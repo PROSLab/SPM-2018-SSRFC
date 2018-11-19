@@ -16,7 +16,8 @@ import { PswRecoveryComponent } from './psw-recovery/psw-recovery.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-psw-recovery',
   templateUrl: './psw-recovery.component.html',
