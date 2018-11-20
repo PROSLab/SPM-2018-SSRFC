@@ -1,0 +1,13 @@
+<div class="container">
+    <h1>Recupero Password</h1>
+  
+    <form name="pswRecovery">
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" class="form-control" (keyup)="0" #e id="email"required >
+      </div>
+      <button  (click)="recovery(e.value)" class="btn btn-success">Submit</button> 
+    </form>
+  </div>
+  

@@ -1,33 +1,30 @@
+import * as $ from 'jquery';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { Routes, RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './component/app/app.component';
-import { LoginComponent } from './component/login/login.component';
-import { RegistrazioneComponent } from './component/registrazione/registrazione.component';
-import { PswRecoveryComponent } from './component/psw-recovery/psw-recovery.component';
-import { HttpClientModule }    from '@angular/common/http';
-import { Service } from './service/service';
-import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
-import { HomeComponent } from './component/home/home.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
+import { SpinnerComponent } from './shared/spinner.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    RegistrazioneComponent,
-    PswRecoveryComponent,
-    PageNotFoundComponent,
-    HomeComponent
-  ],
+  declarations: [AppComponent, SpinnerComponent,],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
+    BrowserAnimationsModule,
     FormsModule,
-    ReactiveFormsModule
+    HttpClientModule,
+    AppRoutingModule
   ],
-  providers: [Service],
+  providers: [
+    {
+      provide: LocationStrategy,
+      useClass: PathLocationStrategy
+    }
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
