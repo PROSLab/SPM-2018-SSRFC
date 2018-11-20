@@ -1,53 +1,83 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs'
-import { HttpClient, HttpHeaders,HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders,HttpErrorResponse, HttpParams } from '@angular/common/http';
 import {User} from '../user'
 import {Account} from '../user'
-import { pipe } from '@angular/core/src/render3';
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class Service {
 
-  constructor
-  (private http: HttpClient,) { }
-private Url =''
-errorData: {};
+  constructor(private http: HttpClient) { }
+  private baseUrl =''
+  errorData: {};
+  user:User
+  account:Account
 
-  getHeroes (): Observable<User[]> {
-    return this.http.get<User[]>(this.Url)
-    .pipe(
-      catchError(this.handleError)
-    );
-    
+  //post per prendere un utente
+  //da rivedere in base al server
+
+  postUser(email) {
+    return new Promise((resolve, reject) => {
+      this.http.post(this.baseUrl + 'user', email, { //string da rivedere
+        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+        params: new HttpParams().set('id', this.user.toString()),
+      })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        });
+    })
+  }
+
+  //post per far registrare un nuovo utente
+
+  postRegistrazione(name,surname,email,psw) {
+    return new Promise((resolve, reject) => {
+      this.http.post(this.baseUrl + 'registration',email, { //string da rivedere
+        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+        params: new HttpParams().set('id', this.user.toString()),
+      })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        });
+    })
+  }
+
+  //post login 
+  postLogin(email,psw) {
+    return new Promise((resolve, reject) => {
+      this.http.post(this.baseUrl + 'registration',email, { //string da rivedere
+        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+        params: new HttpParams().set('id', this.user.toString()),
+      })
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        });
+    })
   }
 
 
-
-
-
-
-
-
-
-
-  
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
+    //post recupera psw
+    postRecoveryPsw(email) {
+      return new Promise((resolve, reject) => {
+        this.http.post(this.baseUrl + 'registration',email, { //string da rivedere
+          headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+          params: new HttpParams().set('id', this.user.toString()),
+        })
+          .subscribe(res => {
+            resolve(res);
+          }, (err) => {
+            reject(err);
+          });
+      })
     }
-    // return an observable with a user-facing error message
-    this.errorData = {
-      errorTitle: 'Oops! Request  failed',
-      errorDesc: 'Something bad happened. Please try again later.'
-    };
-    return throwError(this.errorData);
-  }
+
 }
