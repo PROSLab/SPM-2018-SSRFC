@@ -6,8 +6,6 @@ Repository for the SPM course
  - Utilizzando Eclipse, andare su Help, EclipseMarketplace ed installare Spring Tools 4 
  - Su Eclipse, File ->import -> Maven -> Existing Maven Project -> Scegli la cartella SPMServer tramite Browse ->su Advanced scegli alla voce "name Template" [artifactId]-[version].
  - Run -> Run as -> Sping Boot App
- - 
-
 
 
 ############# RUNNARE IL CLIENT in locale #############
