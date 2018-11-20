@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 @Component({
   selector: 'app-registrazione',
   templateUrl: './registrazione.component.html',
@@ -11,4 +11,9 @@ export class RegistrazioneComponent implements OnInit {
   ngOnInit() {
   }
 
+
+  boh(){
+    window.alert("submit")
+    console.log("ciaoAAAAAAAAAAAAAAAAAAAA")
+  }
 }

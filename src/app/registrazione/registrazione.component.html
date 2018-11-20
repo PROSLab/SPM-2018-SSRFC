@@ -1,43 +1,44 @@
 <div class="container">
   <h1>Registrazione Form</h1>
+
   <form name="registrazione">
 
     <div class="form-group">
       <label for="name">Name</label>
-      <input type="text" class="form-control" id="name"  required>
+      <input type="text" class="form-control" #n (keyup)="0" id="name" required  >
     </div>
 
     <div class="form-group">
       <label for="surname">Surname</label>
-      <input type="text" class="form-control" id="surname" required>
+      <input type="text" class="form-control" (keyup)="0" #s id="surname" required>
     </div>
 
     <div class="form-group">
       <label for="date">Data di nascita</label>
-      <input type="date" class="form-control" id="date" required>
+      <input type="date" class="form-control" (keyup)="0" #d id="date"required >
     </div>
 
     <div class="form-group">
       <label for="email">Email</label>
-      <input type="text" class="form-control" id="email" required>
+      <input type="text" class="form-control" (keyup)="0" #e id="email"required >
     </div>
 
     <div class="form-group">
       <label for="username">Username</label>
-      <input type="text" class="form-control" id="username" required>
+      <input type="text" class="form-control" (keyup)="0" #u id="username"required >
     </div>
 
     <div class="form-group">
       <label for="psw">Password</label>
-      <input type="password" class="form-control" id="psw" required>
+      <input type="password" class="form-control" (keyup)="0" #p id="psw"required >
     </div>
 
     <div class="form-group">
-      <label for="alterEgo">Repeat Password</label>
-      <input type="password" class="form-control" id="psw2" required>
+      <label for="psw2">Repeat Password</label>
+      <input type="password" class="form-control" (keyup)="0" #vp id="psw2"required >
     </div>
-
-    <button type="submit" class="btn btn-success">Submit</button> <!--ancora non funzionante-->
+    <button  (click)="boh()" class="btn btn-success">Submit</button> <!--ancora non funzionante-->
   </form>
+
 </div>
 
