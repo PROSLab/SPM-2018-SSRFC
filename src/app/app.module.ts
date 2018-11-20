@@ -8,12 +8,16 @@ import { RegistrazioneComponent } from './registrazione/registrazione.component'
 import { PswRecoveryComponent } from './psw-recovery/psw-recovery.component';
 import { HttpClientModule }    from '@angular/common/http';
 import { Service } from './service/service';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HomeComponent } from './home/home.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegistrazioneComponent,
-    PswRecoveryComponent
+    PswRecoveryComponent,
+    PageNotFoundComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

@@ -3,8 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
 import { PswRecoveryComponent } from './psw-recovery/psw-recovery.component';
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component'
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [  
+ {path:'', redirectTo:'home', pathMatch:'full'},
+{path:'home', component:HomeComponent},
   {path:'login',component: LoginComponent},
 
 {path:'registrazione',component:RegistrazioneComponent},
@@ -13,8 +18,8 @@ const routes: Routes = [
   path:'pswrecovery',component:PswRecoveryComponent
 },
 
-/* {path:'**', component:PageNotFound}
- */];
+ {path:'**', component:PageNotFoundComponent}
+ ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes,
