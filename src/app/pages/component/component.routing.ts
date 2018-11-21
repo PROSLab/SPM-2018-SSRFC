@@ -26,11 +26,11 @@ export const ComponentsRoutes: Routes = [
       }
     }, 
     {
-      path: 'singUp',
+      path: 'signUp',
       component: RegistrazioneComponent,
       data: {
-        title: 'singUp',
-        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'singUp'}]
+        title: 'signUp',
+        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'signUp'}]
       }
     },{
       path: 'PageNotFound',

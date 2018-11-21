@@ -109,4 +109,9 @@ export class NavigationComponent implements AfterViewInit {
 
         $("body").trigger("resize");
     }
+
+//controllare se c'è perdita di dati futuri nella funzione refresh.
+    refresh(){
+        location.reload();
+    }
 }
