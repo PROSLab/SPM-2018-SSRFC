@@ -2,6 +2,7 @@ import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 import { Service } from '../../../service/service';
 import { User } from '../../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MustMatch } from './must-match.validators';
 
 @Component({
   selector: 'app-registrazione',
@@ -39,22 +40,17 @@ password=false;
 
   return pass === confirmPass ? null : { notSame: true }     
 } */
-checkPasswords(group: FormGroup) { // here we have the 'passwords' group
-  let pass = group.controls.password.value;
-  let confirmPass = group.controls.repeatpassword.value;
-
-  return pass === confirmPass ? null : { notSame: true }     
-  
-}
+ 
   ngOnInit() {
       this.registerForm = this.formBuilder.group({
-          firstName: ['', Validators.required],
-          lastName: ['', Validators.required],
-          username: ['', Validators.required],
+          name: ['', Validators.required],
+          surname: ['', Validators.required],
+          email: ['', [Validators.required, Validators.email]],
           password: ['', [Validators.required, Validators.minLength(6)]],
-          repeatpassword : ['', Validators.required ] 
-        }, {validator: this.checkPasswords });
-      
+          confirmPassword : ['', Validators.required ] 
+        }, {
+           validator: MustMatch('password', 'confirmPassword') 
+      });
   }
   // convenience getter for easy access to form fields
   get f() { return this.registerForm.controls; }
@@ -67,7 +63,6 @@ console.log(this.registerForm.controls)
       if (this.registerForm.invalid) {
           return;
       }
-      this.checkpassword= false;
       this.loading = true;
      /*  this.userService.register(this.registerForm.value)
           .pipe(first())
