@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { Service } from '../../../service/service';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +17,15 @@ export class LoginComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-       
-       
+        private service:Service
+       /*  private route: ActivatedRoute,
+        private router: Router,
+        private authenticationService: AuthenticationService, */
     ) {
         // redirect to home if already logged in
-      /*   if (this.authenticationService.currentUserValue) { 
-            this.router.navigate(['/']); 
-        }*/
+        /* if (this.authenticationService.currentUserValue) { 
+            this.router.navigate(['/']);
+        } */
     }
 
     ngOnInit() {
@@ -48,7 +50,7 @@ export class LoginComponent implements OnInit {
         }
 
         this.loading = true;
-      /*   this.authenticationService.login(this.f.username.value, this.f.password.value)
+       /*  this.service.login(this.f.username.value, this.f.password.value)
             .pipe(first())
             .subscribe(
                 data => {
@@ -57,6 +59,6 @@ export class LoginComponent implements OnInit {
                 error => {
                     this.alertService.error(error);
                     this.loading = false;
-                }); */
-    }
+                });*/
+    } 
 }
