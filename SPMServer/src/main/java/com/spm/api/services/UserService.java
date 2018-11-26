@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.spm.api.entity.User;
 import com.spm.api.exceptions.ForbiddenResourceOverrideException;
 import com.spm.api.repository.UserRepository;
+import com.spm.api.utils.Password;
 
 import reactor.core.publisher.Mono;
 
@@ -28,7 +29,11 @@ public class UserService {
 					if(res == true) { // User exists
 						return Mono.error(new ForbiddenResourceOverrideException());
 					}
-					else return userRepository.save(user); // User not exists
+					else { // User not exists
+						String hash = Password.hashPassword(user.getPassword());
+						user.setPassword(hash);
+						return userRepository.save(user); 
+					}
 				});
 	}
 
