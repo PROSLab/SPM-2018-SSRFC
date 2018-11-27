@@ -19,7 +19,6 @@ export class Service {
 
   //post per prendere un utente
   //da rivedere in base al server
-
   postUser(email) {
     return new Promise((resolve, reject) => {
       this.http.post(this.baseUrl + 'user', email, { //string da rivedere
@@ -36,11 +35,11 @@ export class Service {
 
   //post per far registrare un nuovo utente
 
-  postRegistrazione(name,surname,email,psw) {
+  postRegistrazione(name,surname,email,password) {
     return new Promise((resolve, reject) => {
-      this.http.post(this.baseUrl + 'registration',email, { //string da rivedere
+      this.http.post(this.baseUrl + 'registration', { //string da rivedere
         headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
-        params: new HttpParams().set('id', this.user.toString()),
+        params: new HttpParams().set('name', name.toString()).set('surname', surname.toString()).set('email', email.toString()).set('password', password.toString()),
       })
         .subscribe(res => {
           resolve(res);
@@ -51,11 +50,11 @@ export class Service {
   }
 
   //post login 
-  postLogin(email,psw) {
+  postLogin(email,password) {
     return new Promise((resolve, reject) => {
-      this.http.post(this.baseUrl + 'registration',email, { //string da rivedere
+      this.http.post(this.baseUrl + 'registration', { //string da rivedere
         headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
-        params: new HttpParams().set('id', this.user.toString()),
+        params: new HttpParams().set('email', email.toString()).set('password', password.toString()),
       })
         .subscribe(res => {
           resolve(res);
@@ -66,12 +65,13 @@ export class Service {
   }
 
 
-    //post recupera psw
+    //post recupera psw, gli passo l'email
+    //controllare la risposta
     postRecoveryPsw(email) {
       return new Promise((resolve, reject) => {
-        this.http.post(this.baseUrl + 'registration',email, { //string da rivedere
+        this.http.post(this.baseUrl + 'password/forgot', { //string da rivedere
           headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
-          params: new HttpParams().set('id', this.user.toString()),
+          params: new HttpParams().set('email', email.toString()),
         })
           .subscribe(res => {
             resolve(res);
@@ -80,5 +80,21 @@ export class Service {
           });
       })
     }
+
+
+    postchangePsw(hash,id,newPassword) {
+      return new Promise((resolve, reject) => {
+        this.http.post(this.baseUrl + 'password/forgot', { //string da rivedere
+          headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+          params: new HttpParams().set('hash', hash.toString()).set('id', id.toString()).set('newPassword', newPassword.toString()),
+        })
+          .subscribe(res => {
+            resolve(res);
+          }, (err) => {
+            reject(err);
+          });
+      })
+    }
+
 
 }
