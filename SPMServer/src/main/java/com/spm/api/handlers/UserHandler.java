@@ -1,11 +1,14 @@
 package com.spm.api.handlers;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 
 import com.spm.api.entity.User;
+import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.exceptions.ForbiddenResourceOverrideException;
 import com.spm.api.services.UserService;
 import com.spm.api.utils.Responses;
@@ -31,6 +34,15 @@ public class UserHandler {
 				.flatMap(user -> userService.createOne(user))
 				.flatMap(user -> Responses.ok(user))
 				.onErrorResume(ForbiddenResourceOverrideException.class, Responses::forbidden);		
+	}
+	
+	public Mono<ServerResponse> loginUser(ServerRequest request) {
+		Optional<String> email = request.queryParam("email");
+		Optional<String> password = request.queryParam("password");
+		
+		return userService.verifyCredentials(email.get(), password.get())
+				.flatMap(user -> Responses.ok(user))
+				.onErrorResume(BadRequestException.class, Responses::badRequest);
 	}
 
 
