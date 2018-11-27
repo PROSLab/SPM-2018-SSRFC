@@ -1,15 +1,8 @@
-export class User {
+export interface User {
 
-    constructor(
-      public name: string,
-      public surname: string,
-      public account: Account
-    ) {}
-  }
+    name:string,
+    surname:string,
+    email:string,
+    password:string
 
-  export class Account {
-      constructor(
-          public email: string, // è l'username
-          public password:string
-      ){}
-  }
+}
