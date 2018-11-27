@@ -25,10 +25,15 @@ public class UserRouter {
 								POST("/signin").and(contentType(MediaType.APPLICATION_JSON)), 
 								userHandler::createUser
 						)
+						.andRoute(
+								GET("/login"),
+								userHandler::loginUser
+						)
 						/*.andRoute(
 								GET("/findByName"),
 								userHandler::getUserByName
 						)*/
+						
 				);
 	}
 

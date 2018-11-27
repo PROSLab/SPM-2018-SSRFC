@@ -3,29 +3,29 @@ import { Service } from '../../../service/service'
 import { User } from '../../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-
 @Component({
-  selector: 'app-psw-recovery',
-  templateUrl: './psw-recovery.component.html',
-  styleUrls: ['./psw-recovery.component.css']
+  selector: 'app-new-password',
+  templateUrl: './new-password.component.html',
+  styleUrls: ['./new-password.component.css']
 })
-
-export class PswRecoveryComponent implements OnInit {
+export class NewPasswordComponent implements OnInit {
   service:Service
   user:User //object di tipo user per poter aggregare i dati
   errorMessage: any;
   submitted=false
   loading=false
-pswRecoveryForm:FormGroup;
+  pswRecoveryForm:FormGroup;
   constructor(private formBuilder:FormBuilder) {  }
 
   ngOnInit() {
 this.pswRecoveryForm= this.formBuilder.group ({
-  email: ['', [Validators.required,Validators.email]],
+  password: ['', [Validators.required]],
 
 })
   }
   get f() { return this.pswRecoveryForm.controls; }
+
+
   onSubmit() {
     this.submitted = true;
 
@@ -35,13 +35,7 @@ this.pswRecoveryForm= this.formBuilder.group ({
     }
 
     this.loading = true;
-/* recovery(email) {
-  window.alert(email)
-  this.service.postRecoveryPsw(email)
-    .then(
-      (user: any) => {
-            //do something here
-      },
-      error => this.errorMessage = <any>error)
-  } */
-  }}
+//a questo punto il client invirà al srever lanuova password dell'utente
+//....
+  }
+}
