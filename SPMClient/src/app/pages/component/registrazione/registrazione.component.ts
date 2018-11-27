@@ -87,10 +87,10 @@ export class RegistrazioneComponent implements OnInit {
                 error => this.errorMessage = <any>error)
     }
  */
-    /* registrazione(){
-        this.service.addHero(newHero)
-  .subscribe(hero => this.heroes.push(hero));
-    } */
+    registrazione(user:User):void{
+    this.service.postRegistrazione(user)
+    .subscribe(result => console.log('success'));
+    } 
 
     test() {
         this.service.getTest()
