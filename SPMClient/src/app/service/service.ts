@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-
-import { catchError } from 'rxjs/operators';
-import { MessageService } from './message.service';
+import { Observable, } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+// import { MessageService } from './message.service';
 import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 
 
 ///MODEL
 import { User } from './model/user'
-
+// ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
   })
 };
 
@@ -25,34 +23,58 @@ export class Service {
   private baseUrl = 'http://localhost:8080/'
   private handleError: HandleError;
   user: User
-  err:string
 
   constructor(
-    private http: HttpClient, private messageService: MessageService, httpErrorHandler: HttpErrorHandler
+    private http: HttpClient, httpErrorHandler: HttpErrorHandler
   ) {
-    this.handleError = httpErrorHandler.createHandleError('HeroesService');
+    this.handleError = httpErrorHandler.createHandleError('Service');
   }
 
-
+  // FUNZIONE GET  DA TESTING
   getTest(): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'api/user/', httpOptions);
   }
-  
-// TOCCA CAPIRE BENE QUANDO PRENDE I VALORI come li organizza
-  postRegistrazione(user: User): Observable<User> {
+
+  // FUNZIONE PER AGGIUNGERE GLI UTENTI USATA IN REGISTRAZIONE
+  addUser(user: User): Observable<User> {
     return this.http.post<User>(this.baseUrl + 'api/user/signin', user, httpOptions)
       .pipe(
-        catchError(this.handleError('addUser', user))
+        // UTILIZZARE LA FUNZIONE TAP QUANDO ABBIAMO NECESSITA DI UTILIZZARE I DATI DEL SUCCESSO
+        /* tap(success => console.log(success)),  */
+        catchError(this.handleError('addUserFunction', user))
       );
   }
 
+  sendEmail(email: string): Observable<string> {
+    return this.http.post<string>(this.baseUrl + 'api/user/pswRecovery', email, httpOptions)
+      .pipe(
+        catchError(this.handleError('sendEmail', email))
+      );
+  }
+
+  loginUser(email, psw): Observable<User[]> {
+
+    let params = new HttpParams();
+    params = params.append('email', email);
+    params = params.append('password', psw);
+    return this.http.get<User[]>(this.baseUrl + 'api/user/login', { params: params })
+      .pipe(
+        catchError(this.handleError<User[]>('loginUser', []))
+      );
+  }
+
+}
 
 
 
 
 
 
-  //post per prendere un utente
+
+
+
+// FUNZIONE VECCHIE IN PROMISE DA CONVERTIRE COME SOPRA
+ //post per prendere un utente
   //da rivedere in base al server
 
   /* postUser(email) {
@@ -139,4 +161,3 @@ export class Service {
         });
     })
   } */
-}

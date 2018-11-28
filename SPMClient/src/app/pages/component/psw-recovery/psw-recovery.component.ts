@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Service } from '../../../service/service'
 import { User } from '../../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -11,19 +12,20 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 
 export class PswRecoveryComponent implements OnInit {
-  service:Service
-  user:User //object di tipo user per poter aggregare i dati
+  service: Service
+  user: User //object di tipo user per poter aggregare i dati
   errorMessage: any;
-  submitted=false
-  loading=false
-pswRecoveryForm:FormGroup;
-  constructor(private formBuilder:FormBuilder) {  }
+  submitted = false
+  loading = false
+  pswRecoveryForm: FormGroup;
+  http: any;
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-this.pswRecoveryForm= this.formBuilder.group ({
-  email: ['', [Validators.required,Validators.email]],
+    this.pswRecoveryForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
 
-})
+    })
   }
   get f() { return this.pswRecoveryForm.controls; }
   onSubmit() {
@@ -31,17 +33,19 @@ this.pswRecoveryForm= this.formBuilder.group ({
 
     // stop here if form is invalid
     if (this.pswRecoveryForm.invalid) {
-        return;
+      return;
     }
 
     this.loading = true;
-/* recovery(email) {
-  window.alert(email)
-  this.service.postRecoveryPsw(email)
-    .then(
-      (user: any) => {
-            //do something here
-      },
-      error => this.errorMessage = <any>error)
-  } */
-  }}
+  }
+  sendEmail(email: string): void {
+    //rimuove gli spazi all'inizio ed alla fine della stringa
+    email = this.f.email.value.trim();
+    // verifica se è diversa da null
+    if (!email)  return; 
+    this.service.sendEmail(email)
+    //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione
+    .subscribe(_=>console.log('email inviata '+email));
+    return;
+}
+}
