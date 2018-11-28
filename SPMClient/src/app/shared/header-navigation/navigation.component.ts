@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { Service } from '../../service/service';
 
 @Component({
   selector: 'ap-navigation',
@@ -9,8 +9,7 @@ export class NavigationComponent implements AfterViewInit {
     name:string;
     isLoggedIn: boolean = false;
   
-  	constructor() {}
-
+  	constructor(private service:Service) {}
 
     ngAfterViewInit() {
 
@@ -61,4 +60,8 @@ export class NavigationComponent implements AfterViewInit {
     refresh(){
         location.reload();
     }
+
+    logout(){
+        this.service.logout()
+      }
 }

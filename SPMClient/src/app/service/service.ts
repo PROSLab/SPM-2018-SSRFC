@@ -42,7 +42,7 @@ export class Service {
     return this.http.post<User>(this.baseUrl + 'api/user/signin', user, httpOptions)
       .pipe(
         // UTILIZZARE LA FUNZIONE TAP QUANDO ABBIAMO NECESSITA DI UTILIZZARE I DATI DEL SUCCESSO
-        tap(success => console.log(success)), 
+        tap(success => console.log(success)),
         catchError(this.handleError('addUserFunction', user))
       );
   }
@@ -60,19 +60,17 @@ export class Service {
     params = params.append('password', psw);
     return this.http.get<User>(this.baseUrl + 'api/user/login', { params: params })
       .pipe(
-        tap(success => localStorage.setItem("User",success.toString() )),
-        
+        tap(success => localStorage.setItem("User", success.toString())),
+
         catchError(this.handleError<User>('loginUser'))
       );
   }
 
   logout() {
     console.log("hai fatto il logout. ")
-        // remove user from local storage to log user out
-    localStorage.removeItem('email');
-    localStorage.removeItem('password');
-    this.router.navigate(['/login']);
-    
+    localStorage.clear();
+    this.router.navigate(['']);
+
   }
 }
 

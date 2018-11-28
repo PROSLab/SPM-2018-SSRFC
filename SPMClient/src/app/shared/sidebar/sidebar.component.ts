@@ -14,8 +14,6 @@ export class SidebarComponent implements AfterViewInit {
   showSubMenu = '';
   isLoggedIn: boolean = false;
 
-
-
   constructor(
     private service:Service,
 ) {}

@@ -1,10 +1,10 @@
 <aside class="left-sidebar">
     <div class="scroll-sidebar">
-        
+
         <!-- User profile  LOGGED #DA MODIFICARE QUANDO ABBIAMO IL LOGIN -->
         <div class="user-profile" *ngIf="isLoggedIn" else loggedOut>
             <!-- User profile image -->
-            <div class="profile-img"> <img src="assets/images/users/1.jpg" alt="user" /> </div>
+            <div class="profile-img"> <img src="assets/images/users/1.png" alt="user" /> </div>
             <!-- User profile text-->
             <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button"
                     aria-haspopup="true" aria-expanded="true">Markarn Doe <span class="caret"></span></a>
@@ -16,7 +16,7 @@
                         Account
                         Setting
                     </a>
-                    <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"><i class="fa fa-power-off"></i>
+                    <div (click)="logut()" class="dropdown-divider"></div> <a href="#" class="dropdown-item"><i class="fa fa-power-off"></i>
                         Logout</a>
                 </div>
             </div>
@@ -25,12 +25,11 @@
 
         <!--  VIENE VISUALIZZATO SOLO SE L'UTENTE NON è LOGGATO -->
         <div class="user-profile" #loggedOut>
-            <div class="profile-img" style="margin-bottom:15px"> <img src="assets/images/users/0.png" alt="user" /> </div>
+            <div class="profile-img" style="margin-bottom:15px"> <img src="assets/images/users/0.png" alt="user" />
+            </div>
             <a routerLink="/login"> Login</a>
             <div role="separator" class="divider"> </div>
             <a routerLink="/signUp"> SignUp</a>
-            <div role="separator" class="divider"> </div>
-            <a routerLink="/login" (onclick)="logout()"> LogOut</a>
         </div>
 
         <!-- END LOGGEDOUT -->
@@ -40,7 +39,7 @@
                 <li class="nav-devider"></li>
                 <li [class.active]="showMenu === 'starter'">
                     <a routerLink="" (click)="addExpandClass('starter')" [routerLinkActive]="['router-link-active']"><i
-                        class="mdi mdi-file"></i><span class="hide-menu">Home Page</span></a>
+                            class="mdi mdi-file"></i><span class="hide-menu">Home Page</span></a>
                 </li>
             </ul>
         </nav>
@@ -54,11 +53,11 @@
     <!-- funzioni ancora in fase di sviluppo-->
     <div class="sidebar-footer">
         <!-- item-->
-        <a class="link" data-toggle="tooltip" title="Settings"><i class="ti-settings" ></i></a>
+        <a class="link" data-toggle="tooltip" title="Settings"><i class="ti-settings"></i></a>
         <!-- item-->
         <a class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
         <!-- item-->
-        <a class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
+        <a (click)="logout()"  class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
     </div>
     <!-- End Bottom points-->
 </aside>

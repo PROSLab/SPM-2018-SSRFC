@@ -50,7 +50,7 @@
                             <li role="separator" class="divider"></li>
                             <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
+                            <li (click)="logout()"><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                     </div>
                 </li>
@@ -65,7 +65,7 @@
                             <li><a routerLink="/login"><i class=""></i> Login</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a routerLink="/signUp"><i class=""></i> SignUp</a></li>
-                            <li><a routerLink="/login"><i class=""></i> Logout</a></li>
+                            <li (click)="logout()"><a routerLink="/login"><i class=""></i> Logout</a></li>
                         </ul>
                     </div>
                 </li>
