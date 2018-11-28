@@ -1,4 +1,4 @@
-import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { Service } from '../../../service/service';
 import { User } from '../../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,36 +13,20 @@ import { MustMatch } from './must-match.validators';
 export class RegistrazioneComponent implements OnInit {
 
     registrazioneform: FormGroup;
-    /* user:User //object di tipo user per poter aggregare i dati
-    errorMessage: any; */
     registerForm: FormGroup;
     loading = false;
     submitted = false;
     checkpassword = true;
     password = false;
-    errorMessage: any;
-    user:User;
+    user: User;
+    editUser: User;
+
     constructor(
         private formBuilder: FormBuilder,
         private service: Service,
-        /*   private router: Router,
-          private authenticationService: AuthenticationService,
-          private userService: UserService,
-          private alertService: AlertService */
     ) {
-        // redirect to home if already logged in
-        /* if (this.authenticationService.currentUserValue) { 
-            this.router.navigate(['/']);
-        } */
+
     }
-
-    /* checkPasswords(group:FormGroup) { // here we have the 'passwords' group
-    let pass = group.controls.password.value;
-    let confirmPass = group.controls.repeatpassword.value;
-  
-    return pass === confirmPass ? null : { notSame: true }     
-  } */
-
     ngOnInit() {
         this.registerForm = this.formBuilder.group({
             name: ['', Validators.required],
@@ -64,38 +48,26 @@ export class RegistrazioneComponent implements OnInit {
             return;
         }
         this.loading = true;
-        /*  this.userService.register(this.registerForm.value)
-             .pipe(first())
-             .subscribe(
-                 data => {
-                     this.alertService.success('Registration successful', true);
-                     this.router.navigate(['/login']);
-                 },
-                 error => {
-                     this.alertService.error(error);
-                     this.loading = false;
-                 }); */
     }
 
-    /* registrazione() {
-        console.log(this.f.name.value)
-        this.service.postRegistrazione(this.f.name.value, this.f.surname.value, this.f.email.value, this.f.password.value)
-            .then(
-                (user: any) => {
-                    console.log(user,'l\'ho fatto davvero')
-                },
-                error => this.errorMessage = <any>error)
+    // CHIAMATA POST PER LA REGISTRAZIONE
+    addUser(name: string, surname: string, email: string, password: string): void {
+        //rimuove gli spazi all'inizio ed alla fine della stringa
+        name = this.f.name.value.trim();
+        surname = this.f.surname.value.trim();
+        email = this.f.email.value.trim();
+        password = this.f.password.value.trim();
+        // verifica se sono diversi da null
+        if (!email && !name && !surname && !password) { return; }
+        // Crea il nuovo utente con i valori asseggnati
+        const newUser: User = { name, surname, email, password } as User;
+        this.service.addUser(newUser)
+            .subscribe();
+            return;
     }
- */
-    registrazione(user:User):void{
-    this.service.postRegistrazione(user)
-    .subscribe(result => console.log('success'));
-    } 
-
+ // TESTING // TEST PER UNA CHIAMATA GET
     test() {
         this.service.getTest()
-            .subscribe(
-                data => console.log(data)
-            )
+            .subscribe(data => console.log(data))
     }
 }
