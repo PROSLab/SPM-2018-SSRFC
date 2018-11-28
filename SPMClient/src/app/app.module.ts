@@ -8,8 +8,6 @@ import { HttpClientModule,  } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
-import { MessageService } from './service/message.service';
-import { HttpErrorHandler } from './service/http-error-handler.service';
 
 @NgModule({
   declarations: [AppComponent, SpinnerComponent,],
@@ -23,8 +21,6 @@ import { HttpErrorHandler } from './service/http-error-handler.service';
     
   ],
   providers: [
-    MessageService,
-    HttpErrorHandler,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy

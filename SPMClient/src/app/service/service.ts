@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, } from 'rxjs';
+import { Observable, throwError} from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import {ErrorObservable} from 'rxjs/observable/ErrorObservable'
 // import { MessageService } from './message.service';
-import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 
 
 ///MODEL
@@ -22,14 +22,13 @@ const httpOptions = {
 
 export class Service {
   private baseUrl = 'http://localhost:8080/'
-  public handleError: HandleError;
   user: User
+  public errorMsg: string;
 
   constructor(
     public router: Router,
-    private http: HttpClient, httpErrorHandler: HttpErrorHandler
+    private http: HttpClient,
   ) {
-    this.handleError = httpErrorHandler.createHandleError('Service');
   }
 
   // FUNZIONE GET  DA TESTING
@@ -38,31 +37,31 @@ export class Service {
   }
 
   // FUNZIONE PER AGGIUNGERE GLI UTENTI USATA IN REGISTRAZIONE
-  addUser(user: User): Observable<User> {
-    return this.http.post<User>(this.baseUrl + 'api/user/signin', user, httpOptions)
+  addUser(user: User): Observable<any> {
+    return this.http.post(this.baseUrl + 'api/user/signin', user, httpOptions)
       .pipe(
         // UTILIZZARE LA FUNZIONE TAP QUANDO ABBIAMO NECESSITA DI UTILIZZARE I DATI DEL SUCCESSO
         tap(success => console.log(success)), 
-        catchError(this.handleError('addUserFunction', user))
+        catchError(this.handleError)
       );
   }
 
-  sendEmail(email: string): Observable<string> {
-    return this.http.post<string>(this.baseUrl + 'api/user/pswRecovery', email, httpOptions)
+  sendEmail(email: string): Observable<any> {
+    return this.http.post(this.baseUrl + 'api/user/pswRecovery', email, httpOptions)
       .pipe(
-        catchError(this.handleError('sendEmail', email))
+        catchError(this.handleError)
       );
   }
 
-  loginUser(email, psw): Observable<User> {
+  loginUser(email, psw): Observable<any> {
     let params = new HttpParams();
     params = params.append('email', email);
     params = params.append('password', psw);
-    return this.http.get<User>(this.baseUrl + 'api/user/login', { params: params })
+    return this.http.get(this.baseUrl + 'api/user/login', { params: params })
       .pipe(
         tap(success => localStorage.setItem("User",success.toString() )),
         
-        catchError(this.handleError<User>('loginUser'))
+        catchError(this.handleError)
       );
   }
 
@@ -73,6 +72,20 @@ export class Service {
     localStorage.removeItem('password');
     this.router.navigate(['/login']);
     
+  }
+  private handleError(error:HttpErrorResponse){
+    if(error.status==400){
+      return throwError("Bad Credential")
+    }
+    if(error.status==0){
+      return throwError("Server Connection failed")
+    }
+    if(error.status==404){
+      return throwError("Not Found")
+    }
+    if(error.status==501){
+      return throwError("Internal Server Error")
+    }
   }
 }
 
