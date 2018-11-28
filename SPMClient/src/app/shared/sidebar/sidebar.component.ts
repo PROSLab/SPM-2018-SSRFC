@@ -1,4 +1,6 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Service } from '../../service/service';
+import { Router } from '@angular/router';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -11,6 +13,16 @@ export class SidebarComponent implements AfterViewInit {
   showMenu = '';
   showSubMenu = '';
   isLoggedIn: boolean = false;
+
+
+
+  constructor(
+    private service:Service,
+) {}
+
+  logout(){
+    this.service.logout()
+  }
 
   addExpandClass(element: any) {
     if (element === this.showMenu) {

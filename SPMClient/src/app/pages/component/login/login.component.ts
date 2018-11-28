@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
     loading = false;
     submitted = false;
     returnUrl: string;
+   public login: boolean = false; //utente non loggato
 
     constructor(
         public router: Router,
@@ -45,37 +46,23 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.invalid) {
             return;
         }
+
         this.loading = true;
-        this.service.loginUser(email,psw) 
-        .pipe(first())
+        this.service.loginUser(email,psw)
         .subscribe(
             data => {
-               /*  this.router.navigate([this.returnUrl]); */
-
                //mi salvo in uno storage locale i dati dell'utente così da poterci lavorare poi e lasciarli salvati
               localStorage.setItem('email',email)
               localStorage.setItem('password',psw)
-
+              
                // redirect to home if already logged in
-            console.log("la funzione è un success, ora riporta alla home. è da completare il tutto.")
-            this.router.navigate(['']);
+              this.router.navigate(['']);
+              this.login=true;
             },
             error => {
-           console.log("errore")
+           console.log("errore" +error)
+           this.service.handleError(error)
                 this.loading = false;
             });
-        
-
-
-       /*  this.service.login(this.f.username.value, this.f.password.value)
-            .pipe(first())
-            .subscribe(
-                data => {
-                    this.router.navigate([this.returnUrl]);
-                },
-                error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                });*/
     } 
 }
