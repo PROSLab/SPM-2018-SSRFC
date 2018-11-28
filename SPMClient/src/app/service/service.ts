@@ -12,7 +12,7 @@ import { User } from './model/user'
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-      })
+  })
 };
 
 @Injectable({
@@ -30,13 +30,14 @@ export class Service {
     this.handleError = httpErrorHandler.createHandleError('Service');
   }
 
- // FUNZIONE GET  DA TESTING
+  // FUNZIONE GET  DA TESTING
   getTest(): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'api/user/', httpOptions);
   }
+
   // FUNZIONE PER AGGIUNGERE GLI UTENTI USATA IN REGISTRAZIONE
-  addUser (user: User): Observable<User> {
-    return this.http.post<User>(this.baseUrl+'api/user/signin',user, httpOptions)
+  addUser(user: User): Observable<User> {
+    return this.http.post<User>(this.baseUrl + 'api/user/signin', user, httpOptions)
       .pipe(
         // UTILIZZARE LA FUNZIONE TAP QUANDO ABBIAMO NECESSITA DI UTILIZZARE I DATI DEL SUCCESSO
         /* tap(success => console.log(success)),  */
@@ -44,13 +45,23 @@ export class Service {
       );
   }
 
-  sendEmail (email:string): Observable<string> {
-    return this.http.post<string>(this.baseUrl+'api/user/pswRecovery', email, httpOptions)
+  sendEmail(email: string): Observable<string> {
+    return this.http.post<string>(this.baseUrl + 'api/user/pswRecovery', email, httpOptions)
       .pipe(
         catchError(this.handleError('sendEmail', email))
       );
   }
 
+  loginUser(email, psw): Observable<User[]> {
+
+    let params = new HttpParams();
+    params = params.append('var1', email);
+    params = params.append('var2', psw);
+    return this.http.get<User[]>(this.baseUrl + 'api/user/login', { params: params })
+      .pipe(
+        catchError(this.handleError<User[]>('loginUser', []))
+      );
+  }
 
 }
 
