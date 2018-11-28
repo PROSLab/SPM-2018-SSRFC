@@ -43,6 +43,15 @@ export class Service {
         catchError(this.handleError('addUserFunction', user))
       );
   }
+
+  sendEmail (email:string): Observable<string> {
+    return this.http.post<string>(this.baseUrl+'api/user/pswRecovery', email, httpOptions)
+      .pipe(
+        catchError(this.handleError('sendEmail', email))
+      );
+  }
+
+
 }
 
 
