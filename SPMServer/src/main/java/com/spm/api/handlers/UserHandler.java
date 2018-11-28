@@ -9,8 +9,10 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 
 import com.spm.api.entity.User;
 import com.spm.api.exceptions.BadRequestException;
+import com.spm.api.exceptions.EmailException;
 import com.spm.api.exceptions.ForbiddenResourceOverrideException;
 import com.spm.api.services.UserService;
+import com.spm.api.utils.Email;
 import com.spm.api.utils.Responses;
 
 import reactor.core.publisher.Mono;
@@ -18,9 +20,11 @@ import reactor.core.publisher.Mono;
 @Component
 public class UserHandler {
 	private UserService userService;
+	private Email emailClient;
 	
-	public UserHandler(UserService userService) {
+	public UserHandler(UserService userService, Email emailClient) {
 		this.userService = userService;
+		this.emailClient = emailClient;
 	}
 	
 	public Mono<ServerResponse> hello(ServerRequest request) {
@@ -43,6 +47,13 @@ public class UserHandler {
 		return userService.verifyCredentials(email.get(), password.get())
 				.flatMap(user -> Responses.ok(user))
 				.onErrorResume(BadRequestException.class, Responses::badRequest);
+	}
+	
+	public Mono<ServerResponse> pswRecovery(ServerRequest request) { 
+		return request.bodyToMono(User.class)
+				.flatMap(user -> emailClient.sendSimpleMessage(user.getEmail(), "sto cazzo", "col preservativo!"))
+				.flatMap(res -> Responses.ok(res))
+				.onErrorResume(EmailException.class, Responses::badRequest);
 	}
 
 

@@ -29,6 +29,10 @@ public class UserRouter {
 								GET("/login"),
 								userHandler::loginUser
 						)
+						.andRoute(
+								POST("/pswRecovery").and(contentType(MediaType.APPLICATION_JSON)),
+								userHandler::pswRecovery
+						)
 						/*.andRoute(
 								GET("/findByName"),
 								userHandler::getUserByName

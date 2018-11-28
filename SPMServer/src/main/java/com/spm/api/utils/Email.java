@@ -18,7 +18,7 @@ public class Email {
 		this.emailSender = emailSender;
 	}
 	
-	public void sendSimpleMessage(String to, String subject, String text) {
+	public Mono<Boolean> sendSimpleMessage(String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
@@ -26,9 +26,11 @@ public class Email {
             message.setText(text);
 
             emailSender.send(message);
+            return Mono.just(true);
+            
         } catch (MailException exception) {
             exception.printStackTrace();
-            Mono.error(new EmailException("Email error, see console."));
+            return Mono.error(new EmailException("Email error, see console."));
         }
     }
 	
