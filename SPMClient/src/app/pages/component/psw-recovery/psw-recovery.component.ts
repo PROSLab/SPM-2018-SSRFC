@@ -12,14 +12,14 @@ import { Observable } from 'rxjs';
 })
 
 export class PswRecoveryComponent implements OnInit {
-  service: Service
+  
   user: User //object di tipo user per poter aggregare i dati
   errorMessage: any;
   submitted = false
   loading = false
   pswRecoveryForm: FormGroup;
   http: any;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,private service: Service) { }
 
   ngOnInit() {
     this.pswRecoveryForm = this.formBuilder.group({
@@ -35,7 +35,6 @@ export class PswRecoveryComponent implements OnInit {
     if (this.pswRecoveryForm.invalid) {
       return;
     }
-
     this.loading = true;
   }
   sendEmail(email: string): void {
@@ -45,7 +44,9 @@ export class PswRecoveryComponent implements OnInit {
     if (!email)  return; 
     this.service.sendEmail(email)
     //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione
-    .subscribe(_=>console.log('email inviata '+email));
+    .subscribe(_=>{
+      alert('email inviata'), 
+      this.loading = false;});
     return;
 }
 }

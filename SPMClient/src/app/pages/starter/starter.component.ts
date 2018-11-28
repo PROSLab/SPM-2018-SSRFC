@@ -1,24 +1,30 @@
 import { Component, AfterViewInit } from '@angular/core';
+import { Service } from '../../service/service';
+export var isLogged:boolean;
 
 @Component({
 	templateUrl: './starter.component.html'
 })
 export class StarterComponent implements AfterViewInit {
-	subtitle:string;	
+	subtitle: string;
 	email: string;
-	constructor() {}
+	isLogged=isLogged;
+	
 
+	constructor(private service: Service) { }
 
-ngOnInit(){
-
-console.log(localStorage.getItem("email"))
-	if(localStorage.getItem("email")!=undefined){
-	 this.email = localStorage.getItem("email")
+	ngOnInit() {
+		if (localStorage.getItem("email") != undefined) {
+			this.email = localStorage.getItem("email");
+			isLogged = true;this.isLogged=isLogged
+		}
+	}
+	logout() {
+		isLogged = false;this.isLogged=isLogged
+		this.service.logout()
 	}
 	
-	else{console.log("non sei loggato")}
-}
 
 
-	ngAfterViewInit(){}
+	ngAfterViewInit() { }
 }

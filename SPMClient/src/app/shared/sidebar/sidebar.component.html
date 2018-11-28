@@ -2,29 +2,28 @@
     <div class="scroll-sidebar">
 
         <!-- User profile  LOGGED #DA MODIFICARE QUANDO ABBIAMO IL LOGIN -->
-        <div class="user-profile" *ngIf="isLoggedIn" else loggedOut>
+        <div class="user-profile" *ngIf="isLogged" else loggedOut>
             <!-- User profile image -->
             <div class="profile-img"> <img src="assets/images/users/1.png" alt="user" /> </div>
             <!-- User profile text-->
             <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button"
-                    aria-haspopup="true" aria-expanded="true">Markarn Doe <span class="caret"></span></a>
+                    aria-haspopup="true" aria-expanded="true">{{name}} {{surname}} <span class="caret"></span></a>
                 <div class="dropdown-menu animated flipInY">
-                    <a href="#" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
-                    <a href="#" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
-                    <a href="#" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
+                    <a class="dropdown-item"><i class="ti-user"></i> My Profile</a>
+                    <a class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
+                    <a class="dropdown-item"><i class="ti-email"></i> Inbox</a>
                     <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"><i class="ti-settings"></i>
                         Account
                         Setting
                     </a>
-                    <div (click)="logut()" class="dropdown-divider"></div> <a href="#" class="dropdown-item"><i class="fa fa-power-off"></i>
-                        Logout</a>
-                </div>
+<!--                     <div class="dropdown-divider"></div> <a  (click)="logout()" class="dropdown-item"><i class="fa fa-power-off"></i>Logout</a>
+ -->                </div>
             </div>
         </div>
         <!-- End User profile text #DA MODIFICARE QUANDO ABBIAMO IL LOGIN -->
 
         <!--  VIENE VISUALIZZATO SOLO SE L'UTENTE NON è LOGGATO -->
-        <div class="user-profile" #loggedOut>
+        <div class="user-profile" #loggedOut *ngIf="!isLogged">
             <div class="profile-img" style="margin-bottom:15px"> <img src="assets/images/users/0.png" alt="user" />
             </div>
             <a routerLink="/login"> Login</a>
@@ -51,7 +50,7 @@
     <!-- Bottom points-->
 
     <!-- funzioni ancora in fase di sviluppo-->
-    <div class="sidebar-footer">
+    <div class="sidebar-footer" *ngIf="isLogged">
         <!-- item-->
         <a class="link" data-toggle="tooltip" title="Settings"><i class="ti-settings"></i></a>
         <!-- item-->

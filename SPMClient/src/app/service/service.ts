@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError} from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import {ErrorObservable} from 'rxjs/observable/ErrorObservable'
-// import { MessageService } from './message.service';
 
 
 ///MODEL
@@ -22,8 +20,9 @@ const httpOptions = {
 
 export class Service {
   private baseUrl = 'http://localhost:8080/'
-  user: User
   public errorMsg: string;
+  user: User
+  isLogged:boolean=false;
 
   constructor(
     public router: Router,
@@ -41,17 +40,33 @@ export class Service {
     return this.http.post(this.baseUrl + 'api/user/signin', user, httpOptions)
       .pipe(
         // UTILIZZARE LA FUNZIONE TAP QUANDO ABBIAMO NECESSITA DI UTILIZZARE I DATI DEL SUCCESSO
-        tap(success => console.log(success)), 
+        tap(success => console.log(success)),
         catchError(this.handleError)
       );
   }
 
   sendEmail(email: string): Observable<any> {
-    return this.http.post(this.baseUrl + 'api/user/pswRecovery', email, httpOptions)
+    let body = {email:email}
+    return this.http.post(this.baseUrl + 'api/user/pswRecovery',body, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
+
+  changePassword(uuid:string,pgid:string,password:string){
+    //DECOMMENTARE QUANDO LA FUNZIONE SERVER SARA ON
+    /*let body = {
+      uuid:uuid,
+      pgid:pgid,
+      password:password,
+    }
+      return this.http.post(this.baseUrl + 'api/user/changePassword',body, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      ); */
+      
+  } 
+  
 
   loginUser(email, psw): Observable<any> {
     let params = new HttpParams();
@@ -59,29 +74,28 @@ export class Service {
     params = params.append('password', psw);
     return this.http.get(this.baseUrl + 'api/user/login', { params: params })
       .pipe(
-        tap(success => localStorage.setItem("User",success.toString() )),
-        
+        tap(success => localStorage.setItem("User", success.toString())),
         catchError(this.handleError)
       );
   }
 
   logout() {
-    console.log("hai fatto il logout. ")
     localStorage.clear();
-    this.router.navigate(['']);
-
+    alert('logout effettuato')
+    /* location.reload() */
   }
-  private handleError(error:HttpErrorResponse){
-    if(error.status==400){
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status == 400) {
       return throwError("Bad Credential")
     }
-    if(error.status==0){
+    if (error.status == 0) {
       return throwError("Server Connection failed")
     }
-    if(error.status==404){
+    if (error.status == 404) {
       return throwError("Not Found")
     }
-    if(error.status==501){
+    if (error.status == 501) {
       return throwError("Internal Server Error")
     }
   }

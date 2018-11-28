@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Service } from '../../../service/service'
 import { User } from '../../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-password',
@@ -10,22 +10,21 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./new-password.component.css']
 })
 export class NewPasswordComponent implements OnInit {
-  service: Service
   user: User //object di tipo user per poter aggregare i dati
   errorMessage: any;
   submitted = false
   loading = false
   pswRecoveryForm: FormGroup;
+  password: string;
+  uuid: string;
+  pgid: string;
 
-
-
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,private service: Service,private router:Router) {
     //QUERY PER OTTENERE I VALORI DALL'URL
-    var email;var password;
+
     this.route.queryParams.subscribe(params => {
-      email = params['email'];
-      password = params['password'];
-      console.log(email,password,params)
+      this.uuid = params['uuid'];
+      this.pgid = params['pgid'];
     });
   }
 
@@ -43,9 +42,21 @@ export class NewPasswordComponent implements OnInit {
     if (this.pswRecoveryForm.invalid) {
       return;
     }
-
     this.loading = true;
     //a questo punto il client invirà al srever lanuova password dell'utente
-    //....
+    this.changePassword();
+    alert('Password cambiata');
+  }
+
+  changePassword():void {
+    this.password = this.f.password.value.trim();
+    this.router.navigate(['']);
+    
+     //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione
+     /* 
+     this.service.changePassword(this.uuid,this.pgid,this.password)
+     .subscribe(data => {this.router.navigate(['']);},
+     */
+     return;
   }
 }

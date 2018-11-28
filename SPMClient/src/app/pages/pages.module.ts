@@ -18,6 +18,7 @@ import { SidebarComponent } from '../shared/sidebar/sidebar.component';
         SidebarComponent,
         BreadcrumbComponent,       
         SIDEBAR_TOGGLE_DIRECTIVES,
+        
     ]
 })
 export class PagesModule { }

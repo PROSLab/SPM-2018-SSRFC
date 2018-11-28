@@ -4,14 +4,28 @@
             <h1>Home</h1>
         </div>
     </div>
-    <div >Benvenuto {{email}}!</div>
-    <div class="row">
+   
+    <div class="row" *ngIf="isLogged" else notLogged>
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    Questa è la home page!
+                    Benvenuto {{email}}!
+                </div>
+            </div>
+        </div>
+        <button  (click)="logout()"  class="btn btn-primary">LOGOUT</button>
+    </div>
+   
+
+    <div class="row" #notLogged  *ngIf="!isLogged">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                Registrati per entrare a far parte della community  VuGit! <br>
+                Se sei registrato effettua il login! 
                 </div>
             </div>
         </div>
     </div>
+    
 </div>

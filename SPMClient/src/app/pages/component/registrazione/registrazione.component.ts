@@ -20,14 +20,13 @@ export class RegistrazioneComponent implements OnInit {
     checkpassword = true;
     password = false;
     user: User;
-    editUser: User;
     error: boolean;
     errorMsg: any;
 
     constructor(
         private formBuilder: FormBuilder,
         private service: Service,
-        private router:Router,
+        private router: Router,
     ) {
 
     }
@@ -51,16 +50,13 @@ export class RegistrazioneComponent implements OnInit {
         if (this.registerForm.invalid) {
             return;
         }
-        
         this.loading = true;
-        this.addUser(this.f.name.value,this.f.surname.value,this.f.email.value,this.f.password.value)
-
+        this.addUser(this.f.name.value, this.f.surname.value, this.f.email.value, this.f.password.value)
     }
 
     // CHIAMATA POST PER LA REGISTRAZIONE
     addUser(name: string, surname: string, email: string, password: string): void {
         //rimuove gli spazi all'inizio ed alla fine della stringa
-        //ARIANNA MARCELLO probabilmente vanno inseriti qui i controlli sui vari campi se non si riesce con validetor
         name = this.f.name.value.trim();
         surname = this.f.surname.value.trim();
         email = this.f.email.value.trim();
@@ -70,22 +66,13 @@ export class RegistrazioneComponent implements OnInit {
         // Crea il nuovo utente con i valori asseggnati
         const newUser: User = { name, surname, email, password } as User;
         this.service.addUser(newUser)
-            .subscribe(data => {
-                this.router.navigate(['']);
-            },
-            error => {
-                this.error=true;
-               this.errorMsg= error
-/*            this.service.handleError(error)
- */                this.loading = false;
-            });
-           
-
-            
-    }
- // TESTING // TEST PER UNA CHIAMATA GET
-    test() {
-        this.service.getTest()
-            .subscribe(data => console.log(data))
+        .subscribe(data => {
+            alert('Ti sei registrato con successo, effettua il login!');
+            this.router.navigate(['/login']);
+        },error => {
+            this.error = true;
+            this.errorMsg = error
+            this.loading = false;
+        });
     }
 }

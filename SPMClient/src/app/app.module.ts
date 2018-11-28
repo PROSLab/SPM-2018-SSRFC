@@ -18,7 +18,6 @@ import { SpinnerComponent } from './shared/spinner.component';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    
   ],
   providers: [
     {

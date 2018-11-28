@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Service } from '../../service/service';
-import { Router } from '@angular/router';
-
+import { isLogged } from '../../pages/starter/starter.component'
+import { User } from '../../service/model/user';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'ap-sidebar',
@@ -12,13 +12,31 @@ export class SidebarComponent implements AfterViewInit {
   isActive = true;
   showMenu = '';
   showSubMenu = '';
-  isLoggedIn: boolean = false;
-
+  isLogged: boolean = isLogged;
+  user: User
+  name:string;surname:string;email:string;password:string;
+  
   constructor(
-    private service:Service,
-) {}
+    private service: Service,
+  ) { }
+  
+  ngOnInit(): void {
+    //PORCATA DA RIVEDERE
 
-  logout(){
+   setInterval(() => {
+    this.isLogged = isLogged
+      if (this.isLogged == true) {
+        this.name = localStorage.getItem("name");
+        this.surname = localStorage.getItem("surname");
+        this.email = localStorage.getItem("email");
+        this.password = localStorage.getItem("password");       
+      }
+    }, 1000);
+    
+    
+  }
+
+  logout() {
     this.service.logout()
   }
 
@@ -41,8 +59,8 @@ export class SidebarComponent implements AfterViewInit {
   }
   // End open close
   ngAfterViewInit() {
-    $(function() {
-      $('.sidebartoggler').on('click', function() {
+    $(function () {
+      $('.sidebartoggler').on('click', function () {
         if ($('body').hasClass('mini-sidebar')) {
           $('body').trigger('resize');
           $('.scroll-sidebar, .slimScrollDiv')
