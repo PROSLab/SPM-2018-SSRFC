@@ -55,8 +55,8 @@ export class Service {
   loginUser(email, psw): Observable<User[]> {
 
     let params = new HttpParams();
-    params = params.append('var1', email);
-    params = params.append('var2', psw);
+    params = params.append('email', email);
+    params = params.append('password', psw);
     return this.http.get<User[]>(this.baseUrl + 'api/user/login', { params: params })
       .pipe(
         catchError(this.handleError<User[]>('loginUser', []))
