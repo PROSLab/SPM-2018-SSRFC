@@ -1,10 +1,16 @@
 package com.spm.api.services;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
+
 import org.springframework.stereotype.Component;
 
+import com.spm.api.entity.PasswordChange;
 import com.spm.api.entity.User;
 import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.exceptions.ForbiddenResourceOverrideException;
+import com.spm.api.repository.PasswordChangeRepository;
 import com.spm.api.repository.UserRepository;
 import com.spm.api.utils.Password;
 
@@ -13,9 +19,12 @@ import reactor.core.publisher.Mono;
 @Component
 public class UserService {
 	private UserRepository userRepository;
+	private PasswordChangeRepository passwordChangeRepository;
+	private String uuid;
 
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, PasswordChangeRepository passwordChangeRepository) {
 		this.userRepository = userRepository;
+		this.passwordChangeRepository = passwordChangeRepository;
 	}
 	
 	public Mono<Boolean> isNewUser(String email) {
@@ -54,4 +63,28 @@ public class UserService {
 				);		
 	}
 
+	public Mono<String> createEmailLink(String email) {
+		return userRepository.findByEmail(email)
+				.flatMap(notUsed -> {
+					Date today = new Date();
+					Calendar c = Calendar.getInstance(); 
+					c.setTime(today); 
+					c.add(Calendar.DATE, 1);
+					today = c.getTime();
+					uuid = UUID.randomUUID().toString();
+					String uuidHash = Password.hashPassword(uuid);
+					Boolean used = false;
+					PasswordChange psc = new PasswordChange(today, uuidHash, used);
+					
+					return passwordChangeRepository.save(psc);
+				})
+				.flatMap(psc -> {
+					String url = "http://localhost:4200/NewPassword?uuid="+uuid+"&pgid="+psc.getId();
+					return Mono.just(url);
+				})
+				.switchIfEmpty( // Email not found
+						Mono.defer(() -> Mono.error(new BadRequestException("Email not found")))
+				);		
+	}
+	
 }

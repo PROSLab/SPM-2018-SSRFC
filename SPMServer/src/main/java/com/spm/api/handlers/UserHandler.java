@@ -21,6 +21,7 @@ import reactor.core.publisher.Mono;
 public class UserHandler {
 	private UserService userService;
 	private Email emailClient;
+	private User userObj;
 	
 	public UserHandler(UserService userService, Email emailClient) {
 		this.userService = userService;
@@ -50,10 +51,16 @@ public class UserHandler {
 	}
 	
 	public Mono<ServerResponse> pswRecovery(ServerRequest request) { 
+		
 		return request.bodyToMono(User.class)
-				.flatMap(user -> emailClient.sendSimpleMessage(user.getEmail(), "sto cazzo", "col preservativo!"))
+				.flatMap(user -> {
+					userObj = user;
+					return userService.createEmailLink(user.getEmail());
+				})
+				.flatMap(url -> emailClient.sendSimpleMessage(userObj.getEmail(), "Password Recovery", url))
 				.flatMap(res -> Responses.ok(res))
-				.onErrorResume(EmailException.class, Responses::badRequest);
+				.onErrorResume(EmailException.class, Responses::badRequest)
+				.onErrorResume(BadRequestException.class, Responses::badRequest);
 	}
 
 
