@@ -8,6 +8,7 @@ import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 
 ///MODEL
 import { User } from './model/user'
+import { Router } from '@angular/router';
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
   headers: new HttpHeaders({
@@ -21,10 +22,11 @@ const httpOptions = {
 
 export class Service {
   private baseUrl = 'http://localhost:8080/'
-  private handleError: HandleError;
+  public handleError: HandleError;
   user: User
 
   constructor(
+    public router: Router,
     private http: HttpClient, httpErrorHandler: HttpErrorHandler
   ) {
     this.handleError = httpErrorHandler.createHandleError('Service');
@@ -53,7 +55,6 @@ export class Service {
   }
 
   loginUser(email, psw): Observable<User[]> {
-
     let params = new HttpParams();
     params = params.append('email', email);
     params = params.append('password', psw);
@@ -63,6 +64,14 @@ export class Service {
       );
   }
 
+  logout() {
+    console.log("hai fatto il logout. ")
+        // remove user from local storage to log user out
+    localStorage.removeItem('email');
+    localStorage.removeItem('password');
+    this.router.navigate(['/login']);
+    
+  }
 }
 
 
