@@ -34,6 +34,7 @@ export class Service {
   getTest(): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'api/user/', httpOptions);
   }
+
   // FUNZIONE PER AGGIUNGERE GLI UTENTI USATA IN REGISTRAZIONE
   addUser (user: User): Observable<User> {
     return this.http.post<User>(this.baseUrl+'api/user/signin',user, httpOptions)
@@ -43,6 +44,19 @@ export class Service {
         catchError(this.handleError('addUserFunction', user))
       );
   }
+
+
+  loginUser(email,psw): Observable<User[]> {
+ 
+let params = new HttpParams();
+params = params.append('var1', email);
+params = params.append('var2', psw);
+    return this.http.get<User[]>(this.baseUrl+'api/user/login',{params: params})
+      .pipe(
+        catchError(this.handleError<User[]>('loginUser', []))
+      );
+  }
+
 }
 
 
