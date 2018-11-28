@@ -53,6 +53,7 @@ export class RegistrazioneComponent implements OnInit {
     // CHIAMATA POST PER LA REGISTRAZIONE
     addUser(name: string, surname: string, email: string, password: string): void {
         //rimuove gli spazi all'inizio ed alla fine della stringa
+        //ARIANNA MARCELLO probabilmente vanno inseriti qui i controlli sui vari campi se non si riesce con validetor
         name = this.f.name.value.trim();
         surname = this.f.surname.value.trim();
         email = this.f.email.value.trim();
