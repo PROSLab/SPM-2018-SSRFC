@@ -12,7 +12,7 @@ export class StarterComponent implements AfterViewInit {
 ngOnInit(){
 
 console.log(localStorage.getItem("email"))
-	if(localStorage.getItem("email")!=""){
+	if(localStorage.getItem("email")!=undefined){
 	 this.email = localStorage.getItem("email")
 	}
 	
