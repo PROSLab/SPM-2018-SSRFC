@@ -47,7 +47,10 @@ export class RegistrazioneComponent implements OnInit {
         if (this.registerForm.invalid) {
             return;
         }
+        
         this.loading = true;
+        this.addUser(this.f.name.value,this.f.surname.value,this.f.email.value,this.f.password.value)
+
     }
 
     // CHIAMATA POST PER LA REGISTRAZIONE
