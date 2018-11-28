@@ -2,7 +2,8 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { PswRecoveryComponent } from './psw-recovery/psw-recovery.component';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
-import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component'
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { NewPasswordComponent } from './new-password/new-password.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -38,6 +39,13 @@ export const ComponentsRoutes: Routes = [
       data: {
         title: 'PageNotFound',
         urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'PageNotFound'}]
+      }
+    },{
+      path: 'NewPassword',
+      component: NewPasswordComponent,
+      data: {
+        title: 'changePassword',
+        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'NewPassword'}]
       }
     },
     ]
