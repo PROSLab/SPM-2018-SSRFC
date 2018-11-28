@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Service } from '../../../service/service';
 import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { errorHandler } from '@angular/platform-browser/src/browser';
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,10 @@ export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;
     submitted = false;
+    error=false
     returnUrl: string;
    public login: boolean = false; //utente non loggato
+    errorMsg: string;
 
     constructor(
         public router: Router,
@@ -65,9 +68,10 @@ export class LoginComponent implements OnInit {
               
             },
             error => {
-           console.log(error)
-           this.service.handleError(error)
-                this.loading = false;
+                this.error=true;
+               this.errorMsg= error
+/*            this.service.handleError(error)
+ */                this.loading = false;
             });
 
             

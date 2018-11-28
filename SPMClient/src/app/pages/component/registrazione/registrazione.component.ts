@@ -3,6 +3,7 @@ import { Service } from '../../../service/service';
 import { User } from '../../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch } from './must-match.validators';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-registrazione',
@@ -20,10 +21,13 @@ export class RegistrazioneComponent implements OnInit {
     password = false;
     user: User;
     editUser: User;
+    error: boolean;
+    errorMsg: any;
 
     constructor(
         private formBuilder: FormBuilder,
         private service: Service,
+        private router:Router,
     ) {
 
     }
@@ -66,8 +70,18 @@ export class RegistrazioneComponent implements OnInit {
         // Crea il nuovo utente con i valori asseggnati
         const newUser: User = { name, surname, email, password } as User;
         this.service.addUser(newUser)
-            .subscribe();
-            return;
+            .subscribe(data => {
+                this.router.navigate(['']);
+            },
+            error => {
+                this.error=true;
+               this.errorMsg= error
+/*            this.service.handleError(error)
+ */                this.loading = false;
+            });
+           
+
+            
     }
  // TESTING // TEST PER UNA CHIAMATA GET
     test() {
