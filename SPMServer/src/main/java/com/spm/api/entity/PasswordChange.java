@@ -9,11 +9,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class PasswordChange {
 	@Id
 	String id;
+	String idUser;
 	Date expDate; /*Expiration of hash code (now + 24h)*/
 	String codeHash; /*Random hashed string*/
 	Boolean used;
 	
-	public PasswordChange(Date expDate, String codeHash, Boolean used) {
+	public PasswordChange(String idUser, Date expDate, String codeHash, Boolean used) {
+		this.idUser = idUser;
 		this.expDate = expDate;
 		this.codeHash = codeHash;
 		this.used = used;
@@ -28,6 +30,15 @@ public class PasswordChange {
 		this.id = id;
 	}
 	*/
+	
+	public String getIdUser() {
+		return idUser;
+	}
+	
+	public void setIdUser(String idUser) {
+		this.idUser = idUser;
+	}
+	
 
 	public Date getExpDate() {
 		return expDate;

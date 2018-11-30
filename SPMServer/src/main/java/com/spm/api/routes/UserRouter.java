@@ -33,11 +33,10 @@ public class UserRouter {
 								POST("/pswRecovery").and(contentType(MediaType.APPLICATION_JSON)),
 								userHandler::pswRecovery
 						)
-						/*.andRoute(
-								GET("/findByName"),
-								userHandler::getUserByName
-						)*/
-						
+						.andRoute(
+								GET("/changePassword"),
+								userHandler::changePassword
+						)
 				);
 	}
 

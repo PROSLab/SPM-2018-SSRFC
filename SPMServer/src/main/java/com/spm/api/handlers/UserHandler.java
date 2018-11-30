@@ -51,7 +51,6 @@ public class UserHandler {
 	}
 	
 	public Mono<ServerResponse> pswRecovery(ServerRequest request) { 
-		
 		return request.bodyToMono(User.class)
 				.flatMap(user -> {
 					userObj = user;
@@ -62,16 +61,21 @@ public class UserHandler {
 				.onErrorResume(EmailException.class, Responses::badRequest)
 				.onErrorResume(BadRequestException.class, Responses::badRequest);
 	}
-
-
-	/*public Mono<ServerResponse> getUserByName(ServerRequest request) {
-		Optional<String> name = request.queryParam("name");
-		Flux<User> user = userRepository.findByName(name.get());
+	
+	public Mono<ServerResponse> changePassword(ServerRequest request) {
+		Optional<String> pgid = request.queryParam("pgid");
+		Optional<String> plainHash = request.queryParam("uuid");
+		Optional<String> newPassword = request.queryParam("password");
 		
-		return ServerResponse
-				.ok()
-				.contentType(MediaType.APPLICATION_JSON)
-				.body(user, User.class);
-	}*/
-
+		return userService.verifyPasswordChange(pgid.get(), plainHash.get())
+				.flatMap(res -> {
+					if(res == true)
+						return userService.updatePassword(pgid.get(), newPassword.get());
+					
+					return Mono.just(res);
+				})
+				.flatMap(res -> Responses.ok(res))
+				.onErrorResume(BadRequestException.class, Responses::badRequest);
+	}
+	
 }

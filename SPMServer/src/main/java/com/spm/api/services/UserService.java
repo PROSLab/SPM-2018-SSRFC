@@ -65,12 +65,12 @@ public class UserService {
 
 	public Mono<String> createEmailLink(String email) {
 		return userRepository.findByEmail(email)
-				.flatMap(notUsed -> {
+				.flatMap(user -> {
 					Date expDate = DateLib.tomorrow(); // expiration date of password recovery flow
 					uuid = UUID.randomUUID().toString();
 					String uuidHash = Password.hashPassword(uuid);
 					Boolean used = false;
-					PasswordChange psc = new PasswordChange(expDate, uuidHash, used);
+					PasswordChange psc = new PasswordChange(user.getId(), expDate, uuidHash, used);
 					
 					return passwordChangeRepository.save(psc);
 				})
@@ -81,6 +81,56 @@ public class UserService {
 				.switchIfEmpty( // Email not found
 						Mono.defer(() -> Mono.error(new BadRequestException("Email not found")))
 				);		
+	}
+	
+	public Mono<Boolean> verifyPasswordChange(String pgid, String plainHash) {
+		// Verify code hash, expiration date e if code is used
+		return passwordChangeRepository.findById(pgid)
+				.flatMap(pwc -> {
+					Boolean isValidHash = Password.checkPassword(plainHash, pwc.getCodeHash());
+					Boolean isExpired = !(DateLib.isAfterToday(pwc.getExpDate()));
+					Boolean isUsed = pwc.getUsed();
+					
+					if(isValidHash == false)
+						return Mono.error(new BadRequestException("Hash not valid"));
+					
+					if(isExpired == true)
+						return Mono.error(new BadRequestException("Request expired"));
+					
+					if(isUsed == true)
+						return Mono.error(new BadRequestException("Token already used"));
+					
+					if(isValidHash == true && isExpired == false && isUsed == false)
+						return Mono.just(true);
+					else return Mono.just(false);
+				})
+				.switchIfEmpty( // PasswordChange not found
+						Mono.defer(() -> Mono.error(new BadRequestException("PasswordChange not found")))
+				);
+	}
+	
+	public Mono<User> updatePassword(String pgid, String newPassword) {
+		return passwordChangeRepository.findById(pgid)
+				.flatMap(pwc -> { // Update used to true in PasswordChange schema
+					pwc.setUsed(true);
+					return passwordChangeRepository.save(pwc);
+				})
+				.flatMap(pwc -> { // Update password in User schema
+					String idUser = pwc.getIdUser();
+					
+					return userRepository.findById(idUser)
+					.flatMap(user -> {
+						String hash = Password.hashPassword(newPassword);
+						user.setPassword(hash);
+						return userRepository.save(user);
+					})
+					.switchIfEmpty( // User not found
+							Mono.defer(() -> Mono.error(new BadRequestException("User not found")))
+					);	
+				})
+				.switchIfEmpty( // PasswordChange not found
+						Mono.defer(() -> Mono.error(new BadRequestException("PasswordChange not found")))
+				);
 	}
 	
 }

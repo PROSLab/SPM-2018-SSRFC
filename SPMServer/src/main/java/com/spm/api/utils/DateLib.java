@@ -13,4 +13,9 @@ public class DateLib {
 		today = c.getTime();
 		return today;
 	}
+	
+	public static boolean isAfterToday(Date date) {
+		Date today = new Date();
+		return date.after(today);
+	}
 }
