@@ -1,6 +1,5 @@
 package com.spm.api.services;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,6 +11,7 @@ import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.exceptions.ForbiddenResourceOverrideException;
 import com.spm.api.repository.PasswordChangeRepository;
 import com.spm.api.repository.UserRepository;
+import com.spm.api.utils.DateLib;
 import com.spm.api.utils.Password;
 
 import reactor.core.publisher.Mono;
@@ -66,15 +66,11 @@ public class UserService {
 	public Mono<String> createEmailLink(String email) {
 		return userRepository.findByEmail(email)
 				.flatMap(notUsed -> {
-					Date today = new Date();
-					Calendar c = Calendar.getInstance(); 
-					c.setTime(today); 
-					c.add(Calendar.DATE, 1);
-					today = c.getTime();
+					Date expDate = DateLib.tomorrow(); // expiration date of password recovery flow
 					uuid = UUID.randomUUID().toString();
 					String uuidHash = Password.hashPassword(uuid);
 					Boolean used = false;
-					PasswordChange psc = new PasswordChange(today, uuidHash, used);
+					PasswordChange psc = new PasswordChange(expDate, uuidHash, used);
 					
 					return passwordChangeRepository.save(psc);
 				})
