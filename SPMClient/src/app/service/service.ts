@@ -86,16 +86,25 @@ export class Service {
   }
 
   private handleError(error: HttpErrorResponse) {
+    console.log(error)
     if (error.status == 400) {
+      alert("username o password errata")
       return throwError("Bad Credential")
     }
+    if (error.status == 403) {
+      alert("l'email è già in uso da un altro utente")
+      return throwError("Forbidden")
+    }
     if (error.status == 0) {
+      alert("connessione al server fallita")
       return throwError("Server Connection failed")
     }
     if (error.status == 404) {
+      alert("Account non trovato")
       return throwError("Not Found")
     }
     if (error.status == 501) {
+      alert("errore di internet, riprovare")
       return throwError("Internal Server Error")
     }
   }

@@ -70,6 +70,7 @@ export class RegistrazioneComponent implements OnInit {
             alert('Ti sei registrato con successo, effettua il login!');
             this.router.navigate(['/login']);
         },error => {
+            console.log(error,this.error,this.errorMsg,this.loading)
             this.error = true;
             this.errorMsg = error
             this.loading = false;
