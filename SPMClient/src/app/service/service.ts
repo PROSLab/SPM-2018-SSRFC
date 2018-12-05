@@ -67,6 +67,16 @@ export class Service {
       
   } 
   
+  postFile(fileToUpload: File): Observable<any> {
+    const endpoint = 'your-destination-url';
+    const formData: FormData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+    return this.http
+      .post(endpoint, formData, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+}
 
   loginUser(email, psw): Observable<any> {
     let params = new HttpParams();

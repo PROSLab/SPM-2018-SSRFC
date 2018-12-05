@@ -13,9 +13,32 @@
                 </div>
             </div>
         </div>
+
+        
         <button  (click)="logout()"  class="btn btn-primary">LOGOUT</button>
+
+
     </div>
-   
+   <div><div>
+
+
+    Caricamento di un file
+
+
+    <div class="form-group">
+        <label for="file">Choose File</label>
+        <input type="file"
+               id="file" #f
+               (change)="handleFileInput($event.target.files)">
+               <button  (click)="caricaFile(f.value)"  class="btn btn-primary">Carica File</button>
+    </div>
+
+</div>Lista file pubblici
+
+</div>
+<div>Lista file privati
+
+</div>
 
     <div class="row" #notLogged  *ngIf="!isLogged">
         <div class="col-12">
