@@ -23,33 +23,53 @@ export class StarterComponent implements AfterViewInit {
 		}
 	}
 
+	//funzione per prendere il file
 	handleFileInput(files: File) {
-
 		this.fileToUpload = files;
 	}
 
-caricaFile(f){
-	//controllo se il file caricato è un file XML
-	if(f.split('.').pop() == "bpmn"){
-		alert("formato file corretto")
-		//devo richiamare la funzione del server per inviargli il file!
+	//funzione per caricare il file e inviarlo al server
+    caricaFile(){
+		//controllo se il file caricato è un file XML
+		var a = this.controlFormatFile(this.fileToUpload[0])
+		if(a){
+		//devo richiamare la funzione del server per inviargli il file
+		 this.service.postFile(this.fileToUpload[0])
+		.subscribe(data => {
+			alert(data)
+		}, error => {
+		  console.log(error);
+		});
+	    }	
+    }
 
-	}	else{
-		alert("formato file non corretto")
-	}
-	
-}
+
+
 	logout() {
 		isLogged = false;this.isLogged=isLogged
 		this.service.logout()
 	}
 	
+
 uploadFileToActivity() {
     this.service.postFile(this.fileToUpload).subscribe(data => {
       // do something, if upload success
       }, error => {
         console.log(error);
       });
+  }
+
+  controlFormatFile(f){
+	if(f.name.split('.').pop() == "bpmn"){
+		alert("formato file corretto")
+		return true;
+	}
+
+	else{
+		alert("formato file non corretto")
+		return false;
+	}
+
   }
 
 	ngAfterViewInit() { }

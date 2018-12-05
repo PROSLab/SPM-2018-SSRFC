@@ -24,18 +24,33 @@
 
     Caricamento di un file
 
-
     <div class="form-group">
         <label for="file">Choose File</label>
         <input type="file"
                id="file" #f
                (change)="handleFileInput($event.target.files)">
-               <button  (click)="caricaFile(f.value)"  class="btn btn-primary">Carica File</button>
+               <button  (click)="caricaFile()"  class="btn btn-primary">Carica File</button>
     </div>
 
 </div>Lista file pubblici
-
+<table >
+    <thead>
+      <tr>
+        <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let el of elements">
+        <th scope="row">{{el.id}}</th>
+        <td>{{el.first}}</td>
+        <td>{{el.last}}</td>
+        <td>{{el.handle}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+
+
 <div>Lista file privati
 
 </div>
