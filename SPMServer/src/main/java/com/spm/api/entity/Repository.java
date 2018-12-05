@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /*
  * File System:
  * 
- * [root: BPM_Projects]
+ * [root: BPMFiles]
  * 	  |------ [idUser1]
  * 					|-------[idRepository1]
  * 									   |------- file1_version1.0

@@ -22,7 +22,7 @@ public class FileRouter {
 				.nest(
 						path("/api/file"), 
 						RouterFunctions.route(
-								POST("/uploadTest").and(accept(MediaType.MULTIPART_FORM_DATA)), // HO I MIEI DUBBI !?
+								POST("/uploadTest").and(accept(MediaType.MULTIPART_FORM_DATA)),
 								fileHandler::uploadFileTest
 						)
 						// .andRoute( ... )
