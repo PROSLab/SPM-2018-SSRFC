@@ -12,7 +12,12 @@ const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
   })
+
+
 };
+const httpOptionsFile = {
+  headers:new HttpHeaders({ 'MediaType': 'multipart/form-data'}) 
+}
 
 @Injectable({
   providedIn: 'root'
@@ -67,12 +72,12 @@ export class Service {
       
   } 
   
-  postFile(fileToUpload: File): Observable<any> {
-    const endpoint = 'your-destination-url';
+  postFile(fileToUpload:File): Observable<any> {
     const formData: FormData = new FormData();
-    formData.append('file', fileToUpload, fileToUpload.name);
+    formData.append('files', (JSON.stringify(fileToUpload)))
+   
     return this.http
-      .post(endpoint, formData, httpOptions)
+      .post(this.baseUrl+"api/file/uploadTest", formData)
       .pipe(
         catchError(this.handleError)
       );
@@ -85,7 +90,7 @@ export class Service {
     return this.http.get(this.baseUrl + 'api/user/login', { params: params })
       .pipe(
         tap(success => localStorage.setItem("User", success.toString())),
-        catchError(this.handleError)
+        catchError( this.handleError)
       );
   }
 

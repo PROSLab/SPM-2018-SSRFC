@@ -11,7 +11,7 @@ export class StarterComponent implements AfterViewInit {
 	subtitle: string;
 	email: string;
 	isLogged=isLogged;
-	fileToUpload: File = null;
+	fileToUpload: File;
 
 	constructor(private service: Service) { }
 
@@ -52,11 +52,15 @@ export class StarterComponent implements AfterViewInit {
 	
 
 uploadFileToActivity() {
-    this.service.postFile(this.fileToUpload).subscribe(data => {
+	
+		this.service.postFile(this.fileToUpload)
+		.subscribe(data => {
+			alert(data)
       // do something, if upload success
       }, error => {
-        console.log(error);
-      });
+				console.log(error);
+    
+      })
   }
 
   controlFormatFile(f){
