@@ -1,7 +1,6 @@
 package com.spm.api.services;
 
 import java.io.File;
-import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
@@ -28,9 +27,6 @@ public class FileService {
 	 * Create Repository DB Schema (here i work with DB)
 	 */
 	public Mono<Repository> createRepositorySchema(Repository repo) {
-		Date createdAt = new Date(); // Remember that you have to use java.util
-		repo.setCreatedAt(createdAt);
-		
 		return repositoryRepository.save(repo); // query to mongoDb
 	}
 	

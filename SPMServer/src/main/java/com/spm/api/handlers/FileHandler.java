@@ -1,8 +1,10 @@
 package com.spm.api.handlers;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Map;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.codec.multipart.Part;
@@ -36,18 +38,21 @@ public class FileHandler {
 					FilePart filePart = (FilePart) map.get("files");
 					filePart.transferTo( new File(rootDir + "/" + filePart.filename()) );
 					
-					
 					return Responses.ok("OK");
 				});
 	}
 	
 	public Mono<ServerResponse> createRepository(ServerRequest request) {
-		// Body data: idUser, publicR, repositoryName
-		return request.bodyToMono(Repository.class) // get body data as Repository object
-				.flatMap(repo -> fileService.createRepositorySchema(repo)) // create Repository Schema on DB
+		String idUser = request.queryParam("idUser").get();
+		Boolean publicR = request.queryParam("publicR").get().equals("true") ? true : false;
+		String repositoryName = request.queryParam("repositoryName").get();
+		
+		Repository repo = new Repository(new ObjectId(idUser), new Date(), publicR, repositoryName);
+		
+		return fileService.createRepositorySchema(repo) // create Repository Schema on DB
 				.flatMap(repository -> fileService.createRepositoryPath(rootDir, repository.getIdUser().toHexString() , repository.getId()))
 				.flatMap(res -> Responses.ok(res))
-				.onErrorResume(Exception.class, Responses::badRequest); // change to internal error
+				.onErrorResume(Exception.class, Responses::badRequest); // TODO: change to internal error
 	}
 
 }

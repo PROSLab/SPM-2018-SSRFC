@@ -1,8 +1,8 @@
 package com.spm.api.routes;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
-import static org.springframework.web.reactive.function.server.RequestPredicates.contentType;
 import static org.springframework.web.reactive.function.server.RequestPredicates.path;
 
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,7 @@ public class FileRouter {
 								fileHandler::uploadFileTest
 						)
 						.andRoute(
-								POST("/createRepository").and(contentType(MediaType.APPLICATION_JSON)),
+								GET("/createRepository"),
 								fileHandler::createRepository
 						)
 				);
