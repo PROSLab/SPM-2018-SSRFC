@@ -46,11 +46,13 @@ public class Repository {
 	ObjectId idUser; 	// Reference to id property of User entity
 	Date createdAt; 	// Date of repository creation
 	Boolean publicR;	// if true repository is public; if false repository is private.
+	String repositoryName;
 	
-	public Repository(ObjectId idUser, Date createdAt, Boolean publicR) {
+	public Repository(ObjectId idUser, Date createdAt, Boolean publicR, String repositoryName) {
 		this.idUser = idUser;
 		this.createdAt = createdAt;
 		this.publicR = publicR;
+		this.repositoryName = repositoryName;
 	}
 
 	public String getId() {
@@ -79,6 +81,14 @@ public class Repository {
 
 	public void setPublicR(Boolean publicR) {
 		this.publicR = publicR;
+	}
+
+	public String getRepositoryName() {
+		return repositoryName;
+	}
+
+	public void setRepositoryName(String repositoryName) {
+		this.repositoryName = repositoryName;
 	}
 	
 }
