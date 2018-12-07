@@ -15,9 +15,6 @@ const httpOptions = {
 
 
 };
-const httpOptionsFile = {
-  headers:new HttpHeaders({ 'Content-Type': 'multipart/form-data'})
-}
 
 @Injectable({
   providedIn: 'root'
@@ -74,7 +71,6 @@ export class Service {
   
   postFile(fileToUpload:File): Observable<any> {
     const formData: FormData = new FormData();
-    //formData.append('files', (JSON.stringify(fileToUpload)))
     formData.append('files', fileToUpload)
    
     return this.http.post(this.baseUrl+"api/file/uploadTest", formData)
