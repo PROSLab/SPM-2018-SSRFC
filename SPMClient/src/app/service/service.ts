@@ -23,9 +23,10 @@ const httpOptions = {
 export class Service {
   private baseUrl = 'http://localhost:8080/'
   public errorMsg: string;
-  user: User
+  user: Object
+  datiUser
   isLogged:boolean=false;
-
+  id: any;
   constructor(
     public router: Router,
     private http: HttpClient,
@@ -73,7 +74,7 @@ export class Service {
     const formData: FormData = new FormData();
     formData.append('files', fileToUpload)
    
-    return this.http.post(this.baseUrl+"api/file/uploadTest", formData)
+    return this.http.post(this.baseUrl+"api/file/uploadTest", formData,{ responseType: 'text' })
       .pipe(
         catchError(this.handleError)
     ); 
@@ -85,10 +86,26 @@ export class Service {
     params = params.append('password', psw);
     return this.http.get(this.baseUrl + 'api/user/login', { params: params })
       .pipe(
-        tap(success => localStorage.setItem("User", success.toString())),
+        tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
         catchError( this.handleError)
       );
   }
+
+  createRepo(name,state):Observable<any> {
+    let params = new HttpParams();
+    let id = localStorage.getItem("id")
+    //id utente, se pubblico o privato e nome repo.
+    params = params.append('idUser',id);
+    params = params.append('publicR',state);
+    params = params.append('repositoryName',name);
+
+    return this.http.get(this.baseUrl + 'api/file/createRepository', { params: params,  responseType: 'text' })
+      .pipe(
+        tap(success => localStorage.setItem("User", success.toString())),
+        catchError(this.handleError)
+      );
+  }
+
 
   logout() {
     localStorage.clear();
