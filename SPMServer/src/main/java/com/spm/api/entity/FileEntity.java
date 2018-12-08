@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Files")
-public class File {
+public class FileEntity {
 	@Id
 	String id; 				// MondoDB auto-generated
 	ObjectId idUser; 		// Reference to id property of User entity
@@ -19,7 +19,7 @@ public class File {
 	String path;			// !!Important: the location of the file is stored in the server
 	int cVersion;			// Counter of version (1, 2, 3, 4 ...)
 	
-	public File(ObjectId idUser, ObjectId idRepository, Date createdAt, String fileName, String originalName,
+	public FileEntity(ObjectId idUser, ObjectId idRepository, Date createdAt, String fileName, String originalName,
 			String mimetype, String path, int cVersion) {
 		this.idUser = idUser;
 		this.idRepository = idRepository;

@@ -30,6 +30,10 @@ public class FileRouter {
 								GET("/createRepository"),
 								fileHandler::createRepository
 						)
+						.andRoute(
+								GET("/createFile"),
+								fileHandler::createFile
+								)
 				);
 	}
 }

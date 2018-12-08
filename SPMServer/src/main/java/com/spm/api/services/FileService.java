@@ -47,4 +47,13 @@ public class FileService {
 		return Mono.just("OK");
 	}
 	
+	/*Create File DB schema
+	 * 
+	 * 
+	 */
+
+
+	
+	
 }
+ 
