@@ -14,15 +14,52 @@
             </div>
         </div>
 
-        
+        <div col="11">
+                <button col="2" (click)="createRepo()"  class="btn btn-primary">Create Repository</button> 
+                <div *ngIf="createrepo" class="card">
+                        <div col="11" class="form-group" class="card-body">
+                                <label for="password">Repository name</label>
+                                <input type="text" id="namerepo" #n name="namerepo"
+                                minlength="4" maxlength="3" size="15"/>
+                                <form name="state">
+                                <label for="password">State</label>
+                                <input type="radio" name="statep" id="state" value="public" checked> Public<br>
+                                <input type="radio" name="statep" id="state"  value="private"> Private<br>
+                                </form>
+                            </div>
+                        <button col="2" (click)="save(n.value)"  class="btn btn-primary">Save Repository</button> 
+                </div>
+        </div>
+
+        <div col="7">Lista dei tuoi Repository
+                <table>
+                       <!--  <thead>
+                          <tr>
+                            <th *ngFor="let repo of repositories" scope="col">{{head}} </th>
+                          </tr>
+                        </thead> -->
+                        <tbody>
+                          <tr  *ngFor="let repo of repositories">
+                            <th scope="row">{{repo.name}}</th>
+                            <td>{{repo.first}}</td>
+                            <td>{{repo.last}}</td>
+                            <td>{{repo.handle}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+        </div>
+       
+<div col="4">
         <button  (click)="logout()"  class="btn btn-primary">LOGOUT</button>
+</div>
+
 
 
     </div>
-   <div><div>
+ <div>
 
 
-    Caricamento di un file
+<!--     Caricamento di un file
 
     <div class="form-group">
         <label for="file">Choose File</label>
@@ -30,9 +67,12 @@
                id="file" #f
                (change)="handleFileInput($event.target.files)">
                <button  (click)="caricaFile()"  class="btn btn-primary">Carica File</button>
-    </div>
+    </div> -->
 
-</div>Lista file pubblici
+
+    
+
+<!-- </div>Lista file pubblici
 <table >
     <thead>
       <tr>
@@ -48,12 +88,12 @@
       </tr>
     </tbody>
   </table>
-</div>
+</div> -->
 
-
+<!-- 
 <div>Lista file privati
 
-</div>
+</div> -->
 
     <div class="row" #notLogged  *ngIf="!isLogged">
         <div class="col-12">
@@ -62,8 +102,17 @@
                 Registrati per entrare a far parte della community  VuGit! <br>
                 Se sei registrato effettua il login! 
                 </div>
-            </div>
+
+
+ 
         </div>
+        </div>
+        
     </div>
+
+</div>
+
     
+           
+            
 </div>

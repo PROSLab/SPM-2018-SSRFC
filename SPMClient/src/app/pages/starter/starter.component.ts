@@ -12,6 +12,8 @@ export class StarterComponent implements AfterViewInit {
 	email: string;
 	isLogged=isLogged;
 	fileToUpload: File;
+	createrepo=false;
+	risp: boolean;
 
 	constructor(private service: Service) { }
 
@@ -43,6 +45,32 @@ export class StarterComponent implements AfterViewInit {
 	    }	
     }
 
+save(name){
+var state = $('input[name="statep"]:checked').val();
+if(state=="public"){
+this.risp= true; //mando true  al server, quindi la repo è pubblica
+}
+else{
+	this.risp= false; //mando false al server, la repo è privata
+}
+
+var nameRepo = name;
+ this.service.createRepo(nameRepo,this.risp)
+		.subscribe(data => {
+			console.log(data)
+			alert("Repository creata con successo.")
+			this.createrepo = false;
+      }, error => {
+		alert("Repository non creata")
+	  }) 
+	  this.createrepo=false
+}
+
+	createRepo() {
+	this.createrepo = true;
+
+		
+  }
 
 
 	logout() {
