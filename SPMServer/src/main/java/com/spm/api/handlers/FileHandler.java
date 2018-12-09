@@ -54,33 +54,27 @@ public class FileHandler {
 				.flatMap(res -> Responses.ok(res))
 				.onErrorResume(Exception.class, Responses::badRequest); // TODO: change to internal error
 	}
-	public Mono<ServerResponse> createFile(ServerRequest request){
-		String idUser = request.queryParam("idUser").get();
-		String idRepository= request.queryParam("idRepository").get();
-		String originalName = request.queryParam("originalName").get();
-		String mimetype="bpmn";
-		FileEntity file = new FileEntity (new ObjectId(idUser),new ObjectId(idRepository),new Date(),null,originalName,mimetype,null,1);
-		return fileService.createFileSchema(file)
-				.flatMap(f->{
-					fileName= f.getId()+'.'+1;
-					return fileService.uploadPath(rootDir, idUser, idRepository, fileName, request);
-				})
-				.flatMap(notused ->{
-					String path =rootDir + "/" + idUser + "/" + idRepository + "/" + fileName;
-					return fileService.updateNames(fileName, path, file);
-					
-				})
-				.flatMap(res -> Responses.ok(res));
-		
-	}
-   /*
 	
 	public Mono<ServerResponse> createFile(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
 		String idRepository= request.queryParam("idRepository").get();
-		String fileName = request.queryParam("originalName").get();
-		String mime= "bpmn";
-		FileEntity file = new FileEntity(new ObjectId(idUser), new ObjectId(idRepository), new Date(),fileService.uploadNameFile(fileName,file.getId(),fileName,mime,fileService.uploadPath(rootDir, idUser, idRepository, fileName, request),fileName.split(".")))
+		String originalName = request.queryParam("originalName").get();
+		String mimetype = "bpmn";
+		FileEntity file = new FileEntity (new ObjectId(idUser),new ObjectId(idRepository),new Date(),null,originalName,mimetype,null,1);
+		
+		return fileService.createFileSchema(file)
+				.flatMap(f->{
+					fileName= f.getId() + '.' + 1;
+					return fileService.uploadPath(rootDir, idUser, idRepository, fileName, mimetype);
+				})
+				.flatMap(notused ->{
+					String path = rootDir + "/" + idUser + "/" + idRepository + "/" + fileName;
+					return fileService.updateNames(fileName, path, file);
+					
+				})
+				.flatMap(res -> Responses.ok(res))
+				.onErrorResume(Exception.class, Responses::badRequest); // TODO: change to internal error
+		
+	}
 
-	}*/
 }

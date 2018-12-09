@@ -1,22 +1,13 @@
 package com.spm.api.services;
 
 import java.io.File;
-import java.util.Map;
-
-import org.springframework.http.codec.multipart.FilePart;
-import org.springframework.http.codec.multipart.Part;
+import java.io.IOException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyExtractors;
-import org.springframework.web.reactive.function.server.ServerRequest;
-import org.springframework.web.reactive.function.server.ServerResponse;
-
 import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
 
 import com.spm.api.repository.FileRepository;
 import com.spm.api.repository.RepositoryRepository;
-import com.spm.api.utils.Responses;
-
 import reactor.core.publisher.Mono;
 
 @Component
@@ -67,13 +58,25 @@ public class FileService {
 	 * 
 	 * Upload File Path 
 	 */
-	public Mono<Void>uploadPath(String rootDir,String idUser, String idRepository,String fileName, ServerRequest request){
-		return request.body(BodyExtractors.toMultipartData())
-				.flatMap(parts -> {
-					Map<String, Part> map = parts.toSingleValueMap();
-					FilePart filePart = (FilePart) map.get("files");
-					return filePart.transferTo( new File(rootDir + "/" + idUser + "/" + idRepository + "/" + fileName ));
-				});
+	@SuppressWarnings("static-access")
+	public Mono<String> uploadPath(String rootDir, String idUser, String idRepository, String fileName, String mimetype){
+		String path = rootDir + File.separator + idUser + File.separator + idRepository + File.separator + fileName + "." + mimetype;
+		File dir = new File(path);
+		
+		if(!dir.exists()) {
+			if (!dir.mkdirs()) {
+				return Mono.error(new Exception("Directory not created"));
+            }
+		}
+		
+		try {
+			dir.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Mono.error(new Exception("File not created"));
+		}
+		
+		return Mono.just("OK");
 	}
 	
 	/*
