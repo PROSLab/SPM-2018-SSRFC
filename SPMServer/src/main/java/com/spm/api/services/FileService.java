@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
 
 import com.spm.api.repository.FileRepository;
 import com.spm.api.repository.RepositoryRepository;
+
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -89,6 +91,14 @@ public class FileService {
 		fileEntity.setFileName(fileName);
 		fileEntity.setPath(path);
 		return fileRepository.save(fileEntity);
+	}
+	
+	/*
+	 * Get all repo
+	 */
+	public Flux<Repository> getAll(ObjectId idUser) {
+		
+		return repositoryRepository.findAllByIdUser(idUser);
 	}
 }
  
