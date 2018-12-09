@@ -1,13 +1,13 @@
 package com.spm.api.services;
 
 import java.io.File;
-
+import java.io.IOException;
 import org.springframework.stereotype.Component;
-
+import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
+
 import com.spm.api.repository.FileRepository;
 import com.spm.api.repository.RepositoryRepository;
-
 import reactor.core.publisher.Mono;
 
 @Component
@@ -49,11 +49,329 @@ public class FileService {
 	
 	/*Create File DB schema
 	 * 
-	 * 
 	 */
+	public Mono<FileEntity> createFileSchema(FileEntity file) {
+		return fileRepository.save(file);
+	}
 
-
+	/*
+	 * 
+	 * Upload File Path 
+	 */
+	@SuppressWarnings("static-access")
+	public Mono<String> uploadPath(String rootDir, String idUser, String idRepository, String fileName, String mimetype){
+		String path = rootDir + File.separator + idUser + File.separator + idRepository + File.separator + fileName + "." + mimetype;
+		File dir = new File(path);
+		
+		if(!dir.exists()) {
+			if (!dir.mkdirs()) {
+				return Mono.error(new Exception("Directory not created"));
+            }
+		}
+		
+		try {
+			dir.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Mono.error(new Exception("File not created"));
+		}
+		
+		return Mono.just("OK");
+	}
 	
-	
+	/*
+	 * Update fileDocument : parameters FileName and path
+	 */
+	public Mono<FileEntity>updateNames(String fileName,String path, FileEntity fileEntity){
+		fileEntity.setFileName(fileName);
+		fileEntity.setPath(path);
+		return fileRepository.save(fileEntity);
+	}
 }
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
