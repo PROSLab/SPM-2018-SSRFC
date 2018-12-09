@@ -5,7 +5,8 @@ import{File} from '../../service/model/file';
 export var isLogged:boolean;
 
 @Component({
-	templateUrl: './starter.component.html'
+	templateUrl: './starter.component.html',
+	styleUrls: ['./starter.component.css']
 })
 export class StarterComponent implements AfterViewInit {
 	subtitle: string;

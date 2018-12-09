@@ -5,7 +5,7 @@
         </div>
     </div>
    
-    <div class="row" *ngIf="isLogged" else notLogged>
+    <div class="row"  else notLogged> <!-- *ngIf="isLogged" -->
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
@@ -14,24 +14,34 @@
             </div>
         </div>
 
-        <div col="11">
-                <button col="2" (click)="createRepo()"  class="btn btn-primary">Create Repository</button> 
+    </div>
+    <div class="row">
+       <div class="col-10">
+            
+                <button  (click)="createRepo()"  class="btn btn-primary">Create Repository</button> 
+                <form>
                 <div *ngIf="createrepo" class="card">
-                        <div col="11" class="form-group" class="card-body">
+                        <div class="form-group" class="card-body">
                                 <label for="password">Repository name</label>
-                                <input type="text" id="namerepo" #n name="namerepo"
-                                minlength="4" maxlength="3" size="15"/>
+                                <input type="text" id="namerepo" #n name="namerepo"/>
                                 <form name="state">
                                 <label for="password">State</label>
                                 <input type="radio" name="statep" id="state" value="public" checked> Public<br>
                                 <input type="radio" name="statep" id="state"  value="private"> Private<br>
                                 </form>
                             </div>
-                        <button col="2" (click)="save(n.value)"  class="btn btn-primary">Save Repository</button> 
+                        <button  (click)="save(n.value)"  class="btn btn-primary">Save Repository</button> 
                 </div>
-        </div>
+            </form>
 
-        <div col="7">Lista dei tuoi Repository
+      </div>  
+       
+<div class="col-2">
+       <button  (click)="logout()"  class="btn btn-primary  ">LOGOUT</button>
+</div>
+</div>
+<br><br>
+<div >Lista dei tuoi Repository
                 <table>
                        <!--  <thead>
                           <tr>
@@ -48,14 +58,7 @@
                         </tbody>
                       </table>
         </div>
-       
-<div col="4">
-        <button  (click)="logout()"  class="btn btn-primary">LOGOUT</button>
-</div>
 
-
-
-    </div>
  <div>
 
 
@@ -95,7 +98,7 @@
 
 </div> -->
 
-    <div class="row" #notLogged  *ngIf="!isLogged">
+    <div class="row" #notLogged  *ngIf="isLogged">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
