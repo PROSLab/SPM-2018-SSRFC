@@ -17,6 +17,7 @@ import com.spm.api.entity.Repository;
 import com.spm.api.services.FileService;
 import com.spm.api.utils.Responses;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -75,6 +76,15 @@ public class FileHandler {
 				.flatMap(res -> Responses.ok(res))
 				.onErrorResume(Exception.class, Responses::badRequest); // TODO: change to internal error
 		
+	}
+	
+	public Mono <ServerResponse> getAllRepo(ServerRequest request){
+		String idUser = request.queryParam("idUser").get();
+
+		return fileService.getAll(new ObjectId(idUser))
+				.collectList()
+				.flatMap(res -> Responses.ok(res));
+				
 	}
 
 }

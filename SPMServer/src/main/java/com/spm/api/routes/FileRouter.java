@@ -34,6 +34,10 @@ public class FileRouter {
 								GET("/createFile"),
 								fileHandler::createFile
 						)
+						.andRoute(
+								GET("/getAllRepo"),
+								fileHandler:: getAllRepo
+						)
 				);
 	}
 }
