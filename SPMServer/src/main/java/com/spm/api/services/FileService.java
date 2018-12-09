@@ -2,6 +2,10 @@ package com.spm.api.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.springframework.stereotype.Component;
 import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
@@ -34,7 +38,7 @@ public class FileService {
 	 * Create path for Repository (here i work with fileSystem)
 	 */
 	public Mono<String> createRepositoryPath(String rootDir, String idUser, String idRepository) {
-		File files = new File(rootDir + "/" + idUser + "/" + idRepository);
+		File files = new File(rootDir + File.separator + idUser + File.separator + idRepository);
 		
 		if(!files.exists()) {
 			if (files.mkdirs()) {
@@ -47,33 +51,32 @@ public class FileService {
 		return Mono.just("OK");
 	}
 	
-	/*Create File DB schema
-	 * 
+	/*
+	 * Create File DB schema
 	 */
 	public Mono<FileEntity> createFileSchema(FileEntity file) {
 		return fileRepository.save(file);
 	}
 
 	/*
-	 * 
-	 * Upload File Path 
+	 * Create new bpmn file in the repository dir 
 	 */
-	@SuppressWarnings("static-access")
 	public Mono<String> uploadPath(String rootDir, String idUser, String idRepository, String fileName, String mimetype){
-		String path = rootDir + File.separator + idUser + File.separator + idRepository + File.separator + fileName + "." + mimetype;
-		File dir = new File(path);
+		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + File.separator + fileName + "." + mimetype;
+		Path path = Paths.get(strPath);
 		
-		if(!dir.exists()) {
-			if (!dir.mkdirs()) {
-				return Mono.error(new Exception("Directory not created"));
-            }
+		try {
+			Files.createDirectories(path.getParent());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Mono.error(new Exception(e.getMessage()));
 		}
 		
 		try {
-			dir.createNewFile();
+			Files.createFile(path);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return Mono.error(new Exception("File not created"));
+			return Mono.error(new Exception(e.getMessage()));
 		}
 		
 		return Mono.just("OK");

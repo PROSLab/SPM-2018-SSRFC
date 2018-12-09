@@ -63,11 +63,11 @@ public class FileHandler {
 		FileEntity file = new FileEntity (new ObjectId(idUser),new ObjectId(idRepository),new Date(),null,originalName,mimetype,null,1);
 		
 		return fileService.createFileSchema(file)
-				.flatMap(f->{
+				.flatMap(f -> {
 					fileName= f.getId() + '.' + 1;
 					return fileService.uploadPath(rootDir, idUser, idRepository, fileName, mimetype);
 				})
-				.flatMap(notused ->{
+				.flatMap(notUsed -> {
 					String path = rootDir + "/" + idUser + "/" + idRepository + "/" + fileName;
 					return fileService.updateNames(fileName, path, file);
 					
