@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { Service } from '../../service/service';
 import{File} from '../../service/model/file';
+import { Router } from '@angular/router';
 
 export var isLogged:boolean;
 
@@ -16,7 +17,7 @@ export class StarterComponent implements AfterViewInit {
 	createrepo=false;
 	risp: boolean;
 
-	constructor(private service: Service) { }
+	constructor(private service: Service,  public router: Router) { }
 
 	ngOnInit() {
 		if (localStorage.getItem("email") != undefined) {
@@ -39,7 +40,6 @@ export class StarterComponent implements AfterViewInit {
 		//devo richiamare la funzione del server per inviargli il file
 		 this.service.postFile(this.fileToUpload[0])
 		.subscribe(data => {
-			alert(data)
 		}, error => {
 		  console.log(error);
 		});
@@ -59,8 +59,9 @@ var nameRepo = name;
  this.service.createRepo(nameRepo,this.risp)
 		.subscribe(data => {
 			console.log(data)
-			alert("Repository creata con successo.")
 			this.createrepo = false;
+			alert("Repository creata con successo.")
+			this.router.navigate(['/']);
       }, error => {
 		alert("Repository non creata")
 	  }) 
@@ -106,4 +107,5 @@ uploadFileToActivity() {
   }
 
 	ngAfterViewInit() { }
+
 }
