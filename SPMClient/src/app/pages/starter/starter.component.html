@@ -22,14 +22,17 @@
                 <form>
                 <div *ngIf="createrepo" class="card">
                         <div class="form-group" class="card-body">
-                                <label for="password">Repository name</label>
-                                <input type="text" id="namerepo" #n name="namerepo"/>
+                            <div>
+                                 <label for="reponame">Repository name  </label>
+                                <input type="text" required id="namerepo" #n name="namerepo"/>
                                 <form name="state">
-                                <label for="password">State</label>
+                                <label for="state">State</label>
                                 <input type="radio" name="statep" id="state" value="public" checked> Public<br>
                                 <input type="radio" name="statep" id="state"  value="private"> Private<br>
                                 </form>
                             </div>
+                        </div>
+
                         <button  (click)="save(n.value)"  class="btn btn-primary">Save Repository</button> 
                 </div>
             </form>
