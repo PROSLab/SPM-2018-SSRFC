@@ -2,9 +2,11 @@ package com.spm.api.services;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 import com.spm.api.entity.FileEntity;
@@ -12,7 +14,6 @@ import com.spm.api.entity.Repository;
 
 import com.spm.api.repository.FileRepository;
 import com.spm.api.repository.RepositoryRepository;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -39,18 +40,35 @@ public class FileService {
 	/*
 	 * Create path for Repository (here i work with fileSystem)
 	 */
-	public Mono<String> createRepositoryPath(String rootDir, String idUser, String idRepository) {
+	@SuppressWarnings("unused")
+	public Mono<Object> createRepositoryPath(String rootDir, String idUser, String idRepository) {
 		File files = new File(rootDir + File.separator + idUser + File.separator + idRepository);
+		
+		Object res = new Object() {
+			private final String path = files.getPath();
+			private final String user = idUser;
+			private final String repository = idRepository;
+			
+			public String getPath() {
+				return path;
+			}
+			public String getUser() {
+				return user;
+			}
+			public String getRepository() {
+				return repository;
+			}
+		};
 		
 		if(!files.exists()) {
 			if (files.mkdirs()) {
-                return Mono.just(files.getPath());
+				return Mono.just(res);
             } else {
                 return Mono.error(new Exception("Directory not created"));
             }
 		}
 		
-		return Mono.just("OK");
+		return Mono.just(res);
 	}
 	
 	/*

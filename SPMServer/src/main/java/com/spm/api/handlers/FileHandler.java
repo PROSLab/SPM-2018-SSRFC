@@ -52,7 +52,7 @@ public class FileHandler {
 		return fileService.createRepositorySchema(repo) // create Repository Schema on DB
 				.flatMap(repository -> fileService.createRepositoryPath(rootDir, repository.getIdUser().toHexString() , repository.getId()))
 				.flatMap(res -> Responses.ok(res))
-				.onErrorResume(Exception.class, Responses::badRequest); // TODO: change to internal error
+				.onErrorResume(Exception.class, Responses::internalServerError);
 	}
 	
 	public Mono<ServerResponse> createFile(ServerRequest request) {
@@ -73,7 +73,7 @@ public class FileHandler {
 					
 				})
 				.flatMap(res -> Responses.ok(res))
-				.onErrorResume(Exception.class, Responses::badRequest); // TODO: change to internal error
+				.onErrorResume(Exception.class, Responses::internalServerError);
 		
 	}
 	
