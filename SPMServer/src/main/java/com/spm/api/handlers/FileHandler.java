@@ -79,11 +79,23 @@ public class FileHandler {
 	
 	public Mono <ServerResponse> getAllRepo(ServerRequest request){
 		String idUser = request.queryParam("idUser").get();
-
 		return fileService.getAll(new ObjectId(idUser))
 				.collectList()
 				.flatMap(res -> Responses.ok(res));
 				
 	}
-
+	
+	public Mono <ServerResponse> getRepoSpec(ServerRequest request){
+		String idRepo = request.queryParam("id").get();
+		return fileService.getRepoSpec(new ObjectId(idRepo))
+				.flatMap(res -> Responses.ok(res));
+	}
+	
+	public Mono <ServerResponse>getAllFile(ServerRequest request){
+		String idRepository = request.queryParam("idRepository").get();
+		return fileService.getAllFile(new ObjectId(idRepository))
+				.flatMap(res -> Responses.ok(res));
+				
+	}
+	
 }

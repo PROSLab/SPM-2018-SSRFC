@@ -37,6 +37,11 @@ public class UserRouter {
 								GET("/changePassword"),
 								userHandler::changePassword
 						)
+						.andRoute(
+								GET("/getUser"),
+								userHandler::getUser
+						)
+					
 				);
 	}
 

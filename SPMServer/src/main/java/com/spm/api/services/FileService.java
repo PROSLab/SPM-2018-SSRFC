@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
+
 import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
 
@@ -100,6 +101,19 @@ public class FileService {
 		
 		return repositoryRepository.findAllByIdUser(idUser);
 	}
+
+
+	public Mono<Repository> getRepoSpec(ObjectId idRepo) {
+		return repositoryRepository.findRepoById(idRepo);
+	}
+
+
+
+public Mono<FileEntity> getAllFile(ObjectId idRepository) {
+		
+		return fileRepository.findFileByIdRepository(idRepository);
+	}
+	
 }
  
 

@@ -38,6 +38,15 @@ public class FileRouter {
 								GET("/getAllRepo"),
 								fileHandler:: getAllRepo
 						)
+						.andRoute(
+								GET("/getRepoSpec"),
+								fileHandler:: getRepoSpec
+						)
+						.andRoute(
+								GET("/getAllFile"),
+								fileHandler:: getAllFile
+						)
+					
 				);
 	}
 }

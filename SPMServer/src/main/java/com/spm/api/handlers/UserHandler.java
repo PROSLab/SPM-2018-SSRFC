@@ -2,6 +2,7 @@ package com.spm.api.handlers;
 
 import java.util.Optional;
 
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -78,4 +79,11 @@ public class UserHandler {
 				.onErrorResume(BadRequestException.class, Responses::badRequest);
 	}
 	
+	public Mono <ServerResponse> getUser(ServerRequest request){
+		String id = request.queryParam("id").get();
+		return userService.getUser(new ObjectId(id))
+				.flatMap(res -> Responses.ok(res));
+	}
+	
+
 }
