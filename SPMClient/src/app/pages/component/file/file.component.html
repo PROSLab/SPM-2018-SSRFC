@@ -4,9 +4,9 @@
         <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                            Repository {{repoInfo.repositoryName}}
-                            Created At {{repoInfo.createdAt}}  
-                            State {{repoInfo.publicR}}
+                            Repository: {{repoInfo.repositoryName}} <br>
+                            Created At: {{repoInfo.createdAt}} <br>
+                            State: {{repoInfo.publicR}} <br>
                             <button  (click)="modifyRepo()"  class="btn btn-primary">Modify Repository</button> 
                             <button  (click)="DeleteRepo()"  class="btn btn-primary">Delete Repository</button> 
                     </div>
@@ -20,9 +20,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                                File {{file.fileName}}
-                                Version n. {{file.cVersion}}
-                                Created At {{file.createdAt}}  
+                                File: {{file.originalName}} <br>
+                                Version n. : {{file.cVersion}} <br>
+                                Created At: {{file.createdAt}}  <br>
                                 <button  (click)="modifyFile()"  class="btn btn-primary">Modify file</button> 
                             <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button> 
                         </div>

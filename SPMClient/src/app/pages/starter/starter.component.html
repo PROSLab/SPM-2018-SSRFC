@@ -12,145 +12,66 @@
                 </div>
             </div>
         </div>
-
     </div>
-    <div class="row">
-       <div class="col-10">
-            
-                <button  (click)="createRepo()"  class="btn btn-primary">Create Repository</button> 
-                <form>
-                <div *ngIf="createrepo" class="card">
-                        <div class="form-group" class="card-body">
-                            <div>
-                                 <label for="reponame">Repository name  </label>
-                                <input type="text" required id="namerepo" #n name="namerepo"/>
-                                <form name="state">
-                                <label for="state">State</label>
-                                <input type="radio" name="statep" id="state" value="public" checked> Public<br>
-                                <input type="radio" name="statep" id="state"  value="private"> Private<br>
-                                </form>
-                            </div>
-                        </div>
 
-                        <button  (click)="save(n.value)"  class="btn btn-primary">Save Repository</button> 
+<div class="row">
+    <div class="col-10">
+        <button  (click)="createRepo()"  class="btn btn-primary">Create Repository</button>
+        <br><br>
+        <form>
+            <div *ngIf="createrepo" class="card">
+                <div class="form-group" class="card-body">
+                    <div>
+                        <label for="reponame">Repository name  </label>
+                        <input type="text" required id="namerepo" #n name="namerepo"/>
+                        <form name="state">
+                        <label for="state">State</label>
+                        <input type="radio" name="statep" id="state" value="public" checked> Public<br>
+                        <input type="radio" name="statep" id="state"  value="private"> Private<br>
+                    </form>
+                    </div>
                 </div>
-            </form>
-            <button  (click)="getAllRepo()"  class="btn btn-primary">all repo </button>
-      </div>  
+            <button  (click)="save(n.value)"  class="btn btn-primary">Save Repository</button> 
+            </div>
+        </form>
+    </div>  
        
-<div class="col-2">
-       <button  (click)="logout()"  class="btn btn-primary  ">LOGOUT</button>
+    <div class="col-2">
+        <button  (click)="logout()"  class="btn btn-primary  ">LOGOUT</button>
+    </div>
 </div>
-</div>
-<div >Lista dei tuoi Repository
-                <table>
-                        <thead>
-                                <tr>
-                                    <th  width="40%">Name
-                                    </th>
-                                    <th  width="30%">Created At
-                                    </th>
-                                    <th  width="10%">last Modified
-                                    </th>
-                                    <th  width="3%">Open
-                                    </th>
-                                </tr>
-                            </thead>
-                        <tbody>
-                          <tr  *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
-                            <th scope="row">{{repo.repositoryName}}</th>
-                            <th scope="row">{{repo.createdAt}}</th>
-                            <th scope="row">{{repo.publicR}}</th>
-                            <th><i class="fa fa-angle-right"></i></th>
-                          </tr>
-                        </tbody>
-                      </table>
-        </div>
 
-
-        
-			<!-- <table>
-                   
-
-                    <tbody>
-                        <tr>
-                            <td colspan="5">
-                                <div class="divinterno">
-    
-                                    <table class="table-int">
-                                        <tr>
-                                            <tr *ngFor="let item of repos">
-                                                <td width="40%">{{item.repositoryName}}</td>
-                                                <td width="10%" class="colFocused">{{item.id}}</td>
-                                                <td width="10%" *ngIf="Arraybtn[2] != 'none'" class="colFocused">{{item.sex}}</td>
-                                                <td width="10%" *ngIf="Arraybtn[3] != 'none'" class="colFocused">{{item.weight | number:"1.2-2"}} </td>
-                                                <td width="10%" *ngIf="Arraybtn[4] != 'none'" class="colFocused">{{}} </td> 
-                                            </tr>
-                                    </table>
-                                </div>
-                            </td>
-                            </tr>
-                    </tbody>
-    
-                </table> -->
-
- <div>
-
-
-<!--     Caricamento di un file
-
-    <div class="form-group">
-        <label for="file">Choose File</label>
-        <input type="file"
-               id="file" #f
-               (change)="handleFileInput($event.target.files)">
-               <button  (click)="caricaFile()"  class="btn btn-primary">Carica File</button>
-    </div> -->
-
-
-    
-
-<!-- </div>Lista file pubblici
-<table >
-    <thead>
-      <tr>
-        <th *ngFor="let head of headElements" scope="col">{{head}} </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr  *ngFor="let el of elements">
-        <th scope="row">{{el.id}}</th>
-        <td>{{el.first}}</td>
-        <td>{{el.last}}</td>
-        <td>{{el.handle}}</td>
-      </tr>
-    </tbody>
-  </table>
-</div> -->
-
-<!-- 
-<div>Lista file privati
-
-</div> -->
-
-    <div class="row" #notLogged  *ngIf="isLogged">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                Registrati per entrare a far parte della community  VuGit! <br>
-                Se sei registrato effettua il login! 
-                </div>
-
-
- 
-        </div>
-        </div>
-        
+    <div>Lista dei tuoi Repository
+        <table>
+            <thead>
+                <tr>
+                    <th  width="40%">Name</th>
+                    <th  width="30%">Created At</th>
+                    <th  width="10%">last Modified</th>
+                    <th  width="3%">Open</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr  *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
+                        <th scope="row">{{repo?.repositoryName}}</th>
+                        <th scope="row">{{repo?.createdAt}}</th>
+                        <th scope="row">{{repo?.publicR}}</th>
+                        <th><i class="fa fa-angle-right"></i></th>
+                    </tr>
+            </tbody>
+        </table>
     </div>
 
-</div>
-
-    
-           
-            
+    <div>
+        <div class="row" #notLogged  *ngIf="!isLogged">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                    Registrati per entrare a far parte della community  VuGit! <br>
+                    Se sei registrato effettua il login! 
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>       
 </div>

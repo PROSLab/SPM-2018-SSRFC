@@ -1,7 +1,8 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { Service } from '../../service/service';
-import{File} from '../../service/model/file';
-import { Router } from '@angular/router';
+import { Component, AfterViewInit } from '@angular/core'
+import { Service } from '../../service/service'
+import{File} from '../../service/model/file'
+import { Router } from '@angular/router'
+import { Repo } from '../../../app/service/model/repo'
 export var isLogged:boolean;
 
 @Component({
@@ -16,7 +17,7 @@ export class StarterComponent implements AfterViewInit {
 	fileToUpload: File
 	createrepo=false
 	risp: boolean
-	repos;
+	repos:Repo[] =null;
 	selectedRepo;
 
 	constructor(private service: Service,  public router: Router) { }
@@ -48,8 +49,6 @@ export class StarterComponent implements AfterViewInit {
 					this.repos[i].publicR="private"
 				}
 			}
-
-		console.log(this.repos)
 		}, error => {
 		    console.log(error);
 		});	
@@ -57,7 +56,7 @@ export class StarterComponent implements AfterViewInit {
 
 
 	//funzione per caricare il file e inviarlo al server
-    caricaFile(){
+   /*  caricaFile(){
 		//controllo se il file caricato è un file XML
 		var a = this.controlFormatFile(this.fileToUpload[0])
 		if(a){
@@ -68,19 +67,21 @@ export class StarterComponent implements AfterViewInit {
 		  console.log(error);
 		});
 	    }	
-    }
+    } */
 
+	
 	sendTo(repoSelected){
 		this.selectedRepo=repoSelected  
 	 	for(var i=0;i<this.repos.length;i++){
 			if(repoSelected.id == this.repos[i].id){
 				localStorage.setItem("repoSelected.id",repoSelected.id)
 			}
-		} 
+		}
 		this.router.navigate(['/file']);
 	}
 
 	save(name){
+
 		var state = $('input[name="statep"]:checked').val();
 		if(state=="public") {
 			this.risp= true; //mando true  al server, quindi la repo è pubblica
@@ -88,10 +89,22 @@ export class StarterComponent implements AfterViewInit {
 		else {
 			this.risp= false; //mando false al server, la repo è privata
 		}
+
 		var nameRepo = name;
  		this.service.createRepo(nameRepo,this.risp)
 			.subscribe(data => {
-				console.log(data)
+
+				var newRepos=JSON.parse(data)
+				this.service.getRepoSpec(newRepos.repository)
+
+				.subscribe(data => {
+
+					var newRepo:Repo =data
+					var count = this.repos.length
+					this.repos[count] = newRepo
+				}, error => {
+					console.log(error);
+				});
 				this.createrepo = false;
 				alert("Repository creata con successo.")
 				this.router.navigate(['/']);
@@ -112,7 +125,6 @@ logout() {
 	
 
 uploadFileToActivity() {
-	
 		this.service.postFile(this.fileToUpload)
 		.subscribe(data => {
 			alert(data)

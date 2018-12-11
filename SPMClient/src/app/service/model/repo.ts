@@ -4,6 +4,6 @@ export interface Repo {
     repositoryName:String
     id:String,
     date:String,
-    publicR:String,
+    publicR:any,
     idUser
     }
