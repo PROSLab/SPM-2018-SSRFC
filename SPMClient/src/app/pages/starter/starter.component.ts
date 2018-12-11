@@ -2,20 +2,22 @@ import { Component, AfterViewInit } from '@angular/core';
 import { Service } from '../../service/service';
 import{File} from '../../service/model/file';
 import { Router } from '@angular/router';
-
 export var isLogged:boolean;
 
 @Component({
 	templateUrl: './starter.component.html',
 	styleUrls: ['./starter.component.css']
 })
+
 export class StarterComponent implements AfterViewInit {
-	subtitle: string;
-	email: string;
-	isLogged=isLogged;
-	fileToUpload: File;
-	createrepo=false;
-	risp: boolean;
+	subtitle: string
+	email: string
+	isLogged=isLogged
+	fileToUpload: File
+	createrepo=false
+	risp: boolean
+	repos;
+	selectedRepo;
 
 	constructor(private service: Service,  public router: Router) { }
 
@@ -23,7 +25,7 @@ export class StarterComponent implements AfterViewInit {
 		if (localStorage.getItem("email") != undefined) {
 			this.email = localStorage.getItem("email");
 			isLogged = true;this.isLogged=isLogged
-		
+		this.getAllRepo();
 		}
 	}
 
@@ -31,6 +33,28 @@ export class StarterComponent implements AfterViewInit {
 	handleFileInput(files: File) {
 		this.fileToUpload = files;
 	}
+
+//funzione per prendere tutti i repo pubblici + quelli privati dell'utente
+	getAllRepo(){
+		//devo richiamare la funzione del server per inviargli il file
+		 this.service.getAllRepo()
+		.subscribe(data => {
+			this.repos = JSON.parse(data)
+			for(var i=0;i<this.repos.length;i++) {
+				if(this.repos[i].publicR==true){
+					this.repos[i].publicR="public"
+				}
+				else if(this.repos[i].publicR==false){
+					this.repos[i].publicR="private"
+				}
+			}
+
+		console.log(this.repos)
+		}, error => {
+		    console.log(error);
+		});	
+	}
+
 
 	//funzione per caricare il file e inviarlo al server
     caricaFile(){
@@ -46,38 +70,44 @@ export class StarterComponent implements AfterViewInit {
 	    }	
     }
 
-save(name){
-var state = $('input[name="statep"]:checked').val();
-if(state=="public"){
-this.risp= true; //mando true  al server, quindi la repo è pubblica
-}
-else{
-	this.risp= false; //mando false al server, la repo è privata
-}
+	sendTo(repoSelected){
+		this.selectedRepo=repoSelected  
+	 	for(var i=0;i<this.repos.length;i++){
+			if(repoSelected.id == this.repos[i].id){
+				localStorage.setItem("repoSelected.id",repoSelected.id)
+			}
+		} 
+		this.router.navigate(['/file']);
+	}
 
-var nameRepo = name;
- this.service.createRepo(nameRepo,this.risp)
-		.subscribe(data => {
-			console.log(data)
-			this.createrepo = false;
-			alert("Repository creata con successo.")
-			this.router.navigate(['/']);
-      }, error => {
-		alert("Repository non creata")
-	  }) 
+	save(name){
+		var state = $('input[name="statep"]:checked').val();
+		if(state=="public") {
+			this.risp= true; //mando true  al server, quindi la repo è pubblica
+		}
+		else {
+			this.risp= false; //mando false al server, la repo è privata
+		}
+		var nameRepo = name;
+ 		this.service.createRepo(nameRepo,this.risp)
+			.subscribe(data => {
+				console.log(data)
+				this.createrepo = false;
+				alert("Repository creata con successo.")
+				this.router.navigate(['/']);
+     		}, error => {
+				alert("Repository non creata")
+	 	 }) 
 	  this.createrepo=false
 }
 
-	createRepo() {
-	this.createrepo = true;
-
-		
+createRepo() {
+	this.createrepo = true	
   }
 
-
-	logout() {
-		isLogged = false;this.isLogged=isLogged
-		this.service.logout()
+logout() {
+	isLogged = false;this.isLogged=isLogged
+	this.service.logout()
 	}
 	
 
@@ -98,12 +128,10 @@ uploadFileToActivity() {
 		alert("formato file corretto")
 		return true;
 	}
-
 	else{
 		alert("formato file non corretto")
 		return false;
 	}
-
   }
 
 	ngAfterViewInit() { }

@@ -11,6 +11,7 @@ import { PswRecoveryComponent } from './psw-recovery/psw-recovery.component';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
+import { FileComponent } from './file/file.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { NewPasswordComponent } from './new-password/new-password.component';
     RegistrazioneComponent,
     PagenotfoundComponent,
     NewPasswordComponent,
+    FileComponent
   ]
 })
 

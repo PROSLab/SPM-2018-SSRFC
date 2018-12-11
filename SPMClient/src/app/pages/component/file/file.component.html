@@ -1,71 +1,58 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h1>Home</h1>
-        </div>
-    </div>
-    <div class="row"  else notLogged>
+<div class="row">
+          <!--informazioni sulla repository-->
         <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    Benvenuto {{email}}!
+                <div class="card">
+                    <div class="card-body">
+                            Repository {{repoInfo.repositoryName}}
+                            Created At {{repoInfo.createdAt}}  
+                            State {{repoInfo.publicR}}
+                            <button  (click)="modifyRepo()"  class="btn btn-primary">Modify Repository</button> 
+                            <button  (click)="DeleteRepo()"  class="btn btn-primary">Delete Repository</button> 
+                    </div>
                 </div>
             </div>
-        </div>
+</div>
 
-    </div>
-    <div class="row">
+
+<div class="row" *ngIf="fileExist">
+        <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                                File {{file.fileName}}
+                                Version n. {{file.cVersion}}
+                                Created At {{file.createdAt}}  
+                                <button  (click)="modifyFile()"  class="btn btn-primary">Modify file</button> 
+                            <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button> 
+                        </div>
+                    </div>
+                </div>
+        </div>
+</div>
+
+    <div class="row" *ngIf="!fileExist">
        <div class="col-10">
             
-                <button  (click)="createRepo()"  class="btn btn-primary">Create Repository</button> 
-                <form>
-                <div *ngIf="createrepo" class="card">
+                <button  (click)="createFile()"  class="btn btn-primary">Create File</button> 
+                <form *ngIf="fileAppear">
+                <div  class="card">
                         <div class="form-group" class="card-body">
                             <div>
-                                 <label for="reponame">Repository name  </label>
-                                <input type="text" required id="namerepo" #n name="namerepo"/>
-                                <form name="state">
-                                <label for="state">State</label>
-                                <input type="radio" name="statep" id="state" value="public" checked> Public<br>
-                                <input type="radio" name="statep" id="state"  value="private"> Private<br>
-                                </form>
+                                 <label for="filename">File name</label>
+                                <input type="text" required #n name="filename"/>
                             </div>
                         </div>
-
-                        <button  (click)="save(n.value)"  class="btn btn-primary">Save Repository</button> 
+                  <button  (click)="saveFile(n.value)"  class="btn btn-primary">Save File</button> 
                 </div>
             </form>
-            <button  (click)="getAllRepo()"  class="btn btn-primary">all repo </button>
       </div>  
-       
-<div class="col-2">
-       <button  (click)="logout()"  class="btn btn-primary  ">LOGOUT</button>
-</div>
-</div>
-<div >Lista dei tuoi Repository
-                <table>
-                        <thead>
-                                <tr>
-                                    <th  width="40%">Name
-                                    </th>
-                                    <th  width="30%">Created At
-                                    </th>
-                                    <th  width="10%">last Modified
-                                    </th>
-                                    <th  width="3%">Open
-                                    </th>
-                                </tr>
-                            </thead>
-                        <tbody>
-                          <tr  *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
-                            <th scope="row">{{repo.repositoryName}}</th>
-                            <th scope="row">{{repo.createdAt}}</th>
-                            <th scope="row">{{repo.publicR}}</th>
-                            <th><i class="fa fa-angle-right"></i></th>
-                          </tr>
-                        </tbody>
-                      </table>
-        </div>
+</div> 
+
+
+
+
+
 
 
         

@@ -4,6 +4,7 @@ import { PswRecoveryComponent } from './psw-recovery/psw-recovery.component';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
+import { FileComponent } from './file/file.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -46,6 +47,14 @@ export const ComponentsRoutes: Routes = [
       data: {
         title: 'changePassword',
         urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'NewPassword'}]
+      }
+    },
+    {
+      path: 'file',
+      component: FileComponent,
+      data: {
+        title: 'file',
+        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'file'}]
       }
     },
     ]

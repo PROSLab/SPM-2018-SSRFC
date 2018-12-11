@@ -3,17 +3,15 @@ import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-
 ///MODEL
 import { User } from './model/user'
 import { Router } from '@angular/router';
+
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
   })
-
-
 };
 
 @Injectable({
@@ -27,6 +25,7 @@ export class Service {
   datiUser
   isLogged:boolean=false;
   id: any;
+  repos: string;
   constructor(
     public router: Router,
     private http: HttpClient,
@@ -80,6 +79,37 @@ export class Service {
     ); 
 }
 
+  getUserSpec(id): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('id', id);
+    return this.http.get(this.baseUrl + 'api/user/getRepoSpec', { params: params })
+      .pipe(
+        tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
+        catchError( this.handleError)
+      );
+  }
+
+  getRepoSpec(id): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('id', id);
+    return this.http.get(this.baseUrl + 'api/file/getRepoSpec', { params: params })
+      .pipe(
+        tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
+        catchError( this.handleError)
+      );
+  }
+
+  getFile(id): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('idRepository', id);
+    return this.http.get(this.baseUrl + 'api/file/getAllFile', { params: params })
+      .pipe(
+        tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
+        catchError( this.handleError)
+      );
+  }
+
+
   loginUser(email, psw): Observable<any> {
     let params = new HttpParams();
     params = params.append('email', email);
@@ -107,6 +137,29 @@ export class Service {
   }
 
 
+  getAllRepo(): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('idUser', localStorage.getItem("id"));
+    return this.http.get(this.baseUrl + 'api/file/getAllRepo', { params: params , responseType: 'text'})
+      .pipe(
+        tap(success=>this.repos=success), //mi salvo tutti i dati di ritorno dal server
+        catchError( this.handleError)
+      );
+  }
+
+  createFile(idRepository,idUser,originalName): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('idRepository',idRepository);
+    params = params.append('idUser',idUser);
+    params = params.append('originalName',originalName);
+    
+    return this.http.get(this.baseUrl + 'api/file/createFile', { params: params , responseType: 'text'})
+      .pipe(
+        tap(success=>this.repos=success), //mi salvo tutti i dati di ritorno dal server
+        catchError( this.handleError)
+      );
+  }
+
   logout() {
     localStorage.clear();
     alert('logout effettuato')
@@ -115,6 +168,7 @@ export class Service {
 
   private handleError(error: HttpErrorResponse) {
     console.log(error)
+
     if (error.status == 400) {
       alert("username o password errata")
       return throwError("Bad Credential")
