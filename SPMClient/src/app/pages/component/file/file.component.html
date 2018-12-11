@@ -1,0 +1,143 @@
+<div class="container">
+<div class="row">
+          <!--informazioni sulla repository-->
+        <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                            Repository: {{repoInfo.repositoryName}} <br>
+                            Created At: {{repoInfo.createdAt}} <br>
+                            State: {{repoInfo.publicR}} <br>
+                            <button  (click)="modifyRepo()"  class="btn btn-primary">Modify Repository</button> 
+                            <button  (click)="DeleteRepo()"  class="btn btn-primary">Delete Repository</button> 
+                    </div>
+                </div>
+            </div>
+</div>
+
+
+<div class="row" *ngIf="fileExist">
+        <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                                File: {{file.originalName}} <br>
+                                Version n. : {{file.cVersion}} <br>
+                                Created At: {{file.createdAt}}  <br>
+                                <button  (click)="modifyFile()"  class="btn btn-primary">Modify file</button> 
+                            <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button> 
+                        </div>
+                    </div>
+                </div>
+        </div>
+</div>
+
+    <div class="row" *ngIf="!fileExist">
+       <div class="col-10">
+            
+                <button  (click)="createFile()"  class="btn btn-primary">Create File</button> 
+                <form *ngIf="fileAppear">
+                <div  class="card">
+                        <div class="form-group" class="card-body">
+                            <div>
+                                 <label for="filename">File name</label>
+                                <input type="text" required #n name="filename"/>
+                            </div>
+                        </div>
+                  <button  (click)="saveFile(n.value)"  class="btn btn-primary">Save File</button> 
+                </div>
+            </form>
+      </div>  
+</div> 
+
+
+
+
+
+
+
+        
+			<!-- <table>
+                   
+
+                    <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <div class="divinterno">
+    
+                                    <table class="table-int">
+                                        <tr>
+                                            <tr *ngFor="let item of repos">
+                                                <td width="40%">{{item.repositoryName}}</td>
+                                                <td width="10%" class="colFocused">{{item.id}}</td>
+                                                <td width="10%" *ngIf="Arraybtn[2] != 'none'" class="colFocused">{{item.sex}}</td>
+                                                <td width="10%" *ngIf="Arraybtn[3] != 'none'" class="colFocused">{{item.weight | number:"1.2-2"}} </td>
+                                                <td width="10%" *ngIf="Arraybtn[4] != 'none'" class="colFocused">{{}} </td> 
+                                            </tr>
+                                    </table>
+                                </div>
+                            </td>
+                            </tr>
+                    </tbody>
+    
+                </table> -->
+
+ <div>
+
+
+<!--     Caricamento di un file
+
+    <div class="form-group">
+        <label for="file">Choose File</label>
+        <input type="file"
+               id="file" #f
+               (change)="handleFileInput($event.target.files)">
+               <button  (click)="caricaFile()"  class="btn btn-primary">Carica File</button>
+    </div> -->
+
+
+    
+
+<!-- </div>Lista file pubblici
+<table >
+    <thead>
+      <tr>
+        <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let el of elements">
+        <th scope="row">{{el.id}}</th>
+        <td>{{el.first}}</td>
+        <td>{{el.last}}</td>
+        <td>{{el.handle}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+
+<!-- 
+<div>Lista file privati
+
+</div> -->
+
+    <div class="row" #notLogged  *ngIf="isLogged">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                Registrati per entrare a far parte della community  VuGit! <br>
+                Se sei registrato effettua il login! 
+                </div>
+
+
+ 
+        </div>
+        </div>
+        
+    </div>
+
+</div>
+
+    
+           
+            
+</div>
