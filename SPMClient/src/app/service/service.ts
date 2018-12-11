@@ -149,8 +149,9 @@ export class Service {
 
   createFile(idRepository,idUser,originalName): Observable<any> {
     let params = new HttpParams();
-    params = params.append('idRepository',idRepository);
     params = params.append('idUser',idUser);
+    params = params.append('idRepository',idRepository);
+  
     params = params.append('originalName',originalName);
     
     return this.http.get(this.baseUrl + 'api/file/createFile', { params: params , responseType: 'text'})

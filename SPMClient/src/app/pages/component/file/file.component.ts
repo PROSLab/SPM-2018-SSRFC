@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Service } from '../../../service/service'
 import { Repo } from '../../../../app/service/model/repo'
+import { File } from '../../../../app/service/model/file'
 
 @Component({
   selector: 'app-file',
@@ -16,6 +17,7 @@ export class FileComponent implements OnInit {
   file:Repo = <any>[]
   fileExist=false;
   fileAppear=false;
+  filecreato:File = <any>[];
 
   constructor( public router: Router,private service: Service) { }
 
@@ -57,11 +59,12 @@ export class FileComponent implements OnInit {
     console.log(localStorage.getItem("idRepo"))
     console.log(localStorage.getItem("id"))
     
-    this.userInfo.id=localStorage.getItem("id")
-    this.repoInfo.id=localStorage.getItem("idRepo")
-    this.service.createFile(this.repoInfo.id,this.userInfo.id,originalName)
+    
+    
+    this.service.createFile(localStorage.getItem("id"),localStorage.getItem("idRepo"),originalName)
 		.subscribe(data => {
       console.log(data)
+     
 		}, error => {
 		  console.log(error);
     });
