@@ -13,7 +13,7 @@ public class FileEntity {
 	ObjectId idUser; 		// Reference to id property of User entity
 	ObjectId idRepository;	// Reference to id property of Repository entity
 	Date createdAt; 		// Date of file creation
-	String fileName; 		// Name of saved file
+	String fileName; // Name of saved file
 	String originalName;	// Name of original file
 	String mimetype;
 	String path;			// !!Important: the location of the file is stored in the server

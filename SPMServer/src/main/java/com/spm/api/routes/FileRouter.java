@@ -46,6 +46,10 @@ public class FileRouter {
 								GET("/getAllFile"),
 								fileHandler:: getAllFile
 						)
+						.andRoute(
+								GET("/createFolder"),
+								fileHandler::createFolder
+						)
 					
 				);
 	}

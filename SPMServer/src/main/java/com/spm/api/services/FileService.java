@@ -12,21 +12,24 @@ import org.springframework.stereotype.Component;
 
 import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
-
+import com.spm.api.entity.Folder;
 import com.spm.api.repository.FileRepository;
+
+import com.spm.api.repository.FolderRepository;
 import com.spm.api.repository.RepositoryRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
-public class FileService {
-	
+public class FileService  {
+	private FolderRepository folderRepository;
 	private RepositoryRepository repositoryRepository;
 	private FileRepository fileRepository;
 	
-	public FileService(RepositoryRepository repositoryRepository, FileRepository fileRepository) {
+	public FileService(RepositoryRepository repositoryRepository, FileRepository fileRepository, FolderRepository folderRepository) {
 		this.repositoryRepository = repositoryRepository;
 		this.fileRepository = fileRepository;
+		this.folderRepository = folderRepository;
 	}
 
 
@@ -115,23 +118,83 @@ public class FileService {
 	/*
 	 * Get all repo
 	 */
+	
 	public Flux<Repository> getAll(ObjectId idUser) {
 		
-		return repositoryRepository.findAllByIdUser(idUser);
+		 return  repositoryRepository.findAllByIdUser(idUser);
+		
 	}
-
+/*
+ * get a specific repo
+ */
 
 	public Mono<Repository> getRepoSpec(ObjectId idRepo) {
 		return repositoryRepository.findRepoById(idRepo);
 	}
 
 
-
+/*
+ * get all file in a repo
+ */
 public Mono<FileEntity> getAllFile(ObjectId idRepository) {
 		
 		return fileRepository.findFileByIdRepository(idRepository);
 	}
 	
+
+
+/*
+ * Create Folder DB Schema (here i work with DB)
+ */
+public Mono<Folder> createFolderSchema(Folder fold) {
+	return folderRepository.save(fold); // query to mongoDb
+}
+
+/*
+ * 
+ * Create Path for Folders
+ */
+@SuppressWarnings("unused")
+public Mono<Object> createFolderPath(String rootDir, String idUser, String idRepository,String idFolder) {
+	File files = new File(rootDir + File.separator + idUser + File.separator + idRepository+ File.separator + idFolder);
+	
+	Object res = new Object() {
+		private final String path = files.getPath();
+		private final String user = idUser;
+		private final String repository = idRepository;
+		private final String folder=idFolder;
+		public String getPath() {
+			return path;
+		}
+		public String getUser() {
+			return user;
+		}
+		public String getRepository() {
+			return repository;
+		}
+		public String getFolder() {
+			return folder;
+		}
+	};
+	
+	if(!files.exists()) {
+		if (files.mkdirs()) {
+			return Mono.just(res);
+        } else {
+            return Mono.error(new Exception("Directory not created"));
+        }
+	}
+	
+	return Mono.just(res);
+}
+public Mono<Folder>updatepath(String path,Folder folder){
+	folder.setPath(path);
+	return folderRepository.save(folder);
+}
+
+
+
+
 }
  
 
