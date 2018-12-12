@@ -176,6 +176,15 @@ public class FileHandler {
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
 	
+	public Mono<ServerResponse> modifyRepoVisibility(ServerRequest request) {
+		String idRepository = request.queryParam("idRepository").get();
+		Boolean newRepoVisibility = request.queryParam("newRepoVisibility").get().equals("true") ? true : false;
+		
+		return fileService.updateRepoVisibility(idRepository, newRepoVisibility)
+				.flatMap(repo -> Responses.ok(repo))
+				.onErrorResume(Exception.class, Responses::badRequest);
+	}
+	
 	
 }
 

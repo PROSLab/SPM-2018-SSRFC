@@ -283,6 +283,16 @@ public Flux <Folder> getAllFolders(ObjectId idRepository) {
 				})
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
+	
+	public Mono<Repository> updateRepoVisibility(String idRepository, Boolean newRepoVisibility) {
+		return repositoryRepository.findById(idRepository)
+				.flatMap(r -> {
+					r.setPublicR(newRepoVisibility);
+					return repositoryRepository.save(r);
+				})
+				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("Repository not found"))));
+		
+	}
 
 }
  
