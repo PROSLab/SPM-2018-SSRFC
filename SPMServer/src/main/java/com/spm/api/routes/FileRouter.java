@@ -62,6 +62,14 @@ public class FileRouter {
 								GET("/createNewVersion"),
 								fileHandler::createNewVersion
 						)
+						.andRoute(
+								GET("/modifyRepoName"),
+								fileHandler::modifyRepoName
+						)
+						.andRoute(
+								GET("/modifyFileName"),
+								fileHandler::modifyFileName
+						)
 					
 				);
 	}

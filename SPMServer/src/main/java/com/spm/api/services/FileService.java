@@ -200,7 +200,7 @@ public class FileService  {
 		return Mono.just(res);
 	}
 	
-	public Mono<Folder>updatepath(String path,Folder folder){
+	public Mono<Folder> updatepath(String path,Folder folder){
 		folder.setPath(path);
 		return folderRepository.save(folder);
 	}
@@ -259,7 +259,25 @@ public class FileService  {
 		
 		return Mono.just(sourceFile);
 	}
-
+	
+	public Mono<Repository> updateRepoName(String idRepository, String newRepoName) {
+		return repositoryRepository.findById(idRepository)
+				.flatMap(r -> {
+					r.setRepositoryName(newRepoName);
+					return repositoryRepository.save(r);
+				})
+				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("Repository not found"))));
+		
+	}
+	
+	public Mono<FileEntity> updateFileName(String idFile, String newFileName) {
+		return fileRepository.findById(idFile)
+				.flatMap(f -> {
+					f.setOriginalName(newFileName);
+					return fileRepository.save(f);
+				})
+				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
+	}
 
 }
  

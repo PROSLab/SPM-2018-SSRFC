@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "Files")
+@Document(collection = "FileEntitys")
 public class FileEntity {
 	@Id
 	String id; 				// MondoDB auto-generated

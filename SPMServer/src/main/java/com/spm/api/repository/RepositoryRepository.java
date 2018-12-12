@@ -10,5 +10,5 @@ import reactor.core.publisher.Mono;
 
 public interface RepositoryRepository extends ReactiveMongoRepository<Repository, String> {
 	Flux<Repository> findAllByIdUser(ObjectId idUser);
-	Mono<Repository>findRepoById(ObjectId id);
+	Mono<Repository> findRepoById(ObjectId id);
 }

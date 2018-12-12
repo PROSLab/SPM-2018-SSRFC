@@ -156,6 +156,26 @@ public class FileHandler {
 				.flatMap(res -> Responses.ok(res))
 				.onErrorResume(Exception.class, Responses::internalServerError);
 	}
+	
+	public Mono<ServerResponse> modifyRepoName(ServerRequest request) {
+		String idRepository = request.queryParam("idRepository").get();
+		String newRepoName = request.queryParam("newRepoName").get();
+		
+		return fileService.updateRepoName(idRepository, newRepoName)
+				.flatMap(repo -> Responses.ok(repo))
+				.onErrorResume(Exception.class, Responses::badRequest);
+	}
+
+	public Mono<ServerResponse> modifyFileName(ServerRequest request) {
+		String idFile = request.queryParam("idFile").get();
+		String newFileName = request.queryParam("newFileName").get();
+		
+		return fileService.updateFileName(idFile, newFileName)
+				.flatMap(file -> Responses.ok(file))
+				.onErrorResume(Exception.class, Responses::badRequest);
+	}
+	
+	
 }
 
 
