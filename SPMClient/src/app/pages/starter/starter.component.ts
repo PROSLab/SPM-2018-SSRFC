@@ -32,9 +32,8 @@ export class StarterComponent implements AfterViewInit {
 
 	ngOnInit() {
 		this.setUser();
-		this.getAllRepo();
-
 	}
+
 	setUser() {
 
 		if (localStorage.getItem("email") != undefined) {
@@ -49,6 +48,7 @@ export class StarterComponent implements AfterViewInit {
 			this.isLogged = true;
 			//SET EXPORT 
 			exportLocalUser = this.localUser; exportIsLogged = this.isLogged;
+			this.getAllRepo();
 		}
 	}
 
@@ -61,9 +61,9 @@ export class StarterComponent implements AfterViewInit {
 
 
 	//funzione per prendere il file
-	handleFileInput(files: File) {
+	/* handleFileInput(files: File) {
 		this.fileToUpload = files;
-	}
+	} */
 
 	//funzione per prendere tutti i repo pubblici + quelli privati dell'utente
 	getAllRepo() {
@@ -77,7 +77,6 @@ export class StarterComponent implements AfterViewInit {
 	//RENDER TO REPOSITORY SELEZIONATA
 	//TODO: Non si fa cosi questa cosa.. ma non so come correggerla :/ e mi ci vorebbe troppo tempo ora
 	sendTo(repoSelected) {
-		console.log(repoSelected.id)
 		for (var i = 0; i < this.repos.length; i++) {
 			if (repoSelected.id == this.repos[i].id) {
 				localStorage.setItem("repoSelected.id", repoSelected.id)
@@ -106,6 +105,7 @@ export class StarterComponent implements AfterViewInit {
 				}, error => {
 					this.errorMessage = <any>error
 				});
+				
 				this.createrepo = false;
 				alert("Repository creata con successo.")
 				this.router.navigate(['/']);

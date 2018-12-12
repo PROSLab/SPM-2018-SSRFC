@@ -1,54 +1,90 @@
 <div class="container">
-<div class="row">
-          <!--informazioni sulla repository-->
+    <div class="row">
+        <!--informazioni sulla folder-->
         <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    NameFolder: {{folderInfo?.folderName}} <br>
+                    Created At: {{folderInfo?.createdAt}} <br>
+
+                    <button (click)="modifyFolder()" class="btn btn-primary">Modify Folder</button>
+                    <form *ngIf="appearRenameFolder">
+                        <div class="card">
+                            <div class="form-group" class="card-body">
+                                <div>
+                                    <label for="filename">New name: </label>
+                                    <input type="text" required #n name="filename" />
+                                </div>
+                            </div>
+                            <button (click)="sendNewFolderName(n.value)" class="btn btn-primary">Save folder</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--   <button  (click)="deleteRepo()"  class="btn btn-primary">Delete Repository</button> -->
+        </div>
+    </div>
+
+    <div class="row" *ngIf="fileExist">
+        <div class="row">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                            Repository: {{repoInfo.repositoryName}} <br>
-                            Created At: {{repoInfo.createdAt}} <br>
-                           <div *ngIf="repo?.publicR"  style="margin-bottom:5px;"> State: Public <br> </div>
-                           <div *ngIf="!repo?.publicR" style="margin-bottom:5px;"> State: Private <br> </div> 
-                            <button  (click)="modifyRepo()"  class="btn btn-primary" style="margin-right:5px;">Modify Repository</button> 
-                            <button  (click)="DeleteRepo()"  class="btn btn-primary">Delete Repository</button> 
+                        File: {{file.originalName}} <br>
+                        Version n. : <select>
+
+                            <option *ngFor="let v of versionArray; index as i">{{v}}</option>
+
+                        </select> <br>
+
+                        Created At: {{file.createdAt}} <br>
+                        <button (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
+                        <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
+                        <button (click)="newVersion()" class="btn btn-primary">Create new version</button>
+                        <form *ngIf="appear">
+                            <div class="card">
+                                <div class="form-group" class="card-body">
+                                    <div>
+                                        <label for="filename">New name: </label>
+                                        <input type="text" required #n name="filename" />
+                                    </div>
+                                </div>
+                                <button (click)="sendNewName(n.value)" class="btn btn-primary">Save repo</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-</div>
-
-
-<div class="row" *ngIf="fileExist">
-        <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                                File: {{file.originalName}} <br>
-                                Version n. : {{file.cVersion}} <br>
-                                Created At: {{file.createdAt}}  <br>
-                                <button  (click)="modifyFile()"  class="btn btn-primary">Modify file</button> 
-                            <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button> 
-                        </div>
-                    </div>
-                </div>
         </div>
-</div>
+    </div>
+
+    <div class="dropdown">
+        <ul class="dropdown-menu">
+            <li *ngFor="let v of versionArray">
+                <a href="#">{{v}}
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <div class="row" *ngIf="!fileExist">
-       <div class="col-10">
-            
-                <button  (click)="createFile()"  class="btn btn-primary">Create File</button> 
-                <form *ngIf="fileAppear">
-                <div  class="card">
-                        <div class="form-group" class="card-body">
-                            <div>
-                                 <label for="filename">File name</label>
-                                <input type="text" required #n name="filename"/>
-                            </div>
+        <div class="col-10">
+
+            <button (click)="createFile()" class="btn btn-primary">Create File</button>
+            <form *ngIf="fileAppear">
+                <div class="card">
+                    <div class="form-group" class="card-body">
+                        <div>
+                            <label for="filename">File name</label>
+                            <input type="text" required #n name="filename" />
                         </div>
-                  <button  (click)="saveFile(n.value)"  class="btn btn-primary">Save File</button> 
+                    </div>
+                    <button (click)="saveFile(n.value)" class="btn btn-primary">Save File</button>
                 </div>
             </form>
-      </div>  
-</div> 
+            
+        </div>
+    </div>
 
 
 
@@ -56,8 +92,8 @@
 
 
 
-        
-			<!-- <table>
+
+    <!-- <table>
                    
 
                     <tbody>
@@ -82,10 +118,10 @@
     
                 </table> -->
 
- <div>
+    <div>
 
 
-<!--     Caricamento di un file
+        <!--     Caricamento di un file
 
     <div class="form-group">
         <label for="file">Choose File</label>
@@ -96,9 +132,9 @@
     </div> -->
 
 
-    
 
-<!-- </div>Lista file pubblici
+
+        <!-- </div>Lista file pubblici
 <table >
     <thead>
       <tr>
@@ -116,14 +152,14 @@
   </table>
 </div> -->
 
-<!-- 
+        <!-- 
 <div>Lista file privati
 
 </div> -->
 
-</div>
+    </div>
 
-    
-           
-            
+
+
+
 </div>

@@ -1,45 +1,71 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h1>Folers</h1>
+            <h1>Folders</h1>
         </div>
     </div>
 
-<div class="row">
-    <div class="col-10">
-        <button  (click)="createFolder()"  class="btn btn-primary">create Folder</button>
-        <br><br>
-        <form>
-            <div *ngIf="createFold" class="card">
-                <div class="form-group" class="card-body">
-                    <div>
-                        <label for="reponame">Folder name</label>
-                        <input type="text" required id="namerepo" #n name="namerepo"/>
-                  </div>
-              </div>
-            <button (click)="saveFolder(n.value)"  class="btn btn-primary">Save Folder</button> 
-          </div>
-      </form>
+    <div class="row">
+        <!--informazioni sul folder-->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    Repository: {{repoInfo?.repositoryName}} <br>
+                    Created At: {{repoInfo?.createdAt}} <br>
+                    <div *ngIf="repo?.publicR" style="margin-bottom:5px;"> State: Public <br> </div>
+                    <div *ngIf="!repo?.publicR" style="margin-bottom:5px;"> State: Private <br> </div>
+                    <button (click)="modifyRepo()" class="btn btn-primary">Modify Repository</button>
+                    <form *ngIf="appear">
+                        <div class="card">
+                            <div class="form-group" class="card-body">
+                                <div>
+                                    <label for="filename">New name: </label>
+                                    <input type="text" required #n name="filename" />
+                                </div>
+                            </div>
+                            <button (click)="sendNewName(n.value)" class="btn btn-primary">Save repo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--   <button  (click)="deleteRepo()"  class="btn btn-primary">Delete Repository</button> -->
+        </div>
     </div>
-</div>
+    
+    <div class="row">
+        <div class="col-10">
+            <button (click)="createFolder()" class="btn btn-primary">create Folder</button>
+            <br><br>
+            <form *ngIf="createfold">
+                <div class="card">
+                    <div class="form-group" class="card-body">
+                        <div>
+                            <label for="reponame">Folder name</label>
+                            <input type="text" required id="namerepo" #n name="namerepo" />
+                        </div>
+                    </div>
+                    <button (click)="saveFolder(n.value)" class="btn btn-primary">Save Folder</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-<div >Lista dei tuoi folder
-  <table>
-    <thead>
-      <tr>
-        <th  width="40%">Name</th>
-        <th  width="30%">Created At</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr  *ngFor="let fold of fold; let i=index;" (click)="sendTo(fold)">
-          <th scope="row">{{fold?.folderName}}</th>
-          <th scope="row">{{fold?.createdAt}}</th>
-          <th><i class="fa fa-angle-right"></i></th>
-        </tr>
-    </tbody>
-  </table>
-</div>
-<div>
-</div>       
+    <div>Lista dei tuoi folder
+        <table>
+            <thead>
+                <tr>
+                    <th width="40%">Name</th>
+                    <th width="30%">Created At</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let fold of folder; let i=index;" (click)="sendTo(fold)">
+                    <th scope="row">{{fold?.folderName}}</th>
+                    <th scope="row">{{fold?.createdAt}}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>

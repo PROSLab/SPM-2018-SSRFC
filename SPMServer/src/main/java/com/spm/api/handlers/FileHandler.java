@@ -14,6 +14,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
+import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.entity.Folder;
 import com.spm.api.services.FileService;
 import com.spm.api.utils.Responses;
@@ -155,7 +156,8 @@ public class FileHandler {
 					return fileService.cloneFileVersion(f, version, mimetype, rootDir);
 				})
 				.flatMap(res -> Responses.ok(res))
-				.onErrorResume(Exception.class, Responses::internalServerError);
+				.onErrorResume(Exception.class, Responses::internalServerError)
+				.onErrorResume(BadRequestException.class, Responses::badRequest);
 	}
 	
 	public Mono<ServerResponse> modifyRepoName(ServerRequest request) {
@@ -173,6 +175,15 @@ public class FileHandler {
 		
 		return fileService.updateFileName(idFile, newFileName)
 				.flatMap(file -> Responses.ok(file))
+				.onErrorResume(Exception.class, Responses::badRequest);
+	}
+	
+	public Mono<ServerResponse> modifyRepoVisibility(ServerRequest request) {
+		String idRepository = request.queryParam("idRepository").get();
+		Boolean newRepoVisibility = request.queryParam("newRepoVisibility").get().equals("true") ? true : false;
+		
+		return fileService.updateRepoVisibility(idRepository, newRepoVisibility)
+				.flatMap(repo -> Responses.ok(repo))
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
 	

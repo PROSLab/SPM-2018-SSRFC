@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
+import { Repo } from '../../../service/model/repo';
 
 @Component({
   selector: 'app-folder',
@@ -10,64 +11,96 @@ import { Router } from '@angular/router';
 })
 
 export class FolderComponent implements OnInit {
-  
-  selectedfolder: any;
-  length: any;
-	createFold: boolean;
-	idRepoSelected: string;
-	idUser: string;
-	folder: any;
-	fold:Folder[] =null;
+  selectedfolder: any
+  createFold: boolean
+  idRepoSelected: string
+  idUser: string
+  folder: Folder[] = null
+  repoInfo: Repo = <any>[]
+  folderExist: boolean = false
+  createfold = false
+  errorMessage: any;
+  appear: boolean;
 
-  constructor(private service: Service,public router: Router) { 
-	this.idRepoSelected = localStorage.getItem("repoSelected.id");
-  this.idUser = localStorage.getItem("id")
+  constructor(private service: Service, public router: Router) {
+    this.idRepoSelected = localStorage.getItem("repoSelected.id");
+    this.idUser = localStorage.getItem("id")
   }
 
   ngOnInit() {
-	this.getAllfolder();
+    this.getRepo();
+    this.getAllfolder();
   }
 
+  modifyRepo(name) {
+    this.appear = true;
+  }
+  sendNewName(name) {
+    this.service.changeNameRepo(this.idRepoSelected, name)
+      .subscribe(data => {
+        this.appear = false
+        this.repoInfo = data
+
+      })
+  }
+  //prendo i dati della repo specifica
+  getRepo() {
+    this.service.getRepoSpec(this.idRepoSelected)
+      .subscribe(data => {
+        this.repoInfo = data
+      }, error => {
+        this.errorMessage = <any>error
+      });
+  }
   createFolder() {
-    this.createFold = true;
+    this.createfold = true;
   }
 
   saveFolder(folderName) {
-    this.service.createFolder(this.idRepoSelected, this.idUser, folderName)
+    var nameFolder = folderName;
+    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
       .subscribe(data => {
-       /*  this.fileAppear = false;
-        this.fileExist = true; */
-        this.folder = JSON.parse(data)
-        console.log(this.folder)
-       // location.reload();
+        var folder = JSON.parse(data)
+        this.service.getFolderSpec(folder.id)
+          .subscribe(data => {
+            var newFolder: Folder = data
+            var count = this.folder.length
+            this.folder[count] = newFolder
+          }, error => {
+            this.errorMessage = <any>error
+          });
+        this.createfold = false
+        alert("Cartella creata con successo.")
+        this.router.navigate(['/folder']);
       }, error => {
-        console.log(error);
+        this.errorMessage = <any>error
+        alert("Cartella non creata")
+      })
+    this.createfold = false
+  }
+
+
+
+  getAllfolder() {
+    //devo richiamare la funzione del server per inviargli il file
+    this.service.getAllFolder(this.idRepoSelected)
+      .subscribe(data => {
+        this.folder = JSON.parse(data)
+      }, error => {
+        this.errorMessage = <any>error
       });
   }
 
 
-  getAllfolder(){
-		//devo richiamare la funzione del server per inviargli il file
-		 this.service.getAllFolder(localStorage.getItem("repoSelected.id"))
-		.subscribe(data => {
-      this.fold = JSON.parse(data)
-      console.log(this.fold)
-      this.length=data.length //lunghezza delle carelle, quante ce ne sono
-		}, error => {
-		    console.log(error);
-		});	
+  sendTo(folderSelected) {
+    this.selectedfolder = folderSelected
+    for (var i = 0; i < this.folder.length; i++) {
+      if (folderSelected.id == this.folder[i].id) {
+        localStorage.setItem("folderSelected.id", folderSelected.id)
+      }
+    }
+    this.router.navigate(['/file']);
   }
-  
-
-	sendTo(folderSelected){
-		this.selectedfolder=folderSelected  
-	 	for(var i=0;i<this.fold.length;i++){
-			if(folderSelected.id == this.fold[i].id){
-				localStorage.setItem("folderSelected.id",folderSelected.id)
-			}
-		}
-		this.router.navigate(['/file']);
-	}
 
 
 }

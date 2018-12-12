@@ -1,13 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 import { Service } from '../../../service/service'
-import { Repo } from '../../../../app/service/model/repo'
 import { File } from '../../../../app/service/model/file'
 import { Folder } from '../../../../app/service/model/folder'
 
-import { User } from '../../../service/model/user';
-import {exportIsLogged} from '../../starter/starter.component';
-import {exportLocalUser} from '../../starter/starter.component';
 
 @Component({
   selector: 'app-file',
@@ -17,17 +13,21 @@ import {exportLocalUser} from '../../starter/starter.component';
 
 
 export class FileComponent implements OnInit {
-  repoInfo: Repo = <any>[]
+  appearRenameFolder:boolean=false;
   idRepoSelected: string;
   idUser: string;
   userInfo: any;
   folder: Folder = <any>[]
+  folderInfo:Folder
   file = <any>[]
   fileExist = false;
   fileAppear = false;
   filecreato: File = <any>[];
   errorMessage: any;
   idFolder: string;
+  versionArray = [];
+  appear: boolean;
+
 
   constructor(public router: Router, private service: Service) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -37,69 +37,86 @@ export class FileComponent implements OnInit {
 
   ngOnInit() {
     //faccio una chiamata al server per vedere i dati specifici della repos.
-    this.getRepo();
+    this.getFolder();
+    console.log(this.idFolder)
     this.getAllFile();
-    
-    console.log("l'id repo è", this.idRepoSelected)
-    console.log("l'id user è", this.idUser)
-    console.log("l'id folder è", this.idFolder)
   }
 
-
-  //prendo i dati della repo specifica
-  getRepo() {
-    this.service.getRepoSpec(this.idRepoSelected).subscribe(data => {
-        this.repoInfo = data
-      }, error => {
-        this.errorMessage = <any>error
-      });
-  }
 
   createFile() {
     this.fileAppear = true;
   }
 
-
   saveFile(originalName) {
-    this.service.createFile(this.idRepoSelected,this.idFolder, this.idUser, originalName)
+    this.service.createFile(this.idRepoSelected, this.idFolder, this.idUser, originalName)
       .subscribe(data => {
         this.fileAppear = false;
         this.fileExist = true;
         this.file = JSON.parse(data)
-        console.log(this.file)
-       // location.reload();
+        this.versionArray[0] = 1
+
       }, error => {
-        console.log(error);
+        this.errorMessage = <any>error
+      });
+  }
+
+  newVersion() {
+    this.service.createNewVersion(this.file.id, this.file.cVersion)
+      .subscribe(data => {
+        for (var i = 1; i <= data.cVersion; i++) {
+          this.versionArray[i - 1] = i
+        }
+      }, error => {
+        this.errorMessage = <any>error
       });
   }
 
   getAllFile() {
     this.service.getFile(this.idFolder) //gli passo l'id della cartella da cui prendere il file
       .subscribe(data => {
-        console.log("data è", data)
         if (data != null) {
           this.fileExist = true;
           this.file = data
-          console.log("file", this.file)
+          for (var i = 1; i <= this.file.cVersion; i++) {
+            this.versionArray[i - 1] = i
+          }
         }
         else {
           this.fileExist = false;
         }
-        console.log(data)
       }, error => {
-        console.log(error);
+        this.errorMessage = <any>error
       });
-    // window.setTimeout("getUser()", 1000);
   }
 
-  //prendo i dati dell'user specifico
-  getUser() {
-    this.service.getUserSpec(this.idUser)
+  getFolder() {
+    this.service.getFolderSpec(this.idFolder)
       .subscribe(data => {
-        this.userInfo = data
-        console.log("userInfo: ", this.userInfo)
+        this.folderInfo = data
       }, error => {
-        console.log(error);
+        this.errorMessage = <any>error
       });
   }
+  modifyFolder(){
+    this.appearRenameFolder = true;
+  }
+   sendNewFolderName(name) {
+    this.service.changeNameFolder(this.idFolder, name)
+      .subscribe(data => {
+        this.appearRenameFolder = false
+        this.folderInfo = data
+      })
+  } 
+
+  /* sendNewFileName(name) {
+    this.service.changeNameFile(this.file.id, name)
+      .subscribe(data => {
+        this.appear = false
+        console.log(data)
+        this.folderInfo = data
+
+      })
+  } */
+ 
+  
 }

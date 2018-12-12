@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
+import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.entity.Folder;
 import com.spm.api.repository.FileRepository;
 
@@ -219,7 +220,7 @@ public Flux <Folder> getAllFolders(ObjectId idRepository) {
 					int newVersion = f.getcVersion() + 1;
 					
 					if(Integer.parseInt(version) > f.getcVersion()) {
-						return Mono.error(new Exception("Version does not exist"));
+						return Mono.error(new BadRequestException("Version does not exist"));
 					}
 					
 					String newFileName = f.getId() + '.' + newVersion;
@@ -282,6 +283,16 @@ public Flux <Folder> getAllFolders(ObjectId idRepository) {
 					return fileRepository.save(f);
 				})
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
+	}
+	
+	public Mono<Repository> updateRepoVisibility(String idRepository, Boolean newRepoVisibility) {
+		return repositoryRepository.findById(idRepository)
+				.flatMap(r -> {
+					r.setPublicR(newRepoVisibility);
+					return repositoryRepository.save(r);
+				})
+				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("Repository not found"))));
+		
 	}
 
 }
