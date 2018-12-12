@@ -74,6 +74,10 @@ public class FileRouter {
 								GET("/modifyRepoVisibility"),
 								fileHandler::modifyRepoVisibility
 						)
+						.andRoute(
+								GET("/modifyFolderName"),
+								fileHandler::modifyFolderName
+						)
 					
 				);
 	}

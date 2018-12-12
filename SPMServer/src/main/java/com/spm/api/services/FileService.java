@@ -294,6 +294,15 @@ public Flux <Folder> getAllFolders(ObjectId idRepository) {
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("Repository not found"))));
 		
 	}
+	
+	public Mono<Folder> updateFolderName(String idFolder, String newFileName) {
+		return folderRepository.findById(idFolder)
+				.flatMap(f -> {
+					f.setFolderName(newFileName);
+					return folderRepository.save(f);
+				})
+				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
+	}
 
 }
  
