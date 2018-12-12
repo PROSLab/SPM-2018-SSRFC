@@ -12,6 +12,7 @@ import { RegistrazioneComponent } from './registrazione/registrazione.component'
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { FileComponent } from './file/file.component';
+import { FolderComponent } from './folder/folder.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { FileComponent } from './file/file.component';
     RegistrazioneComponent,
     PagenotfoundComponent,
     NewPasswordComponent,
-    FileComponent
+    FileComponent,
+    FolderComponent,
   ]
 })
 

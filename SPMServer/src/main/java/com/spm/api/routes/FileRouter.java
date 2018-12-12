@@ -56,7 +56,19 @@ public class FileRouter {
 						)
 						.andRoute(
 								GET("/getFolderSpec"),
-								fileHandler:: getAllFolders
+								fileHandler:: getFolderSpec
+						)
+						.andRoute(
+								GET("/createNewVersion"),
+								fileHandler::createNewVersion
+						)
+						.andRoute(
+								GET("/modifyRepoName"),
+								fileHandler::modifyRepoName
+						)
+						.andRoute(
+								GET("/modifyFileName"),
+								fileHandler::modifyFileName
 						)
 					
 				);

@@ -23,15 +23,17 @@ export class StarterComponent implements AfterViewInit {
 	repos: Repo[] = null;
 	errorMessage: any;
 	localUser: User
+	email: string
+	selectedRepo;
 
 	constructor(private service: Service, public router: Router) {
 
 	}
 
-	ngOnInit() {	
+	ngOnInit() {
 		this.setUser();
 		this.getAllRepo();
-		
+
 	}
 	setUser() {
 
@@ -43,12 +45,14 @@ export class StarterComponent implements AfterViewInit {
 				surname: localStorage.getItem("surname"),
 				password: localStorage.getItem("password"),
 			};
-			localStorage.setItem("login",'true')
+			localStorage.setItem("login", 'true')
 			this.isLogged = true;
 			//SET EXPORT 
 			exportLocalUser = this.localUser; exportIsLogged = this.isLogged;
 		}
 	}
+
+
 	logout() {
 		exportIsLogged = false;
 		this.isLogged = exportIsLogged
@@ -79,8 +83,9 @@ export class StarterComponent implements AfterViewInit {
 				localStorage.setItem("repoSelected.id", repoSelected.id)
 			}
 		}
-		this.router.navigate(['/file']);
+		this.router.navigate(['/folder']);
 	}
+	
 	// SALVO IL FILE
 	save(name) {
 		var state = $('input[name="statep"]:checked').val();
@@ -115,15 +120,16 @@ export class StarterComponent implements AfterViewInit {
 		this.createrepo = true
 	}
 
-	uploadFileToActivity() {
-		this.service.postFile(this.fileToUpload)
+	/* uploadFileToActivity() {
+			this.service.postFile(this.fileToUpload)
 			.subscribe(data => {
 				alert(data)
-				// do something, if upload success
-			}, error => {
-				this.errorMessage = <any>error
-			})
-	}
+		  // do something, if upload success
+		  }, error => {
+					console.log(error);
+	    
+		  })
+	  } */
 
 	controlFormatFile(f) {
 		if (f.name.split('.').pop() == "bpmn") {
