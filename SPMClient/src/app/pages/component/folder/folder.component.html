@@ -9,8 +9,8 @@
     <div class="col-10">
         <button  (click)="createFolder()"  class="btn btn-primary">create Folder</button>
         <br><br>
-        <form>
-            <div *ngIf="createFold" class="card">
+        <form *ngIf="createfold">
+            <div  class="card">
                 <div class="form-group" class="card-body">
                     <div>
                         <label for="reponame">Folder name</label>
@@ -29,17 +29,17 @@
       <tr>
         <th  width="40%">Name</th>
         <th  width="30%">Created At</th>
+
       </tr>
     </thead>
     <tbody>
-        <tr  *ngFor="let fold of fold; let i=index;" (click)="sendTo(fold)">
+        <tr  *ngFor="let fold of folder; let i=index;" (click)="sendTo(fold)">
           <th scope="row">{{fold?.folderName}}</th>
-          <th scope="row">{{fold?.createdAt}}</th>
-          <th><i class="fa fa-angle-right"></i></th>
+           <th scope="row">{{fold?.createdAt}}</th>
+          <!-- <th><i class="fa fa-angle-right"></i></th>  -->
         </tr>
     </tbody>
   </table>
 </div>
-<div>
-</div>       
+     
 </div>

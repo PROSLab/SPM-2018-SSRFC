@@ -4,6 +4,7 @@ import { Service } from '../../../service/service'
 import { Repo } from '../../../../app/service/model/repo'
 import { File } from '../../../../app/service/model/file'
 import { Folder } from '../../../../app/service/model/folder'
+import { iif } from 'rxjs';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class FileComponent implements OnInit {
   fileAppear = false;
   filecreato: File = <any>[];
   idFolder: string;
-
+  versionArray=[];
+ 
 
   constructor(public router: Router, private service: Service) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -35,7 +37,7 @@ export class FileComponent implements OnInit {
 
   ngOnInit() {
     //faccio una chiamata al server per vedere i dati specifici della repos.
-    this.getRepo();
+   // this.getRepo();
     this.getAllFile();
     console.log("l'id repo è", this.idRepoSelected)
     console.log("l'id user è", this.idUser)
@@ -44,7 +46,7 @@ export class FileComponent implements OnInit {
 
 
   //prendo i dati della repo specifica
-  getRepo() {
+/*   getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
         this.repoInfo = data
@@ -58,7 +60,7 @@ export class FileComponent implements OnInit {
       },error => {
         console.log(error);
       });
-  }
+  } */
 
 
   createFile() {
@@ -79,7 +81,14 @@ export class FileComponent implements OnInit {
       });
   }
 
-
+newVersion(){
+  this.service.createNewVersion(this.file.id, this.file.cVersion) 
+  .subscribe(data => {
+   console.log(data)
+  }, error => {
+    console.log(error);
+  });
+}
   getAllFile() {
     this.service.getFile(this.idFolder) //gli passo l'id della cartella da cui prendere il file
       .subscribe(data => {
@@ -87,7 +96,10 @@ export class FileComponent implements OnInit {
         if (data != null) {
           this.fileExist = true;
           this.file = data
-          console.log("file", this.file)
+          for(var i=1;i<=this.file.cVersion;i++){
+            this.versionArray[i-1]=i
+          }
+          console.log(this.versionArray)
         }
         else {
           this.fileExist = false;
@@ -96,12 +108,11 @@ export class FileComponent implements OnInit {
       }, error => {
         console.log(error);
       });
-    // window.setTimeout("getUser()", 1000);
   }
 
 
   //prendo i dati dell'user specifico
-  getUser() {
+ /*  getUser() {
     this.service.getUserSpec(this.idUser)
       .subscribe(data => {
         this.userInfo = data
@@ -109,5 +120,5 @@ export class FileComponent implements OnInit {
       }, error => {
         console.log(error);
       });
-  }
+  } */
 }

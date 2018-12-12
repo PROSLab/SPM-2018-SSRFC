@@ -8,12 +8,11 @@
                             Created At: {{repoInfo.createdAt}} <br>
                             State: {{repoInfo.publicR}} <br>
                             <button  (click)="modifyRepo()"  class="btn btn-primary">Modify Repository</button> 
-                            <button  (click)="DeleteRepo()"  class="btn btn-primary">Delete Repository</button> 
+                            <button  (click)="deleteRepo()"  class="btn btn-primary">Delete Repository</button> 
                     </div>
                 </div>
-            </div>
+        </div>
 </div>
-
 
 <div class="row" *ngIf="fileExist">
         <div class="row">
@@ -22,13 +21,24 @@
                         <div class="card-body">
                                 File: {{file.originalName}} <br>
                                 Version n. : {{file.cVersion}} <br>
+                                
                                 Created At: {{file.createdAt}}  <br>
-                                <button  (click)="modifyFile()"  class="btn btn-primary">Modify file</button> 
+                            <button  (click)="modifyFile()"  class="btn btn-primary">Modify file</button> 
                             <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button> 
+                            <button  (click)="newVersion()"  class="btn btn-primary">Create new version</button> 
                         </div>
                     </div>
                 </div>
         </div>
+</div>
+
+<div class="dropdown">
+        <ul class="dropdown-menu">
+          <li *ngFor="let v of versionArray">
+              <a href="#">{{v}}
+              </a>
+          </li>
+        </ul>
 </div>
 
     <div class="row" *ngIf="!fileExist">

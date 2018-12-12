@@ -24,6 +24,7 @@ export class Service {
   isLogged:boolean=false;
   id: any;
   repos: string;
+  folder: string;
 
   constructor(
     public router: Router,
@@ -173,7 +174,7 @@ export class Service {
 
     return this.http.get(this.baseUrl + 'api/file/getAllFolders', { params: params , responseType: 'text'})
       .pipe(
-        tap(success=>this.repos=success), //mi salvo tutti i dati di ritorno dal server
+        tap(success=>this.folder=success), //mi salvo tutti i dati di ritorno dal server
         catchError( this.handleError)
       );
   }
@@ -189,6 +190,19 @@ export class Service {
       );
   }
 
+  //create new version of file 
+
+createNewVersion(id,version): Observable<any>{
+  let params = new HttpParams();
+  params = params.append('idFile',id); //id del file
+  params = params.append('version',version); //numero del version
+  
+  return this.http.get(this.baseUrl + 'api/file/createNewVersion', { params: params })
+    .pipe(
+      tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
+      catchError( this.handleError)
+    );
+}
 
 //funzioni login e logout
 

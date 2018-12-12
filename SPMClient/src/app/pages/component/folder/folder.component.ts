@@ -10,14 +10,14 @@ import { Router } from '@angular/router';
 })
 
 export class FolderComponent implements OnInit {
-  
-  selectedfolder: any;
-  length: any;
-	createFold: boolean;
-	idRepoSelected: string;
-	idUser: string;
-	folder: any;
-	fold:Folder[] =null;
+  selectedfolder: any
+	createFold: boolean
+	idRepoSelected: string
+	idUser: string
+	folder:Folder[] =null
+	
+  folderExist: boolean=false
+  createfold=false
 
   constructor(private service: Service,public router: Router) { 
 	this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -29,21 +29,34 @@ export class FolderComponent implements OnInit {
   }
 
   createFolder() {
-    this.createFold = true;
+    this.createfold = true;
   }
 
   saveFolder(folderName) {
-    this.service.createFolder(this.idRepoSelected, this.idUser, folderName)
+    var nameFolder= folderName;
+    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
       .subscribe(data => {
-       /*  this.fileAppear = false;
-        this.fileExist = true; */
-        this.folder = JSON.parse(data)
-        console.log(this.folder)
-       // location.reload();
+        var folder = JSON.parse(data)
+     console.log(folder);
+        this.service.getFolderSpec(folder.id)
+        .subscribe(data =>{
+          var newFolder:Folder=data
+          var count= this.folder.length
+          this.folder[count]=newFolder
+        }, error => {
+					console.log(error);
+        });
+
+        this.createfold=false  
+        alert("Cartella creata con successo.")
+				this.router.navigate(['/folder']);     
       }, error => {
         console.log(error);
-      });
+        alert("Cartella non creata")
+      })
+    this.createfold=false
   }
+
 
 
   getAllfolder(){
@@ -51,9 +64,8 @@ export class FolderComponent implements OnInit {
 		 this.service.getAllFolder(localStorage.getItem("repoSelected.id"))
 		.subscribe(data => {
 
-      this.fold = JSON.parse(data)
-      console.log(this.fold)
-      this.length=data.length //lunghezza delle carelle, quante ce ne sono
+      this.folder =JSON.parse(data)
+      console.log(this.folder)
 		}, error => {
 		    console.log(error);
 		});	
@@ -62,8 +74,8 @@ export class FolderComponent implements OnInit {
 
 	sendTo(folderSelected){
 		this.selectedfolder=folderSelected  
-	 	for(var i=0;i<this.fold.length;i++){
-			if(folderSelected.id == this.fold[i].id){
+	 	for(var i=0;i<this.folder.length;i++){
+			if(folderSelected.id == this.folder[i].id){
 				localStorage.setItem("folderSelected.id",folderSelected.id)
 			}
 		}

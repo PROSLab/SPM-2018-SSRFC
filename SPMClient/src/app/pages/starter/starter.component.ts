@@ -31,9 +31,9 @@ export class StarterComponent implements AfterViewInit {
 	}
 
 	//funzione per prendere il file
-	handleFileInput(files: File) {
+	/* handleFileInput(files: File) {
 		this.fileToUpload = files;
-	}
+	} */
 
 //funzione per prendere tutti i repo pubblici + quelli privati dell'utente
 	getAllRepo(){
@@ -103,6 +103,7 @@ export class StarterComponent implements AfterViewInit {
 				}, error => {
 					console.log(error);
 				});
+				
 				this.createrepo = false;
 				alert("Repository creata con successo.")
 				this.router.navigate(['/']);
