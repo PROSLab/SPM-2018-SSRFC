@@ -29,7 +29,7 @@ export class FileComponent implements OnInit {
   constructor(public router: Router, private service: Service) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
     this.idUser = localStorage.getItem("id")
-    this.idFolder = localStorage.getItem("idFolder")
+    this.idFolder = localStorage.getItem("folderSelected.id")
   }
 
 
@@ -39,7 +39,7 @@ export class FileComponent implements OnInit {
     this.getAllFile();
     console.log("l'id repo è", this.idRepoSelected)
     console.log("l'id user è", this.idUser)
-    console.log("l'id user è", this.idFolder)
+    console.log("l'id folder è", this.idFolder)
   }
 
 
@@ -61,13 +61,13 @@ export class FileComponent implements OnInit {
   }
 
 
-  createFile(name) {
+  createFile() {
     this.fileAppear = true;
   }
 
 
   saveFile(originalName) {
-    this.service.createFile(localStorage.getItem("repoSelected.id"),localStorage.getItem("idFolder"), localStorage.getItem("id"), originalName)
+    this.service.createFile(this.idRepoSelected,this.idFolder, this.idUser, originalName)
       .subscribe(data => {
         this.fileAppear = false;
         this.fileExist = true;
@@ -81,7 +81,7 @@ export class FileComponent implements OnInit {
 
 
   getAllFile() {
-    this.service.getFile(this.idRepoSelected) //gli passo l'id del repo da cui prendere il file
+    this.service.getFile(this.idFolder) //gli passo l'id della cartella da cui prendere il file
       .subscribe(data => {
         console.log("data è", data)
         if (data != null) {
@@ -102,8 +102,7 @@ export class FileComponent implements OnInit {
 
   //prendo i dati dell'user specifico
   getUser() {
-    this.userInfo.id = localStorage.getItem("id")
-    this.service.getUserSpec(this.userInfo.id)
+    this.service.getUserSpec(this.idUser)
       .subscribe(data => {
         this.userInfo = data
         console.log("userInfo: ", this.userInfo)

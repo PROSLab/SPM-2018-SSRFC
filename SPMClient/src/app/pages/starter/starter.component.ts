@@ -20,13 +20,13 @@ export class StarterComponent implements AfterViewInit {
 	repos:Repo[] =null;
 	selectedRepo;
 
-	constructor(private service: Service,  public router: Router) { }
+	constructor(private service: Service, public router: Router) { }
 
 	ngOnInit() {
 		if (localStorage.getItem("email") != undefined) {
 			this.email = localStorage.getItem("email");
 			isLogged = true;this.isLogged=isLogged
-		this.getAllRepo();
+			this.getAllRepo();
 		}
 	}
 
@@ -80,7 +80,6 @@ export class StarterComponent implements AfterViewInit {
 		this.router.navigate(['/folder']);
 	}
 
-
 	save(name){
 		var state = $('input[name="statep"]:checked').val();
 		if(state=="public") {
@@ -123,7 +122,7 @@ logout() {
 	}
 	
 
-uploadFileToActivity() {
+/* uploadFileToActivity() {
 		this.service.postFile(this.fileToUpload)
 		.subscribe(data => {
 			alert(data)
@@ -132,7 +131,7 @@ uploadFileToActivity() {
 				console.log(error);
     
       })
-  }
+  } */
 
   controlFormatFile(f){
 	if(f.name.split('.').pop() == "bpmn"){
