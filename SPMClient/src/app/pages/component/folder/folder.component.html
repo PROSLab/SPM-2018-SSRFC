@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<div *ngIf="folderExist">Lista dei tuoi Repository
+<div >Lista dei tuoi folder
   <table>
     <thead>
       <tr>
@@ -32,7 +32,7 @@
       </tr>
     </thead>
     <tbody>
-        <tr  *ngFor="let fold of folders; let i=index;" (click)="sendTo(fold)">
+        <tr  *ngFor="let fold of fold; let i=index;" (click)="sendTo(fold)">
           <th scope="row">{{fold?.folderName}}</th>
           <th scope="row">{{fold?.createdAt}}</th>
           <th><i class="fa fa-angle-right"></i></th>

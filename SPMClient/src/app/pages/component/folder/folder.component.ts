@@ -11,13 +11,13 @@ import { Router } from '@angular/router';
 
 export class FolderComponent implements OnInit {
   
-  fold:Folder
   selectedfolder: any;
   length: any;
 	createFold: boolean;
 	idRepoSelected: string;
 	idUser: string;
 	folder: any;
+	fold:Folder[] =null;
 
   constructor(private service: Service,public router: Router) { 
 	this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -62,7 +62,7 @@ export class FolderComponent implements OnInit {
 
 	sendTo(folderSelected){
 		this.selectedfolder=folderSelected  
-	 	for(var i=0;i<this.length;i++){
+	 	for(var i=0;i<this.fold.length;i++){
 			if(folderSelected.id == this.fold[i].id){
 				localStorage.setItem("folderSelected.id",folderSelected.id)
 			}
