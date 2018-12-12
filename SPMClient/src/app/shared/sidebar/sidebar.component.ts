@@ -2,6 +2,8 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Service } from '../../service/service';
 import { exportIsLogged } from '../../pages/starter/starter.component'
 import { User } from '../../service/model/user';
+import { Router } from '@angular/router';
+
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'ap-sidebar',
@@ -16,7 +18,7 @@ export class SidebarComponent implements AfterViewInit {
   user: User
   name: string; surname: string; email: string; password: string;
 
-  constructor(private service: Service) {}
+  constructor(private service: Service,public router: Router) {}
 
 //TODO: PORCATA DA RIVEDERE
   ngOnInit(): void {
@@ -39,7 +41,9 @@ export class SidebarComponent implements AfterViewInit {
   }
 
   logout() {
-    this.service.logout()
+    this.service.logout();
+    location.reload();
+    
   }
 
   addExpandClass(element: any) {

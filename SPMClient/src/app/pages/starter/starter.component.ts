@@ -49,6 +49,9 @@ export class StarterComponent implements AfterViewInit {
 			//SET EXPORT 
 			exportLocalUser = this.localUser; exportIsLogged = this.isLogged;
 			this.getAllRepo();
+		}else{
+		this.isLogged = false;
+		exportIsLogged = this.isLogged;
 		}
 	}
 
