@@ -147,11 +147,16 @@ public class FileService  {
 		return fileRepository.findFileByIdFolder(idFolder);
 	}
 
+/*
+ * get all Folder
+ */
+public Flux <Folder> getAllFolders(ObjectId idRepository) {
+
+
 	/*
 	 * get all Folder
 	 */
-	public Mono<Folder> getAllFolders(ObjectId idRepository) {
-		
+
 		return folderRepository.findFolderByIdRepository(idRepository);
 	}
 
