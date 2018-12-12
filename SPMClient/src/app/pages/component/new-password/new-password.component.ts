@@ -15,7 +15,6 @@ export class NewPasswordComponent implements OnInit {
   submitted = false
   loading = false
   pswRecoveryForm: FormGroup;
-  password: string;
   uuid: string;
   pgid: string;
 
@@ -43,20 +42,19 @@ export class NewPasswordComponent implements OnInit {
       return;
     }
     this.loading = true;
-    //a questo punto il client invirà al srever lanuova password dell'utente
-    this.changePassword();
-    alert('Password cambiata');
+    //a questo punto il client invirà al server la nuova password dell'utente
+    this.changePassword(this.pswRecoveryForm.value.password);
+    
   }
 
-  changePassword():void {
-    this.password = this.f.password.value.trim();
-    this.router.navigate(['']);
-    
-     //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione
-     /* 
-     this.service.changePassword(this.uuid,this.pgid,this.password)
-     .subscribe(data => {this.router.navigate(['']);},
-     */
-     return;
+  changePassword(password):void {
+    password = this.f.password.value.trim();    
+    //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione
+    this.service.changePassword(this.uuid,this.pgid,password)
+    .subscribe(data => {
+      this.router.navigate(['/login']);
+      },error => {
+      console.log(error);
+    });
   }
 }

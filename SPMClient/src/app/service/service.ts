@@ -52,15 +52,15 @@ export class Service {
 
   changePassword(uuid:string,pgid:string,password:string){
     //DECOMMENTARE QUANDO LA FUNZIONE SERVER SARA ON
-    /*let body = {
-      uuid:uuid,
-      pgid:pgid,
-      password:password,
-    }
-      return this.http.post(this.baseUrl + 'api/user/changePassword',body, httpOptions)
+    
+      let params = new HttpParams();
+      params = params.append('uuid', uuid);
+      params = params.append('pgid', pgid);
+      params = params.append('password', password);
+      return this.http.get(this.baseUrl + 'api/user/changePassword', { params: params })
       .pipe(
         catchError(this.handleError)
-      ); */  
+      );
   }
 
   /* 
