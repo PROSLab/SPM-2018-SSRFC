@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
 
 @NgModule({
-  declarations: [AppComponent, SpinnerComponent,],
+  declarations: [AppComponent, SpinnerComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

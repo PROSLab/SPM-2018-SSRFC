@@ -5,6 +5,7 @@ import { RegistrazioneComponent } from './registrazione/registrazione.component'
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { FileComponent } from './file/file.component';
+import { FolderComponent } from './folder/folder.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -55,6 +56,14 @@ export const ComponentsRoutes: Routes = [
       data: {
         title: 'file',
         urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'file'}]
+      }
+    },
+    {
+      path: 'folder',
+      component: FolderComponent,
+      data: {
+        title: 'folder',
+        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'folder'}]
       }
     },
     ]

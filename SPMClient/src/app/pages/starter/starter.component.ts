@@ -20,13 +20,13 @@ export class StarterComponent implements AfterViewInit {
 	repos:Repo[] =null;
 	selectedRepo;
 
-	constructor(private service: Service,  public router: Router) { }
+	constructor(private service: Service, public router: Router) { }
 
 	ngOnInit() {
 		if (localStorage.getItem("email") != undefined) {
 			this.email = localStorage.getItem("email");
 			isLogged = true;this.isLogged=isLogged
-		this.getAllRepo();
+			this.getAllRepo();
 		}
 	}
 
@@ -77,11 +77,10 @@ export class StarterComponent implements AfterViewInit {
 				localStorage.setItem("repoSelected.id",repoSelected.id)
 			}
 		}
-		this.router.navigate(['/file']);
+		this.router.navigate(['/folder']);
 	}
 
 	save(name){
-
 		var state = $('input[name="statep"]:checked').val();
 		if(state=="public") {
 			this.risp= true; //mando true  al server, quindi la repo è pubblica
@@ -98,7 +97,6 @@ export class StarterComponent implements AfterViewInit {
 				this.service.getRepoSpec(newRepos.repository)
 
 				.subscribe(data => {
-
 					var newRepo:Repo =data
 					var count = this.repos.length
 					this.repos[count] = newRepo
@@ -124,7 +122,7 @@ logout() {
 	}
 	
 
-uploadFileToActivity() {
+/* uploadFileToActivity() {
 		this.service.postFile(this.fileToUpload)
 		.subscribe(data => {
 			alert(data)
@@ -133,7 +131,7 @@ uploadFileToActivity() {
 				console.log(error);
     
       })
-  }
+  } */
 
   controlFormatFile(f){
 	if(f.name.split('.').pop() == "bpmn"){

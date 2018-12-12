@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Service } from '../../../service/service'
 import { Repo } from '../../../../app/service/model/repo'
 import { File } from '../../../../app/service/model/file'
+import { Folder } from '../../../../app/service/model/folder'
+
 
 @Component({
   selector: 'app-file',
@@ -10,21 +12,26 @@ import { File } from '../../../../app/service/model/file'
   styleUrls: ['./file.component.css']
 })
 
+
 export class FileComponent implements OnInit {
   repoInfo: Repo = <any>[]
   idRepoSelected: string;
   idUser: string;
   userInfo: any;
-  file: Repo = <any>[]
+  folder: Folder = <any>[]
+  file = <any>[]
   fileExist = false;
   fileAppear = false;
   filecreato: File = <any>[];
+  idFolder: string;
+
 
   constructor(public router: Router, private service: Service) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
     this.idUser = localStorage.getItem("id")
-
+    this.idFolder = localStorage.getItem("folderSelected.id")
   }
+
 
   ngOnInit() {
     //faccio una chiamata al server per vedere i dati specifici della repos.
@@ -32,7 +39,9 @@ export class FileComponent implements OnInit {
     this.getAllFile();
     console.log("l'id repo è", this.idRepoSelected)
     console.log("l'id user è", this.idUser)
+    console.log("l'id folder è", this.idFolder)
   }
+
 
   //prendo i dati della repo specifica
   getRepo() {
@@ -46,18 +55,19 @@ export class FileComponent implements OnInit {
           this.repoInfo.publicR = "private"; //mando false al server, la repo è privata
         }
         console.log("repoInfo: ", this.repoInfo)
-      }, error => {
+      },error => {
         console.log(error);
       });
   }
 
 
-  createFile(name) {
+  createFile() {
     this.fileAppear = true;
   }
 
+
   saveFile(originalName) {
-    this.service.createFile(localStorage.getItem("repoSelected.id"), localStorage.getItem("id"), originalName)
+    this.service.createFile(this.idRepoSelected,this.idFolder, this.idUser, originalName)
       .subscribe(data => {
         this.fileAppear = false;
         this.fileExist = true;
@@ -69,8 +79,9 @@ export class FileComponent implements OnInit {
       });
   }
 
+
   getAllFile() {
-    this.service.getFile(this.idRepoSelected) //gli passo l'id del repo da cui prendere il file
+    this.service.getFile(this.idFolder) //gli passo l'id della cartella da cui prendere il file
       .subscribe(data => {
         console.log("data è", data)
         if (data != null) {
@@ -88,10 +99,10 @@ export class FileComponent implements OnInit {
     // window.setTimeout("getUser()", 1000);
   }
 
+
   //prendo i dati dell'user specifico
   getUser() {
-    this.userInfo.id = localStorage.getItem("id")
-    this.service.getUserSpec(this.userInfo.id)
+    this.service.getUserSpec(this.idUser)
       .subscribe(data => {
         this.userInfo = data
         console.log("userInfo: ", this.userInfo)

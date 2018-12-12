@@ -52,7 +52,7 @@
                 </tr>
             </thead>
             <tbody>
-                    <tr  *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
+                    <tr *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
                         <th scope="row">{{repo?.repositoryName}}</th>
                         <th scope="row">{{repo?.createdAt}}</th>
                         <th scope="row">{{repo?.publicR}}</th>
