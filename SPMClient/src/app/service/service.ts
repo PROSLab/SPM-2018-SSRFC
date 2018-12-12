@@ -147,11 +147,24 @@ export class Service {
       );
   }
 
-  createFile(idRepository,idUser,originalName): Observable<any> {
+  createFile(idRepository,idFolder,idUser,originalName): Observable<any> {
     let params = new HttpParams();
     params = params.append('idUser',idUser);
     params = params.append('idRepository',idRepository);
-  
+    params = params.append('idFolder',idFolder);
+    params = params.append('originalName',originalName);
+    
+    return this.http.get(this.baseUrl + 'api/file/createFile', { params: params , responseType: 'text'})
+      .pipe(
+        tap(success=>this.repos=success), //mi salvo tutti i dati di ritorno dal server
+        catchError( this.handleError)
+      );
+  }
+
+  createFolder(idRepository,idUser,originalName): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('idUser',idUser);
+    params = params.append('idRepository',idRepository);
     params = params.append('originalName',originalName);
     
     return this.http.get(this.baseUrl + 'api/file/createFile', { params: params , responseType: 'text'})

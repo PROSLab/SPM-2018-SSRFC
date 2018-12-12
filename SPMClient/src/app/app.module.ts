@@ -8,9 +8,10 @@ import { HttpClientModule,  } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
+import { FolderComponent } from './folder/folder.component';
 
 @NgModule({
-  declarations: [AppComponent, SpinnerComponent,],
+  declarations: [AppComponent, SpinnerComponent, FolderComponent,],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
