@@ -1,17 +1,14 @@
 <div class="container">
-<div class="row">
-          <!--informazioni sulla repository-->
-        <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                            Repository: {{repoInfo.repositoryName}} <br>
-                            Created At: {{repoInfo.createdAt}} <br>
-                            State: {{repoInfo.publicR}} <br>
-                            <button  (click)="modifyRepo()"  class="btn btn-primary">Modify Repository</button> 
-                            <button  (click)="deleteRepo()"  class="btn btn-primary">Delete Repository</button> 
-                    </div>
-                </div>
-        </div>
+  <!--informazioni sulla folder-->
+  <div class="col-12">
+       <!--  <div class="card">
+            <div class="card-body">
+                    Folder: {{repoInfo?.repositoryName}} <br>
+                    Created At: {{repoInfo?.createdAt}} <br>
+                    <button  (click)="modifyRepo()"  class="btn btn-primary">Modify Repository</button> 
+                    <button  (click)="deleteRepo()"  class="btn btn-primary">Delete Repository</button> 
+            </div>
+        </div> -->
 </div>
 
 <div class="row" *ngIf="fileExist">
@@ -20,7 +17,11 @@
                     <div class="card">
                         <div class="card-body">
                                 File: {{file.originalName}} <br>
-                                Version n. : {{file.cVersion}} <br>
+                                Version n. : <select> 
+    
+                                        <option *ngFor="let v of versionArray; index as i" >{{v}}</option>
+                                    
+                                    </select> <br>
                                 
                                 Created At: {{file.createdAt}}  <br>
                             <button  (click)="modifyFile()"  class="btn btn-primary">Modify file</button> 
@@ -32,14 +33,6 @@
         </div>
 </div>
 
-<div class="dropdown">
-        <ul class="dropdown-menu">
-          <li *ngFor="let v of versionArray">
-              <a href="#">{{v}}
-              </a>
-          </li>
-        </ul>
-</div>
 
     <div class="row" *ngIf="!fileExist">
        <div class="col-10">

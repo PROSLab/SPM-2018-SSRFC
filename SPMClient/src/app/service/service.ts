@@ -190,6 +190,19 @@ export class Service {
       );
   }
 
+
+  changeNameRepo(id,newRepoName): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('idRepository', id); //id repos
+    params = params.append('newRepoName', newRepoName); //name della repo nuovo
+    return this.http.get(this.baseUrl + 'api/file/modifyRepoName', { params: params })
+      .pipe(
+        tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
+        catchError( this.handleError)
+      );
+  }
+
+
   //create new version of file 
 
 createNewVersion(id,version): Observable<any>{

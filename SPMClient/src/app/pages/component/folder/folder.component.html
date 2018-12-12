@@ -1,10 +1,35 @@
 <div class="container">
-    <div class="row">
+   
+<div class="row">
+            <!--informazioni sulla repository-->
+          <div class="col-12">
+                  <div class="card">
+                      <div class="card-body">
+                              Repository: {{repoInfo?.repositoryName}} <br>
+                              Created At: {{repoInfo?.createdAt}} <br>
+                              State: {{repoInfo?.publicR}} <br>
+                              <button  (click)="modifyRepo()"  class="btn btn-primary">Modify Repository</button>
+                                             <form *ngIf="appear">
+                                             <div  class="card">
+                                                     <div class="form-group" class="card-body">
+                                                         <div>
+                                                              <label for="filename">New name:  </label>
+                                                             <input type="text" required #n name="filename"/>
+                                                         </div>
+                                                     </div>
+                                               <button  (click)="sendNewName(n.value)"  class="btn btn-primary">Save repo</button> 
+                                             </div>
+                                         </form>
+                                   </div>  
+                             </div>  
+                            <!--   <button  (click)="deleteRepo()"  class="btn btn-primary">Delete Repository</button> 
+                      --> </div>
+  </div>
+  <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h1>Folers</h1>
+            <h1>Folders</h1>
         </div>
     </div>
-
 <div class="row">
     <div class="col-10">
         <button  (click)="createFolder()"  class="btn btn-primary">create Folder</button>

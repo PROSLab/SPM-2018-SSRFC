@@ -15,9 +15,10 @@ export class FolderComponent implements OnInit {
 	idRepoSelected: string
 	idUser: string
 	folder:Folder[] =null
-	
   folderExist: boolean=false
   createfold=false
+  repoInfo: any;
+  appear: boolean=false;
 
   constructor(private service: Service,public router: Router) { 
 	this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -25,12 +26,27 @@ export class FolderComponent implements OnInit {
   }
 
   ngOnInit() {
-	this.getAllfolder();
+  this.getAllfolder()
+  this.getRepo()
   }
 
   createFolder() {
     this.createfold = true;
   }
+  
+  modifyRepo(name){
+    this.appear=true;
+  }
+
+  sendNewName(name){
+    this.service.changeNameRepo(this.idRepoSelected, name)
+    .subscribe(data => {
+      this.appear=false
+      this.repoInfo = data
+      
+    })
+  }
+
 
   saveFolder(folderName) {
     var nameFolder= folderName;
@@ -56,6 +72,24 @@ export class FolderComponent implements OnInit {
       })
     this.createfold=false
   }
+
+ //prendo i dati della repo specifica
+   getRepo() {
+    this.service.getRepoSpec(this.idRepoSelected)
+      .subscribe(data => {
+        this.repoInfo = data
+        console.log(data)
+        if (this.repoInfo.publicR == "true") {
+          this.repoInfo.publicR = "public"; //mando true al server, quindi la repo è pubblica
+        }
+        else {
+          this.repoInfo.publicR = "private"; //mando false al server, la repo è privata
+        }
+        console.log("repoInfo: ", this.repoInfo)
+      },error => {
+        console.log(error);
+      });
+  } 
 
 
 

@@ -81,6 +81,7 @@ export class FileComponent implements OnInit {
       });
   }
 
+
 newVersion(){
   this.service.createNewVersion(this.file.id, this.file.cVersion) 
   .subscribe(data => {
@@ -89,6 +90,8 @@ newVersion(){
     console.log(error);
   });
 }
+
+
   getAllFile() {
     this.service.getFile(this.idFolder) //gli passo l'id della cartella da cui prendere il file
       .subscribe(data => {
