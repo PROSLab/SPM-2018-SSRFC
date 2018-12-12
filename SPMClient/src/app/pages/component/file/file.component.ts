@@ -13,15 +13,17 @@ import { Folder } from '../../../../app/service/model/folder'
 
 
 export class FileComponent implements OnInit {
-  appearRenameFolder:boolean=false;
+  appearRenameFolder: boolean = false;
+  appearRenameFile: boolean = false;
+  fileExist = false;
+  fileAppear = false;
+
   idRepoSelected: string;
   idUser: string;
   userInfo: any;
   folder: Folder = <any>[]
-  folderInfo:Folder
+  folderInfo: Folder
   file = <any>[]
-  fileExist = false;
-  fileAppear = false;
   filecreato: File = <any>[];
   errorMessage: any;
   idFolder: string;
@@ -38,7 +40,6 @@ export class FileComponent implements OnInit {
   ngOnInit() {
     //faccio una chiamata al server per vedere i dati specifici della repos.
     this.getFolder();
-    console.log(this.idFolder)
     this.getAllFile();
   }
 
@@ -97,26 +98,28 @@ export class FileComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
-  modifyFolder(){
+
+  modifyFolder() {
     this.appearRenameFolder = true;
   }
-   sendNewFolderName(name) {
+  sendNewFolderName(name) {
     this.service.changeNameFolder(this.idFolder, name)
       .subscribe(data => {
         this.appearRenameFolder = false
         this.folderInfo = data
       })
-  } 
+  }
+  modifyFile() {
+    this.appearRenameFile = true;
+  }
 
-  /* sendNewFileName(name) {
+  sendNewFileName(name) {
     this.service.changeNameFile(this.file.id, name)
-      .subscribe(data => {
-        this.appear = false
-        console.log(data)
-        this.folderInfo = data
-
+    .subscribe(data => {
+      this.appearRenameFile = false
+      this.file = data
       })
-  } */
- 
-  
+  }
+
+
 }

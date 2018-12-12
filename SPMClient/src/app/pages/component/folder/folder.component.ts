@@ -56,6 +56,8 @@ export class FolderComponent implements OnInit {
     this.createfold = true;
   }
 
+
+
   saveFolder(folderName) {
     var nameFolder = folderName;
     this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
@@ -78,8 +80,6 @@ export class FolderComponent implements OnInit {
       })
     this.createfold = false
   }
-
-
 
   getAllfolder() {
     //devo richiamare la funzione del server per inviargli il file

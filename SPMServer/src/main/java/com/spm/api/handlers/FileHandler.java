@@ -186,7 +186,14 @@ public class FileHandler {
 				.flatMap(repo -> Responses.ok(repo))
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
-	
+	public Mono<ServerResponse> modifyFolderName(ServerRequest request) {
+		String idFolder = request.queryParam("idFolder").get();
+		String newFileName = request.queryParam("newFolderName").get();
+		
+		return fileService.updateFolderName(idFolder, newFileName)
+				.flatMap(file -> Responses.ok(file))
+				.onErrorResume(Exception.class, Responses::badRequest);
+	}
 	
 }
 
