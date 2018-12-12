@@ -59,7 +59,7 @@ public class FileHandler {
 	public Mono<ServerResponse> createFile(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
 		String idRepository= request.queryParam("idRepository").get();
-		String idFolder= request.queryParam("idRepository").get();
+		String idFolder= request.queryParam("idFolder").get();
 
 		String originalName = request.queryParam("originalName").get();
 		String mimetype = "bpmn";
