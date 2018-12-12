@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { Service } from '../../../service/service'
 import { Repo } from '../../../../app/service/model/repo'
 import { File } from '../../../../app/service/model/file'
+import { User } from '../../../service/model/user';
+
+import {exportIsLogged} from '../../starter/starter.component';
+import {exportLocalUser} from '../../starter/starter.component';
 
 @Component({
   selector: 'app-file',
@@ -19,10 +23,11 @@ export class FileComponent implements OnInit {
   fileExist = false;
   fileAppear = false;
   filecreato: File = <any>[];
+  errorMessage: any;
 
   constructor(public router: Router, private service: Service) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
-    this.idUser = localStorage.getItem("id")
+  
 
   }
 
@@ -30,27 +35,36 @@ export class FileComponent implements OnInit {
     //faccio una chiamata al server per vedere i dati specifici della repos.
     this.getRepo();
     this.getAllFile();
-    console.log("l'id repo è", this.idRepoSelected)
-    console.log("l'id user è", this.idUser)
+    
   }
 
   //prendo i dati della repo specifica
   getRepo() {
-    this.service.getRepoSpec(this.idRepoSelected)
-      .subscribe(data => {
+    this.service.getRepoSpec(this.idRepoSelected).subscribe(data => {
         this.repoInfo = data
-        if (this.repoInfo.publicR == "true") {
-          this.repoInfo.publicR = "public"; //mando true al server, quindi la repo è pubblica
-        }
-        else {
-          this.repoInfo.publicR = "private"; //mando false al server, la repo è privata
-        }
-        console.log("repoInfo: ", this.repoInfo)
       }, error => {
-        console.log(error);
+        this.errorMessage = <any>error
       });
   }
 
+  getAllFile() {
+    console.log('ci arrivi qui?')
+    this.service.getFile(this.idRepoSelected) //gli passo l'id del repo da cui prendere il file
+    .subscribe(data => {
+      console.log("data è", data)
+      if (data != null) {
+        this.fileExist = true;
+        this.file = data
+        console.log("file", this.file)
+      }else {
+        this.fileExist = false;
+      }
+      console.log(data)
+      }, error => {
+        console.log(error);
+      });
+    // window.setTimeout("getUser()", 1000);
+  }
 
   createFile(name) {
     this.fileAppear = true;
@@ -69,24 +83,7 @@ export class FileComponent implements OnInit {
       });
   }
 
-  getAllFile() {
-    this.service.getFile(this.idRepoSelected) //gli passo l'id del repo da cui prendere il file
-      .subscribe(data => {
-        console.log("data è", data)
-        if (data != null) {
-          this.fileExist = true;
-          this.file = data
-          console.log("file", this.file)
-        }
-        else {
-          this.fileExist = false;
-        }
-        console.log(data)
-      }, error => {
-        console.log(error);
-      });
-    // window.setTimeout("getUser()", 1000);
-  }
+ 
 
   //prendo i dati dell'user specifico
   getUser() {

@@ -4,74 +4,81 @@
             <h1>Home</h1>
         </div>
     </div>
-    <div class="row"  else notLogged>
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    Benvenuto {{email}}!
-                </div>
-            </div>
-        </div>
-    </div>
 
-<div class="row">
-    <div class="col-10">
-        <button  (click)="createRepo()"  class="btn btn-primary">Create Repository</button>
-        <br><br>
-        <form>
-            <div *ngIf="createrepo" class="card">
-                <div class="form-group" class="card-body">
-                    <div>
-                        <label for="reponame">Repository name  </label>
-                        <input type="text" required id="namerepo" #n name="namerepo"/>
-                        <form name="state">
-                        <label for="state">State</label>
-                        <input type="radio" name="statep" id="state" value="public" checked> Public<br>
-                        <input type="radio" name="statep" id="state"  value="private"> Private<br>
-                    </form>
-                    </div>
-                </div>
-            <button  (click)="save(n.value)"  class="btn btn-primary">Save Repository</button> 
-            </div>
-        </form>
-    </div>  
-       
-    <div class="col-2">
-        <button  (click)="logout()"  class="btn btn-primary  ">LOGOUT</button>
-    </div>
-</div>
-
-    <div>Lista dei tuoi Repository
-        <table>
-            <thead>
-                <tr>
-                    <th  width="40%">Name</th>
-                    <th  width="30%">Created At</th>
-                    <th  width="10%">last Modified</th>
-                    <th  width="3%">Open</th>
-                </tr>
-            </thead>
-            <tbody>
-                    <tr  *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
-                        <th scope="row">{{repo?.repositoryName}}</th>
-                        <th scope="row">{{repo?.createdAt}}</th>
-                        <th scope="row">{{repo?.publicR}}</th>
-                        <th><i class="fa fa-angle-right"></i></th>
-                    </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div>
-        <div class="row" #notLogged  *ngIf="!isLogged">
+    <div *ngIf="isLogged">
+        <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                    Registrati per entrare a far parte della community  VuGit! <br>
-                    Se sei registrato effettua il login! 
+                        Benvenuto {{localUser?.email}}!
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
-    </div>       
+
+        <div class="row">
+            <div class="col-10">
+                <button (click)="createRepo()" class="btn btn-primary">Create Repository</button>
+                <br><br>
+                <form>
+                    <div *ngIf="createrepo" class="card">
+                        <div class="form-group" class="card-body">
+                            <div>
+                                <label for="reponame">Repository name </label>
+                                <input type="text" required id="namerepo" #n name="namerepo" />
+                                <form name="state">
+                                    <label for="state">State</label>
+                                    <input type="radio" name="statep" id="state" value="public" checked> Public<br>
+                                    <input type="radio" name="statep" id="state" value="private"> Private<br>
+                                </form>
+                            </div>
+                        </div>
+                        <button (click)="save(n.value)" class="btn btn-primary">Save Repository</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div>Lista dei tuoi Repository
+            <table>
+                <thead>
+                    <tr>
+                        <th width="40%">Name</th>
+                        <th width="30%">Created At</th>
+                        <th width="10%">last Modified</th>
+                        <th width="3%">Open</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let repo of repos; let i=index;" >
+                        <th scope="row">{{repo?.repositoryName}}</th>
+                        <th scope="row">{{repo?.createdAt}}</th>
+                        <th scope="row" *ngIf="repo?.publicR" >Public</th>
+                        <th scope="row" *ngIf="!repo?.publicR">Private</th>
+                        <th (click)="sendTo(repo)" ><i class="fa fa-angle-right"></i></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="row">
+            <div class="col-10" style="margin-top:40px;">
+                <button (click)="logout()" class="btn btn-primary  ">LOGOUT</button>
+            </div>
+        </div>
+        
+    </div>
+    <div>
+        <div class="row" *ngIf="!isLogged">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        Registrati per entrare a far parte della community VuGit! <br>
+                        Se sei registrato effettua il login!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

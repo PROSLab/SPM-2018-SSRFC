@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Service } from '../../../service/service';
-import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { errorHandler } from '@angular/platform-browser/src/browser';
 
 @Component({
     selector: 'app-login',
@@ -52,8 +50,7 @@ export class LoginComponent implements OnInit {
 
         this.loading = true;
         this.service.loginUser(email, psw).pipe()
-        .subscribe(
-        data => {
+        .subscribe(data => {
            
         //in "data" abbiamo tutti i dati dell'utente
         //li salviamo in locale
@@ -62,16 +59,11 @@ export class LoginComponent implements OnInit {
             localStorage.setItem("surname", data.surname)
             localStorage.setItem("email", data.email)
             localStorage.setItem("password", data.password)
-
-          /*console.log(localStorage.getItem("id"))
-            console.log(localStorage.getItem("name"))
-            console.log(localStorage.getItem("surname"))
-            console.log(localStorage.getItem("email")) */
-            
             // redirect to home
             this.login = true;
             alert('login effetuato')
             this.router.navigate(['']);
+            
         },error => {
             this.error = true;
             this.errorMsg = error

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Service } from '../service/service';
 
 
 @Component({
@@ -10,7 +9,7 @@ import { Service } from '../service/service';
 })
 export class PageComponent implements OnInit {
 
-    constructor(public router: Router, private service: Service, ) {
+    constructor(public router: Router, ) {
     }
 
     ngOnInit() {

@@ -20,7 +20,6 @@ export class NewPasswordComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,private service: Service,private router:Router) {
     //QUERY PER OTTENERE I VALORI DALL'URL
-
     this.route.queryParams.subscribe(params => {
       this.uuid = params['uuid'];
       this.pgid = params['pgid'];
@@ -42,19 +41,18 @@ export class NewPasswordComponent implements OnInit {
       return;
     }
     this.loading = true;
-    //a questo punto il client invirà al server la nuova password dell'utente
     this.changePassword(this.pswRecoveryForm.value.password);
     
   }
 
   changePassword(password):void {
     password = this.f.password.value.trim();    
-    //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione
     this.service.changePassword(this.uuid,this.pgid,password)
-    .subscribe(data => {
+    .subscribe(data =>{
+      alert('password cambiata'), 
       this.router.navigate(['/login']);
       },error => {
-      console.log(error);
-    });
-  }
+        this.errorMessage=<any>error
+    }); 
+  } 
 }

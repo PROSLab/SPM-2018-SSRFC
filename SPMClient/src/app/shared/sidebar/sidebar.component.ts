@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Service } from '../../service/service';
-import { isLogged } from '../../pages/starter/starter.component'
+import { exportIsLogged } from '../../pages/starter/starter.component'
 import { User } from '../../service/model/user';
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,28 +12,30 @@ export class SidebarComponent implements AfterViewInit {
   isActive = true;
   showMenu = '';
   showSubMenu = '';
-  isLogged: boolean = isLogged;
+  isLogged: boolean = exportIsLogged;
   user: User
-  name:string;surname:string;email:string;password:string;
-  
-  constructor(
-    private service: Service,
-  ) { }
-  
-  ngOnInit(): void {
-    //PORCATA DA RIVEDERE
+  name: string; surname: string; email: string; password: string;
 
-   setInterval(() => {
-    this.isLogged = isLogged
-      if (this.isLogged == true) {
-        this.name = localStorage.getItem("name");
-        this.surname = localStorage.getItem("surname");
-        this.email = localStorage.getItem("email");
-        this.password = localStorage.getItem("password");       
+  constructor(private service: Service) {}
+
+//TODO: PORCATA DA RIVEDERE
+  ngOnInit(): void {
+    
+    setInterval(() => {
+      if (localStorage.getItem("login") == 'true') {
+        this.isLogged = true;
+        if (this.isLogged == true) {
+          this.name = localStorage.getItem("name");
+          this.surname = localStorage.getItem("surname");
+          this.email = localStorage.getItem("email");
+          this.password = localStorage.getItem("password");
+        }
+      }else {
+        this.isLogged=false;
       }
     }, 1000);
-    
-    
+
+
   }
 
   logout() {

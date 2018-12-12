@@ -6,6 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 ///MODEL
 import { User } from './model/user'
 import { Router } from '@angular/router';
+import { ChangePassword } from './model/changePassword';
 
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
@@ -21,54 +22,63 @@ const httpOptions = {
 export class Service {
   private baseUrl = 'http://localhost:8080/'
   public errorMsg: string;
-  user: Object
-  datiUser
+  user:Object;
+  
   isLogged:boolean=false;
   id: any;
   repos: string;
+
   constructor(
     public router: Router,
     private http: HttpClient,
   ) {
   }
-
-  // FUNZIONE GET  DA TESTING
-  getTest(): Observable<User> {
-    return this.http.get<User>(this.baseUrl + 'api/user/', httpOptions);
-  }
+  //@@@ SERVICE PER LE FUNZIONI DELL'UTENTE@@@//
 
   // FUNZIONE PER AGGIUNGERE GLI UTENTI USATA IN REGISTRAZIONE
-  addUser(user: User): Observable<any> {
-    return this.http.post(this.baseUrl + 'api/user/signin', user, httpOptions)
+  addUser(user: User): Observable<User> {
+    return this.http.post<User>(this.baseUrl + 'api/user/signin', user, httpOptions)
       .pipe(
         // UTILIZZARE LA FUNZIONE TAP QUANDO ABBIAMO NECESSITA DI UTILIZZARE I DATI DEL SUCCESSO
-        tap(success => console.log(success)),
+        // tap(data => data),
         catchError(this.handleError)
       );
   }
 
-  sendEmail(email: string): Observable<any> {
+  sendEmail(email: string): Observable<String> {
     let body = {email:email}
-    return this.http.post(this.baseUrl + 'api/user/pswRecovery',body, httpOptions)
+    return this.http.post<String>(this.baseUrl + 'api/user/pswRecovery',body, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  changePassword(uuid:string,pgid:string,password:string){
-    //DECOMMENTARE QUANDO LA FUNZIONE SERVER SARA ON
-    
+  changePassword(uuid:string,pgid:string,password:string):Observable<ChangePassword>{
       let params = new HttpParams();
       params = params.append('uuid', uuid);
       params = params.append('pgid', pgid);
       params = params.append('password', password);
-      return this.http.get(this.baseUrl + 'api/user/changePassword', { params: params })
+      return this.http.get<ChangePassword>(this.baseUrl + 'api/user/changePassword', { params: params })
       .pipe(
         catchError( this.handleError)
       );
-      
   } 
+  loginUser(email, psw): Observable<User> {
+    let params = new HttpParams();
+    params = params.append('email', email);
+    params = params.append('password', psw);
+    return this.http.get<User>(this.baseUrl + 'api/user/login', { params: params })
+      .pipe(
+        //tap(userLogged =>{}), //mi salvo tutti i dati di ritorno dal server
+        catchError( this.handleError)
+      );
+  }
+  logout() {
+    localStorage.clear();
+    alert('logout effettuato')
+  }
   
+  // @@@@ Service per la gestione dei file @@@@ ///
   postFile(fileToUpload:File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('files', fileToUpload)
@@ -79,10 +89,10 @@ export class Service {
     ); 
 }
 
-  getUserSpec(id): Observable<any> {
+  getUserSpec(id): Observable<User> {
     let params = new HttpParams();
     params = params.append('id', id);
-    return this.http.get(this.baseUrl + 'api/user/getRepoSpec', { params: params })
+    return this.http.get<User>(this.baseUrl + 'api/user/getRepoSpec', { params: params })
       .pipe(
         tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
         catchError( this.handleError)
@@ -92,7 +102,7 @@ export class Service {
   getRepoSpec(id): Observable<any> {
     let params = new HttpParams();
     params = params.append('id', id);
-    return this.http.get(this.baseUrl + 'api/file/getRepoSpec', { params: params })
+    return this.http.get<any>(this.baseUrl + 'api/file/getRepoSpec', { params: params })
       .pipe(
         tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
         catchError( this.handleError)
@@ -102,7 +112,7 @@ export class Service {
   getFile(id): Observable<any> {
     let params = new HttpParams();
     params = params.append('idRepository', id);
-    return this.http.get(this.baseUrl + 'api/file/getAllFile', { params: params })
+    return this.http.get<any>(this.baseUrl + 'api/file/getAllFile', { params: params })
       .pipe(
         tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
         catchError( this.handleError)
@@ -110,16 +120,7 @@ export class Service {
   }
 
 
-  loginUser(email, psw): Observable<any> {
-    let params = new HttpParams();
-    params = params.append('email', email);
-    params = params.append('password', psw);
-    return this.http.get(this.baseUrl + 'api/user/login', { params: params })
-      .pipe(
-        tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
-        catchError( this.handleError)
-      );
-  }
+  
 
   createRepo(name,state):Observable<any> {
     let params = new HttpParams();
@@ -161,11 +162,7 @@ export class Service {
       );
   }
 
-  logout() {
-    localStorage.clear();
-    alert('logout effettuato')
-    /* location.reload() */
-  }
+  
 
   private handleError(error: HttpErrorResponse) {
     console.log(error)

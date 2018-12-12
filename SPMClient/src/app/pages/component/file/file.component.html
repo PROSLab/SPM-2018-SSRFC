@@ -6,8 +6,9 @@
                     <div class="card-body">
                             Repository: {{repoInfo.repositoryName}} <br>
                             Created At: {{repoInfo.createdAt}} <br>
-                            State: {{repoInfo.publicR}} <br>
-                            <button  (click)="modifyRepo()"  class="btn btn-primary">Modify Repository</button> 
+                           <div *ngIf="repo?.publicR"  style="margin-bottom:5px;"> State: Public <br> </div>
+                           <div *ngIf="!repo?.publicR" style="margin-bottom:5px;"> State: Private <br> </div> 
+                            <button  (click)="modifyRepo()"  class="btn btn-primary" style="margin-right:5px;">Modify Repository</button> 
                             <button  (click)="DeleteRepo()"  class="btn btn-primary">Delete Repository</button> 
                     </div>
                 </div>
