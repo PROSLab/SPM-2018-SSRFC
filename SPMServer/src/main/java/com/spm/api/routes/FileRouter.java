@@ -58,6 +58,10 @@ public class FileRouter {
 								GET("/getFolderSpec"),
 								fileHandler:: getAllFolders
 						)
+						.andRoute(
+								GET("/createNewVersion"),
+								fileHandler::createNewVersion
+						)
 					
 				);
 	}

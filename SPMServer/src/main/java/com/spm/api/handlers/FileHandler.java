@@ -71,7 +71,8 @@ public class FileHandler {
 					return fileService.uploadPath(rootDir, idUser, idRepository,idFolder, fileName, mimetype);
 				})
 				.flatMap(notUsed -> {
-					String path = rootDir + "/" + idUser + "/" + idRepository + "/" + idFolder+ "/" + fileName;
+					//String path = rootDir + "/" + idUser + "/" + idRepository + "/" + idFolder+ "/" + fileName;
+					String path = rootDir + "/" + idUser + "/" + idRepository + "/" + idFolder;
 					return fileService.updateNames(fileName, path, file);
 					
 				})
@@ -139,4 +140,35 @@ public class FileHandler {
 				.flatMap(res -> Responses.ok(res))
 				.onErrorResume(Exception.class, Responses::internalServerError);*/
 	}
+	
+	/*
+	 * Params: idFile, version
+	 * */
+	public Mono<ServerResponse> createNewVersion(ServerRequest request) {
+		String idFile = request.queryParam("idFile").get();
+		String version = request.queryParam("version").get();
+		String mimetype = "bpmn";
+		
+		return fileService.updateFileEntity(version, idFile)
+				.flatMap(f -> {
+					return fileService.cloneFileVersion(f, version, mimetype, rootDir);
+				})
+				.flatMap(res -> Responses.ok(res))
+				.onErrorResume(Exception.class, Responses::internalServerError);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

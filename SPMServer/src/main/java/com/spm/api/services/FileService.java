@@ -139,73 +139,126 @@ public class FileService  {
 	}
 
 
-
-/*
- * get all file in a folder
- */
-public Mono<FileEntity> getAllFile(ObjectId idFolder) {
+	/*
+	 * get all file in a folder
+	 */
+	public Mono<FileEntity> getAllFile(ObjectId idFolder) {
 		
 		return fileRepository.findFileByIdFolder(idFolder);
 	}
-/*
- * get all Folder
- */
-public Mono<Folder> getAllFolders(ObjectId idRepository) {
+
+	/*
+	 * get all Folder
+	 */
+	public Mono<Folder> getAllFolders(ObjectId idRepository) {
 		
 		return folderRepository.findFolderByIdRepository(idRepository);
 	}
 
 
-/*
- * Create Folder DB Schema (here i work with DB)
- */
-public Mono<Folder> createFolderSchema(Folder fold) {
-	return folderRepository.save(fold); // query to mongoDb
-}
+	/*
+	 * Create Folder DB Schema (here i work with DB)
+	 */
+	public Mono<Folder> createFolderSchema(Folder fold) {
+		return folderRepository.save(fold); // query to mongoDb
+	}
 
-/*
- * 
- * Create Path for Folders
- */
-@SuppressWarnings("unused")
-public Mono<Object> createFolderPath(String rootDir, String idUser, String idRepository,String idFolder) {
-	File files = new File(rootDir + File.separator + idUser + File.separator + idRepository+ File.separator + idFolder);
-	
-	Object res = new Object() {
-		private final String path = files.getPath();
-		private final String user = idUser;
-		private final String repository = idRepository;
-		private final String folder=idFolder;
-		public String getPath() {
-			return path;
+	/*
+	 * Create Path for Folders
+	 */
+	@SuppressWarnings("unused")
+	public Mono<Object> createFolderPath(String rootDir, String idUser, String idRepository,String idFolder) {
+		File files = new File(rootDir + File.separator + idUser + File.separator + idRepository+ File.separator + idFolder);
+		
+		Object res = new Object() {
+			private final String path = files.getPath();
+			private final String user = idUser;
+			private final String repository = idRepository;
+			private final String folder=idFolder;
+			public String getPath() {
+				return path;
+			}
+			public String getUser() {
+				return user;
+			}
+			public String getRepository() {
+				return repository;
+			}
+			public String getFolder() {
+				return folder;
+			}
+		};
+		
+		if(!files.exists()) {
+			if (files.mkdirs()) {
+				return Mono.just(res);
+	        } else {
+	            return Mono.error(new Exception("Directory not created"));
+	        }
 		}
-		public String getUser() {
-			return user;
-		}
-		public String getRepository() {
-			return repository;
-		}
-		public String getFolder() {
-			return folder;
-		}
-	};
-	
-	if(!files.exists()) {
-		if (files.mkdirs()) {
-			return Mono.just(res);
-        } else {
-            return Mono.error(new Exception("Directory not created"));
-        }
+		
+		return Mono.just(res);
 	}
 	
-	return Mono.just(res);
-}
-public Mono<Folder>updatepath(String path,Folder folder){
-	folder.setPath(path);
-	return folderRepository.save(folder);
-}
+	public Mono<Folder>updatepath(String path,Folder folder){
+		folder.setPath(path);
+		return folderRepository.save(folder);
+	}
+	
+	/*
+	 * Update cVersion, fileName of a File document db
+	 */
+	public Mono<FileEntity> updateFileEntity(String version, String idFile) {
+		return fileRepository.findById(idFile)
+				.flatMap(f -> {
+					int newVersion = f.getcVersion() + 1;
+					
+					if(Integer.parseInt(version) > f.getcVersion()) {
+						return Mono.error(new Exception("Version does not exist"));
+					}
+					
+					String newFileName = f.getId() + '.' + newVersion;
+					
+					f.setFileName(newFileName);
+					f.setcVersion(newVersion);
+					
+					return fileRepository.save(f);
+				});
+	}
 
-
+	public Mono<FileEntity> cloneFileVersion(FileEntity sourceFile, String version, String mimetype, String rootDir) {
+		String sourcePath = rootDir 
+							+ File.separator 
+							+ sourceFile.getIdUser().toHexString()
+							+ File.separator
+							+ sourceFile.getIdRepository().toHexString()
+							+ File.separator
+							+ sourceFile.getIdFolder().toHexString()
+							+ File.separator
+							+ sourceFile.getId() + '.' + version + '.' + mimetype;
+		
+		String destinationPath = rootDir
+								 + File.separator
+								 + sourceFile.getIdUser().toHexString()
+								 + File.separator
+								 + sourceFile.getIdRepository().toHexString()
+								 + File.separator
+								 + sourceFile.getIdFolder().toHexString()
+								 + File.separator
+								 + sourceFile.getId() + '.' + sourceFile.getcVersion() + '.' + mimetype;
+		
+		try {
+			File source = new File(sourcePath);
+			File dest = new File(destinationPath);
+			Files.copy(source.toPath(), dest.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Mono.error(new Exception(e.getMessage()));
+		}
+		
+		
+		return Mono.just(sourceFile);
+	}
 
 
 }
