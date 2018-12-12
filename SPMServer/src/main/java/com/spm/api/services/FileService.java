@@ -150,7 +150,7 @@ public Mono<FileEntity> getAllFile(ObjectId idFolder) {
 /*
  * get all Folder
  */
-public Mono<Folder> getAllFolders(ObjectId idRepository) {
+public Flux <Folder> getAllFolders(ObjectId idRepository) {
 		
 		return folderRepository.findFolderByIdRepository(idRepository);
 	}

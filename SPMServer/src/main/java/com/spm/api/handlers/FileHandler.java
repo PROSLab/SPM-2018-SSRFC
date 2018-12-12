@@ -95,8 +95,8 @@ public class FileHandler {
 	}
 	
 	public Mono <ServerResponse> getFolderSpec(ServerRequest request){
-		String id = request.queryParam("id").get();
-		return fileService.getRepoSpec(new ObjectId(id))
+		String idFold = request.queryParam("id").get();
+		return fileService.getFolderSpec(new ObjectId(idFold))
 				.flatMap(res -> Responses.ok(res));
 	}
 	public Mono <ServerResponse>getAllFile(ServerRequest request){
@@ -108,6 +108,7 @@ public class FileHandler {
 	public Mono <ServerResponse>getAllFolders(ServerRequest request){
 		String idRepository = request.queryParam("idRepository").get();
 		return fileService.getAllFolders(new ObjectId(idRepository))
+				.collectList()
 				.flatMap(res -> Responses.ok(res));
 				
 	}

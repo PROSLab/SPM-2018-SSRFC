@@ -56,7 +56,7 @@ public class FileRouter {
 						)
 						.andRoute(
 								GET("/getFolderSpec"),
-								fileHandler:: getAllFolders
+								fileHandler:: getFolderSpec
 						)
 					
 				);
