@@ -11,7 +11,8 @@ public class FileEntity {
 	@Id
 	String id; 				// MondoDB auto-generated
 	ObjectId idUser; 		// Reference to id property of User entity
-	ObjectId idRepository;	// Reference to id property of Repository entity
+	ObjectId idRepository;// Reference to id property of Repository entity
+	ObjectId idFolder;
 	Date createdAt; 		// Date of file creation
 	String fileName; // Name of saved file
 	String originalName;	// Name of original file
@@ -19,10 +20,11 @@ public class FileEntity {
 	String path;			// !!Important: the location of the file is stored in the server
 	int cVersion;			// Counter of version (1, 2, 3, 4 ...)
 	
-	public FileEntity(ObjectId idUser, ObjectId idRepository, Date createdAt, String fileName, String originalName,
+	public FileEntity(ObjectId idUser, ObjectId idRepository, ObjectId idFolder, Date createdAt, String fileName, String originalName,
 			String mimetype, String path, int cVersion) {
 		this.idUser = idUser;
 		this.idRepository = idRepository;
+		this.idFolder = idFolder;
 		this.createdAt = createdAt;
 		this.fileName = fileName;
 		this.originalName = originalName;
@@ -30,6 +32,16 @@ public class FileEntity {
 		this.path = path;
 		this.cVersion = cVersion;
 	}
+
+	public ObjectId getIdFolder() {
+		return idFolder;
+	}
+
+	public void setIdFolder(ObjectId idFolder) {
+		this.idFolder = idFolder;
+	}
+
+	
 
 	public String getId() {
 		return id;

@@ -85,8 +85,8 @@ public class FileService  {
 	/*
 	 * Create new bpmn file in the repository dir 
 	 */
-	public Mono<String> uploadPath(String rootDir, String idUser, String idRepository, String fileName, String mimetype){
-		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + File.separator + fileName + "." + mimetype;
+	public Mono<String> uploadPath(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String mimetype){
+		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + File.separator + idFolder+File.separator+ fileName + "." + mimetype;
 		Path path = Paths.get(strPath);
 		
 		try {
@@ -131,16 +131,29 @@ public class FileService  {
 	public Mono<Repository> getRepoSpec(ObjectId idRepo) {
 		return repositoryRepository.findRepoById(idRepo);
 	}
+	/*
+	 * Get a specific folder
+	 */
+	public Mono<Folder> getFolderSpec(ObjectId idFolder) {
+		return folderRepository.findFolderById(idFolder);
+	}
+
 
 
 /*
- * get all file in a repo
+ * get all file in a folder
  */
-public Mono<FileEntity> getAllFile(ObjectId idRepository) {
+public Mono<FileEntity> getAllFile(ObjectId idFolder) {
 		
-		return fileRepository.findFileByIdRepository(idRepository);
+		return fileRepository.findFileByIdFolder(idFolder);
 	}
-	
+/*
+ * get all Folder
+ */
+public Mono<Folder> getAllFolders(ObjectId idRepository) {
+		
+		return folderRepository.findFolderByIdRepository(idRepository);
+	}
 
 
 /*

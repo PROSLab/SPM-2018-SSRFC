@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 import com.spm.api.entity.PasswordChange;
-import com.spm.api.entity.Repository;
 import com.spm.api.entity.User;
 import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.exceptions.ForbiddenResourceOverrideException;

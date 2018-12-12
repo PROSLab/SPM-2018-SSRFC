@@ -50,6 +50,14 @@ public class FileRouter {
 								GET("/createFolder"),
 								fileHandler::createFolder
 						)
+						.andRoute(
+								GET("/getAllFolders"),
+								fileHandler:: getAllFolders
+						)
+						.andRoute(
+								GET("/getFolderSpec"),
+								fileHandler:: getAllFolders
+						)
 					
 				);
 	}

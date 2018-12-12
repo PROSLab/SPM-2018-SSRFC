@@ -37,9 +37,6 @@ public class Folder {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public ObjectId getIdUser() {
 		return idUser;
