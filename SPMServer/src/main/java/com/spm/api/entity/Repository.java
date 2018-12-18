@@ -14,22 +14,25 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 /*
- * File System:
+ * 
+ * File System (Server):
  * 
  * [root: BPMFiles]
  * 	  |------ [idUser1]
- * 					|-------[idRepository1]
- * 									   |------- file1_version1.0
- * 									   |------- file1_version1.1
- * 					|-------[idRepository2]
- * 									   |------- file2_version1.0
- * 									   |------- file2_version1.1
- * 									   ......
- * 					|-------[idRepository3]
- * 					
- * 	  |------ [idUser2]
- * 					|
- * 					....................
+ * 					|-------(U) [idRepository1]
+ * 										|---[idFile1]		
+ * 												    |-------(U) file1_version1.0
+ * 
+ * 									   	|-----(U) [idFolder1]		
+ * 													   |---[idFile2]		
+ * 															       |-------(U) file2_version1.0
+ * 									   						       |-------(U) file2_version1.1
+ * 													   |---[idFile3]
+ * 																   |-------(U) file3_version1.0
+ * 										|-----(U) [idFolder2]
+ * 													   |---[idFile1(clone)]		
+ * 												   				          |-------(U) file1_version1.0(clone)
+ * 
  * 
  * Note: 
  * - When User save a file => will be update the specific file.
