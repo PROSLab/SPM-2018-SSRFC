@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
@@ -86,8 +87,15 @@ public class FileService  {
 	/*
 	 * Create new bpmn file in the repository dir 
 	 */
-	public Mono<String> uploadPath(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String mimetype){
-		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + File.separator + idFolder+File.separator+ fileName + "." + mimetype;
+	public Mono<String> uploadPath(String rootDir, String idUser, String idRepository, Optional<String> idFolder, String fileName, String idFile, String mimetype) {
+		String suffixPath = idFolder.isPresent() == true ? File.separator + idFolder.get() + 
+		          							               File.separator + idFile +
+		          							               File.separator + fileName + "." + mimetype
+														 : File.separator + idFile +
+														   File.separator + fileName + "." + mimetype;
+		
+		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + suffixPath;
+		
 		Path path = Paths.get(strPath);
 		
 		try {
@@ -119,19 +127,17 @@ public class FileService  {
 	/*
 	 * Get all repo
 	 */
-	
 	public Flux<Repository> getAll(ObjectId idUser) {
-		
-		 return  repositoryRepository.findAllByIdUser(idUser);
-		
+		 return repositoryRepository.findAllByIdUser(idUser);
 	}
-/*
- * get a specific repo
- */
-
+	
+	/*
+	 * get a specific repo
+	 */
 	public Mono<Repository> getRepoSpec(ObjectId idRepo) {
 		return repositoryRepository.findRepoById(idRepo);
 	}
+	
 	/*
 	 * Get a specific folder
 	 */
@@ -139,25 +145,17 @@ public class FileService  {
 		return folderRepository.findFolderById(idFolder);
 	}
 
-
 	/*
 	 * get all file in a folder
 	 */
 	public Mono<FileEntity> getAllFile(ObjectId idFolder) {
-		
 		return fileRepository.findFileByIdFolder(idFolder);
 	}
-
-/*
- * get all Folder
- */
-public Flux <Folder> getAllFolders(ObjectId idRepository) {
-
 
 	/*
 	 * get all Folder
 	 */
-
+	public Flux <Folder> getAllFolders(ObjectId idRepository) {
 		return folderRepository.findFolderByIdRepository(idRepository);
 	}
 
@@ -234,24 +232,16 @@ public Flux <Folder> getAllFolders(ObjectId idRepository) {
 
 	public Mono<FileEntity> cloneFileVersion(FileEntity sourceFile, String version, String mimetype, String rootDir) {
 		String sourcePath = rootDir 
-							+ File.separator 
-							+ sourceFile.getIdUser().toHexString()
-							+ File.separator
-							+ sourceFile.getIdRepository().toHexString()
-							+ File.separator
-							+ sourceFile.getIdFolder().toHexString()
-							+ File.separator
-							+ sourceFile.getId() + '.' + version + '.' + mimetype;
+							+ File.separator + sourceFile.getIdUser().toHexString()
+							+ File.separator + sourceFile.getIdRepository().toHexString()
+							+ File.separator + sourceFile.getIdFolder().toHexString()
+							+ File.separator + sourceFile.getId() + '.' + version + '.' + mimetype;
 		
 		String destinationPath = rootDir
-								 + File.separator
-								 + sourceFile.getIdUser().toHexString()
-								 + File.separator
-								 + sourceFile.getIdRepository().toHexString()
-								 + File.separator
-								 + sourceFile.getIdFolder().toHexString()
-								 + File.separator
-								 + sourceFile.getId() + '.' + sourceFile.getcVersion() + '.' + mimetype;
+								 + File.separator + sourceFile.getIdUser().toHexString()
+								 + File.separator + sourceFile.getIdRepository().toHexString()
+								 + File.separator + sourceFile.getIdFolder().toHexString()
+								 + File.separator + sourceFile.getId() + '.' + sourceFile.getcVersion() + '.' + mimetype;
 		
 		try {
 			File source = new File(sourcePath);

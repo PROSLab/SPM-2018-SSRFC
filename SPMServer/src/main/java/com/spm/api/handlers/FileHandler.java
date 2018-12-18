@@ -3,6 +3,7 @@ package com.spm.api.handlers;
 import java.io.File;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,8 @@ public class FileHandler {
 	@Value("${upload.rootDir}")
     private String rootDir;
 	private String fileName;
+	private String idFile;
+	
 	public FileHandler(FileService fileService) {
 		this.fileService = fileService;
 	}
@@ -60,20 +63,37 @@ public class FileHandler {
 	public Mono<ServerResponse> createFile(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
 		String idRepository= request.queryParam("idRepository").get();
-		String idFolder= request.queryParam("idFolder").get();
-
+		Optional<String> idFolder= request.queryParam("idFolder");
 		String originalName = request.queryParam("originalName").get();
 		String mimetype = "bpmn";
-		FileEntity file = new FileEntity (new ObjectId(idUser),new ObjectId(idRepository),new ObjectId(idFolder),new Date(),null,originalName,mimetype,null,1);
+		
+		FileEntity file = new FileEntity (
+				new ObjectId(idUser),
+				new ObjectId(idRepository),
+				idFolder.isPresent() == true ? new ObjectId(idFolder.get()) : null,
+				new Date(),
+				null,
+				originalName,
+				mimetype,
+				null,
+				1
+		);
 		
 		return fileService.createFileSchema(file)
 				.flatMap(f -> {
-					fileName= f.getId() + '.' + 1;
-					return fileService.uploadPath(rootDir, idUser, idRepository,idFolder, fileName, mimetype);
+					idFile = f.getId();
+					fileName = idFile + '.' + 1;
+					return fileService.uploadPath(rootDir, idUser, idRepository, idFolder, fileName, idFile, mimetype);
 				})
 				.flatMap(notUsed -> {
-					//String path = rootDir + "/" + idUser + "/" + idRepository + "/" + idFolder+ "/" + fileName;
-					String path = rootDir + "/" + idUser + "/" + idRepository + "/" + idFolder;
+					String path = rootDir + "/" + idUser + "/" + idRepository;
+					
+					if(idFolder.isPresent() == true) {
+						path += "/" + idFolder.get();
+					}
+					
+					path += "/" + idFile;
+					
 					return fileService.updateNames(fileName, path, file);
 					
 				})
@@ -101,19 +121,22 @@ public class FileHandler {
 		return fileService.getFolderSpec(new ObjectId(idFold))
 				.flatMap(res -> Responses.ok(res));
 	}
-	public Mono <ServerResponse>getAllFile(ServerRequest request){
+	
+	public Mono <ServerResponse> getAllFile(ServerRequest request){
 		String idFolder = request.queryParam("idFolder").get();
 		return fileService.getAllFile(new ObjectId(idFolder))
 				.flatMap(res -> Responses.ok(res));
 				
 	}
-	public Mono <ServerResponse>getAllFolders(ServerRequest request){
+	
+	public Mono <ServerResponse> getAllFolders(ServerRequest request){
 		String idRepository = request.queryParam("idRepository").get();
 		return fileService.getAllFolders(new ObjectId(idRepository))
 				.collectList()
 				.flatMap(res -> Responses.ok(res));
 				
 	}
+	
 	public Mono<ServerResponse> createFolder(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
 		String idRepository=request.queryParam("idRepository").get();
@@ -186,6 +209,7 @@ public class FileHandler {
 				.flatMap(repo -> Responses.ok(repo))
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
+	
 	public Mono<ServerResponse> modifyFolderName(ServerRequest request) {
 		String idFolder = request.queryParam("idFolder").get();
 		String newFileName = request.queryParam("newFolderName").get();

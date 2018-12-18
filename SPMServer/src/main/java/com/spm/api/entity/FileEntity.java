@@ -9,16 +9,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "FileEntitys")
 public class FileEntity {
 	@Id
-	String id; 				// MondoDB auto-generated
-	ObjectId idUser; 		// Reference to id property of User entity
-	ObjectId idRepository;// Reference to id property of Repository entity
-	ObjectId idFolder;
-	Date createdAt; 		// Date of file creation
-	String fileName; // Name of saved file
-	String originalName;	// Name of original file
+	String id; 					// MondoDB auto-generated
+	ObjectId idUser; 			// Reference to id property of User entity
+	ObjectId idRepository;		// Reference to id property of Repository entity
+	
+	ObjectId idFolder;			/* Can be null:
+								 * if null => file is only inside a repository
+								 * if not null => file is inside a folder
+								 */
+	
+	Date createdAt; 			// Date of file creation
+	String fileName; 			// Name of saved file
+	String originalName;		// Name of original file
 	String mimetype;
-	String path;			// !!Important: the location of the file is stored in the server
-	int cVersion;			// Counter of version (1, 2, 3, 4 ...)
+	String path;				// !!Important: the location of the file is stored in the server
+	int cVersion;				// Counter of version (1, 2, 3, 4 ...)
 	
 	public FileEntity(ObjectId idUser, ObjectId idRepository, ObjectId idFolder, Date createdAt, String fileName, String originalName,
 			String mimetype, String path, int cVersion) {
