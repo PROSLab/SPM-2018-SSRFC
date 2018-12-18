@@ -231,17 +231,21 @@ public class FileService  {
 	}
 
 	public Mono<FileEntity> cloneFileVersion(FileEntity sourceFile, String version, String mimetype, String rootDir) {
-		String sourcePath = rootDir 
-							+ File.separator + sourceFile.getIdUser().toHexString()
-							+ File.separator + sourceFile.getIdRepository().toHexString()
-							+ File.separator + sourceFile.getIdFolder().toHexString()
-							+ File.separator + sourceFile.getId() + '.' + version + '.' + mimetype;
+		String prefix = rootDir + File.separator + sourceFile.getIdUser().toHexString()
+							    + File.separator + sourceFile.getIdRepository().toHexString();
 		
-		String destinationPath = rootDir
-								 + File.separator + sourceFile.getIdUser().toHexString()
-								 + File.separator + sourceFile.getIdRepository().toHexString()
-								 + File.separator + sourceFile.getIdFolder().toHexString()
-								 + File.separator + sourceFile.getId() + '.' + sourceFile.getcVersion() + '.' + mimetype;
+		String sourcePath = prefix;
+		String destinationPath = prefix;
+		
+		if(sourceFile.getIdFolder() != null) {
+			String pathFolder = File.separator + sourceFile.getIdFolder().toHexString();
+			sourcePath += pathFolder;
+			destinationPath += pathFolder;
+		}
+		
+		String pathFile = File.separator + sourceFile.getId();
+		sourcePath += pathFile + File.separator + sourceFile.getId() + '.' + version + '.' + mimetype;
+		destinationPath += pathFile + File.separator + sourceFile.getId() + '.' + sourceFile.getcVersion() + '.' + mimetype;
 		
 		try {
 			File source = new File(sourcePath);
