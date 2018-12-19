@@ -35,6 +35,11 @@ export class FolderComponent implements OnInit {
     
   }
 
+  back(){
+    this.router.navigate(['']);
+  }
+
+
   ngOnInit() {
     this.getRepo()
     this.getAllfolder()
@@ -151,18 +156,16 @@ export class FolderComponent implements OnInit {
 
   
   sendTofolder(folderSelected) {
-    this.selectedfolder = folderSelected
     for (var i = 0; i < this.folder.length; i++) {
       if (folderSelected.id == this.folder[i].id) {
         localStorage.setItem("folderSelected.id", folderSelected.id)
       }
     }
-    this.router.navigate(['/file']);
+    this.router.navigate(['/allFiles']);
   } 
 
 
   sendTofile(fileSelected) {
-    this.selectedfolder = fileSelected
     for (var i = 0; i < this.files.length; i++) {
       if (fileSelected.id == this.files[i].id) {
         localStorage.setItem("fileSelected.id", fileSelected.id)
