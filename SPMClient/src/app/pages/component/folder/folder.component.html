@@ -1,9 +1,12 @@
 <div class="container">
-  <div class="row">
+
+        <button (click)="back()" class="btn btn-primary">Back</button>
+
+  <div class="col-5" class="row">
         <div class="col-md-6 offset-md-3">
             <h1>Folders</h1>
         </div>
-    </div>
+ + </div>
 
     <div class="row">
         <!--informazioni sul folder-->
@@ -28,7 +31,6 @@
                     </form>
                 </div>
             </div>
-            <!--   <button  (click)="deleteRepo()"  class="btn btn-primary">Delete Repository</button> -->
         </div>
     </div>
     
@@ -64,42 +66,32 @@
                 </div>
             </form>
         </div>
-    
     </div>
 
-    <div>Lista dei tuoi folder
+    <div>Lista dei tuoi folder e files
         <table>
             <thead>
                 <tr>
                     <th width="20%">Name</th>
                     <th width="30%">Created At</th>
-
                 </tr>
             </thead>
             <tbody>
-                    
                 <tr *ngFor="let fold of folder;" (click)="sendTofolder(fold)">
                     <th scope="row">
                         <i class="material-icons">&#xe2c8; </i>  
-                        {{fold?.folderName}}  
-                        
+                        {{fold?.folderName}}   
                     </th>
-              
                     <th scope="row">{{fold?.createdAt}}</th>
-               
                 </tr>
-                
                 <tr *ngFor="let fil of files;" (click)="sendTofile(fil)">
-                    
                         <th scope="row">
                                 <i class="fa">&#xf016; </i>  
                                 {{fil?.originalName}}  
                             </th>
-
                     <th scope="row">{{fil?.createdAt}}</th>
                   <!--   <th scope="row">{{fold?.createdAt}}</th> -->
                 </tr>
-                
             </tbody>
         </table>
     </div>
