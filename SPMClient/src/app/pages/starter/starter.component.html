@@ -63,14 +63,17 @@
         </div> -->
         
 
-
-
-        <div class="card col-2" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
+     
+        <div class="row">
+        
+        <div  class="card col-3 display"  *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
                <!--  <img src="img_avatar2.png" alt="Avatar" style="width:20%"> -->
-            <div class="container">
-                <h4><b>{{repo?.repositoryName}}</b></h4> 
+               
+                <h4><b>{{repo?.repositoryName}}</b> </h4>
                 <p>{{repo?.createdAt}}</p> 
+               
             </div>
+    
         </div>
 
 
