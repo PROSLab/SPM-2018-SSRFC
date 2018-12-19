@@ -40,14 +40,14 @@
         </div>
 
 
-        <div>Lista dei tuoi Repository
+    <!--     <div>Lista dei tuoi Repository
             <table>
                 <thead>
                     <tr>
                         <th width="40%">Name</th>
                         <th width="30%">Created At</th>
                         <th width="10%">Privacy</th>
-<!--                         <th width="3%">Open</th> -->                    
+                 
                     </tr>
                 </thead>
                 <tbody>
@@ -56,12 +56,24 @@
                         <th scope="row">{{repo?.createdAt}}</th>
                         <th scope="row" *ngIf="repo?.publicR" >Public</th>
                         <th scope="row" *ngIf="!repo?.publicR">Private</th>
-<!--                    <th  ><i class="fa fa-angle-right"></i></th> --> 
+
                    </tr>
                 </tbody>
             </table>
-        </div>
+        </div> -->
         
+
+
+
+        <div class="card col-2" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
+               <!--  <img src="img_avatar2.png" alt="Avatar" style="width:20%"> -->
+            <div class="container">
+                <h4><b>{{repo?.repositoryName}}</b></h4> 
+                <p>{{repo?.createdAt}}</p> 
+            </div>
+        </div>
+
+
        <!--  <div class="row">
             <div class="col-10" style="margin-top:40px;">
                 <button (click)="logout()" class="btn btn-primary  ">LOGOUT</button>
