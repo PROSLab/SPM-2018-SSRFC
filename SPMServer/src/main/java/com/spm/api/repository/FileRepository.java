@@ -5,11 +5,12 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 import com.spm.api.entity.FileEntity;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface FileRepository extends ReactiveMongoRepository<FileEntity, String> {
 
-	Mono<FileEntity> findFileByIdFolder(ObjectId idFolder);
+	Flux<FileEntity> findFileByIdFolder(ObjectId idFolder);
 
 
 }

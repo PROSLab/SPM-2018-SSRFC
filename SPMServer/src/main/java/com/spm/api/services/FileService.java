@@ -148,7 +148,7 @@ public class FileService  {
 	/*
 	 * get all file in a folder
 	 */
-	public Mono<FileEntity> getAllFile(ObjectId idFolder) {
+	public Flux <FileEntity> getAllFile(ObjectId idFolder) {
 		return fileRepository.findFileByIdFolder(idFolder);
 	}
 
