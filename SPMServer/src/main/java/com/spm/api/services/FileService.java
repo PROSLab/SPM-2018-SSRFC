@@ -148,8 +148,8 @@ public class FileService  {
 	/*
 	 * get all file in a folder
 	 */
-	public Flux <FileEntity> getAllFile(ObjectId idFolder) {
-		return fileRepository.findFileByIdFolder(idFolder);
+	public Flux <FileEntity> getAllFile(ObjectId idFolder,ObjectId idRepository) {
+		return fileRepository.findFileByIdFolderAndIdRepository(idFolder,idRepository);
 	}
 
 	/*

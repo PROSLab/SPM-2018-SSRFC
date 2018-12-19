@@ -73,11 +73,11 @@ export class FileComponent implements OnInit {
   }
 
   getAllFile() {
-    this.service.getFile(this.idFolder) //gli passo l'id della cartella da cui prendere il file
+    this.service.getFileSpec(this.file.id) //gli passo l'id della cartella da cui prendere il file
       .subscribe(data => {
         if (data != null) {
           this.fileExist = true;
-          this.file = data
+          this.file = JSON.parse(data)
           for (var i = 1; i <= this.file.cVersion; i++) {
             this.versionArray[i - 1] = i
           }

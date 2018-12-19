@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 public interface FileRepository extends ReactiveMongoRepository<FileEntity, String> {
 
-	Flux<FileEntity> findFileByIdFolder(ObjectId idFolder);
+	Flux<FileEntity> findFileByIdFolderAndIdRepository(ObjectId idFolder,ObjectId idRepository);
 Mono<FileEntity> findFileById(ObjectId id);
 
 }

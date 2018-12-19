@@ -25,7 +25,7 @@ export class Service {
   isLogged: boolean = false;
   id: any;
   repos: string;
-  folder: string;
+  folder: string =null;
 
   constructor(
     public router: Router,
@@ -154,6 +154,16 @@ export class Service {
       );
   }
 
+  getFileSpec(id): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('id', id); //gli passo l'id del file
+    return this.http.get(this.baseUrl + 'api/file/getFileSpec', { params: params })
+      .pipe(
+        tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
+        catchError(this.handleError)
+      );
+  }
+
   createRepo(name, state): Observable<any> {
     let params = new HttpParams();
     let id = localStorage.getItem("id")
@@ -170,11 +180,13 @@ export class Service {
       );
   }
 
-  createFile(idRepository, idFolder, idUser, originalName): Observable<any> {
+  createFile(idRepository,idUser,originalName,idFolder?): Observable<any> {
     let params = new HttpParams();
     params = params.append('idUser', idUser); //nome id utente
     params = params.append('idRepository', idRepository); //id repo
+    if(idFolder!=null){
     params = params.append('idFolder', idFolder); //id cartella
+    }
     params = params.append('originalName', originalName); //nome del file scelto
 
     return this.http.get(this.baseUrl + 'api/file/createFile', { params: params, responseType: 'text' })
@@ -186,8 +198,6 @@ export class Service {
 
   createFolder(idRepository, idUser, folderName): Observable<any> {
     let params = new HttpParams();
-    console.log("id user", idUser)
-    console.log("id repo", idRepository)
     params = params.append('idUser', idUser); //id dell'utente
     params = params.append('idRepository', idRepository); //id della repository
     params = params.append('folderName', folderName); //nome della cartella scelto
@@ -224,10 +234,12 @@ export class Service {
       );
   }
 
-  getFile(id): Observable<any> {
+  getFile(idRepository,id?): Observable<any> {
     let params = new HttpParams();
+    if(id!=null){
     params = params.append('idFolder', id); //id cartella
-
+    }
+    params = params.append('idRepository', idRepository); //id repo
     return this.http.get(this.baseUrl + 'api/file/getAllFile', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server

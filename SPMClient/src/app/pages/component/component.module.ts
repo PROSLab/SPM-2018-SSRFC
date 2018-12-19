@@ -13,6 +13,7 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { FileComponent } from './file/file.component';
 import { FolderComponent } from './folder/folder.component';
+import { AllFilesComponent } from './all-files/all-files.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { FolderComponent } from './folder/folder.component';
     NewPasswordComponent,
     FileComponent,
     FolderComponent,
+    AllFilesComponent,
   ]
 })
 

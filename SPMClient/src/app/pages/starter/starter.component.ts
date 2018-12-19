@@ -25,6 +25,8 @@ export class StarterComponent implements AfterViewInit {
 	localUser: User
 	email: string
 	selectedRepo;
+	files: any;
+	idFileSelected: any;
 
 	constructor(private service: Service, public router: Router) {
 
@@ -32,10 +34,10 @@ export class StarterComponent implements AfterViewInit {
 
 	ngOnInit() {
 		this.setUser();
+
 	}
 
 	setUser() {
-
 		if (localStorage.getItem("email") != undefined) {
 			this.localUser = {
 				email: localStorage.getItem("email"),
@@ -99,6 +101,7 @@ export class StarterComponent implements AfterViewInit {
 		}
 		var nameRepo = name;
 		this.service.createRepo(nameRepo, this.risp)
+
 			.subscribe(data => {
 				var newRepos = JSON.parse(data)
 				this.service.getRepoSpec(newRepos.repository).subscribe(data => {
@@ -146,8 +149,8 @@ export class StarterComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() { }
-
 }
+
 
 
 	//funzione per caricare il file e inviarlo al server

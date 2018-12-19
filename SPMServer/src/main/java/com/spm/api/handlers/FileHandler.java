@@ -123,8 +123,10 @@ public class FileHandler {
 	}
 	
 	public Mono <ServerResponse> getAllFile(ServerRequest request){
+
 		Optional<String> idFolder= request.queryParam("idFolder");
-		return fileService.getAllFile(idFolder.isPresent() == true ? new ObjectId(idFolder.get()) : null)				
+		String idRepository= request.queryParam("idRepository").get();
+		return fileService.getAllFile(idFolder.isPresent() == true ? new ObjectId(idFolder.get()) : null,new ObjectId(idRepository))				
 				.collectList()
 				.flatMap(res -> Responses.ok(res));
 				
