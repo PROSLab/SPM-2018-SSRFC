@@ -78,7 +78,10 @@ public class FileRouter {
 								GET("/modifyFolderName"),
 								fileHandler::modifyFolderName
 						)
-					
+						.andRoute(
+								GET("/getFileSpec"),
+								fileHandler::getFileSpec
+						)
 				);
 	}
 }

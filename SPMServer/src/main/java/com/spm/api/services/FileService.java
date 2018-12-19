@@ -297,7 +297,12 @@ public class FileService  {
 				})
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
-
+	/*
+	 * Get a specific File
+	 */
+	public Mono<FileEntity> getFileSpec (ObjectId idFile) {
+		return fileRepository.findFileById(idFile);
+	}
 }
  
 

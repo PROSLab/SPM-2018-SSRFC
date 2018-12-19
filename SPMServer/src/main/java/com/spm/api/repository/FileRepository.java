@@ -11,6 +11,6 @@ import reactor.core.publisher.Mono;
 public interface FileRepository extends ReactiveMongoRepository<FileEntity, String> {
 
 	Flux<FileEntity> findFileByIdFolder(ObjectId idFolder);
-
+Mono<FileEntity> findFileById(ObjectId id);
 
 }

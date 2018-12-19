@@ -219,7 +219,11 @@ public class FileHandler {
 				.flatMap(file -> Responses.ok(file))
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
-	
+	public Mono <ServerResponse> getFileSpec(ServerRequest request){
+		String idFile = request.queryParam("id").get();
+		return fileService.getFileSpec(new ObjectId(idFile))
+				.flatMap(res -> Responses.ok(res));
+	}
 }
 
 
