@@ -18,6 +18,7 @@ import com.spm.api.entity.Repository;
 import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.entity.Folder;
 import com.spm.api.services.FileService;
+import com.spm.api.utils.FileLib;
 import com.spm.api.utils.Responses;
 
 import reactor.core.publisher.Mono;
@@ -224,6 +225,17 @@ public class FileHandler {
 	public Mono <ServerResponse> getFileSpec(ServerRequest request){
 		String idFile = request.queryParam("id").get();
 		return fileService.getFileSpec(new ObjectId(idFile))
+				.flatMap(res -> Responses.ok(res));
+	}
+	
+	public Mono <ServerResponse> deleteRepository(ServerRequest request) {
+		String idUser = request.queryParam("idUser").get();
+		String idRepository = request.queryParam("idRepository").get();
+		
+		return fileService.createFileObjRepositoryPath(rootDir, idUser, idRepository)
+				.flatMap(repo -> {
+					return Mono.fromRunnable(() -> FileLib.deleteFolder(repo));
+				})
 				.flatMap(res -> Responses.ok(res));
 	}
 }

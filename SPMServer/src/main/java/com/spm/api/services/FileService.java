@@ -303,6 +303,11 @@ public class FileService  {
 	public Mono<FileEntity> getFileSpec (ObjectId idFile) {
 		return fileRepository.findFileById(idFile);
 	}
+	
+	public Mono<File> createFileObjRepositoryPath(String rootDir, String idUser, String idRepository) {
+		File file = new File(rootDir + File.separator + idUser + File.separator + idRepository);
+		return Mono.just(file);
+	}
 }
  
 
