@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Vector;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,6 @@ import com.spm.api.entity.Repository;
 import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.entity.Folder;
 import com.spm.api.services.FileService;
-import com.spm.api.utils.FileLib;
 import com.spm.api.utils.Responses;
 
 import reactor.core.publisher.Mono;
@@ -77,7 +77,8 @@ public class FileHandler {
 				originalName,
 				mimetype,
 				null,
-				1
+				1,
+				new Vector<Integer>()
 		);
 		
 		return fileService.createFileSchema(file)
@@ -222,13 +223,14 @@ public class FileHandler {
 				.flatMap(file -> Responses.ok(file))
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
+	
 	public Mono <ServerResponse> getFileSpec(ServerRequest request){
 		String idFile = request.queryParam("id").get();
 		return fileService.getFileSpec(new ObjectId(idFile))
 				.flatMap(res -> Responses.ok(res));
 	}
 	
-	public Mono <ServerResponse> deleteRepository(ServerRequest request) {
+	/*public Mono <ServerResponse> deleteRepository(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
 		String idRepository = request.queryParam("idRepository").get();
 		
@@ -237,6 +239,19 @@ public class FileHandler {
 					return Mono.fromRunnable(() -> FileLib.deleteFolder(repo));
 				})
 				.flatMap(res -> Responses.ok(res));
+	}*/
+	
+	public Mono <ServerResponse> deleteVersion(ServerRequest request) {
+		String idFile = request.queryParam("idFile").get();
+		String version = request.queryParam("version").get();
+		String mimetype = "bpmn";
+		
+		return fileService.updateDeletedVersionsArray(idFile, version)
+				.flatMap(f -> {
+					return fileService.deleteFileVersion(f, rootDir, mimetype, version);
+				})
+				.flatMap(res -> Responses.ok(res))
+				.onErrorResume(Exception.class, Responses::internalServerError);
 	}
 }
 

@@ -1,6 +1,7 @@
 package com.spm.api.entity;
 
 import java.util.Date;
+import java.util.Vector;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -9,24 +10,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "FileEntitys")
 public class FileEntity {
 	@Id
-	String id; 					// MondoDB auto-generated
-	ObjectId idUser; 			// Reference to id property of User entity
-	ObjectId idRepository;		// Reference to id property of Repository entity
+	String id; 							// MondoDB auto-generated
+	ObjectId idUser; 					// Reference to id property of User entity
+	ObjectId idRepository;				// Reference to id property of Repository entity
 	
-	ObjectId idFolder;			/* Can be null:
-								 * if null => file is only inside a repository
-								 * if not null => file is inside a folder
-								 */
+	ObjectId idFolder;					/* Can be null:
+									 	* if null => file is only inside a repository
+									 	* if not null => file is inside a folder
+									 	*/
 	
-	Date createdAt; 			// Date of file creation
-	String fileName; 			// Name of saved file
-	String originalName;		// Name of original file
+	Date createdAt; 					// Date of file creation
+	String fileName; 					// Name of saved file
+	String originalName;				// Name of original file
 	String mimetype;
-	String path;				// !!Important: the location of the file is stored in the server
-	int cVersion;				// Counter of version (1, 2, 3, 4 ...)
+	String path;						// !!Important: the location of the file is stored in the server
+	int cVersion;						// Counter of version (1, 2, 3, 4 ...)
+	
+	Vector<Integer> deletedVersions;	// Array for deleted version of the file
 	
 	public FileEntity(ObjectId idUser, ObjectId idRepository, ObjectId idFolder, Date createdAt, String fileName, String originalName,
-			String mimetype, String path, int cVersion) {
+			String mimetype, String path, int cVersion, Vector<Integer> deletedVersions) {
 		this.idUser = idUser;
 		this.idRepository = idRepository;
 		this.idFolder = idFolder;
@@ -36,6 +39,7 @@ public class FileEntity {
 		this.mimetype = mimetype;
 		this.path = path;
 		this.cVersion = cVersion;
+		this.deletedVersions = deletedVersions;
 	}
 
 	public ObjectId getIdFolder() {
@@ -114,6 +118,14 @@ public class FileEntity {
 
 	public void setcVersion(int cVersion) {
 		this.cVersion = cVersion;
+	}
+	
+	public Vector<Integer> getDeletedVersions() {
+		return deletedVersions;
+	}
+
+	public void setDeletedVersions(Vector<Integer> deletedVersions) {
+		this.deletedVersions = deletedVersions;
 	}
 	
 }

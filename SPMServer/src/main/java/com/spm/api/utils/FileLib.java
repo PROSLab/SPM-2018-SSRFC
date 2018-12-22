@@ -20,4 +20,9 @@ public class FileLib {
 	    folder.delete();
 	}
 	
+	// delete file
+	public static boolean deleteFile(File file) {
+		return file.delete();
+	}
+	
 }

@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Vector;
 
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,8 @@ import com.spm.api.repository.FileRepository;
 
 import com.spm.api.repository.FolderRepository;
 import com.spm.api.repository.RepositoryRepository;
+import com.spm.api.utils.FileLib;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -231,8 +235,9 @@ public class FileService  {
 	}
 
 	public Mono<FileEntity> cloneFileVersion(FileEntity sourceFile, String version, String mimetype, String rootDir) {
-		String prefix = rootDir + File.separator + sourceFile.getIdUser().toHexString()
-							    + File.separator + sourceFile.getIdRepository().toHexString();
+		String prefix = rootDir 
+				+ File.separator + sourceFile.getIdUser().toHexString()
+				+ File.separator + sourceFile.getIdRepository().toHexString();
 		
 		String sourcePath = prefix;
 		String destinationPath = prefix;
@@ -247,15 +252,25 @@ public class FileService  {
 		sourcePath += pathFile + File.separator + sourceFile.getId() + '.' + version + '.' + mimetype;
 		destinationPath += pathFile + File.separator + sourceFile.getId() + '.' + sourceFile.getcVersion() + '.' + mimetype;
 		
-		try {
-			File source = new File(sourcePath);
-			File dest = new File(destinationPath);
-			Files.copy(source.toPath(), dest.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return Mono.error(new Exception(e.getMessage()));
-		}
+		File source = new File(sourcePath);
+		File dest = new File(destinationPath);
 		
+		if(!source.exists()) {
+			try {
+				Files.createFile( Paths.get(destinationPath) );
+			} catch (IOException e) {
+				e.printStackTrace();
+				return Mono.error( new Exception(e.getMessage()) );
+			}
+		}
+		else {
+			try {
+				Files.copy(source.toPath(), dest.toPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+				return Mono.error( new Exception(e.getMessage()) );
+			}
+		}
 		
 		return Mono.just(sourceFile);
 	}
@@ -304,285 +319,46 @@ public class FileService  {
 		return fileRepository.findFileById(idFile);
 	}
 	
-	public Mono<File> createFileObjRepositoryPath(String rootDir, String idUser, String idRepository) {
+	/*public Mono<File> createFileObjRepositoryPath(String rootDir, String idUser, String idRepository) {
 		File file = new File(rootDir + File.separator + idUser + File.separator + idRepository);
 		return Mono.just(file);
+	}*/
+	
+	public Mono<Boolean> deleteFileVersion (FileEntity sourceFile, String rootDir, String mimetype, String version) {
+		String prefix = rootDir 
+				+ File.separator + sourceFile.getIdUser().toHexString() 
+				+ File.separator + sourceFile.getIdRepository().toHexString();
+		
+		if(sourceFile.getIdFolder() != null) prefix += File.separator + sourceFile.getIdFolder().toHexString();
+		
+		String suffix = File.separator + sourceFile.getId() 
+				+ File.separator + sourceFile.getId() + "." + version + "." + mimetype;
+		
+		File file = new File(prefix + suffix);
+		
+		if(FileLib.deleteFile(file)) {
+			return Mono.just(true);
+		}
+		
+		return Mono.error(new Exception("Can not delete file"));		
+				
+	}
+	
+	public Mono<FileEntity> updateDeletedVersionsArray(String idFile, String version) {
+		return fileRepository.findById(idFile)
+				.flatMap(f -> {
+					Vector<Integer> vec = f.getDeletedVersions() == null ? new Vector<Integer>() : f.getDeletedVersions();
+					vec.add( Integer.parseInt(version) );
+					Collections.sort(vec);
+					f.setDeletedVersions(vec);
+					
+					return fileRepository.save(f);
+					
+				})
+				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
 }
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
