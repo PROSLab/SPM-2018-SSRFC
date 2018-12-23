@@ -36,15 +36,35 @@ public class FileHandler {
 		this.fileService = fileService;
 	}
 
-	public Mono<ServerResponse> uploadFileTest(ServerRequest request) { // just a test for files upload
+	public Mono<ServerResponse> uploadFile(ServerRequest request) {
+		String idUser = request.queryParam("idUser").get();
+		String idRepository= request.queryParam("idRepository").get();
+		Optional<String> idFolder= request.queryParam("idFolder");
+		String originalName = request.queryParam("originalName").get();
+		String mimetype = "bpmn";
+		
+		FileEntity file = new FileEntity (
+				new ObjectId(idUser),
+				new ObjectId(idRepository),
+				idFolder.isPresent() == true ? new ObjectId(idFolder.get()) : null,
+				new Date(),
+				null,
+				originalName,
+				mimetype,
+				null,
+				1
+		);
+		return fileService.createFileSchema(file)
+				.flatMap(res -> Responses.ok(res));
+
+		/*
 		return request.body(BodyExtractors.toMultipartData())
 				.flatMap(parts -> {
 					Map<String, Part> map = parts.toSingleValueMap();
-					FilePart filePart = (FilePart) map.get("files");
-					filePart.transferTo( new File(rootDir + "/" + filePart.filename()) );
-					
+					FilePart filePart = (FilePart) map.get("files");					
 					return Responses.ok("OK");
 				});
+				*/
 	}
 	
 	public Mono<ServerResponse> createRepository(ServerRequest request) {
@@ -223,6 +243,14 @@ public class FileHandler {
 		String idFile = request.queryParam("id").get();
 		return fileService.getFileSpec(new ObjectId(idFile))
 				.flatMap(res -> Responses.ok(res));
+	}
+	
+	public Mono <ServerResponse> getAllRepoPublic(ServerRequest request){
+		Boolean publicR = true;
+		return fileService.getAllPublicRepo(publicR)
+				.collectList()
+				.flatMap(res -> Responses.ok(res));
+				
 	}
 }
 

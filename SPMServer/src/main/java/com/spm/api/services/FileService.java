@@ -130,6 +130,9 @@ public class FileService  {
 	public Flux<Repository> getAll(ObjectId idUser) {
 		 return repositoryRepository.findAllByIdUser(idUser);
 	}
+	public Flux<Repository> getAllPublicRepo(Boolean publicR) {
+		 return repositoryRepository.findAllRepoBypublicR(publicR);
+	}
 	
 	/*
 	 * get a specific repo

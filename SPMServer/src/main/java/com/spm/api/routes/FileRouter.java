@@ -23,8 +23,8 @@ public class FileRouter {
 				.nest(
 						path("/api/file"), 
 						RouterFunctions.route(
-								POST("/uploadTest").and(accept(MediaType.MULTIPART_FORM_DATA)),
-								fileHandler::uploadFileTest
+								POST("/uploadFile").and(accept(MediaType.MULTIPART_FORM_DATA)),
+								fileHandler::uploadFile
 						)
 						.andRoute(
 								GET("/createRepository"),
@@ -81,6 +81,10 @@ public class FileRouter {
 						.andRoute(
 								GET("/getFileSpec"),
 								fileHandler::getFileSpec
+						)
+						.andRoute(
+								GET("/getAllRepoPublic"),
+								fileHandler::getAllRepoPublic
 						)
 				);
 	}
