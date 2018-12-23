@@ -3,7 +3,7 @@ import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
-import { File } from '../../../service/model/file'
+//import { File } from '../../../service/model/file'
 
 @Component({
   selector: 'app-folder',
@@ -23,8 +23,9 @@ export class FolderComponent implements OnInit {
   errorMessage: any;
   appear: boolean;
   createfile=false;
-  files: File[]  =null;
+  files  =null;
   idFileSelected: any;
+  fileToUpload: File;
 
 
   constructor(private service: Service, public router: Router) {
@@ -40,13 +41,27 @@ export class FolderComponent implements OnInit {
   }
 
 
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+}
+
+  uploadFileToActivity() {
+    this.service.postFile(this.fileToUpload).subscribe(data => {
+      console.log(data)
+      // do something, if upload success
+      }, error => {
+        console.log(error);
+      });
+  }
+
+
   ngOnInit() {
     this.getRepo()
     this.getAllfolder()
     this.getAllFile()
   }
 
-  modifyRepo(name) {
+  modifyRepo() {
     this.appear = true;
   }
 

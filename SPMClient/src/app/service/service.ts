@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from './model/user'
 import { Router } from '@angular/router';
 import { ChangePassword } from './model/changePassword';
+import { Repo } from './model/repo';
 
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
@@ -32,6 +33,8 @@ export class Service {
     private http: HttpClient,
   ) {
   }
+
+
   //@@@ SERVICE PER LE FUNZIONI DELL'UTENTE@@@//
 
   // FUNZIONE PER AGGIUNGERE GLI UTENTI USATA IN REGISTRAZIONE
@@ -80,9 +83,9 @@ export class Service {
 
   // @@@@ Service per la gestione dei file @@@@ ///
   postFile(fileToUpload: File): Observable<any> {
-    const formData: FormData = new FormData();
+     const formData: FormData = new FormData();
     formData.append('files', fileToUpload)
-
+ 
     return this.http.post(this.baseUrl + "api/file/uploadTest", formData, { responseType: 'text' })
       .pipe(
         catchError(this.handleError)
@@ -123,6 +126,15 @@ export class Service {
   } 
 
   //get specific file,repo or folder
+  getAllRepoPublic(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + 'api/file/getAllRepoPublic')
+      .pipe(
+        tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
+        catchError(this.handleError)
+      );
+  }
+
+
 
   getUserSpec(id): Observable<User> {
     let params = new HttpParams();

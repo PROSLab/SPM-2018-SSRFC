@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h1>Home</h1>
-        </div>
+            <h1>Home Page </h1>
+             </div>
     </div>
 
     <div *ngIf="isLogged">
@@ -10,7 +10,9 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        Benvenuto {{localUser?.email}}!
+                        Benvenuto {{localUser?.email}}! <br><br>
+                         Questa è la lista di tutti i tuoi repository. Puoi cliccare su di essi per visualizzare cosa c'è all'interno!
+       
                     </div>
                 </div>
             </div>
@@ -64,28 +66,30 @@
         
 
      
-        <div class="row">
-        
-        <div  class="card col-3 display"  *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
-               <!--  <img src="img_avatar2.png" alt="Avatar" style="width:20%"> -->
+    <div class="row">
+        <div  class="card card2" padding *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
                
-                <h4><b>{{repo?.repositoryName}}</b> </h4>
-                <p>{{repo?.createdAt}}</p> 
-               
+           <h4 class="cardWrite">
+                <i class="fas fa-sitemap"></i> 
+                {{repo?.repositoryName}}
+             </h4>
+         <!--         <p>{{repo?.createdAt}}</p> -->
+              <!--   <p *ngIf="repo.publicR">Public</p> 
+                <p *ngIf="!repo.publicR">Private</p>  -->
             </div>
-    
         </div>
 
 
        <!--  <div class="row">
             <div class="col-10" style="margin-top:40px;">
-                <button (click)="logout()" class="btn btn-primary  ">LOGOUT</button>
+                <button (click)="logout()" class="btn btn-primary">LOGOUT</button>
             </div>
         </div> -->
         
     </div>
     <div>
-        <div class="row" *ngIf="!isLogged">
+        <div  *ngIf="!isLogged">
+            <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -94,6 +98,27 @@
                     </div>
                 </div>
             </div>
+        </div>
+         <div>
+                <div>Lista dei  Repository Pubblici
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="40%">Name</th>
+                                    <th width="30%">Created At</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let repoPublic of reposPublic; let i=index;" (click)="sendTo(repoPublic)" >
+                                    <th scope="row">{{repoPublic?.repositoryName}}</th>
+                                    <th scope="row">{{repoPublic?.createdAt}}</th>
+                               </tr>
+                            </tbody>
+                        </table>
+                    </div>
+         </div>
+        
         </div>
     </div>
 </div>

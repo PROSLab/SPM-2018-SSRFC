@@ -1,7 +1,7 @@
 import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 import { Service } from '../../../service/service'
-import { File } from '../../../../app/service/model/file'
+//import { File } from '../../../../app/service/model/file'
 import { Folder } from '../../../../app/service/model/folder'
 
 
@@ -24,7 +24,7 @@ export class FileComponent implements OnInit {
   folder: Folder = <any>[]
   folderInfo: Folder
   file = <any>[]
-  filecreato: File = <any>[];
+  filecreato = <any>[];
   errorMessage: any;
   idFolder: string;
   versionArray = [];
@@ -32,7 +32,7 @@ export class FileComponent implements OnInit {
   idFile: string;
   folders: any;
   repo: any;
-
+  fileToUpload: File = null;
 
   constructor(public router: Router, private service: Service) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -49,9 +49,26 @@ export class FileComponent implements OnInit {
     this.getRepo();
   }
 
+
+ 
+
   createFile() {
     this.fileAppear = true;
   }
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+}
+
+  uploadFileToActivity() {
+    this.service.postFile(this.fileToUpload).subscribe(data => {
+      console.log(data)
+      // do something, if upload success
+      }, error => {
+        console.log(error);
+      });
+  }
+
 
   saveFile(originalName) {
     this.service.createFile(this.idRepoSelected, this.idFolder, this.idUser, originalName)

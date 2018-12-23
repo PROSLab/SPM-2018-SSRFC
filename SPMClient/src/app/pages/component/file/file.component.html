@@ -1,5 +1,5 @@
 <div class="container">
-        <button (click)="back()" class="btn btn-primary">Back</button>
+    <button (click)="back()" style="border-radius: 20px; width: 80px;background-color: rgba(0, 128, 0, 0.63);"class="btn btn-success far">	&#xf359; Back</button>
                         
     <div class="row">
         <!--informazioni sulla folder-->
@@ -93,15 +93,15 @@
 <div>
 
 
-        <!--     Caricamento di un file
+             Caricamento di un file
 
     <div class="form-group">
         <label for="file">Choose File</label>
         <input type="file"
                id="file" #f
                (change)="handleFileInput($event.target.files)">
-               <button  (click)="caricaFile()"  class="btn btn-primary">Carica File</button>
-    </div> -->
+               <button  (click)="uploadFileToActivity()"  class="btn btn-primary">Carica File</button>
+    </div> 
 
 
 

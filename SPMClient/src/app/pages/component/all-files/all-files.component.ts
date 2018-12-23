@@ -15,6 +15,8 @@ export class AllFilesComponent implements OnInit {
   selectedfile: any;
   createfile: boolean;
   idUser: string;
+  folderInfo: any;
+  fileToUpload: File;
 
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -26,6 +28,20 @@ export class AllFilesComponent implements OnInit {
   ngOnInit() {
   this.getAllFile()
   }
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+}
+
+  uploadFileToActivity() {
+    this.service.postFile(this.fileToUpload).subscribe(data => {
+      console.log(data)
+      // do something, if upload success
+      }, error => {
+        console.log(error);
+      });
+  }
+
 
 
   back(){
@@ -41,6 +57,16 @@ export class AllFilesComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
+
+  getFolder() {
+    this.service.getFolderSpec(this.idFolderSelected)
+      .subscribe(data => {
+        this.folderInfo = data
+      }, error => {
+        this.errorMessage = <any>error
+      });
+  }
+
 
   sendTofile(fileSelected) {
     for (var i = 0; i < this.files.length; i++) {
