@@ -14,6 +14,7 @@ import { NewPasswordComponent } from './new-password/new-password.component';
 import { FileComponent } from './file/file.component';
 import { FolderComponent } from './folder/folder.component';
 import { AllFilesComponent } from './all-files/all-files.component';
+import { RepoPublicComponent } from './repo-public/repo-public.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { AllFilesComponent } from './all-files/all-files.component';
     FileComponent,
     FolderComponent,
     AllFilesComponent,
+    RepoPublicComponent,
   ]
 })
 
