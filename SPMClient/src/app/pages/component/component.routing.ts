@@ -6,6 +6,7 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { FileComponent } from './file/file.component';
 import { FolderComponent } from './folder/folder.component';
+import { AllFilesComponent } from './all-files/all-files.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -66,6 +67,14 @@ export const ComponentsRoutes: Routes = [
         urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'folder'}]
       }
     },
-    ]
+    {
+      path: 'allFiles',
+      component: AllFilesComponent,
+      data: {
+        title: 'allFiles',
+        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'allFiles'}]
+      }
+    }
+   ]
   }
 ];

@@ -1,2 +1,0 @@
-INDEX VERSION 1.131+C:\Users\Arianna\SPM-2018-SSRFC\Nuova cartella\.metadata\.plugins\org.eclipse.jdt.core
-2542069023.index

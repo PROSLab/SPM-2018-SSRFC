@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Vector;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +53,8 @@ public class FileHandler {
 				originalName,
 				mimetype,
 				null,
-				1
+				1,
+				null
 		);
 		return fileService.createFileSchema(file)
 				.flatMap(res -> Responses.ok(res));
@@ -96,7 +98,8 @@ public class FileHandler {
 				originalName,
 				mimetype,
 				null,
-				1
+				1,
+				new Vector<Integer>()
 		);
 		
 		return fileService.createFileSchema(file)
@@ -143,8 +146,10 @@ public class FileHandler {
 	}
 	
 	public Mono <ServerResponse> getAllFile(ServerRequest request){
+
 		Optional<String> idFolder= request.queryParam("idFolder");
-		return fileService.getAllFile(idFolder.isPresent() == true ? new ObjectId(idFolder.get()) : null)				
+		String idRepository= request.queryParam("idRepository").get();
+		return fileService.getAllFile(idFolder.isPresent() == true ? new ObjectId(idFolder.get()) : null,new ObjectId(idRepository))				
 				.collectList()
 				.flatMap(res -> Responses.ok(res));
 				
@@ -239,18 +244,33 @@ public class FileHandler {
 				.flatMap(file -> Responses.ok(file))
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
+	
 	public Mono <ServerResponse> getFileSpec(ServerRequest request){
 		String idFile = request.queryParam("id").get();
 		return fileService.getFileSpec(new ObjectId(idFile))
 				.flatMap(res -> Responses.ok(res));
 	}
 	
+
 	public Mono <ServerResponse> getAllRepoPublic(ServerRequest request){
 		Boolean publicR = true;
 		return fileService.getAllPublicRepo(publicR)
 				.collectList()
 				.flatMap(res -> Responses.ok(res));
 				
+	}
+	public Mono <ServerResponse> deleteVersion(ServerRequest request) {
+		String idFile = request.queryParam("idFile").get();
+		String version = request.queryParam("version").get();
+		String mimetype = "bpmn";
+		
+		return fileService.updateDeletedVersionsArray(idFile, version)
+				.flatMap(f -> {
+					return fileService.deleteFileVersion(f, rootDir, mimetype, version);
+				})
+				.flatMap(res -> Responses.ok(res))
+				.onErrorResume(Exception.class, Responses::internalServerError);
+
 	}
 }
 

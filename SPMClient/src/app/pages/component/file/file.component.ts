@@ -15,7 +15,7 @@ import { Folder } from '../../../../app/service/model/folder'
 export class FileComponent implements OnInit {
   appearRenameFolder: boolean = false;
   appearRenameFile: boolean = false;
-  fileExist = false;
+  fileExist = true;
   fileAppear = false;
 
   idRepoSelected: string;
@@ -29,20 +29,25 @@ export class FileComponent implements OnInit {
   idFolder: string;
   versionArray = [];
   appear: boolean;
+  idFile: string;
+  folders: any;
+  repo: any;
 
 
   constructor(public router: Router, private service: Service) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
     this.idUser = localStorage.getItem("id")
     this.idFolder = localStorage.getItem("folderSelected.id")
+    this.idFile = localStorage.getItem("fileSelected.id")
   }
 
   ngOnInit() {
     //faccio una chiamata al server per vedere i dati specifici della repos.
     this.getFolder();
+    this.getAllFolder();
     this.getAllFile();
+    this.getRepo();
   }
-
 
   createFile() {
     this.fileAppear = true;
@@ -62,26 +67,60 @@ export class FileComponent implements OnInit {
   }
 
   newVersion() {
-    this.service.createNewVersion(this.file.id, this.file.cVersion)
+    this.service.createNewVersion(this.idFile, this.file.cVersion)
       .subscribe(data => {
-        for (var i = 1; i <= data.cVersion; i++) {
+        /* for (var i = 1; i <= data.cVersion; i++) {
           this.versionArray[i - 1] = i
-        }
+        } */
+        this.getAllFile()
+        alert("Hai creato una nuova versione del file")
+        this.router.navigate(['/file']);
       }, error => {
         this.errorMessage = <any>error
       });
   }
 
+
+  back(){
+    this.router.navigate(['/allFiles']);
+  }
+
+
+//prendo tutta la lista di tutte le cartelle  della repo
+  getAllFolder(){
+    this.service.getAllFolder(this.idRepoSelected)
+    .subscribe(data => {
+      if (data != null) {
+        this.folders =JSON.parse(data)
+  }
+}, error => {
+  this.errorMessage = <any>error
+});
+}
+
+getRepo(){
+  this.service.getRepoSpec(this.idRepoSelected)
+  .subscribe(data => {
+    if (data != null) {
+      this.repo =(data)
+}
+}, error => {
+this.errorMessage = <any>error
+});
+}
+
+  //premdo i dati specifici di quel file che ho selezionato in precedenza
   getAllFile() {
-    this.service.getFile(this.idFolder) //gli passo l'id della cartella da cui prendere il file
+    this.service.getFileSpec(this.idFile)
       .subscribe(data => {
         if (data != null) {
           this.fileExist = true;
-          this.file = data
-          for (var i = 1; i <= this.file.cVersion; i++) {
-            this.versionArray[i - 1] = i
+          this.file =(data)
+          for (var i = 0; i<this.file.cVersion ; i++) {
+            this.versionArray[i] = this.file.cVersion - i
           }
         }
+     
         else {
           this.fileExist = false;
         }
@@ -114,7 +153,7 @@ export class FileComponent implements OnInit {
   }
 
   sendNewFileName(name) {
-    this.service.changeNameFile(this.file.id, name)
+    this.service.changeNameFile(this.idFile, name)
     .subscribe(data => {
       this.appearRenameFile = false
       this.file = data
