@@ -6,18 +6,17 @@ import { Repo } from '../../../service/model/repo';
 import { File } from '../../../service/model/file'
 
 @Component({
-  selector: 'app-Folder',
-  templateUrl: './folder.component.html',
-  styleUrls: ['./folder.component.css']
+  selector: 'app-Repository',
+  templateUrl: './repository.component.html',
+  styleUrls: ['./repository.component.css']
 })
 
-export class FolderComponent implements OnInit {
+export class RepositoryComponent implements OnInit {
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
   idUser: string
   folder: Folder[] = null
-  folderInfo: Folder[]= null
   repoInfo: Repo = <any>[]
   folderExist: boolean = false
   createfold = false
@@ -26,36 +25,29 @@ export class FolderComponent implements OnInit {
   createfile=false;
   files: File[]  =null;
   idFileSelected: any;
-  folderSelected: string;
-  appearFormFolder: boolean;
 
 
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
-    this.folderSelected = localStorage.getItem("folderSelected.id")
     this.idUser = localStorage.getItem("id")  
-    
   }
 
   back(){
-    this.router.navigate(['repository']);
+    this.router.navigate(['']);
   }
 
 
   ngOnInit() {
-    this.getRepoInfo()
-    this.getFolderInfo()
+    this.getRepo()
+    this.getAllfolder()
     this.getAllFile()
   }
 
-  modifyRepo() {
+  modifyRepo(name) {
     this.appear = true;
   }
-  modifyFolder() {
-    this.appearFormFolder = true;
-  }
 
-  sendNewNameRepo(name) {
+  sendNewName(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
       .subscribe(data => {
         this.appear = false
@@ -63,17 +55,8 @@ export class FolderComponent implements OnInit {
 
       })
   }
-  sendNewNameFolder(name) {
-    this.service.changeNameFolder(this.folderSelected, name)
-      .subscribe(data => {
-        this.appearFormFolder = false
-        this.folderInfo = data
-
-      })
-  }
-
   //prendo i dati della repo specifica
-  getRepoInfo() {
+  getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
         this.repoInfo = data
@@ -81,13 +64,10 @@ export class FolderComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
-  getFolderInfo() {
-    this.service.getFolderSpec(this.folderSelected)
-      .subscribe(data => {
-        this.folderInfo = data
-      }, error => {
-        this.errorMessage = <any>error
-      });
+
+
+  createFolder() {
+    this.createfold = true;
   }
 
   createFile() {
@@ -96,7 +76,8 @@ export class FolderComponent implements OnInit {
 
   saveFile(fileName) {
     var name = fileName
-    this.service.createFile(this.idRepoSelected, this.idUser, name,this.folderSelected)
+    var idfolder=null
+    this.service.createFile(this.idRepoSelected, this.idUser, name,idfolder)
       .subscribe(data => {
          var file = JSON.parse(data)
         this.service.getFileSpec(file.id)
@@ -109,6 +90,7 @@ export class FolderComponent implements OnInit {
           }); 
         this.createfile = false
         alert("File creato con successo.")
+        //this.router.navigate(['/folder']);
       }, error => {
         this.errorMessage = <any>error
         alert("file non creato")
@@ -116,15 +98,64 @@ export class FolderComponent implements OnInit {
     this.createfile = false
   }
 
+
+
+  saveFolder(folderName) {
+    var nameFolder = folderName;
+    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
+      .subscribe(data => {
+        var folder = JSON.parse(data)
+        this.service.getFolderSpec(folder.id)
+          .subscribe(data => {
+            var newFolder: Folder = data
+            var count = this.folder.length
+            this.folder[count] = newFolder
+          }, error => {
+            this.errorMessage = <any>error
+          });
+        this.createfold = false
+        alert("Cartella creata con successo.")
+        //this.router.navigate(['/folder']);
+      }, error => {
+        this.errorMessage = <any>error
+        alert("Cartella non creata")
+      })
+    this.createfold = false
+  }
+
+
+
+  getAllfolder() {
+   
+    //prende tutte le cartelle create
+    this.service.getAllFolder(this.idRepoSelected)
+      .subscribe(data => {
+        this.folder = JSON.parse(data)
+        //console.log('getALLfOLDER',this.folder)
+      }, error => {
+        this.errorMessage = <any>error
+      });
+
+  
+  }
+
   //tutti i file
    getAllFile() {
-		this.service.getFile(this.idRepoSelected,this.folderSelected)
+		this.service.getFile(this.idRepoSelected,null)
 		.subscribe(data => {
+		  //console.log('allfiles',data)
 		  this.files = (data)
 		}, error => {
 		  this.errorMessage = <any>error
 		});
 	  } 
+
+  
+  sendTofolder(folderSelected) {
+    localStorage.setItem("folderSelected.id", folderSelected)
+    
+  } 
+
 
  sendTofile(fileSelected) {
   localStorage.setItem("fileSelected.id", fileSelected)

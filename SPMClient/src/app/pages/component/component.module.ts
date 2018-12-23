@@ -6,14 +6,12 @@ import { JsonpModule } from '@angular/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsRoutes } from './component.routing';
 
-import { LoginComponent } from './login/login.component';
-import { PswRecoveryComponent } from './psw-recovery/psw-recovery.component';
-import { RegistrazioneComponent } from './registrazione/registrazione.component';
-import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
-import { NewPasswordComponent } from './new-password/new-password.component';
+
 import { FileComponent } from './file/file.component';
-import { FolderComponent } from './folder/folder.component';
+import { RepositoryComponent } from './Repository/repository.component';
 import { AllFilesComponent } from './all-files/all-files.component';
+import { FolderComponent } from './folder/folder.component';
+import { FileRepositoryComponent } from './filerepository/file.component';
 
 @NgModule({
   imports: [
@@ -25,13 +23,10 @@ import { AllFilesComponent } from './all-files/all-files.component';
     NgbModule
   ],
   declarations: [
-    LoginComponent,
-    PswRecoveryComponent,
-    RegistrazioneComponent,
-    PagenotfoundComponent,
-    NewPasswordComponent,
-    FileComponent,
+    RepositoryComponent,
     FolderComponent,
+    FileComponent,
+    FileRepositoryComponent,
     AllFilesComponent,
   ]
 })
