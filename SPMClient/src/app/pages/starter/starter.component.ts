@@ -82,11 +82,22 @@ export class StarterComponent implements AfterViewInit {
 		}, error => {
 			this.errorMessage = <any>error
 		});
+	} 
+
+
+	sendTo(repoSelected) {
+		for (var i = 0; i < this.repos.length; i++) {
+			if (repoSelected.id == this.repos[i].id) {
+				localStorage.setItem("repoSelected.id", repoSelected.id)
+			}
+		}
+		this.router.navigate(['/folder']);
 	}
+
 
 	//RENDER TO REPOSITORY SELEZIONATA
 	//TODO: Non si fa cosi questa cosa.. ma non so come correggerla :/ e mi ci vorebbe troppo tempo ora
-	sendTo(repoSelected) {
+	sendToPublic(repoSelected) {
 		for (var i = 0; i < this.reposPublic.length; i++) {
 			if (repoSelected.id == this.reposPublic[i].id) {
 				localStorage.setItem("repoSelected.id", repoSelected.id)
