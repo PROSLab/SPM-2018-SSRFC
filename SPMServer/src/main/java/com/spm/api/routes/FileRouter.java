@@ -83,13 +83,11 @@ public class FileRouter {
 								fileHandler::getFileSpec
 						)
 						.andRoute(
-
 								GET("/getAllRepoPublic"),
 								fileHandler::getAllRepoPublic
 
 						)
 						.andRoute(
-
 								GET("/deleteVersion"),
 								fileHandler::deleteVersion
 
