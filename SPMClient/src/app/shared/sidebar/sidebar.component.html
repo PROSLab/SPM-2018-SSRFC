@@ -40,6 +40,10 @@
                     <a routerLink="" (click)="addExpandClass('starter')" [routerLinkActive]="['router-link-active']"><i
                             class="mdi mdi-file"></i><span class="hide-menu">Home Page</span></a>
                 </li>
+                <li [class.active]="showMenu === 'repo-public'">
+                        <a routerLink="/repo-public" (click)="addExpandClass('repo-public')" ><i
+                                class="mdi mdi-file"></i><span class="hide-menu">Repository Pubblici</span></a>
+                    </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

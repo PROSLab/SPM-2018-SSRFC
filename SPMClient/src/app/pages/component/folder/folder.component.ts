@@ -3,7 +3,9 @@ import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
-import { File } from '../../../service/model/file'
+import  {exportIsLogged} from '../../starter/starter.component'
+import { isEmpty } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-Folder',
@@ -24,10 +26,12 @@ export class FolderComponent implements OnInit {
   errorMessage: any;
   appear: boolean;
   createfile=false;
-  files: File[]  =null;
+  files  =null;
   idFileSelected: any;
   folderSelected: string;
   appearFormFolder: boolean;
+  fileToUpload: File;
+  exist: boolean;
 
 
   constructor(private service: Service, public router: Router) {
@@ -39,6 +43,20 @@ export class FolderComponent implements OnInit {
 
   back(){
     this.router.navigate(['repository']);
+  }
+
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+}
+
+  uploadFileToActivity() {
+    this.service.postFile(this.fileToUpload).subscribe(data => {
+      console.log(data)
+      // do something, if upload success
+      }, error => {
+        console.log(error);
+      });
   }
 
 
@@ -116,11 +134,59 @@ export class FolderComponent implements OnInit {
     this.createfile = false
   }
 
+
+
+  saveFolder(folderName) {
+    var nameFolder = folderName;
+    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
+      .subscribe(data => {
+        var folder = JSON.parse(data)
+        this.service.getFolderSpec(folder.id)
+          .subscribe(data => {
+            var newFolder: Folder = data
+            var count = this.folder.length
+            this.folder[count] = newFolder
+          }, error => {
+            this.errorMessage = <any>error
+          });
+        this.createfold = false
+        alert("Cartella creata con successo.")
+        this.router.navigate(['/folder']);
+      }, error => {
+        this.errorMessage = <any>error
+        alert("Cartella non creata")
+      })
+    this.createfold = false
+  }
+
+
+
+  getAllfolder() {
+    console.log(this.idRepoSelected)
+
+    //devo richiamare la funzione del server per inviargli il file
+    this.service.getAllFolder(this.idRepoSelected)
+      .subscribe(data => {
+        this.folder = JSON.parse(data)
+        if(this.folder.length>0){
+          this.exist=true;
+        }
+      }, error => {
+        this.errorMessage = <any>error
+      });
+
+  
+  }
+
   //tutti i file
    getAllFile() {
 		this.service.getFile(this.idRepoSelected,this.folderSelected)
 		.subscribe(data => {
-		  this.files = (data)
+      console.log(data)
+      this.files =(data)
+      if(this.files.length>0){
+        this.exist=true;
+      }
 		}, error => {
 		  this.errorMessage = <any>error
 		});

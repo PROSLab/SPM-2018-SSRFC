@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
+import  {exportIsLogged} from '../../starter/starter.component'
+
 
 @Component({
   selector: 'app-all-files',
   templateUrl: './all-files.component.html',
   styleUrls: ['./all-files.component.css']
 })
+
 export class AllFilesComponent implements OnInit {
   errorMessage: any;
   files: any;
@@ -15,6 +18,9 @@ export class AllFilesComponent implements OnInit {
   selectedfile: any;
   createfile: boolean;
   idUser: string;
+  folderInfo: any;
+  fileToUpload: File;
+isLogged=exportIsLogged
 
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -26,6 +32,20 @@ export class AllFilesComponent implements OnInit {
   ngOnInit() {
   this.getAllFile()
   }
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+}
+
+  uploadFileToActivity() {
+    this.service.postFile(this.fileToUpload).subscribe(data => {
+      console.log(data)
+      // do something, if upload success
+      }, error => {
+        console.log(error);
+      });
+  }
+
 
 
   back(){
@@ -41,6 +61,16 @@ export class AllFilesComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
+
+  getFolder() {
+    this.service.getFolderSpec(this.idFolderSelected)
+      .subscribe(data => {
+        this.folderInfo = data
+      }, error => {
+        this.errorMessage = <any>error
+      });
+  }
+
 
   sendTofile(fileSelected) {
     for (var i = 0; i < this.files.length; i++) {
