@@ -19,9 +19,9 @@
             </div>
         </div>
   
-      <div class="row">
+      <div class="row" *ngIf="isLogged" >
           <div class="col-3">
-              <button (click)="createFile()" class="btn btn-primary">create File</button>
+              <button  (click)="createFile()" class="btn btn-primary">create File</button>
               <br><br>
               <form *ngIf="createfile">
                   <div class="card">
@@ -60,7 +60,7 @@
               </div>
              
           </div> -->
-                  <div class="form-group">
+                  <div class="form-group" *ngIf="isLogged" >
               <label for="file">Choose File</label>
               <input type="file"
                      id="file" #f

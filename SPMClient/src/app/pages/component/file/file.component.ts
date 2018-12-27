@@ -1,9 +1,8 @@
 import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 import { Service } from '../../../service/service'
-//import { File } from '../../../../app/service/model/file'
 import { Folder } from '../../../../app/service/model/folder'
-
+import  {exportIsLogged} from '../../starter/starter.component'
 
 @Component({
   selector: 'app-file',
@@ -17,7 +16,7 @@ export class FileComponent implements OnInit {
   appearRenameFile: boolean = false;
   fileExist = true;
   fileAppear = false;
-
+vers
   idRepoSelected: string;
   idUser: string;
   userInfo: any;
@@ -33,6 +32,7 @@ export class FileComponent implements OnInit {
   folders: any;
   repo: any;
   fileToUpload: File = null;
+  versions: any;
 
   constructor(public router: Router, private service: Service) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -40,6 +40,7 @@ export class FileComponent implements OnInit {
     this.idFolder = localStorage.getItem("folderSelected.id")
     this.idFile = localStorage.getItem("fileSelected.id")
   }
+
 
   ngOnInit() {
     //faccio una chiamata al server per vedere i dati specifici della repos.
@@ -50,11 +51,28 @@ export class FileComponent implements OnInit {
   }
 
 
- 
+  selected(){
+    //in this.vers abbiamo la versione del file cliccata!
+    console.log(this.vers)
+  }
+
+
+  deleteVersion(){
+    console.log("vuoi eliminare la versione n.", this.vers)
+    this.service.deleteVersion(this.idFile,this.vers)
+    .subscribe(data => {
+      console.log(data)
+      // do something, if upload success
+      }, error => {
+        console.log(error);
+      });
+  }
+
 
   createFile() {
     this.fileAppear = true;
   }
+
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
@@ -82,6 +100,7 @@ export class FileComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
+
 
   newVersion() {
     this.service.createNewVersion(this.idFile, this.file.cVersion)
@@ -115,16 +134,18 @@ export class FileComponent implements OnInit {
 });
 }
 
-getRepo(){
+
+  getRepo(){
   this.service.getRepoSpec(this.idRepoSelected)
   .subscribe(data => {
     if (data != null) {
       this.repo =(data)
-}
-}, error => {
-this.errorMessage = <any>error
-});
-}
+      }
+    },
+    error => {
+     this.errorMessage = <any>error
+    });
+  }
 
   //premdo i dati specifici di quel file che ho selezionato in precedenza
   getAllFile() {
@@ -137,7 +158,6 @@ this.errorMessage = <any>error
             this.versionArray[i] = this.file.cVersion - i
           }
         }
-     
         else {
           this.fileExist = false;
         }
@@ -165,9 +185,12 @@ this.errorMessage = <any>error
         this.folderInfo = data
       })
   }
+
+
   modifyFile() {
     this.appearRenameFile = true;
   }
+  
 
   sendNewFileName(name) {
     this.service.changeNameFile(this.idFile, name)

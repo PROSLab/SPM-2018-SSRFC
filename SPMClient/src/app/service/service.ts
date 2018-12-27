@@ -166,6 +166,17 @@ export class Service {
       );
   }
 
+  deleteVersion(id,version){
+    let params = new HttpParams();
+    params = params.append('idFile', id); //gli passo l'id del file
+    params = params.append('version', version); //gli passo la versione del file
+    return this.http.get(this.baseUrl + 'api/file/deleteVersion', { params: params, responseType: 'text' })
+      .pipe(
+        tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
+        catchError(this.handleError)
+      );
+  }
+
   getFileSpec(id): Observable<any> {
     let params = new HttpParams();
     params = params.append('id', id); //gli passo l'id del file
@@ -220,7 +231,6 @@ export class Service {
         catchError(this.handleError)
       );
   }
-
 
   //get repositories,folders and files
   getAllRepo(): Observable<any> {
@@ -300,104 +310,5 @@ export class Service {
       alert("errore di internet, riprovare")
       return throwError("Internal Server Error")
     }
-
   }
-
 }
-
-
-
-
-
-
-
-
-
-// FUNZIONE VECCHIE IN PROMISE DA CONVERTIRE COME SOPRA
- //post per prendere un utente
-  //da rivedere in base al server
-
-  /* postUser(email) {
-    return new Promise((resolve, reject) => {
-      this.http.post(this.baseUrl + 'user', email, { //string da rivedere
-        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
-        params: new HttpParams().set('id', this.user.toString()),
-      })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
-    })
-  } */
-
-
-
-  //post per far registrare un nuovo utente
-
-  /*  postRegistrazione(name,surname,email,psw) {
-     console.log('ci arrivo qui?')
-     return new Promise((resolve, reject) => {
-       this.http.post(this.baseUrl + 'api/user/signin', { //string da rivedere
-         headers: new HttpHeaders({ 'Content-Type': 'application/json','Access-Control-Allow-Origin': '*'}),
-         params: new HttpParams()
-         .set('name', name)
-         .set('surname', surname)
-         .set('email', email)
-         .set('password', psw)
-       })
-         .subscribe(res => {
-           console.log(res)
-           resolve(res);
-         }, (err) => {
-           console.log(err)
-           reject(err);
-         });
-     })
-   }  */
-
-  /*   //post login 
-     postLogin(email,psw) {
-      return new Promise((resolve, reject) => {
-        this.http.post(this.baseUrl + 'registration', { //string da rivedere
-          headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
-          params: new HttpParams().set('email', email.toString()).set('password', password.toString()),
-        })
-          .subscribe(res => {
-            resolve(res);
-          }, (err) => {
-            reject(err);
-          });
-      })
-    }  */
-
-
-  /* //post recupera psw
-  postRecoveryPsw(email) {
-    return new Promise((resolve, reject) => {
-      this.http.post(this.baseUrl + 'password/forgot', { //string da rivedere
-        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
-        params: new HttpParams().set('email', email.toString()),
-      })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
-    })
-  }
-
-
-  postchangePsw(hash,id,newPassword) {
-    return new Promise((resolve, reject) => {
-      this.http.post(this.baseUrl + 'password/forgot', { //string da rivedere
-        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
-        params: new HttpParams().set('hash', hash.toString()).set('id', id.toString()).set('newPassword', newPassword.toString()),
-      })
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
-    })
-  } */

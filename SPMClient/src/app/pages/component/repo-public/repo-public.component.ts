@@ -8,16 +8,17 @@ import { Router } from '@angular/router';
   templateUrl: './repo-public.component.html',
   styleUrls: ['./repo-public.component.css']
 })
+
+
 export class RepoPublicComponent implements OnInit {
   reposPublic: any;
+	errorMessage: any;
+	isLogged: string ="false";
 
-  constructor(private service: Service, public router: Router) {
-    
-   }
-  errorMessage: any;
+  constructor(private service: Service, public router: Router) {}
   
-
   ngOnInit() {
+	this.isLogged =	localStorage.getItem("logged") //check se l'utente è loggato
     this.getAllPublicRepo();
   }
 

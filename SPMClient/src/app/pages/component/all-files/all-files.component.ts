@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
+import  {exportIsLogged} from '../../starter/starter.component'
+
 
 @Component({
   selector: 'app-all-files',
   templateUrl: './all-files.component.html',
   styleUrls: ['./all-files.component.css']
 })
+
 export class AllFilesComponent implements OnInit {
   errorMessage: any;
   files: any;
@@ -17,6 +20,7 @@ export class AllFilesComponent implements OnInit {
   idUser: string;
   folderInfo: any;
   fileToUpload: File;
+isLogged=exportIsLogged
 
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");

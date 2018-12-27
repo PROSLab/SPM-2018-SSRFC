@@ -3,7 +3,9 @@ import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
-//import { File } from '../../../service/model/file'
+import  {exportIsLogged} from '../../starter/starter.component'
+import { isEmpty } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-folder',
@@ -26,13 +28,14 @@ export class FolderComponent implements OnInit {
   files  =null;
   idFileSelected: any;
   fileToUpload: File;
-
+  isLogged =exportIsLogged
+  exist: boolean=false;
 
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
     this.idUser = localStorage.getItem("id")
 
-    console.log(this.idRepoSelected)
+    console.log(this.isLogged)
     
   }
 
@@ -151,6 +154,9 @@ export class FolderComponent implements OnInit {
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
         this.folder = JSON.parse(data)
+        if(this.folder.length>0){
+          this.exist=true;
+        }
       }, error => {
         this.errorMessage = <any>error
       });
@@ -162,8 +168,11 @@ export class FolderComponent implements OnInit {
    getAllFile() {
 		this.service.getFile(this.idRepoSelected,null)
 		.subscribe(data => {
-		  console.log(data)
-		  this.files =(data)
+      console.log(data)
+      this.files =(data)
+      if(this.files.length>0){
+        this.exist=true;
+      }
 		}, error => {
 		  this.errorMessage = <any>error
 		});

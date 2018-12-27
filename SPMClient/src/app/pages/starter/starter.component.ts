@@ -166,7 +166,7 @@ export class StarterComponent implements AfterViewInit {
 
 	//funzione per caricare il file e inviarlo al server
    /*  caricaFile(){
-		//controllo se il file caricato è un file XML
+		//controllo se il file caricato è un file bpmn
 		var a = this.controlFormatFile(this.fileToUpload[0])
 		if(a){
 		//devo richiamare la funzione del server per inviargli il file
