@@ -33,8 +33,7 @@ export class FileComponent implements OnInit {
   idFile: string;
   folders: any;
   repoInfo: Repo = <any>[]
-
-
+  
   constructor(public router: Router, private service: Service,private route:ActivatedRoute) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
     this.idUser = localStorage.getItem("id")
