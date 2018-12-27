@@ -3,77 +3,51 @@ import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
-import  {exportIsLogged} from '../../starter/starter.component'
-import { isEmpty } from 'rxjs/operators';
-
+import { File } from '../../../service/model/file'
 
 @Component({
-  selector: 'app-Folder',
-  templateUrl: './folder.component.html',
-  styleUrls: ['./folder.component.css']
+  selector: 'app-Repository',
+  templateUrl: './repository.component.html',
+  styleUrls: ['./repository.component.css']
 })
 
-export class FolderComponent implements OnInit {
+export class RepositoryComponent implements OnInit {
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
   idUser: string
   folder: Folder[] = null
-  folderInfo: Folder[]= null
   repoInfo: Repo = <any>[]
   folderExist: boolean = false
   createfold = false
   errorMessage: any;
   appear: boolean;
   createfile=false;
-  files  =null;
+  files: File[]  =null;
   idFileSelected: any;
-  folderSelected: string;
-  appearFormFolder: boolean;
-  fileToUpload: File;
-  exist: boolean;
 
 
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
-    this.folderSelected = localStorage.getItem("folderSelected.id")
     this.idUser = localStorage.getItem("id")  
-    
   }
 
   back(){
-    this.router.navigate(['repository']);
-  }
-
-
-  handleFileInput(files: FileList) {
-    this.fileToUpload = files.item(0);
-}
-
-  uploadFileToActivity() {
-    this.service.postFile(this.fileToUpload).subscribe(data => {
-      console.log(data)
-      // do something, if upload success
-      }, error => {
-        console.log(error);
-      });
+    this.router.navigate(['']);
   }
 
 
   ngOnInit() {
-    this.getRepoInfo()
-    this.getFolderInfo()
+    this.getRepo()
+    this.getAllfolder()
     this.getAllFile()
   }
 
-  modifyRepo() {
+  modifyRepo(name) {
     this.appear = true;
   }
-  modifyFolder() {
-    this.appearFormFolder = true;
-  }
 
-  sendNewNameRepo(name) {
+  sendNewName(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
       .subscribe(data => {
         this.appear = false
@@ -81,17 +55,8 @@ export class FolderComponent implements OnInit {
 
       })
   }
-  sendNewNameFolder(name) {
-    this.service.changeNameFolder(this.folderSelected, name)
-      .subscribe(data => {
-        this.appearFormFolder = false
-        this.folderInfo = data
-
-      })
-  }
-
   //prendo i dati della repo specifica
-  getRepoInfo() {
+  getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
         this.repoInfo = data
@@ -99,13 +64,10 @@ export class FolderComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
-  getFolderInfo() {
-    this.service.getFolderSpec(this.folderSelected)
-      .subscribe(data => {
-        this.folderInfo = data
-      }, error => {
-        this.errorMessage = <any>error
-      });
+
+
+  createFolder() {
+    this.createfold = true;
   }
 
   createFile() {
@@ -114,7 +76,8 @@ export class FolderComponent implements OnInit {
 
   saveFile(fileName) {
     var name = fileName
-    this.service.createFile(this.idRepoSelected, this.idUser, name,this.folderSelected)
+    var idfolder=null
+    this.service.createFile(this.idRepoSelected, this.idUser, name,idfolder)
       .subscribe(data => {
          var file = JSON.parse(data)
         this.service.getFileSpec(file.id)
@@ -127,6 +90,7 @@ export class FolderComponent implements OnInit {
           }); 
         this.createfile = false
         alert("File creato con successo.")
+        //this.router.navigate(['/folder']);
       }, error => {
         this.errorMessage = <any>error
         alert("file non creato")
@@ -151,7 +115,7 @@ export class FolderComponent implements OnInit {
           });
         this.createfold = false
         alert("Cartella creata con successo.")
-        this.router.navigate(['/folder']);
+        //this.router.navigate(['/folder']);
       }, error => {
         this.errorMessage = <any>error
         alert("Cartella non creata")
@@ -162,15 +126,12 @@ export class FolderComponent implements OnInit {
 
 
   getAllfolder() {
-    console.log(this.idRepoSelected)
-
-    //devo richiamare la funzione del server per inviargli il file
+   
+    //prende tutte le cartelle create
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
         this.folder = JSON.parse(data)
-        if(this.folder.length>0){
-          this.exist=true;
-        }
+        //console.log('getALLfOLDER',this.folder)
       }, error => {
         this.errorMessage = <any>error
       });
@@ -180,17 +141,21 @@ export class FolderComponent implements OnInit {
 
   //tutti i file
    getAllFile() {
-		this.service.getFile(this.idRepoSelected,this.folderSelected)
+		this.service.getFile(this.idRepoSelected,null)
 		.subscribe(data => {
-      console.log(data)
-      this.files =(data)
-      if(this.files.length>0){
-        this.exist=true;
-      }
+		  //console.log('allfiles',data)
+		  this.files = (data)
 		}, error => {
 		  this.errorMessage = <any>error
 		});
 	  } 
+
+  
+  sendTofolder(folderSelected) {
+    localStorage.setItem("folderSelected.id", folderSelected)
+    
+  } 
+
 
  sendTofile(fileSelected) {
   localStorage.setItem("fileSelected.id", fileSelected)

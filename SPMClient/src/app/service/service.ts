@@ -262,7 +262,7 @@ export class Service {
     params = params.append('idFolder', id); //id cartella
     }
     params = params.append('idRepository', idRepository); //id repo
-    return this.http.get(this.baseUrl + 'api/file/getAllFile', { params: params })
+    return this.http.get(this.baseUrl + 'api/file/getAllFile', { params: params, responseType: 'text' })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
         catchError(this.handleError)
@@ -276,7 +276,7 @@ export class Service {
     params = params.append('idFile', id); //id del file
     params = params.append('version', version); //numero del version
 
-    return this.http.get(this.baseUrl + 'api/file/createNewVersion', { params: params })
+    return this.http.get(this.baseUrl + 'api/file/createNewVersion', { params: params  , responseType: 'text'})
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
         catchError(this.handleError)

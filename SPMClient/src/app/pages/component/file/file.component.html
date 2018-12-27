@@ -1,16 +1,55 @@
 <div class="container">
-    <button (click)="back()" style="border-radius: 20px; width: 80px;background-color: rgba(0, 128, 0, 0.63);"class="btn btn-success far">	&#xf359; Back</button>
+        
                         
-    <div class="row">
-        <!--informazioni sulla folder-->
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    NameFolder: {{folderInfo?.folderName}} <br>
-                    Created At: {{folderInfo?.createdAt}} <br>
+        <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col"><h3>Repository Details</h3></th>
+                    <th scope="col"><h3>Folder Details</h3></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Repository name : {{repoInfo?.repositoryName}} </td>
+                        <td>Folder name : {{folderInfo?.folderName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Created At : {{repoInfo?.createdAt}} </td>
+                        <td>Created At : {{folderInfo?.createdAt}}</td>
+                    </tr>
+                    <tr>
+                        <td>Repository State: 
+                            <p *ngIf="repo?.publicR"> State: Public </p>
+                            <p *ngIf="!repo?.publicR"> State: Private </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button (click)="modifyRepo()" class="btn btn-primary">Modify Repository</button>
+                            
+                        </td>
+                        
+                        <td>
+                            <button (click)="modifyFolder()" class="btn btn-primary">Modify Folder</button>
+                        </td>
 
-                    <button  *ngIf="isLogged"  (click)="modifyFolder()" class="btn btn-primary">Modify Folder</button>
-                    <form *ngIf="appearRenameFolder">
+                    </tr>
+                </tbody>
+              </table>
+
+              <form *ngIf="appear">
+                    <div class="card">
+                        <div class="form-group" class="card-body">
+                            <div>
+                                <label for="filename">New name: </label>
+                                <input type="text" required #n name="filename" />
+                            </div>
+                        </div>
+                        <button (click)="sendNewNameRepo(n.value)" class="btn btn-primary">Save repository Name</button>
+                    </div>
+                </form>
+                
+                <form *ngIf="appearFormFolder">
                         <div class="card">
                             <div class="form-group" class="card-body">
                                 <div>
@@ -18,14 +57,9 @@
                                     <input type="text" required #n name="filename" />
                                 </div>
                             </div>
-                            <button (click)="sendNewFolderName(n.value)" class="btn btn-primary">Save folder</button>
+                            <button (click)="sendNewNameFolder(n.value)" class="btn btn-primary">Save Folder Name</button>
                         </div>
                     </form>
-                </div>
-            </div>
-            <!--   <button  (click)="deleteRepo()"  class="btn btn-primary">Delete Repository</button> -->
-        </div>
-    </div>
 
     <div class="row" *ngIf="fileExist">
         <div class="row">
@@ -44,11 +78,11 @@
                     <br>
 
                         Created At: {{file.createdAt}} <br>
-                        <button  *ngIf="isLogged"  (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
+                        <button   (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
                         <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
-                        <button *ngIf="isLogged"  (click)="newVersion()" class="btn btn-primary">Create new version</button>
+                        <button  (click)="newVersion()" class="btn btn-primary">Create new version</button>
                        
-                        <div *ngIf="vers!=null&&isLogged"><button (click)="deleteVersion()" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
+                        <div><button (click)="deleteVersion()" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
                         </div>
                         
                      <form *ngIf="appearRenameFile">
@@ -97,6 +131,8 @@
 
         </div>
     </div>
+    <button (click)="back()" class="btn btn-primary">Back</button>
+
 
 
 <div *ngIf="isLogged">

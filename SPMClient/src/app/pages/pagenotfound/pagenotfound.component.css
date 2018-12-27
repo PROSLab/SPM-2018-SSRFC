@@ -42,7 +42,7 @@
     font-weight: 900;
     margin:0;
     text-transform: uppercase;
-    background: url('../../../../assets/images/pagenotfound/text.png');
+    background: url('../../../assets/images/pagenotfound/text.png');
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-size: cover;

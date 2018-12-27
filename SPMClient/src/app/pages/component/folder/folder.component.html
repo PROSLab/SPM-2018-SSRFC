@@ -1,26 +1,53 @@
 <div class="container">
+        <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col"><h3>Repository Details</h3></th>
+                    <th scope="col"><h3>Folder Details</h3></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Repository name : {{repoInfo?.repositoryName}} </td>
+                        <td>Folder name : {{folderInfo?.folderName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Created At : {{repoInfo?.createdAt}} </td>
+                        <td>Created At : {{folderInfo?.createdAt}}</td>
+                    </tr>
+                    <tr>
+                        <td>Repository State: 
+                            <p *ngIf="repo?.publicR"> State: Public </p>
+                            <p *ngIf="!repo?.publicR"> State: Private </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button (click)="modifyRepo()" class="btn btn-primary">Modify Repository</button>
+                            
+                        </td>
+                        
+                        <td>
+                            <button (click)="modifyFolder()" class="btn btn-primary">Modify Folder</button>
+                        </td>
 
-    <button (click)="back()" style="border-radius: 20px; width: 80px;background-color: rgba(0, 128, 0, 0.63);"class="btn btn-success far">&#xf359; Back</button>
+                    </tr>
+                </tbody>
+              </table>
 
-  <div class="col-5" class="row">
-        <div class="col-md-6 offset-md-3">
-            <h1>Folders and Files</h1>
-        </div>
-  </div>
-
-
-<div >
-    <div class="row">
-        <!--informazioni sul folder-->
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    Repository: {{repoInfo?.repositoryName}} <br>
-                    Created At: {{repoInfo?.createdAt}} <br>
-                    <div *ngIf="repo?.publicR" style="margin-bottom:5px;"> State: Public <br> </div>
-                    <div *ngIf="!repo?.publicR" style="margin-bottom:5px;"> State: Private <br> </div>
-                    <button  *ngIf="isLogged" (click)="modifyRepo()" class="btn btn-primary">Modify Repository</button>
-                    <form *ngIf="appear">
+              <form *ngIf="appear">
+                    <div class="card">
+                        <div class="form-group" class="card-body">
+                            <div>
+                                <label for="filename">New name: </label>
+                                <input type="text" required #n name="filename" />
+                            </div>
+                        </div>
+                        <button (click)="sendNewNameRepo(n.value)" class="btn btn-primary">Save repository Name</button>
+                    </div>
+                </form>
+                
+                <form *ngIf="appearFormFolder">
                         <div class="card">
                             <div class="form-group" class="card-body">
                                 <div>
@@ -28,13 +55,11 @@
                                     <input type="text" required #n name="filename" />
                                 </div>
                             </div>
-                            <button (click)="sendNewName(n.value)" class="btn btn-primary">Save repo</button>
+                            <button (click)="sendNewNameFolder(n.value)" class="btn btn-primary">Save Folder Name</button>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
+        
+  
     
     <div class="row">
         <div class="col-3">
@@ -80,6 +105,9 @@
     </div>
 
     <div *ngIf="exist==true">Lista dei tuoi folder e files
+    
+
+    <div style="margin:5px">Lista dei tuoi files
         <table>
             <thead>
                 <tr>
@@ -88,22 +116,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let fold of folder;" (click)="sendTofolder(fold)">
+                
+                
+                <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)" [routerLink]="['/repository',folderInfo?.folderName,fil.id]">
                     <th scope="row">
-                        <i class="material-icons">&#xe2c8; </i>  
-                        {{fold?.folderName}}   
-                    </th>
-                    <th scope="row">{{fold?.createdAt}}</th>
-                </tr>
-                <tr *ngFor="let fil of files;" (click)="sendTofile(fil)">
-                        <th scope="row">
-                                <i class="fa">&#xf016; </i>  
-                                {{fil?.originalName}}  
-                            </th>
+                        <i class="fa">&#xf016; </i>  
+                            {{fil?.originalName}}  
+                        </th>
                     <th scope="row">{{fil?.createdAt}}</th>
                 </tr>
             </tbody>
         </table>
     </div>
+    
+
 </div>
-</div>
+
+
+<button (click)="back()" class="btn btn-primary">Back</button>

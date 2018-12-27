@@ -91,7 +91,7 @@ export class StarterComponent implements AfterViewInit {
 				localStorage.setItem("repoSelected.id", repoSelected.id)
 			}
 		}
-		this.router.navigate(['/folder']);
+		this.router.navigate(['/repository']);
 	}
 
 

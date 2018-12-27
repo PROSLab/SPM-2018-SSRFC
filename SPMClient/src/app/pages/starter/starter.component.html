@@ -42,7 +42,7 @@
         </div>
 
 
-    <!--     <div>Lista dei tuoi Repository
+        <!--     <div>Lista dei tuoi Repository
             <table>
                 <thead>
                     <tr>
@@ -63,29 +63,32 @@
                 </tbody>
             </table>
         </div> -->
-        
 
-     
-    <div class="row">
-        <div  class="card card2" padding *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
-               
-           <h4 class="cardWrite">
-                <i class="fas fa-sitemap"></i> 
-                {{repo?.repositoryName}}
-             </h4>
-         <!--         <p>{{repo?.createdAt}}</p> -->
-              <!--   <p *ngIf="repo.publicR">Public</p> 
-                <p *ngIf="!repo.publicR">Private</p>  -->
+<div class="row">
+    <div class="col-md-12">
+        <h3>My Repository:</h3>
+    </div>
+</div>
+
+        <div class="row">
+
+            <div class="card col-3 display" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
+                <!--  <img src="img_avatar2.png" alt="Avatar" style="width:20%"> -->
+
+                <h4><b>{{repo?.repositoryName}}</b> </h4>
+                <p>{{repo?.createdAt}}</p>
+
             </div>
+
         </div>
 
 
-       <!--  <div class="row">
+        <!--  <div class="row">
             <div class="col-10" style="margin-top:40px;">
                 <button (click)="logout()" class="btn btn-primary">LOGOUT</button>
             </div>
         </div> -->
-        
+
     </div>
     <div>
         <div  *ngIf="!isLogged">
