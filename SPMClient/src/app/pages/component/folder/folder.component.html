@@ -61,8 +61,24 @@
         
   
     
+    <div class="row">
         <div class="col-3">
-            <button (click)="createFile()" class="btn btn-primary">create File</button>
+            <button *ngIf="isLogged" (click)="createFolder()" class="btn btn-primary"> +  create Folder</button>
+            <br><br>
+            <form *ngIf="createfold">
+                <div class="card">
+                    <div class="form-group" class="card-body">
+                        <div>
+                            <label for="reponame">Folder name</label>
+                            <input type="text" required id="namerepo" #n name="namerepo" />
+                        </div>
+                    </div>
+                    <button (click)="saveFolder(n.value)" class="btn btn-primary">Save Folder</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-3">
+            <button (click)="createFile()" *ngIf="isLogged" class="btn btn-primary">+  create File</button>
             <br><br>
             <form *ngIf="createfile">
                 <div class="card">
@@ -77,9 +93,18 @@
                 </div>
             </form>
         </div>
-    
 
-    <div style="margin:5px">Lista dei tuoi files
+        <div class="form-group" *ngIf="isLogged">
+            <label for="file">Choose File</label>
+            <input type="file"
+                   id="file" #f
+                   (change)="handleFileInput($event.target.files)">
+                   <button  (click)="uploadFileToActivity()"  class="btn btn-primary">Carica File</button>
+        </div> 
+    
+    </div>
+
+    <div *ngIf="exist==true" style="margin:5px" >Lista dei tuoi folder e files
         <table>
             <thead>
                 <tr>
@@ -100,9 +125,5 @@
             </tbody>
         </table>
     </div>
-    
-
 </div>
-
-
-<button (click)="back()" class="btn btn-primary">Back</button>
+</div>

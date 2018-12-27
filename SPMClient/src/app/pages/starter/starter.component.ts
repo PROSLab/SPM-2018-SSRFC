@@ -15,7 +15,6 @@ export let exportLocalUser: User;
 
 export class StarterComponent implements AfterViewInit {
 	subtitle: string;
-
 	isLogged = exportIsLogged
 	fileToUpload: File;
 	createrepo = false;
@@ -27,6 +26,7 @@ export class StarterComponent implements AfterViewInit {
 	selectedRepo;
 	files: any;
 	idFileSelected: any;
+	reposPublic: any = null;
 
 	constructor(private service: Service, public router: Router) {
 
@@ -34,6 +34,7 @@ export class StarterComponent implements AfterViewInit {
 
 	ngOnInit() {
 		this.setUser();
+		this.getAllPublicRepo();
 
 	}
 
@@ -80,8 +81,16 @@ export class StarterComponent implements AfterViewInit {
 		});
 	}
 
-	//RENDER TO REPOSITORY SELEZIONATA
-	//TODO: Non si fa cosi questa cosa.. ma non so come correggerla :/ e mi ci vorebbe troppo tempo ora
+
+	getAllPublicRepo() {
+		this.service.getAllRepoPublic().subscribe(data => {
+			this.reposPublic = data
+		}, error => {
+			this.errorMessage = <any>error
+		});
+	} 
+
+
 	sendTo(repoSelected) {
 		for (var i = 0; i < this.repos.length; i++) {
 			if (repoSelected.id == this.repos[i].id) {
@@ -89,6 +98,18 @@ export class StarterComponent implements AfterViewInit {
 			}
 		}
 		this.router.navigate(['/repository']);
+	}
+
+
+	//RENDER TO REPOSITORY SELEZIONATA
+	//TODO: Non si fa cosi questa cosa.. ma non so come correggerla :/ e mi ci vorebbe troppo tempo ora
+	sendToPublic(repoSelected) {
+		for (var i = 0; i < this.reposPublic.length; i++) {
+			if (repoSelected.id == this.reposPublic[i].id) {
+				localStorage.setItem("repoSelected.id", repoSelected.id)
+			}
+		}
+		this.router.navigate(['/folder']);
 	}
 	
 	// SALVO IL FILE
@@ -127,16 +148,6 @@ export class StarterComponent implements AfterViewInit {
 		this.createrepo = true
 	}
 
-	/* uploadFileToActivity() {
-			this.service.postFile(this.fileToUpload)
-			.subscribe(data => {
-				alert(data)
-		  // do something, if upload success
-		  }, error => {
-					console.log(error);
-	    
-		  })
-	  } */
 
 	controlFormatFile(f) {
 		if (f.name.split('.').pop() == "bpmn") {
@@ -150,13 +161,18 @@ export class StarterComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() { }
+
+
+
+
+
 }
 
 
 
 	//funzione per caricare il file e inviarlo al server
    /*  caricaFile(){
-		//controllo se il file caricato è un file XML
+		//controllo se il file caricato è un file bpmn
 		var a = this.controlFormatFile(this.fileToUpload[0])
 		if(a){
 		//devo richiamare la funzione del server per inviargli il file

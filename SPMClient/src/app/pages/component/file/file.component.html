@@ -63,20 +63,29 @@
 
     <div class="row" *ngIf="fileExist">
         <div class="row">
-            <div class="col-12">
+            <div class="col-16">
                 <div class="card">
                     <div class="card-body">
                         File: {{file.originalName}} <br>
-                        Version n. : <select> 
-                                <option disabled>Select a version...</option>
-                            <option *ngFor="let v of versionArray; index as i">{{v}}</option>
-                        </select> <br>
+                        Version n. : 
+                       
+                        <select [(ngModel)]="vers" (change)="selected()"> 
+                          <!--   <option disabled>Select a version...</option> -->
+                            <option  [ngValue]="v" *ngFor="let v of versionArray; index as i">{{v}}</option>
+                        </select>
+                       
+                        
+                    <br>
 
                         Created At: {{file.createdAt}} <br>
-                        <button (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
+                        <button  *ngIf="isLogged"  (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
                         <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
-                        <button (click)="newVersion()" class="btn btn-primary">Create new version</button>
-                        <form *ngIf="appearRenameFile">
+                        <button *ngIf="isLogged"  (click)="newVersion()" class="btn btn-primary">Create new version</button>
+                       
+                        <div *ngIf="vers!=null&&isLogged"><button (click)="deleteVersion()" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
+                        </div>
+                        
+                     <form *ngIf="appearRenameFile">
                             <div class="card">
                                 <div class="form-group" class="card-body">
                                     <div>
@@ -90,7 +99,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" *ngIf="isLogged" >
                         <div class="card-body">
                             Move to...<select> 
                                     <option disabled>Select a folder..</option>
@@ -104,7 +113,7 @@
         </div>
     </div>
 
-    <div class="row" *ngIf="!fileExist">
+    <div class="row" *ngIf="!fileExist && isLogged">
         <div class="col-10">
 
             <button (click)="createFile()" class="btn btn-primary">Create File</button>
@@ -126,15 +135,18 @@
 <div>
 
 
-        <!--     Caricamento di un file
+<div *ngIf="isLogged">
 
-    <div class="form-group">
+
+             Caricamento di un file
+
+    <div class="form-group" *ngIf="isLogged" >
         <label for="file">Choose File</label>
         <input type="file"
                id="file" #f
                (change)="handleFileInput($event.target.files)">
-               <button  (click)="caricaFile()"  class="btn btn-primary">Carica File</button>
-    </div> -->
+               <button  (click)="uploadFileToActivity()"  class="btn btn-primary">Carica File</button>
+    </div> 
 
 
 
@@ -162,4 +174,5 @@
 
 </div> -->
     </div>
+</div>
 </div>

@@ -9,6 +9,7 @@ import java.util.Vector;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.http.codec.multipart.FormFieldPart;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyExtractors;
@@ -32,21 +33,66 @@ public class FileHandler {
     private String rootDir;
 	private String fileName;
 	private String idFile;
+	private Map<String, Part> map;
+	private FilePart filePart;
 	
 	public FileHandler(FileService fileService) {
 		this.fileService = fileService;
 	}
-
-	public Mono<ServerResponse> uploadFileTest(ServerRequest request) { // just a test for files upload
+	
+	public Mono<ServerResponse> uploadFile(ServerRequest request) { // just a test for files upload
 		return request.body(BodyExtractors.toMultipartData())
-				.flatMap(parts -> {
-					Map<String, Part> map = parts.toSingleValueMap();
-					FilePart filePart = (FilePart) map.get("files");
-					filePart.transferTo( new File(rootDir + "/" + filePart.filename()) );
+                .flatMap(parts -> {
+                    map = parts.toSingleValueMap();
+                    filePart = (FilePart) map.get("files");
+                    FormFieldPart idUser = (FormFieldPart)map.get("idUser");
+                    FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
+                    
+                    String idFolder = null;
+                    
+                    if(map.get("idFolder") != null) {
+                    	FormFieldPart idFolderPart = (FormFieldPart)map.get("idFolder");
+                    	idFolder = idFolderPart.value();
+                    }                   
+                    
+                    FormFieldPart originalName = (FormFieldPart)map.get("originalName");
+                    String mimetype = "bpmn";
+                    
+                    
+                    
+                    FileEntity file = new FileEntity (
+            				new ObjectId( idUser.value() ),
+            				new ObjectId( idRepository.value() ),
+            				idFolder != null ? new ObjectId(idFolder) : null,
+            				new Date(),
+            				null, // id of file . varsion
+            				originalName.value(),
+            				mimetype,
+            				null,
+            				1,
+            				new Vector<Integer>()
+            		);
+                    
+                    return fileService.createFileSchema(file);
+                })
+                .flatMap(f -> {
+                	idFile = f.getId();
+					fileName = idFile + '.' + 1;
+					
+					/*
+					 * TODO
+					 * Fare nel service: (l'upload può essere o a livello di repo o di folder. Ricorda la "cartella nascosta").
+					 * -- filePart.transferTo( new File(rootDir + "/" + filePart.filename()) ); --
+					 * Aggiornare path e filename db.
+					 * 
+					 * ISSUE
+					 * - l'upload di un file può essere considerato come nuova versione di un file esistente? NO!
+					 */
 					
 					return Responses.ok("OK");
-				});
-	}
+					
+                });
+    }
 	
 	public Mono<ServerResponse> createRepository(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
@@ -230,17 +276,14 @@ public class FileHandler {
 				.flatMap(res -> Responses.ok(res));
 	}
 	
-	/*public Mono <ServerResponse> deleteRepository(ServerRequest request) {
-		String idUser = request.queryParam("idUser").get();
-		String idRepository = request.queryParam("idRepository").get();
-		
-		return fileService.createFileObjRepositoryPath(rootDir, idUser, idRepository)
-				.flatMap(repo -> {
-					return Mono.fromRunnable(() -> FileLib.deleteFolder(repo));
-				})
+
+	public Mono <ServerResponse> getAllRepoPublic(ServerRequest request){
+		Boolean publicR = true;
+		return fileService.getAllPublicRepo(publicR)
+				.collectList()
 				.flatMap(res -> Responses.ok(res));
-	}*/
-	
+				
+	}
 	public Mono <ServerResponse> deleteVersion(ServerRequest request) {
 		String idFile = request.queryParam("idFile").get();
 		String version = request.queryParam("version").get();
@@ -252,6 +295,7 @@ public class FileHandler {
 				})
 				.flatMap(res -> Responses.ok(res))
 				.onErrorResume(Exception.class, Responses::internalServerError);
+
 	}
 }
 
