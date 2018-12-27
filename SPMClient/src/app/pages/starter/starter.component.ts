@@ -70,6 +70,7 @@ export class StarterComponent implements AfterViewInit {
 		this.fileToUpload = files;
 	} */
 
+	
 	//funzione per prendere tutti i repo pubblici + quelli privati dell'utente
 	getAllRepo() {
 		this.service.getAllRepo().subscribe(data => {
