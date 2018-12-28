@@ -350,6 +350,10 @@ public class FileService  {
 	public Mono<FileEntity> updateDeletedVersionsArray(String idFile, String version) {
 		return fileRepository.findById(idFile)
 				.flatMap(f -> {
+					if(Integer.parseInt(version) > f.getcVersion()) {
+						return Mono.error(new BadRequestException("Version does not exist"));
+					}
+					
 					Vector<Integer> vec = f.getDeletedVersions();
 					
 					if(vec != null) {
