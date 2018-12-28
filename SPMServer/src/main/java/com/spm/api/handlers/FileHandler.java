@@ -294,7 +294,8 @@ public class FileHandler {
 					return fileService.deleteFileVersion(f, rootDir, mimetype, version);
 				})
 				.flatMap(res -> Responses.ok(res))
-				.onErrorResume(Exception.class, Responses::internalServerError);
+				.onErrorResume(Exception.class, Responses::internalServerError)
+				.onErrorResume(BadRequestException.class, Responses::badRequest);
 
 	}
 }
