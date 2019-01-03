@@ -5,7 +5,11 @@ import { RepositoryComponent } from './Repository/repository.component';
 import { AllFilesComponent } from './all-files/all-files.component';
 import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { FileRepositoryComponent } from './filerepository/file.component';
+<<<<<<< HEAD
 import { FolderComponent } from './folder/folder.component';
+=======
+import { RepoPublicComponent } from './repo-public/repo-public.component';
+>>>>>>> 24dd0e14d5640b098e8e5900d15bd5f778969f0c
 
 
 export const ComponentsRoutes: Routes = [
@@ -38,8 +42,12 @@ export const ComponentsRoutes: Routes = [
           title: 'allFiles',
           urls: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'ngComponent' }, { title: 'allFiles' }]
         }
+<<<<<<< HEAD
       }
   ,
+=======
+      },
+>>>>>>> 24dd0e14d5640b098e8e5900d15bd5f778969f0c
       {
         path: 'repo-public',
         component: RepoPublicComponent,
@@ -48,6 +56,12 @@ export const ComponentsRoutes: Routes = [
           urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'repo-public'}]
         }
     }
+<<<<<<< HEAD
   ]
 }
 ]
+=======
+   ]
+  }
+];
+>>>>>>> 24dd0e14d5640b098e8e5900d15bd5f778969f0c

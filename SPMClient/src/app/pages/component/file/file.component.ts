@@ -40,7 +40,7 @@ export class FileComponent implements OnInit {
   appearRenameFolder: boolean;
 
   constructor(public router: Router, private service: Service,private route:ActivatedRoute) {
-    this.idRepoSelected = localStorage.getItem("repoSelected.id");
+    this.idRepoSelected = localStorage.getItem("repoSelected.id")
     this.idUser = localStorage.getItem("id")
     this.idFolder = localStorage.getItem("folderSelected.id")
     this.idFile = localStorage.getItem("fileSelected.id")
@@ -62,7 +62,7 @@ export class FileComponent implements OnInit {
       });
   }
 
-  getFileSpec() {
+   getFileSpec() {
     this.service.getFileSpec(this.idFile)
     .subscribe(data => {
       this.file =data
@@ -93,6 +93,11 @@ export class FileComponent implements OnInit {
   }
 
 
+  createFile() {
+    this.fileAppear = true;
+  }
+
+
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
 }
@@ -107,7 +112,7 @@ export class FileComponent implements OnInit {
   }
 
 
- /*  saveFile(originalName) {
+  /* saveFile(originalName) {
     this.service.createFile(this.idRepoSelected, this.idFolder, this.idUser, originalName)
       .subscribe(data => {
         if (data != null) {
@@ -141,9 +146,6 @@ export class FileComponent implements OnInit {
       });
   }
 
-  createFile() {
-    this.fileAppear = true;
-  }
   modifyRepo() {
     this.appear = true;
   }
@@ -157,14 +159,16 @@ export class FileComponent implements OnInit {
 
       })
   }
-/*   sendNewNameFolder(name) {
+  sendNewNameFolder(name) {
     this.service.changeNameFolder(this.idFolder, name)
       .subscribe(data => {
         this.appearFormFolder = false
         this.folderInfo = data
 
       })
-  } */
+  } 
+
+  
 
   getRepo(){
   this.service.getRepoSpec(this.idRepoSelected)
@@ -221,7 +225,9 @@ export class FileComponent implements OnInit {
   } 
 
 
-  
+
+ 
+
 
   modifyFolder() {
     this.appearRenameFolder = true;
