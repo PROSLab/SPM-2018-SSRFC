@@ -55,8 +55,11 @@ export class FileRepositoryComponent implements OnInit {
     this.service.deleteVersion(this.idFile,this.vers)
     .subscribe(data => {
       console.log(data)
-      this.getFileSpec();
-      // do something, if upload success
+      var index = this.finalVersion.indexOf(this.vers);
+if (index > -1) {
+  this.finalVersion.splice(index, 1);
+}
+    
       }, error => {
         console.log(error);
       });
