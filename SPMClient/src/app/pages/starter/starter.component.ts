@@ -14,9 +14,10 @@ export let exportLocalUser: User;
 })
 
 export class StarterComponent implements AfterViewInit {
-	subtitle: string;
+	repoExist:boolean = false
+	subtitle: string
 	isLogged = exportIsLogged
-	fileToUpload: File;
+	fileToUpload: File
 	createrepo = false;
 	risp: boolean;
 	repos: Repo[] = null;
@@ -76,6 +77,9 @@ export class StarterComponent implements AfterViewInit {
 	getAllRepo() {
 		this.service.getAllRepo().subscribe(data => {
 			this.repos = JSON.parse(data)
+			if(this.repos.length>0){
+				this.repoExist=true
+			}
 		}, error => {
 			this.errorMessage = <any>error
 		});
@@ -130,6 +134,7 @@ export class StarterComponent implements AfterViewInit {
 					var newRepo: Repo = data
 					var count = this.repos.length
 					this.repos[count] = newRepo
+					this.createrepo=false
 				}, error => {
 					this.errorMessage = <any>error
 				});
@@ -145,7 +150,12 @@ export class StarterComponent implements AfterViewInit {
 	}
 
 	createRepo() {
-		this.createrepo = true
+		if(this.createrepo==true){
+this.createrepo=false
+		}
+		else if(this.createrepo==false){
+			this.createrepo=true
+		}
 	}
 
 
