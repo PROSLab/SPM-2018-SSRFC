@@ -4,7 +4,6 @@ import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
 import  {exportIsLogged} from '../../starter/starter.component'
-import { isEmpty } from 'rxjs/operators';
 
 
 @Component({
@@ -14,6 +13,7 @@ import { isEmpty } from 'rxjs/operators';
 })
 
 export class FolderComponent implements OnInit {
+  isLogged =exportIsLogged
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
@@ -78,15 +78,14 @@ export class FolderComponent implements OnInit {
       .subscribe(data => {
         this.appear = false
         this.repoInfo = data
-
       })
   }
+
   sendNewNameFolder(name) {
     this.service.changeNameFolder(this.folderSelected, name)
       .subscribe(data => {
         this.appearFormFolder = false
         this.folderInfo = data
-
       })
   }
 
@@ -99,6 +98,7 @@ export class FolderComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
+
   getFolderInfo() {
     this.service.getFolderSpec(this.folderSelected)
       .subscribe(data => {
@@ -127,6 +127,8 @@ export class FolderComponent implements OnInit {
           }); 
         this.createfile = false
         alert("File creato con successo.")
+        this.getAllFile();
+        this.getAllfolder();
       }, error => {
         this.errorMessage = <any>error
         alert("file non creato")

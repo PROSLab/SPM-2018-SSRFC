@@ -4,6 +4,7 @@ import { Service } from '../../../service/service'
 import { File } from '../../../../app/service/model/file'
 import { Folder } from '../../../../app/service/model/folder'
 import { Repo } from '../../../service/model/repo';
+import  {exportIsLogged} from '../../starter/starter.component'
 
 
 @Component({
@@ -14,7 +15,7 @@ import { Repo } from '../../../service/model/repo';
 
 
 export class FileRepositoryComponent implements OnInit {
-
+  isLogged=exportIsLogged
   appearRenameFile: boolean = false;
   fileExist = true;
   fileAppear = false;
@@ -50,19 +51,27 @@ export class FileRepositoryComponent implements OnInit {
     console.log(this.vers)
   }
 
-  deleteVersion(){
+  deleteVersion(v){
+    
+    this.vers=v
+    if(this.vers==null){
+      alert("seleziona una versione per eliminarla!")
+    }
+    else{
     alert("vuoi eliminare la versione n."+this.vers +"?")
     this.service.deleteVersion(this.idFile,this.vers)
     .subscribe(data => {
       console.log(data)
       var index = this.finalVersion.indexOf(this.vers);
-if (index > -1) {
-  this.finalVersion.splice(index, 1);
-}
-    
-      }, error => {
+      if (index > -1) {
+        this.finalVersion.splice(index, 1);
+      }
+      this.vers=null
+  
+    }, error => {
         console.log(error);
       });
+    }
   }
 
 
@@ -98,8 +107,6 @@ if (index > -1) {
           } 
 
        
-
-     console.log(this.versionArray)
           // mi salvo il valore dell'ultima versione corrente
           this.lastVersion=this.file.cVersion
 
@@ -108,18 +115,14 @@ if (index > -1) {
             this.deprecatedVers[i]=this.file.deletedVersions[i]
           }
 
-//i=0
-// 1 2 3 4 5 6    ---> version array
-// 1 2  --->deprecatedVers
-var j=0;
+          var j=0;
           for(i=0;i<this.versionArray.length;i++){
           if(this.deprecatedVers.indexOf(this.versionArray[i])==-1){
             this.finalVersion[j]=this.versionArray[i]
             j++
-                }
-              }
-              
-        }
+          }
+        }        
+      }
      
         else {
           this.fileExist = false;

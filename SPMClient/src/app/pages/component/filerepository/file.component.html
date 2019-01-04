@@ -62,21 +62,16 @@
                 <div class="card-body">
                     File: {{file.originalName}} <br>
                     Version n. : 
-                   
                     <select [(ngModel)]="vers" (change)="selected()"> 
-                      <!--   <option disabled>Select a version...</option> -->
                         <option  [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
-                    </select>
-                   
-                    
+                    </select> 
                 <br>
-
                     Created At: {{file.createdAt}} <br>
                     <button   (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
                     <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
                     <button  (click)="newVersion()" class="btn btn-primary">Create new version</button>
                    
-                    <div><button (click)="deleteVersion()" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
+                    <div><button (click)="deleteVersion(vers)" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
                     </div>
                     
                  <form *ngIf="appearRenameFile">

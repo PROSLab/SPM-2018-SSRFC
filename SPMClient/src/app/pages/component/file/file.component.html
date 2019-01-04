@@ -70,8 +70,7 @@
                         Version n. : 
                        
                         <select [(ngModel)]="vers" (change)="selected()"> 
-                          <!--   <option disabled>Select a version...</option> -->
-                            <option  [ngValue]="v" *ngFor="let v of versionArray; index as i">{{v}}</option>
+                            <option  [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
                         </select>
                        
                         
@@ -79,10 +78,10 @@
 
                         Created At: {{file.createdAt}} <br>
                         <button  *ngIf="isLogged"  (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
-                        <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
+                       
                         <button *ngIf="isLogged"  (click)="newVersion()" class="btn btn-primary">Create new version</button>
                        
-                        <div *ngIf="vers!=null&&isLogged"><button (click)="deleteVersion()" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
+                        <div *ngIf="vers!=null&&isLogged"><button (click)="deleteVersion(vers)" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
                         </div>
                         
                      <form *ngIf="appearRenameFile">

@@ -14,7 +14,7 @@ import  {exportIsLogged} from '../../starter/starter.component'
 
 
 export class FileComponent implements OnInit {
-
+isLogged=exportIsLogged
   appearRenameFile: boolean = false;
   fileExist = true;
   fileAppear = false;
@@ -38,6 +38,9 @@ export class FileComponent implements OnInit {
   fileToUpload: File = null;
   versions: any;
   appearRenameFolder: boolean;
+  finalVersion: any;
+  deprecatedVers: any;
+  lastVersion: any;
 
   constructor(public router: Router, private service: Service,private route:ActivatedRoute) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id")
@@ -62,17 +65,45 @@ export class FileComponent implements OnInit {
       });
   }
 
-   getFileSpec() {
+  getFileSpec() {
+    for(var i=0;i<this.versionArray.length;i++){
+      this.versionArray[i]=null
+    }
+
     this.service.getFileSpec(this.idFile)
-    .subscribe(data => {
-      this.file =data
-      console.log(this.file.id, this.file.cVersion)
-      for (var i = 0; i<this.file.cVersion ; i++) {
-        this.versionArray[i] = this.file.cVersion - i
+      .subscribe(data => {
+        console.log(data)
+        if (data != null) {
+          this.fileExist = true;
+          this.file =(data)
+          for (var i = 0; i<this.file.cVersion ; i++) {
+            this.versionArray[i] =  this.file.cVersion - (this.file.cVersion-i)+1
+          } 
+
+       
+          // mi salvo il valore dell'ultima versione corrente
+          this.lastVersion=this.file.cVersion
+
+          //mi salvo le versioni deprecate
+          for( var i=0;i<this.file.deletedVersions.length;i++){
+            this.deprecatedVers[i]=this.file.deletedVersions[i]
+          }
+
+          var j=0;
+          for(i=0;i<this.versionArray.length;i++){
+          if(this.deprecatedVers.indexOf(this.versionArray[i])==-1){
+            this.finalVersion[j]=this.versionArray[i]
+            j++
+          }
+        }        
       }
-    }, error => {
-      this.errorMessage = <any>error
-    });
+     
+        else {
+          this.fileExist = false;
+        }
+      }, error => {
+        this.errorMessage = <any>error
+      });
   }
   
   selected(){
@@ -81,15 +112,26 @@ export class FileComponent implements OnInit {
   }
 
 
-  deleteVersion(){
-    console.log("vuoi eliminare la versione n.", this.vers)
+  deleteVersion(v){
+    this.vers=v
+    if(this.vers==null){
+      alert("seleziona una versione per eliminarla!")
+    }
+    else{
+    alert("vuoi eliminare la versione n."+this.vers +"?")
     this.service.deleteVersion(this.idFile,this.vers)
     .subscribe(data => {
       console.log(data)
-      // do something, if upload success
-      }, error => {
+      var index = this.finalVersion.indexOf(this.vers);
+      if (index > -1) {
+        this.finalVersion.splice(index, 1);
+      }
+      this.vers=null
+  
+    }, error => {
         console.log(error);
       });
+    }
   }
 
 
