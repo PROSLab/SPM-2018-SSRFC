@@ -151,7 +151,7 @@ export class StarterComponent implements AfterViewInit {
 
 	createRepo() {
 		if(this.createrepo==true){
-this.createrepo=false
+			this.createrepo=false
 		}
 		else if(this.createrepo==false){
 			this.createrepo=true

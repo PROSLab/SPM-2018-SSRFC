@@ -163,7 +163,6 @@ export class FolderComponent implements OnInit {
 
   getAllfolder() {
     console.log(this.idRepoSelected)
-
     //devo richiamare la funzione del server per inviargli il file
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
@@ -174,8 +173,6 @@ export class FolderComponent implements OnInit {
       }, error => {
         this.errorMessage = <any>error
       });
-
-  
   }
 
   //tutti i file
@@ -183,7 +180,7 @@ export class FolderComponent implements OnInit {
 		this.service.getFile(this.idRepoSelected,this.folderSelected)
 		.subscribe(data => {
       console.log(data)
-      this.files =(data)
+      this.files =JSON.parse(data)
       if(this.files.length>0){
         this.exist=true;
       }

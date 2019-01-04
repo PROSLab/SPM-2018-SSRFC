@@ -1,7 +1,5 @@
 <div class="container">
-
-    
-
+        <button (click)="back()" class="btn btn-primary">Back</button>
     <div class="col-5" class="row">
         <div class="col-md-6 offset-md-3">
             <h1>Repository</h1>
@@ -18,7 +16,9 @@
                     <div *ngIf="repo?.publicR" style="margin-bottom:5px;"> State: Public <br> </div>
                     <div *ngIf="!repo?.publicR" style="margin-bottom:5px;"> State: Private <br> </div>
                     <button (click)="modifyRepo()" class="btn btn-primary">Modify Repository</button>
-                    <form *ngIf="appear">
+
+                    <form *ngIf="appear" class="col-3">
+                 
                         <div class="card">
                             <div class="form-group" class="card-body">
                                 <div>
@@ -26,7 +26,9 @@
                                     <input type="text" required #n name="filename" />
                                 </div>
                             </div>
+
                             <button (click)="sendNewName(n.value)" class="btn btn-primary">Save repo</button>
+                            <button (click)="appear=false">X</button>
                         </div>
                     </form>
                 </div>
@@ -42,11 +44,14 @@
                 <div class="card">
                     <div class="form-group" class="card-body">
                         <div>
+                            
                             <label for="reponame">Folder name</label>
                             <input type="text" required id="namerepo" #n name="namerepo" />
-                        </div>
+                        </div><br>
+                        <button (click)="saveFolder(n.value)" class="btn btn-primary col-6">Save Folder</button>
+                        <button  class="btn btn-primary col-3" padding (click)="createfold=false">X</button>
                     </div>
-                    <button (click)="saveFolder(n.value)" class="btn btn-primary">Save Folder</button>
+     
                 </div>
             </form>
         </div>
@@ -59,18 +64,23 @@
                         <div>
                             <label for="reponame">File name</label>
                             <input type="text" required id="namerepo" #n name="namefile" />
+                        </div> <br>
+                        <div class="row">
+                                <button (click)="saveFile(n.value)" class="btn btn-primary">Save file
+                                    </button>
+                                    <button class="btn btn-primary" (click)="createfile=false">X</button>
                         </div>
                     </div>
-                    <button (click)="saveFile(n.value)" class="btn btn-primary">Save file
-                    </button>
+                    
+                    
                 </div>
             </form>
         </div>
     </div>
 
-    <button (click)="back()" class="btn btn-primary">Back</button>
+   
 
-    <div>Lista dei tuoi folder e files
+    <div *ngIf="folderExist==true || filesExist==true">Lista dei tuoi folder e files
         <table>
             <thead>
                 <tr>

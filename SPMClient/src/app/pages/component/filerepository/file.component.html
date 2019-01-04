@@ -65,7 +65,7 @@
                    
                     <select [(ngModel)]="vers" (change)="selected()"> 
                       <!--   <option disabled>Select a version...</option> -->
-                        <option  [ngValue]="v" *ngFor="let v of versionArray; index as i">{{v}}</option>
+                        <option  [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
                     </select>
                    
                     

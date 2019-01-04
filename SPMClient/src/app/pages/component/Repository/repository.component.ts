@@ -21,10 +21,11 @@ export class RepositoryComponent implements OnInit {
   folderExist: boolean = false
   createfold = false
   errorMessage: any;
-  appear: boolean;
+  appear: boolean =false;
   createfile=false;
   files: File[]  =null;
   idFileSelected: any;
+  filesExist: boolean=false;
 
 
   constructor(private service: Service, public router: Router) {
@@ -43,8 +44,15 @@ export class RepositoryComponent implements OnInit {
     this.getAllFile()
   }
 
-  modifyRepo(name) {
-    this.appear = true;
+  modifyRepo() {
+    if(this.appear==true)
+{
+  this.appear = false;
+}    
+else if(this.appear==false)
+{
+  this.appear = true;
+}
   }
 
   sendNewName(name) {
@@ -55,6 +63,7 @@ export class RepositoryComponent implements OnInit {
 
       })
   }
+
   //prendo i dati della repo specifica
   getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
@@ -85,6 +94,7 @@ export class RepositoryComponent implements OnInit {
             var newFile: File = data
             var count = this.files.length
             this.files[count] = newFile
+            this.filesExist=true
           }, error => {
             this.errorMessage = <any>error
           }); 
@@ -99,7 +109,6 @@ export class RepositoryComponent implements OnInit {
   }
 
 
-
   saveFolder(folderName) {
     var nameFolder = folderName;
     this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
@@ -110,6 +119,7 @@ export class RepositoryComponent implements OnInit {
             var newFolder: Folder = data
             var count = this.folder.length
             this.folder[count] = newFolder
+            this.folderExist=true
           }, error => {
             this.errorMessage = <any>error
           });
@@ -131,7 +141,10 @@ export class RepositoryComponent implements OnInit {
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
         this.folder = JSON.parse(data)
-        //console.log('getALLfOLDER',this.folder)
+        if(this.folder.length>0){
+          this.folderExist=true
+        }
+        //console.log(this.folder)
       }, error => {
         this.errorMessage = <any>error
       });
@@ -144,7 +157,10 @@ export class RepositoryComponent implements OnInit {
 		this.service.getFile(this.idRepoSelected,null)
 		.subscribe(data => {
 		  //console.log('allfiles',data)
-		  this.files = (data)
+      this.files = JSON.parse(data)
+      if(this.files.length>0){
+        this.filesExist=true
+      }
 		}, error => {
 		  this.errorMessage = <any>error
 		});

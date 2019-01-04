@@ -34,6 +34,9 @@ export class FileRepositoryComponent implements OnInit {
   folders: any;
   repoInfo: Repo = <any>[]
   vers: any;
+  deprecatedVers=[];
+  lastVersion: any;
+  finalVersion=[]
 
   constructor(public router: Router, private service: Service,private route:ActivatedRoute) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -48,10 +51,11 @@ export class FileRepositoryComponent implements OnInit {
   }
 
   deleteVersion(){
-    console.log("vuoi eliminare la versione n.", this.vers)
+    alert("vuoi eliminare la versione n."+this.vers +"?")
     this.service.deleteVersion(this.idFile,this.vers)
     .subscribe(data => {
       console.log(data)
+      this.getFileSpec();
       // do something, if upload success
       }, error => {
         console.log(error);
@@ -76,14 +80,42 @@ export class FileRepositoryComponent implements OnInit {
   }
 
   getFileSpec() {
+    for(var i=0;i<this.versionArray.length;i++){
+      this.versionArray[i]=null
+    }
+
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
+        console.log(data)
         if (data != null) {
           this.fileExist = true;
           this.file =(data)
           for (var i = 0; i<this.file.cVersion ; i++) {
-            this.versionArray[i] = this.file.cVersion - i
+            this.versionArray[i] =  this.file.cVersion - (this.file.cVersion-i)+1
+          } 
+
+       
+
+     console.log(this.versionArray)
+          // mi salvo il valore dell'ultima versione corrente
+          this.lastVersion=this.file.cVersion
+
+          //mi salvo le versioni deprecate
+          for( var i=0;i<this.file.deletedVersions.length;i++){
+            this.deprecatedVers[i]=this.file.deletedVersions[i]
           }
+
+//i=0
+// 1 2 3 4 5 6    ---> version array
+// 1 2  --->deprecatedVers
+var j=0;
+          for(i=0;i<this.versionArray.length;i++){
+          if(this.deprecatedVers.indexOf(this.versionArray[i])==-1){
+            this.finalVersion[j]=this.versionArray[i]
+            j++
+                }
+              }
+              
         }
      
         else {
@@ -115,9 +147,7 @@ export class FileRepositoryComponent implements OnInit {
   modifyRepo() {
     this.appear = true;
   }
- /*  modifyFolder() {
-    this.appearFormFolder = true;
-  } */
+ 
 
   sendNewNameRepo(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
@@ -127,6 +157,7 @@ export class FileRepositoryComponent implements OnInit {
 
       })
   }
+
   /* sendNewNameFolder(name) {
     this.service.changeNameFolder(this.idFolder, name)
       .subscribe(data => {
