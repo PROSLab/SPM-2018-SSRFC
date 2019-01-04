@@ -61,8 +61,8 @@ export class FileRepositoryComponent implements OnInit {
 
   
   ngOnInit() {
-    this.getFolder();
-    this.getRepoInfo();
+/*     this.getFolder();
+ */    this.getRepoInfo();
     this.getFileSpec(); 
   }
 
@@ -115,10 +115,9 @@ export class FileRepositoryComponent implements OnInit {
   modifyRepo() {
     this.appear = true;
   }
-  
-  modifyFolder() {
+ /*  modifyFolder() {
     this.appearFormFolder = true;
-  }
+  } */
 
   sendNewNameRepo(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
@@ -128,15 +127,14 @@ export class FileRepositoryComponent implements OnInit {
 
       })
   }
-
-  sendNewNameFolder(name) {
+  /* sendNewNameFolder(name) {
     this.service.changeNameFolder(this.idFolder, name)
       .subscribe(data => {
         this.appearFormFolder = false
         this.folderInfo = data
 
       })
-  }
+  } */
 
 
   saveFile(originalName) {
@@ -162,14 +160,14 @@ export class FileRepositoryComponent implements OnInit {
   //premdo i dati specifici di quel file che ho selezionato in precedenza
   
 
-  getFolder() {
+  /* getFolder() {
     this.service.getFolderSpec(this.idFolder)
       .subscribe(data => {
         this.folderInfo = data
       }, error => {
         this.errorMessage = <any>error
       });
-  }
+  } */
 
 
   

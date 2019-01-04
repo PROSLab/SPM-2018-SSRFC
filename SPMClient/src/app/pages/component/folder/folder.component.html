@@ -106,8 +106,9 @@
 
     <div *ngIf="exist==true">Lista dei tuoi folder e files
     
+    </div>
 
-    <div style="margin:5px">Lista dei tuoi files
+    <div *ngIf="exist==true" style="margin:5px" >Lista dei tuoi folder e files
         <table>
             <thead>
                 <tr>
@@ -128,8 +129,6 @@
             </tbody>
         </table>
     </div>
-    
-
 </div>
 
 

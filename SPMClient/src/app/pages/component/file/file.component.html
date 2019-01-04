@@ -78,11 +78,11 @@
                     <br>
 
                         Created At: {{file.createdAt}} <br>
-                        <button   (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
+                        <button  *ngIf="isLogged"  (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
                         <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
-                        <button  (click)="newVersion()" class="btn btn-primary">Create new version</button>
+                        <button *ngIf="isLogged"  (click)="newVersion()" class="btn btn-primary">Create new version</button>
                        
-                        <div><button (click)="deleteVersion()" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
+                        <div *ngIf="vers!=null&&isLogged"><button (click)="deleteVersion()" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
                         </div>
                         
                      <form *ngIf="appearRenameFile">
@@ -132,7 +132,6 @@
         </div>
     </div>
     <button (click)="back()" class="btn btn-primary">Back</button>
-
 
 
 <div *ngIf="isLogged">

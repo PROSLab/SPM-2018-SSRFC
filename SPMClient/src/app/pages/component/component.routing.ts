@@ -3,9 +3,9 @@ import { Routes } from '@angular/router';
 import { FileComponent } from './file/file.component';
 import { RepositoryComponent } from './Repository/repository.component';
 import { AllFilesComponent } from './all-files/all-files.component';
-import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { FileRepositoryComponent } from './filerepository/file.component';
 import { FolderComponent } from './folder/folder.component';
+import { RepoPublicComponent } from './repo-public/repo-public.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -38,8 +38,7 @@ export const ComponentsRoutes: Routes = [
           title: 'allFiles',
           urls: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'ngComponent' }, { title: 'allFiles' }]
         }
-      }
-  ,
+      },
       {
         path: 'repo-public',
         component: RepoPublicComponent,
@@ -48,6 +47,6 @@ export const ComponentsRoutes: Routes = [
           urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'ngComponent'},{title: 'repo-public'}]
         }
     }
-  ]
-}
-]
+   ]
+  }
+];
