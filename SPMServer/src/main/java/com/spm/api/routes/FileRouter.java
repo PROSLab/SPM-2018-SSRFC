@@ -27,6 +27,10 @@ public class FileRouter {
 								fileHandler::uploadFile
 						)
 						.andRoute(
+								GET("/downloadFile"),
+								fileHandler::downloadFile
+						)
+						.andRoute(
 								GET("/createRepository"),
 								fileHandler::createRepository
 						)
@@ -85,12 +89,10 @@ public class FileRouter {
 						.andRoute(
 								GET("/getAllRepoPublic"),
 								fileHandler::getAllRepoPublic
-
 						)
 						.andRoute(
 								GET("/deleteVersion"),
 								fileHandler::deleteVersion
-
 						)
 						
 						

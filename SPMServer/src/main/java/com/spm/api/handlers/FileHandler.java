@@ -1,6 +1,5 @@
 package com.spm.api.handlers;
 
-import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -8,6 +7,7 @@ import java.util.Vector;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.codec.multipart.FormFieldPart;
 import org.springframework.http.codec.multipart.Part;
@@ -127,6 +127,17 @@ public class FileHandler {
 
                 
     }
+	
+	public Mono<ServerResponse> downloadFile(ServerRequest request){
+		
+		String idFile = request.queryParam("idFile").get();
+		String version = request.queryParam("version").get();
+		String mimetype = "bpmn";
+		
+		return fileService.getFileFromResurce(idFile, version, mimetype)
+				.flatMap(res -> Responses.ok(res));
+		
+	}
 	
 	public Mono<ServerResponse> createRepository(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
