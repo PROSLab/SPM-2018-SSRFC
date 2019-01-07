@@ -26,6 +26,7 @@ export class RepositoryComponent implements OnInit {
   files: File[]  =null;
   idFileSelected: any;
   filesExist: boolean=false;
+  dataTroncata: any;
 
 
   constructor(private service: Service, public router: Router) {
@@ -64,16 +65,20 @@ else if(this.appear==false)
       })
   }
 
+  troncaData(data:String){
+return this.dataTroncata = data.substr(0,10)
+  }
+
   //prendo i dati della repo specifica
   getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
-        this.repoInfo = data
+      data.createdAt =  this.troncaData(data.createdAt)
+      this.repoInfo = data
       }, error => {
         this.errorMessage = <any>error
       });
   }
-
 
   createFolder() {
     this.createfold = true;
@@ -92,6 +97,7 @@ else if(this.appear==false)
         this.service.getFileSpec(file.id)
           .subscribe(data => {
             var newFile: File = data
+            newFile.createdAt = this.troncaData(newFile.createdAt)
             var count = this.files.length
             this.files[count] = newFile
             this.filesExist=true
@@ -117,6 +123,7 @@ else if(this.appear==false)
         this.service.getFolderSpec(folder.id)
           .subscribe(data => {
             var newFolder: Folder = data
+            newFolder.createdAt = this.troncaData(newFolder.createdAt)
             var count = this.folder.length
             this.folder[count] = newFolder
             this.folderExist=true
@@ -125,7 +132,6 @@ else if(this.appear==false)
           });
         this.createfold = false
         alert("Cartella creata con successo.")
-        //this.router.navigate(['/folder']);
       }, error => {
         this.errorMessage = <any>error
         alert("Cartella non creata")
@@ -133,14 +139,17 @@ else if(this.appear==false)
     this.createfold = false
   }
 
-
-
   getAllfolder() {
-   
     //prende tutte le cartelle create
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
-        this.folder = JSON.parse(data)
+        data= JSON.parse(data)
+
+        for(var i=0;i<data.length;i++){
+          data[i].createdAt =  this.troncaData(data[i].createdAt)
+          }
+      
+        this.folder = (data)
         if(this.folder.length>0){
           this.folderExist=true
         }
@@ -156,12 +165,17 @@ else if(this.appear==false)
    getAllFile() {
 		this.service.getFile(this.idRepoSelected,null)
 		.subscribe(data => {
-		  //console.log('allfiles',data)
-      this.files = JSON.parse(data)
+      data= JSON.parse(data)
+
+      for(var i=0;i<data.length;i++){
+      data[i].createdAt =  this.troncaData(data[i].createdAt)
+      }
+      this.files =(data)
       if(this.files.length>0){
         this.filesExist=true
       }
-		}, error => {
+    },
+     error => {
 		  this.errorMessage = <any>error
 		});
 	  } 
