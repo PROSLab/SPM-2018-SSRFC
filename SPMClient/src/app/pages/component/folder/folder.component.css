@@ -44,4 +44,19 @@ table {
   tr:nth-child(even) {
     background-color: #dddddd;
   }
- 
+ /*  label{
+    padding: 7px 12px;
+    font-size: 14px;
+    background: #7460ee;
+    border: 1px solid #7460ee;
+    border-radius: .25rem;
+    display: table;
+    color: #fff;
+    cursor: pointer;
+     } */
+
+
+
+input[type="file"] {
+    display: none;
+}

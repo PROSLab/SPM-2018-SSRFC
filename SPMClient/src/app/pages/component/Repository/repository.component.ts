@@ -4,6 +4,7 @@ import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
 import { File } from '../../../service/model/file'
+import { exportIsLogged } from '../../starter/starter.component'
 
 @Component({
   selector: 'app-Repository',
@@ -12,6 +13,7 @@ import { File } from '../../../service/model/file'
 })
 
 export class RepositoryComponent implements OnInit {
+  isLogged=exportIsLogged
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
@@ -27,6 +29,7 @@ export class RepositoryComponent implements OnInit {
   idFileSelected: any;
   filesExist: boolean=false;
   dataTroncata: any;
+  fileToUpload;
 
 
   constructor(private service: Service, public router: Router) {
@@ -113,6 +116,30 @@ return this.dataTroncata = data.substr(0,10)
       })
     this.createfile = false
   }
+
+
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+    this.uploadFileToActivity()
+  }
+
+  uploadFileToActivity() {
+    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload).subscribe(data => {
+      alert("Hai caricato il file correttamente.")
+      var newFile = data
+      newFile.createdAt = this.troncaData(newFile.createdAt)
+      var count = this.files.length
+      this.files[count] = newFile
+     /*  this.exist = true
+      this.caricaFile=false */
+    
+      // do something, if upload success
+    }, error => {
+      console.log(error);
+    });
+}
+
 
 
   saveFolder(folderName) {

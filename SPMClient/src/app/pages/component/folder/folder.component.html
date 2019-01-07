@@ -26,15 +26,15 @@
             </form>
         </div>
     </div>
-  
+
     <div class="row">
-        <div class="col-3">
-            <br>
-            <button (click)="createFile()" *ngIf="isLogged" class="btn btn-primary">+ Create File</button>
-            <br><br>
+        <div class="col-2">
+            
+            <button (click)="createFile()" *ngIf="isLogged || isLogged==undefined" class="btn btn-primary">+ Create File</button>
+           
             <form *ngIf="createfile">
                 <div class="card">
-                    <div class="form-group" class="card-body">
+                    <div class="form-group card-body">
                         <div>
                             <label for="reponame">File name</label>
                             <input type="text" required id="namerepo" #n name="namefile" />
@@ -45,11 +45,12 @@
                 </div>
             </form>
         </div>
-        <br>
-        <div class="form-group" *ngIf="isLogged">
-            <label for="file">Choose File</label>
-            <input type="file" id="file" #f (change)="handleFileInput($event.target.files)">
-            <button (click)="uploadFileToActivity()" class="btn btn-primary">Carica File</button>
+
+        <div class="col-2" *ngIf="isLogged || isLogged==undefined">
+
+            <label for="file" class="btn btn-primary" >Choose File
+                <input type="file"  id="file" #f (change)="handleFileInput($event.target.files)">
+            </label>
         </div>
 
     </div>

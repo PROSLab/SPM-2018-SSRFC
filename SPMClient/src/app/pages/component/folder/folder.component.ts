@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
 import { exportIsLogged } from '../../starter/starter.component'
 
-
 @Component({
   selector: 'app-Folder',
   templateUrl: './folder.component.html',
@@ -13,7 +12,7 @@ import { exportIsLogged } from '../../starter/starter.component'
 })
 
 export class FolderComponent implements OnInit {
-  isLogged = exportIsLogged
+  
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
@@ -28,18 +27,18 @@ export class FolderComponent implements OnInit {
   createfile = false;
   files = null;
   idFileSelected: any;
-  folderSelected: string;
+  folderSelected;
   appearFormFolder: boolean;
   fileToUpload: File;
   exist: boolean;
   dataTroncata: string;
-
+  caricaFile: boolean=false;
+  isLogged = exportIsLogged
 
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
     this.folderSelected = localStorage.getItem("folderSelected.id")
     this.idUser = localStorage.getItem("id")
-
   }
 
   back() {
@@ -49,20 +48,28 @@ export class FolderComponent implements OnInit {
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
+    this.uploadFileToActivity()
   }
 
   uploadFileToActivity() {
-    this.service.postFile(this.fileToUpload).subscribe(data => {
-      console.log(data)
+    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,this.folderSelected).subscribe(data => {
+      alert("Hai caricato il file correttamente.")
+      var newFile = data
+      newFile.createdAt = this.troncaData(newFile.createdAt)
+      var count = this.files.length
+      this.files[count] = newFile
+      this.exist = true
+      this.caricaFile=false
+    
       // do something, if upload success
     }, error => {
       console.log(error);
     });
-  }
+}
 
 
-  ngOnInit() {/* 
-    this.getRepoInfo() */
+  ngOnInit() {
+    this.isLogged = exportIsLogged
     this.getFolderInfo()
     this.getAllFile()
   }

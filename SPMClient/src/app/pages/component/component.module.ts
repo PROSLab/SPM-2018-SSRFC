@@ -9,7 +9,6 @@ import { ComponentsRoutes } from './component.routing';
 
 import { FileComponent } from './file/file.component';
 import { RepositoryComponent } from './Repository/repository.component';
-import { AllFilesComponent } from './all-files/all-files.component';
 import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { FolderComponent } from './folder/folder.component';
 import { FileRepositoryComponent } from './filerepository/file.component';
@@ -28,7 +27,6 @@ import { FileRepositoryComponent } from './filerepository/file.component';
     FolderComponent,
     FileComponent,
     FileRepositoryComponent,
-    AllFilesComponent,
     RepoPublicComponent,
   ]
 })

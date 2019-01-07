@@ -6,12 +6,11 @@ import { User } from './model/user'
 import { Router } from '@angular/router';
 import { ChangePassword } from './model/changePassword';
 import { Repo } from './model/repo';
+import { Options } from 'selenium-webdriver/chrome';
 
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  })
+  headers: new HttpHeaders({ "Content-Type": "multipart/form-data"})
 };
 
 @Injectable({
@@ -82,15 +81,21 @@ export class Service {
   }
 
   // @@@@ Service per la gestione dei file @@@@ ///
-  postFile(fileToUpload: File): Observable<any> {
+  postFile(idRepo, idUser, fileToUpload,idFolder?: File): Observable<any> {
      const formData: FormData = new FormData();
-    formData.append('files', fileToUpload)
- 
-    return this.http.post(this.baseUrl + "api/file/uploadTest", formData, { responseType: 'text' })
+     if(idFolder!=null){
+     formData.append('idFolder', idFolder); 
+     }
+     formData.append('idRepository', idRepo);
+     formData.append('idUser', idUser);
+     formData.append('files', fileToUpload)
+
+     return this.http.post(this.baseUrl + "api/file/uploadFile",formData )
       .pipe(
         catchError(this.handleError)
       );
   }
+ 
 
   changeNameRepo(id, newRepoName): Observable<any> {
     let params = new HttpParams();
