@@ -3,7 +3,7 @@ import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
 import { Router } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
-import  {exportIsLogged} from '../../starter/starter.component'
+import { exportIsLogged } from '../../starter/starter.component'
 
 
 @Component({
@@ -13,55 +13,56 @@ import  {exportIsLogged} from '../../starter/starter.component'
 })
 
 export class FolderComponent implements OnInit {
-  isLogged =exportIsLogged
+  isLogged = exportIsLogged
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
   idUser: string
   folder: Folder[] = null
-  folderInfo: Folder[]= null
+  folderInfo: Folder[] = null
   repoInfo: Repo = <any>[]
   folderExist: boolean = false
   createfold = false
   errorMessage: any;
   appear: boolean;
-  createfile=false;
-  files  =null;
+  createfile = false;
+  files = null;
   idFileSelected: any;
   folderSelected: string;
   appearFormFolder: boolean;
   fileToUpload: File;
   exist: boolean;
+  dataTroncata: string;
 
 
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
     this.folderSelected = localStorage.getItem("folderSelected.id")
-    this.idUser = localStorage.getItem("id")  
-    
+    this.idUser = localStorage.getItem("id")
+
   }
 
-  back(){
+  back() {
     this.router.navigate(['repository']);
   }
 
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
-}
+  }
 
   uploadFileToActivity() {
     this.service.postFile(this.fileToUpload).subscribe(data => {
       console.log(data)
       // do something, if upload success
-      }, error => {
-        console.log(error);
-      });
+    }, error => {
+      console.log(error);
+    });
   }
 
 
-  ngOnInit() {
-    this.getRepoInfo()
+  ngOnInit() {/* 
+    this.getRepoInfo() */
     this.getFolderInfo()
     this.getAllFile()
   }
@@ -89,23 +90,28 @@ export class FolderComponent implements OnInit {
       })
   }
 
-  //prendo i dati della repo specifica
-  getRepoInfo() {
-    this.service.getRepoSpec(this.idRepoSelected)
+  /*   //prendo i dati della repo specifica
+    getRepoInfo() {
+      this.service.getRepoSpec(this.idRepoSelected)
+        .subscribe(data => {
+          this.repoInfo = data
+        }, error => {
+          this.errorMessage = <any>error
+        });
+    } */
+
+  getFolderInfo() {
+    this.service.getFolderSpec(this.folderSelected)
       .subscribe(data => {
-        this.repoInfo = data
+        data.createdAt = this.troncaData(data.createdAt)
+        this.folderInfo = data
       }, error => {
         this.errorMessage = <any>error
       });
   }
 
-  getFolderInfo() {
-    this.service.getFolderSpec(this.folderSelected)
-      .subscribe(data => {
-        this.folderInfo = data
-      }, error => {
-        this.errorMessage = <any>error
-      });
+  troncaData(data: String) {
+    return this.dataTroncata = data.substr(0, 10)
   }
 
   createFile() {
@@ -114,17 +120,18 @@ export class FolderComponent implements OnInit {
 
   saveFile(fileName) {
     var name = fileName
-    this.service.createFile(this.idRepoSelected, this.idUser, name,this.folderSelected)
+    this.service.createFile(this.idRepoSelected, this.idUser, name, this.folderSelected)
       .subscribe(data => {
-         var file = JSON.parse(data)
+        var file = JSON.parse(data)
         this.service.getFileSpec(file.id)
           .subscribe(data => {
-            var newFile: File = data
+            var newFile = data
+            newFile.createdAt = this.troncaData(newFile.createdAt)
             var count = this.files.length
             this.files[count] = newFile
           }, error => {
             this.errorMessage = <any>error
-          }); 
+          });
         this.createfile = false
         alert("File creato con successo.")
         this.getAllFile();
@@ -146,6 +153,7 @@ export class FolderComponent implements OnInit {
         this.service.getFolderSpec(folder.id)
           .subscribe(data => {
             var newFolder: Folder = data
+            newFolder.createdAt = this.troncaData(newFolder.createdAt)
             var count = this.folder.length
             this.folder[count] = newFolder
           }, error => {
@@ -168,9 +176,13 @@ export class FolderComponent implements OnInit {
     //devo richiamare la funzione del server per inviargli il file
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
-        this.folder = JSON.parse(data)
-        if(this.folder.length>0){
-          this.exist=true;
+        data = JSON.parse(data)
+        for (var i = 0; i < data.length; i++) {
+          data[i].createdAt = this.troncaData(data[i].createdAt)
+        }
+        this.folder = (data)
+        if (this.folder.length > 0) {
+          this.exist = true;
         }
       }, error => {
         this.errorMessage = <any>error
@@ -178,20 +190,23 @@ export class FolderComponent implements OnInit {
   }
 
   //tutti i file
-   getAllFile() {
-		this.service.getFile(this.idRepoSelected,this.folderSelected)
-		.subscribe(data => {
-      console.log(data)
-      this.files =JSON.parse(data)
-      if(this.files.length>0){
-        this.exist=true;
-      }
-		}, error => {
-		  this.errorMessage = <any>error
-		});
-	  } 
+  getAllFile() {
+    this.service.getFile(this.idRepoSelected, this.folderSelected)
+      .subscribe(data => {
+        data = JSON.parse(data)
+        for (var i = 0; i < data.length; i++) {
+          data[i].createdAt = this.troncaData(data[i].createdAt)
+        }
+        this.files = (data)
+        if (this.files.length > 0) {
+          this.exist = true;
+        }
+      }, error => {
+        this.errorMessage = <any>error
+      });
+  }
 
- sendTofile(fileSelected) {
-  localStorage.setItem("fileSelected.id", fileSelected)
-  } 
+  sendTofile(fileSelected) {
+    localStorage.setItem("fileSelected.id", fileSelected)
+  }
 }

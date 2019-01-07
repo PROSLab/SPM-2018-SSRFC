@@ -28,7 +28,7 @@
                             <button (click)="createRepo()">X</button>
                             <div>
                                 <label for="reponame">Repository name </label>
-                                <input type="text" required id="namerepo" #n name="namerepo" />
+                                <input type="text" maxlength="10" required id="namerepo" #n name="namerepo" />
                                 <form name="state">
                                     <label for="state">State</label><br>
                                     <input type="radio" name="statep" id="state" value="public" checked>Public<br>
@@ -79,10 +79,10 @@
 
         <div class="row">
 
-            <div class="card2 col-3 display" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
-                <!--  <img src="img_avatar2.png" alt="Avatar" style="width:20%"> -->
-
-                <h4><b>{{repo?.repositoryName}}</b> </h4>
+            <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
+               
+                <h4 class="card2Write"> 
+                    <b>{{repo?.repositoryName}}</b> </h4>
                             
 
             </div>

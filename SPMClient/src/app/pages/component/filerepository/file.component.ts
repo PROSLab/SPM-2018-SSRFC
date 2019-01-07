@@ -38,6 +38,8 @@ export class FileRepositoryComponent implements OnInit {
   deprecatedVers=[];
   lastVersion: any;
   finalVersion=[]
+  dataTroncata: string;
+  versionExist: boolean = false;
 
   constructor(public router: Router, private service: Service,private route:ActivatedRoute) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
@@ -67,6 +69,7 @@ export class FileRepositoryComponent implements OnInit {
         this.finalVersion.splice(index, 1);
       }
       this.vers=null
+      this.getFileSpec()
   
     }, error => {
         console.log(error);
@@ -77,18 +80,12 @@ export class FileRepositoryComponent implements OnInit {
 
   
   ngOnInit() {
-/*     this.getFolder();
- */    this.getRepoInfo();
     this.getFileSpec(); 
   }
 
-  getRepoInfo() {
-    this.service.getRepoSpec(this.idRepoSelected)
-      .subscribe(data => {
-        this.repoInfo = data
-      }, error => {
-        this.errorMessage = <any>error
-      });
+
+  troncaData(data:String){
+    return this.dataTroncata = data.substr(0,10)
   }
 
   getFileSpec() {
@@ -98,15 +95,13 @@ export class FileRepositoryComponent implements OnInit {
 
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
-        console.log(data)
         if (data != null) {
+          data.createdAt = this.troncaData(data.createdAt)
           this.fileExist = true;
           this.file =(data)
           for (var i = 0; i<this.file.cVersion ; i++) {
             this.versionArray[i] =  this.file.cVersion - (this.file.cVersion-i)+1
           } 
-
-       
           // mi salvo il valore dell'ultima versione corrente
           this.lastVersion=this.file.cVersion
 
@@ -122,6 +117,15 @@ export class FileRepositoryComponent implements OnInit {
             j++
           }
         }        
+        console.log(this.finalVersion)
+        if(this.finalVersion.length>0){
+          console.log("c'è un versione")
+          this.versionExist = true;
+        }
+        else{
+          console.log(" non c'è un versione")
+          this.versionExist = false;
+        }
       }
      
         else {
@@ -140,7 +144,6 @@ export class FileRepositoryComponent implements OnInit {
         } 
         this.getFileSpec()
         alert("Hai creato una nuova versione del file")
-        /* this.router.navigate(['/file']); */
       }, error => {
         this.errorMessage = <any>error
       });

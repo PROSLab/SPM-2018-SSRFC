@@ -1,51 +1,11 @@
 <div class="container">
         
-                        
-    <table class="table">
-            <thead>
-              <tr>
-                <th scope="col"><h3>Repository Details</h3></th>
-              </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Repository name : {{repoInfo?.repositoryName}} </td>
-                    
-                </tr>
-                <tr>
-                    <td>Created At : {{repoInfo?.createdAt}} </td>
-                   
-                </tr>
-                <tr>
-                    <td>Repository State: 
-                        <p *ngIf="repo?.publicR"> State: Public </p>
-                        <p *ngIf="!repo?.publicR"> State: Private </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button (click)="modifyRepo()" class="btn btn-primary">Modify Repository</button>
-                        
-                    </td>
-                </tr>
-            </tbody>
-          </table>
-
-          <form *ngIf="appear">
-                <div class="card">
-                    <div class="form-group" class="card-body">
-                        <div>
-                            <label for="filename">New name: </label>
-                            <input type="text" required #n name="filename" />
-                        </div>
-                    </div>
-                    <button (click)="sendNewNameRepo(n.value)" class="btn btn-primary">Save repository Name</button>
-                </div>
-            </form>
-            
-            <form *ngIf="appearFormFolder">
-                    <div class="card">
-                        <div class="form-group" class="card-body">
+<button (click)="back()" class="btn btn-primary">Back</button>
+<br>
+<br>        
+    <form *ngIf="appearFormFolder">
+        <div class="card">
+            <div class="form-group" class="card-body">
                             <div>
                                 <label for="filename">New name: </label>
                                 <input type="text" required #n name="filename" />
@@ -57,23 +17,32 @@
 
 <div class="row" *ngIf="fileExist">
     <div class="row">
-        <div class="col-16">
-            <div class="card">
+        <div class="">
+            <div class="card col-12">
                 <div class="card-body">
-                    File: {{file.originalName}} <br>
-                    Version n. : 
+                  <b>  File:</b> {{file.originalName}} <br>
+                  <b>  Created At: </b> {{file.createdAt}} <br>
+                  <div *ngIf="versionExist">
+                  <b> Version n. : </b> 
                     <select [(ngModel)]="vers" (change)="selected()"> 
                         <option  [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
                     </select> 
+                </div>
                 <br>
-                    Created At: {{file.createdAt}} <br>
+                    <div *ngIf="!versionExist">
+                             Non ci sono versioni per questo file! 
+                            <br> Clicca sul bottone "Create Version" per creare una nuova versione del file.
+                    </div>
+                    <div class="row">
                     <button   (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
                     <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
-                    <button  (click)="newVersion()" class="btn btn-primary">Create new version</button>
+                    <button  (click)="newVersion()" class="btn btn-primary" style="margin-right:5px;">Create new version</button>
                    
-                    <div><button (click)="deleteVersion(vers)" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
+                    <div>
+                        <button *ngIf="versionExist" (click)="deleteVersion(vers)" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
                     </div>
-                    
+                </div>
+
                  <form *ngIf="appearRenameFile">
                         <div class="card">
                             <div class="form-group" class="card-body">
@@ -83,6 +52,7 @@
                                 </div>
                             </div>
                             <button (click)="sendNewFileName(n.value)" class="btn btn-primary">Save file</button>
+                            <button (click)="appearRenameFile=false"   class="btn btn-primary">X</button>
                         </div>
                     </form>
                 </div>
@@ -120,48 +90,17 @@
 
     </div>
 </div>
-<button (click)="back()" class="btn btn-primary">Back</button>
 
-
-
-<div *ngIf="isLogged">
-
-
+<!-- <div *ngIf="isLogged">
          Caricamento di un file
-
-<div class="form-group" *ngIf="isLogged" >
+    <div class="form-group" *ngIf="isLogged" >
     <label for="file">Choose File</label>
     <input type="file"
            id="file" #f
            (change)="handleFileInput($event.target.files)">
            <button  (click)="uploadFileToActivity()"  class="btn btn-primary">Carica File</button>
-</div> 
-
-
-
-
-    <!-- </div>Lista file pubblici
-<table >
-<thead>
-  <tr>
-    <th *ngFor="let head of headElements" scope="col">{{head}} </th>
-  </tr>
-</thead>
-<tbody>
-  <tr  *ngFor="let el of elements">
-    <th scope="row">{{el.id}}</th>
-    <td>{{el.first}}</td>
-    <td>{{el.last}}</td>
-    <td>{{el.handle}}</td>
-  </tr>
-</tbody>
-</table>
+    </div> 
 </div> -->
 
-    <!-- 
-<div>Lista file privati
-
-</div> -->
-</div>
 </div>
 
