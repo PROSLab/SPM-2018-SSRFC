@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h1>Home Page </h1>
-             </div>
+        </div>
     </div>
 
     <div *ngIf="isLogged">
@@ -11,8 +11,9 @@
                 <div class="card">
                     <div class="card-body">
                         Benvenuto {{localUser?.email}}! <br><br>
-                         Questa è la lista di tutti i tuoi repository. Puoi cliccare su di essi per visualizzare cosa c'è all'interno!
-       
+                        Questa è la lista di tutti i tuoi repository. Puoi cliccare su di essi per visualizzare cosa
+                        c'è all'interno!
+
                     </div>
                 </div>
             </div>
@@ -71,20 +72,15 @@
             </div>
         </div>
 
-<div class="row" *ngIf="repoExist">
-    <div class="col-md-12">
-        <h3>My Repository:</h3>
-    </div>
-</div>
-
+        <div class="row" *ngIf="repoExist">
+            <div class="col-md-12">
+                <h3>My Repository:</h3>
+            </div>
+        </div>
         <div class="row">
-
             <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
-               
-                <h4 class="card2Write"> 
+                <h4 class="card2Write" style="cursor:pointer;">
                     <b>{{repo?.repositoryName}}</b> </h4>
-                            
-
             </div>
 
         </div>
@@ -98,23 +94,23 @@
 
     </div>
     <div>
-        <div  *ngIf="!isLogged">
+        <div *ngIf="!isLogged">
             <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        Registrati per entrare a far parte della community VuGit! <br>
-                        Se sei registrato effettua il login!
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            Registrati per entrare a far parte della community VuGit! <br>
+                            Se sei registrato effettua il login!
+                        </div>
                     </div>
                 </div>
             </div>
+            <div>
+
+            </div>
+
         </div>
-         <div>
-                
-         </div>
-        
-        </div>
-       <!--  <div>Lista dei  Repository Pubblici
+        <!--  <div>Lista dei  Repository Pubblici
                 <table>
                     <thead>
                         <tr>

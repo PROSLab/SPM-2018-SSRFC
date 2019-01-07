@@ -35,8 +35,8 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-3">
+    <div class="row" *ngIf="isLogged">
+        <div class="col-2">
             <button (click)="createFolder()" class="btn btn-primary">+ Create Folder</button>
             <br><br>
             <form *ngIf="createfold">
@@ -54,7 +54,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-3">
+        <div class="col-2" >
             <button (click)="createFile()" class="btn btn-primary">+ Create File</button>
             <br><br>
             <form *ngIf="createfile">
@@ -74,6 +74,13 @@
                     
                 </div>
             </form>
+        </div>
+        <div>
+            <div class="col-2">
+                <label for="file" class="btn btn-primary" >Choose File
+                    <input type="file"  id="file" #f (change)="handleFileInput($event.target.files)">
+                </label>
+            </div>
         </div>
     </div>
 
