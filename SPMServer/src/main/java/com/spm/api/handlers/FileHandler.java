@@ -34,20 +34,21 @@ public class FileHandler {
 	private String fileName;
 	private String idFile;
 	private Map<String, Part> map;
-	private FilePart filePart;
 	
 	public FileHandler(FileService fileService) {
 		this.fileService = fileService;
 	}
 	
-	public Mono<ServerResponse> uploadFile(ServerRequest request) { // just a test for files upload
+	public Mono<ServerResponse> uploadFile(ServerRequest request) {// just a test for files upload
 		return request.body(BodyExtractors.toMultipartData())
+
                 .flatMap(parts -> {
+
                     map = parts.toSingleValueMap();
-                    filePart = (FilePart) map.get("files");
                     FormFieldPart idUser = (FormFieldPart)map.get("idUser");
                     FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
-                    
+                    FilePart filePart = (FilePart) map.get("files");
+
                     String idFolder = null;
                     
                     if(map.get("idFolder") != null) {
@@ -55,7 +56,7 @@ public class FileHandler {
                     	idFolder = idFolderPart.value();
                     }                   
                     
-                    FormFieldPart originalName = (FormFieldPart)map.get("originalName");
+                    String originalName = filePart.filename();
                     String mimetype = "bpmn";
                     
                     
@@ -66,7 +67,7 @@ public class FileHandler {
             				idFolder != null ? new ObjectId(idFolder) : null,
             				new Date(),
             				null, // id of file . varsion
-            				originalName.value(),
+            				originalName,
             				mimetype,
             				null,
             				1,
@@ -78,7 +79,19 @@ public class FileHandler {
                 .flatMap(f -> {
                 	idFile = f.getId();
 					fileName = idFile + '.' + 1;
-					
+                    FilePart filePart = (FilePart) map.get("files");
+                    FormFieldPart idUser = (FormFieldPart)map.get("idUser");
+                    FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
+                    String mimetype = "bpmn";
+
+                    String idFolder = null;
+                    
+                    if(map.get("idFolder") != null) {
+                    	FormFieldPart idFolderPart = (FormFieldPart)map.get("idFolder");
+                    	idFolder = idFolderPart.value();
+                    }  
+					return fileService.uploadFilePath(rootDir, idUser.value(), idRepository.value(), idFolder, fileName, idFile, mimetype,filePart,f);
+
 					/*
 					 * TODO
 					 * Fare nel service: (l'upload può essere o a livello di repo o di folder. Ricorda la "cartella nascosta").
@@ -89,9 +102,30 @@ public class FileHandler {
 					 * - l'upload di un file può essere considerato come nuova versione di un file esistente? NO!
 					 */
 					
-					return Responses.ok("OK");
 					
-                });
+                })
+                .flatMap(f -> {
+                	FormFieldPart idUser = (FormFieldPart)map.get("idUser");
+                	FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
+                	String path = rootDir + "/" + idUser.value() + "/" + idRepository.value();
+                	String idFolder = null;
+	                    
+	                if(map.get("idFolder") != null) {
+	                	FormFieldPart idFolderPart = (FormFieldPart)map.get("idFolder");
+	                	idFolder = idFolderPart.value();
+	                	path += "/" + idFolder;
+	                }  
+					
+					
+	                path += "/" + idFile;
+					
+					return fileService.updateNames(fileName, path, f);
+					
+				})
+                .flatMap(res -> Responses.ok(res))
+				.onErrorResume(Exception.class, Responses::internalServerError);
+
+                
     }
 	
 	public Mono<ServerResponse> createRepository(ServerRequest request) {

@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Vector;
 
 import org.bson.types.ObjectId;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Component;
 
 import com.spm.api.entity.FileEntity;
@@ -87,7 +88,35 @@ public class FileService  {
 	public Mono<FileEntity> createFileSchema(FileEntity file) {
 		return fileRepository.save(file);
 	}
-
+	
+	/*
+	 * uploadFile creazione path
+	 * 
+	 */
+	public Mono<FileEntity> uploadFilePath(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String idFile, String mimetype, FilePart filePart, FileEntity fileEntity) {
+		String suffixPath = idFolder != null ? File.separator + idFolder + 
+		          							               File.separator + idFile +
+		          							               File.separator + fileName + "." + mimetype
+														 : File.separator + idFile +
+														   File.separator + fileName + "." + mimetype;
+		
+		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + suffixPath;
+		
+		Path path = Paths.get(strPath);
+		
+		try {
+			Files.createDirectories(path.getParent());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Mono.error(new Exception(e.getMessage()));
+		}
+		
+		filePart.transferTo( new File(strPath) );
+		
+		return Mono.just(fileEntity);
+	}
+	
+	
 	/*
 	 * Create new bpmn file in the repository dir 
 	 */
