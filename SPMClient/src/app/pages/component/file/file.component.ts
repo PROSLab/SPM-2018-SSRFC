@@ -158,6 +158,10 @@ export class FileComponent implements OnInit {
       });
   }
 
+  downloadAllVersion(){
+    console.log("STO SCARICANDO TUTTE LE VERSIONI DEL FILE")
+  }
+
 
   downloadFile(vers) {
     window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)

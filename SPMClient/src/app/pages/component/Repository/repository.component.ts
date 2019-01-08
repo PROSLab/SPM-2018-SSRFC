@@ -13,7 +13,7 @@ import { exportIsLogged } from '../../starter/starter.component'
 })
 
 export class RepositoryComponent implements OnInit {
-  isLogged=exportIsLogged
+  isLogged = exportIsLogged
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
@@ -23,21 +23,24 @@ export class RepositoryComponent implements OnInit {
   folderExist: boolean = false
   createfold = false
   errorMessage: any;
-  appear: boolean =false;
-  createfile=false;
-  files: File[]  =null;
+  appear: boolean = false;
+  createfile = false;
+  files: File[] = null;
   idFileSelected: any;
-  filesExist: boolean=false;
+  filesExist: boolean = false;
   dataTroncata: any;
   fileToUpload;
   selezione= "name";
 search:string;
+  share: boolean = false;
+
+
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
-    this.idUser = localStorage.getItem("id")  
+    this.idUser = localStorage.getItem("id")
   }
 
-  back(){
+  back() {
     this.router.navigate(['']);
   }
 
@@ -49,14 +52,28 @@ search:string;
   }
 
   modifyRepo() {
-    if(this.appear==true)
-{
-  this.appear = false;
-}    
-else if(this.appear==false)
-{
-  this.appear = true;
-}
+    if (this.appear == true) {
+      this.appear = false;
+    }
+    else if (this.appear == false) {
+      this.appear = true;
+    }
+  }
+
+  shareRepo1() {
+    this.share = true
+  }
+
+  shareRepo(email) {
+    console.log(email,)
+    this.service.shareRepository(this.idRepoSelected, email)
+      .subscribe(data => {
+        alert("Email inviata!")
+        this.share = false
+      }, error => {
+        alert("ERRORE! Invio email non riuscito")
+        this.errorMessage = <any>error
+      })
   }
 
   sendNewName(name) {
@@ -68,24 +85,24 @@ else if(this.appear==false)
       })
   }
 
-  troncaData(data:String){
-return this.dataTroncata = data.substr(0,10)
+
+  troncaData(data: String) {
+    return this.dataTroncata = data.substr(0, 10)
   }
 
   //prendo i dati della repo specifica
   getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
-        if(data.publicR==true){
-          data.publicR="Public"
+        if (data.publicR == true) {
+          data.publicR = "Public"
         }
-        else{
-          data.publicR="Private"
+        else {
+          data.publicR = "Private"
         }
 
-
-      data.createdAt =  this.troncaData(data.createdAt)
-      this.repoInfo = data
+        data.createdAt = this.troncaData(data.createdAt)
+        this.repoInfo = data
       }, error => {
         this.errorMessage = <any>error
       });
@@ -106,20 +123,20 @@ return this.dataTroncata = data.substr(0,10)
   }
   saveFile(fileName) {
     var name = fileName
-    var idfolder=null
-    this.service.createFile(this.idRepoSelected, this.idUser, name,idfolder)
+    var idfolder = null
+    this.service.createFile(this.idRepoSelected, this.idUser, name, idfolder)
       .subscribe(data => {
-         var file = JSON.parse(data)
+        var file = JSON.parse(data)
         this.service.getFileSpec(file.id)
           .subscribe(data => {
             var newFile: File = data
             newFile.createdAt = this.troncaData(newFile.createdAt)
             var count = this.files.length
             this.files[count] = newFile
-            this.filesExist=true
+            this.filesExist = true
           }, error => {
             this.errorMessage = <any>error
-          }); 
+          });
         this.createfile = false
         alert("File creato con successo.")
         //this.router.navigate(['/folder']);
@@ -130,22 +147,22 @@ return this.dataTroncata = data.substr(0,10)
     this.createfile = false
   }
 
-	controlFormatFile(f) {
-		if (f.name.split('.').pop() == "bpmn") {
-			return true;
-		}
-		else {
-			alert("formato file non corretto")
-			return false;
-		}
-	}
+  controlFormatFile(f) {
+    if (f.name.split('.').pop() == "bpmn") {
+      return true;
+    }
+    else {
+      alert("formato file non corretto")
+      return false;
+    }
+  }
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
-  var a =   this.controlFormatFile(this.fileToUpload)
-  if(a==true){
-    this.uploadFileToActivity()
-  }
+    var a = this.controlFormatFile(this.fileToUpload)
+    if (a == true) {
+      this.uploadFileToActivity()
+    }
   }
 Search(){
   if(this.selezione=="name"){
@@ -179,8 +196,11 @@ Search(){
     }
   }
 }
+
+
+
   uploadFileToActivity() {
-    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload).subscribe(data => {
+    this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload).subscribe(data => {
       alert("Hai caricato il file correttamente.")
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
@@ -190,10 +210,10 @@ Search(){
     }, error => {
       console.log(error);
     });
-}
+  }
 
 
-  changeRepoVisibility(value){
+  changeRepoVisibility(value) {
     console.log(value)
     console.log("MANCA DA FARE TUTTA LA FUNZIONE CHE CAMBIA LA VISIBILITA' DELLA REPO.")
   }
@@ -210,7 +230,7 @@ Search(){
             newFolder.createdAt = this.troncaData(newFolder.createdAt)
             var count = this.folder.length
             this.folder[count] = newFolder
-            this.folderExist=true
+            this.folderExist = true
           }, error => {
             this.errorMessage = <any>error
           });
@@ -223,55 +243,54 @@ Search(){
     this.createfold = false
   }
 
+
   getAllfolder() {
     //prende tutte le cartelle create
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
-        data= JSON.parse(data)
+        data = JSON.parse(data)
 
-        for(var i=0;i<data.length;i++){
-          data[i].createdAt =  this.troncaData(data[i].createdAt)
-          }
-      
+        for (var i = 0; i < data.length; i++) {
+          data[i].createdAt = this.troncaData(data[i].createdAt)
+        }
+
         this.folder = (data)
-        if(this.folder.length>0){
-          this.folderExist=true
+        if (this.folder.length > 0) {
+          this.folderExist = true
         }
         //console.log(this.folder)
       }, error => {
         this.errorMessage = <any>error
       });
-
-  
   }
 
   //tutti i file
-   getAllFile() {
-		this.service.getFile(this.idRepoSelected,null)
-		.subscribe(data => {
-      data= JSON.parse(data)
+  getAllFile() {
+    this.service.getFile(this.idRepoSelected, null)
+      .subscribe(data => {
+        data = JSON.parse(data)
 
-      for(var i=0;i<data.length;i++){
-      data[i].createdAt =  this.troncaData(data[i].createdAt)
-      }
-      this.files =(data)
-      if(this.files.length>0){
-        this.filesExist=true
-      }
-    },
-     error => {
-		  this.errorMessage = <any>error
-		});
-	  } 
+        for (var i = 0; i < data.length; i++) {
+          data[i].createdAt = this.troncaData(data[i].createdAt)
+        }
+        this.files = (data)
+        if (this.files.length > 0) {
+          this.filesExist = true
+        }
+      },
+        error => {
+          this.errorMessage = <any>error
+        });
+  }
 
-  
+
   sendTofolder(folderSelected) {
     localStorage.setItem("folderSelected.id", folderSelected)
-    
-  } 
+
+  }
 
 
- sendTofile(fileSelected) {
-  localStorage.setItem("fileSelected.id", fileSelected)
-  } 
+  sendTofile(fileSelected) {
+    localStorage.setItem("fileSelected.id", fileSelected)
+  }
 }
