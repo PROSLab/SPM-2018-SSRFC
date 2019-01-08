@@ -55,6 +55,8 @@ export class FileComponent implements OnInit {
     this.cambia=true
   }
 
+  
+
   deleteVersion(v) {
     this.vers = v
     if (this.vers == null) {

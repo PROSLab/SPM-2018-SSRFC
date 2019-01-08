@@ -30,8 +30,8 @@ export class RepositoryComponent implements OnInit {
   filesExist: boolean=false;
   dataTroncata: any;
   fileToUpload;
-
-
+  selezione= "name";
+search:string;
   constructor(private service: Service, public router: Router) {
     this.idRepoSelected = localStorage.getItem("repoSelected.id");
     this.idUser = localStorage.getItem("id")  
@@ -98,7 +98,12 @@ return this.dataTroncata = data.substr(0,10)
   createFile() {
     this.createfile = true;
   }
+  selected() {
+   this.selezione= (<HTMLInputElement>document.getElementById("select")).value;
+   console.log(this.selezione)
 
+   
+  }
   saveFile(fileName) {
     var name = fileName
     var idfolder=null
@@ -142,7 +147,38 @@ return this.dataTroncata = data.substr(0,10)
     this.uploadFileToActivity()
   }
   }
+Search(){
+  if(this.selezione=="name"){
+  if (this.search != ""){
+    this.files=this.files.filter(res=>{
 
+    return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+    
+   
+    }) 
+    this.folder =this.folder.filter(res=>{
+      return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+})
+  }else if (this.search==""){
+    this.ngOnInit()
+  }
+  }
+  if (this.selezione=="date"){
+    if (this.search != ""){
+      this.files=this.files.filter(res=>{
+  
+      return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+      
+     
+      }) 
+      this.folder =this.folder.filter(res=>{
+        return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+  })
+    }else if (this.search==""){
+      this.ngOnInit()
+    }
+  }
+}
   uploadFileToActivity() {
     this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload).subscribe(data => {
       alert("Hai caricato il file correttamente.")

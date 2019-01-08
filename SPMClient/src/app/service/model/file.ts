@@ -1,6 +1,6 @@
 export interface File {
     id:string,
-name :string,
+originalName :string,
 fileName:string,
 lastModified: any,
 createdAt:String,
