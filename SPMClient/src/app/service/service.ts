@@ -38,7 +38,7 @@ export class Service {
 
   // FUNZIONE PER AGGIUNGERE GLI UTENTI USATA IN REGISTRAZIONE
   addUser(user: User): Observable<User> {
-    return this.http.post<User>(this.baseUrl + 'api/user/signin', user, httpOptions)
+    return this.http.post<User>(this.baseUrl + 'api/user/signin', user)
       .pipe(
         // UTILIZZARE LA FUNZIONE TAP QUANDO ABBIAMO NECESSITA DI UTILIZZARE I DATI DEL SUCCESSO
         // tap(data => data),
@@ -151,6 +151,19 @@ export class Service {
         catchError(this.handleError)
       );
   }
+
+
+shareRepository(idRepo,email){
+  let params = new HttpParams();
+  params = params.append('idRepository', idRepo); //id repository
+  params = params.append('emailTo', email); //email
+  console.log(params)
+  return this.http.get(this.baseUrl + 'api/share/repository', { responseType: 'text' })
+  .pipe(
+      tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server
+      catchError(this.handleError)
+    );
+}
 
 
   getUserSpec(id): Observable<User> {

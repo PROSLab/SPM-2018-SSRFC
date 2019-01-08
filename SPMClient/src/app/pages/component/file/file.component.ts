@@ -55,6 +55,8 @@ export class FileComponent implements OnInit {
     this.cambia=true
   }
 
+  
+
   deleteVersion(v) {
     this.vers = v
     if (this.vers == null) {
@@ -154,6 +156,10 @@ export class FileComponent implements OnInit {
       }, error => {
         this.errorMessage = <any>error
       });
+  }
+
+  downloadAllVersion(){
+    console.log("STO SCARICANDO TUTTE LE VERSIONI DEL FILE")
   }
 
 
