@@ -24,10 +24,10 @@ public class ShareRouter {
 								GET("/repository"),
 								shareHandler::shareRepository
 						)
-						/*.andRoute(
+						.andRoute(
 								GET("/file"),
-								shareHandler::
-						)*/
+								shareHandler::shareModel
+						)
 				);
 	}
 }
