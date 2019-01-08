@@ -31,6 +31,7 @@ export class RepoPublicComponent implements OnInit {
 	} 
 
 
+	//da rivedere,c ol cambiamento di route è cambiato
   sendToPublic(repoSelected) {
 		for (var i = 0; i < this.reposPublic.length; i++) {
 			if (repoSelected.id == this.reposPublic[i].id) {

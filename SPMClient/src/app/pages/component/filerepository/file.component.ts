@@ -15,11 +15,11 @@ import  {exportIsLogged} from '../../starter/starter.component'
 
 
 export class FileRepositoryComponent implements OnInit {
-  isLogged=exportIsLogged
+  isLogged = exportIsLogged
   appearRenameFile: boolean = false;
   fileExist = true;
   fileAppear = false;
-  appearFormFolder=false;
+  appearFormFolder = false;
   idRepoSelected: string;
   idUser: string;
   userInfo: any;
@@ -35,99 +35,105 @@ export class FileRepositoryComponent implements OnInit {
   folders: any;
   repoInfo: Repo = <any>[]
   vers: any;
-  deprecatedVers=[];
+  deprecatedVers = [];
   lastVersion: any;
-  finalVersion=[]
+  finalVersion = []
   dataTroncata: string;
   versionExist: boolean = false;
+  repo: any;
+  cambia=false
 
-  constructor(public router: Router, private service: Service,private route:ActivatedRoute) {
-    this.idRepoSelected = localStorage.getItem("repoSelected.id");
+
+  constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
+    this.idRepoSelected = localStorage.getItem("repoSelected.id")
     this.idUser = localStorage.getItem("id")
     this.idFolder = localStorage.getItem("folderSelected.id")
     this.idFile = localStorage.getItem("fileSelected.id")
   }
 
-  selected(){
+  selected() {
     //in this.vers abbiamo la versione del file cliccata!
     console.log(this.vers)
+    this.cambia=true
   }
 
-  deleteVersion(v){
-    
-    this.vers=v
-    if(this.vers==null){
+  deleteVersion(v) {
+    this.vers = v
+    if (this.vers == null) {
       alert("seleziona una versione per eliminarla!")
     }
-    else{
-    alert("vuoi eliminare la versione n."+this.vers +"?")
-    this.service.deleteVersion(this.idFile,this.vers)
-    .subscribe(data => {
-      console.log(data)
-      var index = this.finalVersion.indexOf(this.vers);
-      if (index > -1) {
-        this.finalVersion.splice(index, 1);
-      }
-      this.vers=null
-      this.getFileSpec()
-  
-    }, error => {
-        console.log(error);
-      });
+    else {
+      alert("vuoi eliminare la versione n." + this.vers + "?")
+      this.service.deleteVersion(this.idFile, this.vers)
+        .subscribe(data => {
+          var index = this.finalVersion.indexOf(this.vers);
+          if (index > -1) {
+            this.finalVersion.splice(index, 1);
+          }
+          this.vers = null
+          this.getFileSpec()
+
+        }, error => {
+          console.log(error);
+        });
     }
   }
 
 
-  
   ngOnInit() {
-    this.getFileSpec(); 
+    this.cambia=false
+    this.getFileSpec()
+    this.getFolder()
+    this.getRepo()
+    this.getAllFolders()
   }
 
 
-  troncaData(data:String){
-    return this.dataTroncata = data.substr(0,10)
+  troncaData(data: String) {
+    return this.dataTroncata = data.substr(0, 10)
   }
 
   getFileSpec() {
-    for(var i=0;i<this.versionArray.length;i++){
-      this.versionArray[i]=null
+    for (var i = 0; i < this.versionArray.length; i++) {
+      this.versionArray[i] = null
     }
 
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
+        console.log(data)
         if (data != null) {
           data.createdAt = this.troncaData(data.createdAt)
           this.fileExist = true;
-          this.file =(data)
-          for (var i = 0; i<this.file.cVersion ; i++) {
-            this.versionArray[i] =  this.file.cVersion - (this.file.cVersion-i)+1
-          } 
+          this.file = (data)
+          for (var i = 0; i < this.file.cVersion; i++) {
+            this.versionArray[i] = this.file.cVersion - (this.file.cVersion - i) + 1
+          }
           // mi salvo il valore dell'ultima versione corrente
-          this.lastVersion=this.file.cVersion
+          this.lastVersion = this.file.cVersion
 
           //mi salvo le versioni deprecate
-          for( var i=0;i<this.file.deletedVersions.length;i++){
-            this.deprecatedVers[i]=this.file.deletedVersions[i]
+          for (var i = 0; i < this.file.deletedVersions.length; i++) {
+            this.deprecatedVers[i] = this.file.deletedVersions[i]
           }
 
-          var j=0;
-          for(i=0;i<this.versionArray.length;i++){
-          if(this.deprecatedVers.indexOf(this.versionArray[i])==-1){
-            this.finalVersion[j]=this.versionArray[i]
-            j++
+          var j = 0;
+          for (i = 0; i < this.versionArray.length; i++) {
+            if (this.deprecatedVers.indexOf(this.versionArray[i]) == -1) {
+              this.finalVersion[j] = this.versionArray[i]
+              j++
+            }
           }
-        }        
-        console.log(this.finalVersion)
-        if(this.finalVersion.length>0){
-          console.log("c'è un versione")
-          this.versionExist = true;
+          console.log(this.finalVersion)
+          if (this.finalVersion.length > 0) {
+            console.log("c'è un versione")
+            this.versionExist = true;
+          }
+          else {
+            console.log(" non c'è un versione")
+            this.versionExist = false;
+          }
         }
-        else{
-          console.log(" non c'è un versione")
-          this.versionExist = false;
-        }
-      }
-     
+
         else {
           this.fileExist = false;
         }
@@ -139,14 +145,19 @@ export class FileRepositoryComponent implements OnInit {
   newVersion() {
     this.service.createNewVersion(this.idFile, this.file.cVersion)
       .subscribe(data => {
-         for (var i = 1; i <= data.cVersion; i++) {
+        for (var i = 1; i <= data.cVersion; i++) {
           this.versionArray[i - 1] = i
-        } 
+        }
         this.getFileSpec()
         alert("Hai creato una nuova versione del file")
       }, error => {
         this.errorMessage = <any>error
       });
+  }
+
+
+  downloadFile(vers) {
+    window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)
   }
 
   createFile() {
@@ -156,7 +167,7 @@ export class FileRepositoryComponent implements OnInit {
   modifyRepo() {
     this.appear = true;
   }
- 
+
 
   sendNewNameRepo(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
@@ -166,16 +177,6 @@ export class FileRepositoryComponent implements OnInit {
 
       })
   }
-
-  /* sendNewNameFolder(name) {
-    this.service.changeNameFolder(this.idFolder, name)
-      .subscribe(data => {
-        this.appearFormFolder = false
-        this.folderInfo = data
-
-      })
-  } */
-
 
   saveFile(originalName) {
     this.service.createFile(this.idRepoSelected, this.idFolder, this.idUser, originalName)
@@ -190,27 +191,47 @@ export class FileRepositoryComponent implements OnInit {
       });
   }
 
- 
 
-
-  back(){
+  back() {
     this.router.navigate(['']);
   }
 
   //premdo i dati specifici di quel file che ho selezionato in precedenza
-  
 
-  /* getFolder() {
+
+  getFolder() {
     this.service.getFolderSpec(this.idFolder)
       .subscribe(data => {
+        data.createdAt = this.troncaData(data.createdAt)
         this.folderInfo = data
       }, error => {
         this.errorMessage = <any>error
       });
-  } */
+  }
+
+  getAllFolders() {
+    this.service.getAllFolder(this.idRepoSelected)
+      .subscribe(data => {
+        data = JSON.parse(data)
+        this.folders = data
+        console.log(data)
+      }, error => {
+        this.errorMessage = <any>error
+      });
+  }
 
 
-  
+  getRepo() {
+    this.service.getRepoSpec(this.idRepoSelected)
+      .subscribe(data => {
+        // data.createdAt = this.troncaData(data.createdAt)
+
+        this.repo = data
+      }, error => {
+        this.errorMessage = <any>error
+      });
+  }
+
 
   modifyFile() {
     this.appearRenameFile = true;
@@ -218,11 +239,12 @@ export class FileRepositoryComponent implements OnInit {
 
   sendNewFileName(name) {
     this.service.changeNameFile(this.idFile, name)
-    .subscribe(data => {
-      this.appearRenameFile = false
-      this.file = data
+      .subscribe(data => {
+        this.appearRenameFile = false
+        this.file = data
       })
   }
+
 
 
 }

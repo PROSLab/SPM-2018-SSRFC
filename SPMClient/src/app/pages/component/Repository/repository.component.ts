@@ -76,6 +76,14 @@ return this.dataTroncata = data.substr(0,10)
   getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
+        if(data.publicR==true){
+          data.publicR="Public"
+        }
+        else{
+          data.publicR="Private"
+        }
+
+
       data.createdAt =  this.troncaData(data.createdAt)
       this.repoInfo = data
       }, error => {
@@ -117,11 +125,22 @@ return this.dataTroncata = data.substr(0,10)
     this.createfile = false
   }
 
-
+	controlFormatFile(f) {
+		if (f.name.split('.').pop() == "bpmn") {
+			return true;
+		}
+		else {
+			alert("formato file non corretto")
+			return false;
+		}
+	}
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
+  var a =   this.controlFormatFile(this.fileToUpload)
+  if(a==true){
     this.uploadFileToActivity()
+  }
   }
 
   uploadFileToActivity() {
@@ -131,15 +150,17 @@ return this.dataTroncata = data.substr(0,10)
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
       this.files[count] = newFile
-     /*  this.exist = true
-      this.caricaFile=false */
-    
-      // do something, if upload success
+
     }, error => {
       console.log(error);
     });
 }
 
+
+  changeRepoVisibility(value){
+    console.log(value)
+    console.log("MANCA DA FARE TUTTA LA FUNZIONE CHE CAMBIA LA VISIBILITA' DELLA REPO.")
+  }
 
 
   saveFolder(folderName) {
