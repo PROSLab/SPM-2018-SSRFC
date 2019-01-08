@@ -33,7 +33,7 @@ public class ShareService {
 	}
 	
 	public Mono<Boolean> sendEmailRepositoryLink(String idRepository, String emailTo) {
-		String repoLink = "http://localhost:4200/shareRepository?idRepository="+idRepository;
+		String repoLink = "http://localhost:4200/"+idRepository;
 		
 		return emailClient.sendSimpleMessage(emailTo, "Share Repository", repoLink);
 	}
