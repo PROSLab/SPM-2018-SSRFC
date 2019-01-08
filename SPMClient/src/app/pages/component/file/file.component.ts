@@ -40,6 +40,7 @@ export class FileComponent implements OnInit {
   dataTroncata: string;
   versionExist: boolean = false;
   repo: any;
+  cambia=false
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
@@ -50,8 +51,8 @@ export class FileComponent implements OnInit {
   }
 
   selected() {
-    //in this.vers abbiamo la versione del file cliccata!
     console.log(this.vers)
+    this.cambia=true
   }
 
   deleteVersion(v) {
@@ -60,15 +61,16 @@ export class FileComponent implements OnInit {
       alert("seleziona una versione per eliminarla!")
     }
     else {
+      this.cambia=false
       alert("vuoi eliminare la versione n." + this.vers + "?")
       this.service.deleteVersion(this.idFile, this.vers)
         .subscribe(data => {
-          console.log(data)
           var index = this.finalVersion.indexOf(this.vers);
           if (index > -1) {
             this.finalVersion.splice(index, 1);
           }
           this.vers = null
+          this.cambia=false
           this.getFileSpec()
 
         }, error => {
@@ -79,6 +81,7 @@ export class FileComponent implements OnInit {
 
 
   ngOnInit() {
+    this.cambia=false
     this.getFileSpec()
     this.getFolder()
     this.getRepo()
@@ -91,6 +94,7 @@ export class FileComponent implements OnInit {
   }
 
   getFileSpec() {
+    this.cambia=false
     for (var i = 0; i < this.versionArray.length; i++) {
       this.versionArray[i] = null
     }
@@ -144,11 +148,18 @@ export class FileComponent implements OnInit {
         for (var i = 1; i <= data.cVersion; i++) {
           this.versionArray[i - 1] = i
         }
+        this.cambia=false
         this.getFileSpec()
         alert("Hai creato una nuova versione del file")
       }, error => {
         this.errorMessage = <any>error
       });
+  }
+
+
+  downloadFile(vers) {
+    window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)
+    this.cambia=false
   }
 
   createFile() {

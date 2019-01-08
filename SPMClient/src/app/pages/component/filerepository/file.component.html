@@ -1,106 +1,103 @@
 <div class="container">
-        
-<button (click)="back()" class="btn btn-primary">Back</button>
-<br>
-<br>        
-    <form *ngIf="appearFormFolder">
-        <div class="card">
-            <div class="form-group" class="card-body">
-                            <div>
-                                <label for="filename">New name: </label>
-                                <input type="text" required #n name="filename" />
-                            </div>
-                        </div>
-                        <button (click)="sendNewNameFolder(n.value)" class="btn btn-primary">Save Folder Name</button>
-                    </div>
-                </form>
+    <button (click)="back()" class="btn btn-primary">Back</button>
+    <br><br>
 
-<div class="row" *ngIf="fileExist">
-    <div class="row">
-        <div class="">
-            <div class="card col-12">
-                <div class="card-body">
-                  <b>  File:</b> {{file.originalName}} <br>
-                  <b>  Created At: </b> {{file.createdAt}} <br>
-                  <div *ngIf="versionExist">
-                  <b> Version n. : </b> 
-                    <select [(ngModel)]="vers" (change)="selected()"> 
-                        <option  [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
-                    </select> 
-                </div>
-                <br>
-                    <div *ngIf="!versionExist">
-                             Non ci sono versioni per questo file! 
+<!-- 
+    <div class="card">
+        <div class="card-body">
+            <h3>Folder Details</h3>
+            <b> Folder name: </b> {{folderInfo?.folderName}} <br>
+            <b> Created At:</b> {{folderInfo?.createdAt}}
+            <br>
+        </div>
+    </div> -->
+
+    <div class="row" *ngIf="fileExist">
+        <div class="row">
+            <div class="">
+                <div class="card col-12">
+                    <div class="card-body">
+                        <h3>File Details</h3>
+                        <b> File:</b> {{file.originalName}} <br>
+                        <b> Created At: </b> {{file.createdAt}} <br>
+                        <div *ngIf="versionExist">
+                            <b> Version n. : </b>
+                            <select [(ngModel)]="vers" (change)="selected()">
+                                <option [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
+                            </select>
+
+                        </div>
+
+                        <div *ngIf="!versionExist">
+                            Non ci sono versioni per questo file!
                             <br> Clicca sul bottone "Create Version" per creare una nuova versione del file.
-                    </div>
-                    <div class="row">
-                    <button   (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify file</button>
-                    <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
-                    <button  (click)="newVersion()" class="btn btn-primary" style="margin-right:5px;">Create new version</button>
-                   
-                    <div>
-                        <button *ngIf="versionExist" (click)="deleteVersion(vers)" class="btn btn-primary" style="margin-right:5px;">Delete Version {{vers}}</button>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <button (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify
+                                file</button>
+                            <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
+                            <button (click)="newVersion()" class="btn btn-primary" style="margin-right:5px;">Create new
+                                version</button>
+
+                            <div>
+                                <button *ngIf="versionExist && cambia && vers!=null" (click)="deleteVersion(vers)" class="btn btn-primary"
+                                    style="margin-right:5px;"> Delete Version {{vers}} </button>
+                            </div>
+                            <div>
+                                <button *ngIf="versionExist && cambia && vers!=null" (click)="downloadFile(vers)" class="btn btn-primary"
+                                    style="margin-right:5px;">Download Version {{vers}}</button>
+                            </div>
+                        </div>
+
+                        <form *ngIf="appearRenameFile">
+                            <div class="card">
+                                <div class="form-group" class="card-body">
+                                    <div>
+                                        <label for="filename">New name: </label>
+                                        <input type="text" required #n name="filename" />
+                                    </div>
+                                </div>
+                                <button (click)="sendNewFileName(n.value)" class="btn btn-primary">Save file</button>
+                                <button (click)="appearRenameFile=false" class="btn btn-primary">X</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                 <form *ngIf="appearRenameFile">
-                        <div class="card">
-                            <div class="form-group" class="card-body">
-                                <div>
-                                    <label for="filename">New name: </label>
-                                    <input type="text" required #n name="filename" />
-                                </div>
-                            </div>
-                            <button (click)="sendNewFileName(n.value)" class="btn btn-primary">Save file</button>
-                            <button (click)="appearRenameFile=false"   class="btn btn-primary">X</button>
-                        </div>
-                    </form>
+                <div class="card" *ngIf="isLogged">
+                    <div class="card-body">
+                        Move to...<select>
+                            <option disabled>Select a folder..</option>
+                            <option>Repo: {{repo?.repositoryName}}</option>
+                            <option *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
+                        </select>
+                        <br>
+                    </div>
                 </div>
             </div>
-
-            <div class="card" *ngIf="isLogged" >
-                    <div class="card-body">
-                        Move to...<select> 
-                                <option disabled>Select a folder..</option>
-                              <option>{{repo?.repositoryName}}</option>
-                            <option *ngFor="let v of folders; index as i">{{v?.folderName}}</option>
-                        </select> <br>
-                    </div>
-                </div>
-
         </div>
     </div>
-</div>
 
-<div class="row" *ngIf="!fileExist && isLogged">
-    <div class="col-10">
-
-        <button (click)="createFile()" class="btn btn-primary">Create File</button>
-        <form *ngIf="fileAppear">
-            <div class="card">
-                <div class="form-group" class="card-body">
-                    <div>
-                        <label for="filename">File name</label>
-                        <input type="text" required #n name="filename" />
+    <div class="row" *ngIf="!fileExist && isLogged">
+        <div class="col-10">
+            <button (click)="createFile()" class="btn btn-primary">Create File</button>
+            <form *ngIf="fileAppear">
+                <div class="card">
+                    <div class="form-group" class="card-body">
+                        <div>
+                            <label for="filename">File name</label>
+                            <input type="text" required #n name="filename" />
+                        </div>
                     </div>
+                    <button (click)="saveFile(n.value)" class="btn btn-primary">Save File</button>
                 </div>
-                <button (click)="saveFile(n.value)" class="btn btn-primary">Save File</button>
-            </div>
-        </form>
-
+            </form>
+        </div>
+    </div>
+    <div>
+        <div *ngIf="vers!=null">Stai visualizzando la versione del file n. {{vers}}</div>
+        <div *ngIf="vers==null">Non stai visualizzando alcuna versione del file. Clicca sul menu per sceglierne una!</div>
+   
     </div>
 </div>
-
-<!-- <div *ngIf="isLogged">
-         Caricamento di un file
-    <div class="form-group" *ngIf="isLogged" >
-    <label for="file">Choose File</label>
-    <input type="file"
-           id="file" #f
-           (change)="handleFileInput($event.target.files)">
-           <button  (click)="uploadFileToActivity()"  class="btn btn-primary">Carica File</button>
-    </div> 
-</div> -->
-
-</div>
-

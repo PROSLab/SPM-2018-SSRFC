@@ -6,8 +6,8 @@
     <div class="card">
         <div class="card-body">
             <h3>Folder Details</h3>
-          <b> Folder name: </b>  {{folderInfo?.folderName}} <br>
-           <b> Created At:</b>  {{folderInfo?.createdAt}}
+            <b> Folder name: </b> {{folderInfo?.folderName}} <br>
+            <b> Created At:</b> {{folderInfo?.createdAt}}
             <br>
         </div>
     </div>
@@ -35,14 +35,20 @@
                         <br>
                         <div class="row">
                             <button (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">Modify
-                                file</button>
-                            <!-- <button  (click)="deleteFile()"  class="btn btn-primary">Delete File</button>  -->
+                                file
+                            </button>
+
                             <button (click)="newVersion()" class="btn btn-primary" style="margin-right:5px;">Create new
-                                version</button>
+                                version
+                            </button>
 
                             <div>
-                                <button *ngIf="versionExist" (click)="deleteVersion(vers)" class="btn btn-primary"
-                                    style="margin-right:5px;">Delete Version {{vers}}</button>
+                                <button *ngIf="versionExist && cambia && vers!=null" (click)="deleteVersion(vers)" class="btn btn-primary" style="margin-right:5px;"> Delete Version {{vers}} </button>
+                            </div>
+
+                            <div>
+                                <button *ngIf="versionExist && cambia && vers!=null" (click)="downloadFile(vers)" class="btn btn-primary"
+                                    style="margin-right:5px;">Download Version {{vers}}</button>
                             </div>
                         </div>
 
@@ -90,5 +96,10 @@
                 </div>
             </form>
         </div>
+    </div>
+    <div>
+        <div *ngIf="vers!=null">Stai visualizzando la versione del file n. {{vers}}</div>
+        <div *ngIf="vers==null">Non stai visualizzando alcuna versione del file. Clicca sul menu per sceglierne una!</div>
+   
     </div>
 </div>

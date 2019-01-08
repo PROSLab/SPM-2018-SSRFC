@@ -46,9 +46,22 @@ export class FolderComponent implements OnInit {
   }
 
 
+  controlFormatFile(f) {
+		if (f.name.split('.').pop() == "bpmn") {
+			return true;
+		}
+		else {
+			alert("formato file non corretto")
+			return false;
+		}
+	}
+
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
+  var a =   this.controlFormatFile(this.fileToUpload)
+  if(a==true){
     this.uploadFileToActivity()
+  }
   }
 
   uploadFileToActivity() {
