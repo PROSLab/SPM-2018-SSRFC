@@ -1,5 +1,5 @@
 <div class="container">
-    <button (click)="back()" class="btn btn-primary">Back</button>
+    <button (click)="back()" class="btn btn-info">Back</button>
     <div class="col-5" class="row">
         <div class="col-md-6 offset-md-3">
             <h1>Repository</h1>
@@ -26,20 +26,21 @@
                         <div>
                             <label for="filename">New name: </label>
                             <form>
-                                    <input type="text" required #n name="filename" />
+                                <input type="text" required #n name="filename" />
                             </form>
-                     
+
                         </div><br>
-                    
-                    <div class="row">
-                        <button (click)="sendNewName(n.value)" class="btn btn-primary col-3"  style="margin-right:5px;">Save repo</button>
-                        <button (click)="changeRepoVisibility(c.value)"  style="margin-right:5px;" *ngIf="repoInfo.publicR=='Private'"#c value="Private"
-                            class="btn btn-primary col-5">Change to public </button>
-                        <button (click)="changeRepoVisibility(c.value)"  style="margin-right:5px;" *ngIf="repoInfo.publicR=='Public'" #c value="Public"
-                            class="btn btn-primary col-5">Change to private </button>
-                        <button class="btn btn-primary col-2"  style="margin-right:10px;" (click)="appear=false">X</button>
-                      </div>
-                   </div>
+
+                        <div class="row">
+                            <button (click)="sendNewName(n.value)" class="btn btn-primary col-3" style="margin-right:5px;">Save
+                                repo</button>
+                        <!--     <button (click)="changeRepoVisibility(c.value)" style="margin-right:5px;" *ngIf="repoInfo.publicR=='Private'"
+                                #c value="Private" class="btn btn-primary col-5">Change to public </button>
+                            <button (click)="changeRepoVisibility(c.value)" style="margin-right:5px;" *ngIf="repoInfo.publicR=='Public'"
+                                #c value="Public" class="btn btn-primary col-5">Change to private </button> -->
+                            <button class="btn btn-danger" style="margin-right:10px;" (click)="appear=false">X</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -49,55 +50,72 @@
 
     <div class="row" *ngIf="isLogged">
         <div class="col-2">
-            <button (click)="createFolder()" class="btn btn-primary">+ Create Folder</button>
-            <br><br>
-            <form *ngIf="createfold">
-                <div class="card">
-                    <div class="form-group" class="card-body">
-                        <div>
+            <button (click)="createFolder()" class="btn btn-primary" style="margin-right:5px;">+ Create Folder</button>
 
-                            <label for="reponame">Folder name</label>
-                            <input type="text" required id="namerepo" #n name="namerepo" />
-                        </div><br>
-                        <button (click)="saveFolder(n.value)" class="btn btn-primary col-6">Save Folder</button>
-                        <button class="btn btn-primary col-3" padding (click)="createfold=false">X</button>
-                    </div>
+        </div>
 
-                </div>
-            </form>
+        <div class="col-2">
+            <button (click)="createFile()" class="btn btn-primary" style="margin-right:5px;">+ Create File</button>
         </div>
         <div class="col-2">
-            <button (click)="createFile()" class="btn btn-primary">+ Create File</button>
-            <br><br>
-            <form *ngIf="createfile">
-                <div class="card">
-                    <div class="form-group" class="card-body">
-                        <div>
-                            <label for="reponame">File name</label>
-                            <input type="text" required id="namerepo" #n name="namefile" />
-                        </div> <br>
-                        <div class="row">
-                            <button (click)="saveFile(n.value)" class="btn btn-primary">Save file
-                            </button>
-                            <button class="btn btn-primary" (click)="createfile=false">X</button>
-                        </div>
-                    </div>
-
-
-                </div>
-            </form>
+            <label for="file" class="btn btn-success" style="margin-right:5px;">Import File
+                <input type="file" id="file" #f (change)="handleFileInput($event.target.files)">
+            </label>
         </div>
-        <div>
-            <div class="col-2">
-                <label for="file" class="btn btn-primary">Choose File
-                    <input type="file" id="file" #f (change)="handleFileInput($event.target.files)">
-                </label>
+
+        <div class="col-2">
+            <button (click)="shareRepo1()" class="btn btn-warning" style="margin-right:5px;">Share Repo</button>
+        </div>
+
+    </div>
+ 
+
+    <div class="row">
+        <div *ngIf="createfold" class="col-4">
+            <div class="card">
+                <div class="form-group" class="card-body">
+                    <div>
+
+                        <label for="reponame">Folder name</label>
+                        <input type="text" required id="namerepo" #n name="namerepo" />
+                    </div><br>
+                    <button (click)="saveFolder(n.value)" class="btn btn-primary col-6">Save Folder</button>
+                    <button class="btn btn-danger" padding (click)="createfold=false">X</button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="createfile" class="col-4">
+            <div class="card">
+                <div class="form-group" class="card-body">
+                    <div>
+                        <label for="reponame">File name</label>
+                        <input type="text" required id="namerepo" #n name="namefile" />
+                    </div> <br>
+                    <div class="row">
+                        <button (click)="saveFile(n.value)" class="btn btn-primary">Save file
+                        </button>
+                        <button class="btn btn-danger" padding (click)="createfile=false">X</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="share" class="col-4">
+            <div class="card">
+                <div class="form-group" class="card-body">
+                    <div>
+
+                        <label for="reponame">Enter email...</label>
+                        <input type="email" required id="email" #e name="email" />
+                    </div><br>
+                    <button (click)="shareRepo(e.value)" class="btn btn-primary col-6">Send Email</button>
+                    <button class="btn btn-danger" padding (click)="share=false">X</button>
+                </div>
             </div>
         </div>
     </div>
 
-
-
+    <br>
     <div *ngIf="folderExist==true || filesExist==true">Lista dei tuoi folder e files
         <table>
             <thead>
