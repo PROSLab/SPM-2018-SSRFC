@@ -1,8 +1,14 @@
 package com.spm.api.utils;
 
+import java.io.File;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerResponse;
+
+import com.spm.api.entity.FileEntity;
 
 import reactor.core.publisher.Mono;
 
@@ -10,6 +16,22 @@ public class Responses {
 	
 	public static<T> Mono<ServerResponse> ok(T result) {
 		return ServerResponse.ok().body(BodyInserters.fromObject(result));
+	}
+	
+	public static<T> Mono<ServerResponse> okFile(T result, File file) {
+		return ServerResponse.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.contentLength(file.length())
+				.body(BodyInserters.fromObject(result));
+	}
+	
+	public static<T> Mono<ServerResponse> okFile(T result, File file, FileEntity fileE) {
+		return ServerResponse.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileE.getOriginalName() + "." + fileE.getMimetype())
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.contentLength(file.length())
+				.body(BodyInserters.fromObject(result));
 	}
 	
 	public static Mono<ServerResponse> badRequest(Exception e) {

@@ -1,5 +1,6 @@
 package com.spm.api.handlers;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Vector;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.codec.multipart.FormFieldPart;
@@ -134,9 +136,25 @@ public class FileHandler {
 		String version = request.queryParam("version").get();
 		String mimetype = "bpmn";
 		
-		return fileService.getFileFromResurce(idFile, version, mimetype)
-				.flatMap(res -> Responses.ok(res));
+		// Return the file with fileSystem name
+		/*return fileService.getFilePath(idFile, version, mimetype)
+				.flatMap(res -> {
+					File file = new File(res);
+					Resource resource = new FileSystemResource(res);
+					
+					return Responses.okFile(resource, file);
+				})
+				.onErrorResume(Exception.class, Responses::badRequest);*/
 		
+		// Other solution for return the file with original name
+		return fileService.getFileSpec(new ObjectId(idFile))
+				.flatMap(f -> {
+					String path = fileService.getFilePath(version, mimetype, f);
+					Resource resource = new FileSystemResource(path);
+					File file = new File(path);
+					
+					return Responses.okFile(resource, file, f);
+				});
 	}
 	
 	public Mono<ServerResponse> createRepository(ServerRequest request) {

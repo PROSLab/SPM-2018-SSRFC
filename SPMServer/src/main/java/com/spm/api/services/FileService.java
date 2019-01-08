@@ -11,8 +11,6 @@ import java.util.Optional;
 import java.util.Vector;
 
 import org.bson.types.ObjectId;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Component;
 
@@ -409,14 +407,21 @@ public class FileService  {
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
 	
-	public Mono<Resource> getFileFromResurce(String idFile, String version, String mimetype){
+	public String getFilePath(String version, String mimetype, FileEntity file) {
+		String pathStr = file.getPath();
+		pathStr += File.separator + file.getId() + "." + version + "." + mimetype;
+		return pathStr;
+	}
+	
+	public Mono<String> getFilePath(String version, String mimetype, String idFile){
 		return fileRepository.findById(idFile)
 				.flatMap(f -> {
-					String path = f.getPath();
-					path += File.separator + idFile + "." + version + "." + mimetype;
-					Resource resource = new FileSystemResource(path);
-					return Mono.just(resource);
-				});
+					String pathStr = f.getPath();
+					pathStr += File.separator + idFile + "." + version + "." + mimetype;
+					
+					return Mono.just(pathStr);
+				})
+				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
 }
  
