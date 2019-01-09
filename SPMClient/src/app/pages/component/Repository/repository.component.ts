@@ -31,7 +31,7 @@ export class RepositoryComponent implements OnInit {
   dataTroncata: any;
   fileToUpload;
   selezione= "name";
-search:string;
+  search:string;
   share: boolean = false;
 
 
@@ -85,7 +85,6 @@ search:string;
       })
   }
 
-
   troncaData(data: String) {
     return this.dataTroncata = data.substr(0, 10)
   }
@@ -115,12 +114,11 @@ search:string;
   createFile() {
     this.createfile = true;
   }
+
   selected() {
    this.selezione= (<HTMLInputElement>document.getElementById("select")).value;
-   console.log(this.selezione)
-
-   
   }
+
   saveFile(fileName) {
     var name = fileName
     var idfolder = null
@@ -164,18 +162,18 @@ search:string;
       this.uploadFileToActivity()
     }
   }
+
 Search(){
   if(this.selezione=="name"){
   if (this.search != ""){
     this.files=this.files.filter(res=>{
-
     return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
-    
-   
-    }) 
+    })
+
     this.folder =this.folder.filter(res=>{
       return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
 })
+
   }else if (this.search==""){
     this.ngOnInit()
   }
@@ -183,11 +181,9 @@ Search(){
   if (this.selezione=="date"){
     if (this.search != ""){
       this.files=this.files.filter(res=>{
-  
       return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
-      
-     
       }) 
+
       this.folder =this.folder.filter(res=>{
         return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
   })
@@ -206,7 +202,6 @@ Search(){
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
       this.files[count] = newFile
-
     }, error => {
       console.log(error);
     });

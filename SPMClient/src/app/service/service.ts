@@ -38,6 +38,7 @@ export class Service {
 
   // FUNZIONE PER AGGIUNGERE GLI UTENTI USATA IN REGISTRAZIONE
   addUser(user: User): Observable<User> {
+
     return this.http.post<User>(this.baseUrl + 'api/user/signin', user)
       .pipe(
         // UTILIZZARE LA FUNZIONE TAP QUANDO ABBIAMO NECESSITA DI UTILIZZARE I DATI DEL SUCCESSO
@@ -48,6 +49,7 @@ export class Service {
 
   sendEmail(email: string): Observable<String> {
     let body = { email: email }
+
     return this.http.post<String>(this.baseUrl + 'api/user/pswRecovery', body, httpOptions)
       .pipe(
         catchError(this.handleError)
@@ -56,9 +58,10 @@ export class Service {
 
   changePassword(uuid: string, pgid: string, password: string): Observable<ChangePassword> {
     let params = new HttpParams();
-    params = params.append('uuid', uuid);
-    params = params.append('pgid', pgid);
-    params = params.append('password', password);
+    params = params.append('uuid', uuid)
+    params = params.append('pgid', pgid)
+    params = params.append('password', password)
+
     return this.http.get<ChangePassword>(this.baseUrl + 'api/user/changePassword', { params: params })
       .pipe(
         catchError(this.handleError)
@@ -66,8 +69,9 @@ export class Service {
   }
   loginUser(email, psw): Observable<User> {
     let params = new HttpParams();
-    params = params.append('email', email);
-    params = params.append('password', psw);
+    params = params.append('email', email)
+    params = params.append('password', psw)
+
     return this.http.get<User>(this.baseUrl + 'api/user/login', { params: params })
       .pipe(
         //tap(userLogged =>{}), //mi salvo tutti i dati di ritorno dal server
@@ -101,6 +105,7 @@ export class Service {
     let params = new HttpParams();
     params = params.append('idRepository', id); //id repos
     params = params.append('newRepoName', newRepoName); //name della repo nuovo
+
     return this.http.get(this.baseUrl + 'api/file/modifyRepoName', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
@@ -112,6 +117,7 @@ export class Service {
     let params = new HttpParams();
     params = params.append('idFolder', id); //id repos
     params = params.append('newFolderName', newRepoName); //name della repo nuovo
+
     return this.http.get(this.baseUrl + 'api/file/modifyFolderName', { params: params })
       .pipe(
         tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
@@ -123,6 +129,7 @@ export class Service {
     let params = new HttpParams();
     params = params.append('idFile', id); //id repos
     params = params.append('newFileName', newRepoName); //name della repo nuovo
+
     return this.http.get(this.baseUrl + 'api/file/modifyFileName', { params: params })
       .pipe(
         tap(success =>this.user=success), //mi salvo tutti i dati di ritorno dal server
@@ -132,6 +139,7 @@ export class Service {
 
   //get specific file,repo or folder
   getAllRepoPublic(): Observable<any> {
+
     return this.http.get<any>(this.baseUrl + 'api/file/getAllRepoPublic')
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
@@ -145,6 +153,7 @@ export class Service {
     let params = new HttpParams();
     params = params.append('idFile', idFile); //id file
     params = params.append('version', version); //num. version
+
     return this.http.get<any>(this.baseUrl + 'api/file/downloadFile')
       .pipe(
         tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server
@@ -153,11 +162,11 @@ export class Service {
   }
 
 
-shareRepository(idRepo,email){
+  shareRepository(idRepo,email){
   let params = new HttpParams();
   params = params.append('idRepository', idRepo); //id repository
   params = params.append('emailTo', email); //email
-  console.log(params)
+
   return this.http.get(this.baseUrl + 'api/share/repository', {params:params, responseType: 'text'})
   .pipe(
       tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server
@@ -166,9 +175,24 @@ shareRepository(idRepo,email){
 }
 
 
+shareFile(repoName,idUser,idFile,email){
+  let params = new HttpParams();
+  params = params.append('repositoryName', repoName); //id repository
+  params = params.append('emailTo', email); //email
+  params = params.append('idUser', idUser); //id utente
+  params = params.append('idFile', idFile); //id file
+  
+  return this.http.get(this.baseUrl + 'api/share/file', {params:params, responseType: 'text'})
+  .pipe(
+      tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server
+      catchError(this.handleError)
+    );
+}
+
   getUserSpec(id): Observable<User> {
     let params = new HttpParams();
     params = params.append('id', id);
+
     return this.http.get<User>(this.baseUrl + 'api/user/getUserSpec', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
@@ -179,6 +203,7 @@ shareRepository(idRepo,email){
   getRepoSpec(id): Observable<any> {
     let params = new HttpParams();
     params = params.append('id', id);
+
     return this.http.get<any>(this.baseUrl + 'api/file/getRepoSpec', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
@@ -189,6 +214,7 @@ shareRepository(idRepo,email){
   getFolderSpec(id): Observable<any> {
     let params = new HttpParams();
     params = params.append('id', id); //gli passo l'id del folder
+
     return this.http.get(this.baseUrl + 'api/file/getFolderSpec', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
@@ -200,6 +226,7 @@ shareRepository(idRepo,email){
     let params = new HttpParams();
     params = params.append('idFile', id); //gli passo l'id del file
     params = params.append('version', version); //gli passo la versione del file
+
     return this.http.get(this.baseUrl + 'api/file/deleteVersion', { params: params, responseType: 'text' })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
@@ -210,6 +237,7 @@ shareRepository(idRepo,email){
   getFileSpec(id): Observable<any> {
     let params = new HttpParams();
     params = params.append('id', id); //gli passo l'id del file
+
     return this.http.get(this.baseUrl + 'api/file/getFileSpec', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
@@ -276,6 +304,7 @@ shareRepository(idRepo,email){
   getAllFolder(idRepository): Observable<any> {
     let params = new HttpParams();
     params = params.append('idRepository', idRepository); //id repos
+
     return this.http.get(this.baseUrl + 'api/file/getAllFolders', { params: params, responseType: 'text' })
       .pipe(
         tap(success => {
@@ -292,6 +321,7 @@ shareRepository(idRepo,email){
     params = params.append('idFolder', id); //id cartella
     }
     params = params.append('idRepository', idRepository); //id repo
+
     return this.http.get(this.baseUrl + 'api/file/getAllFile', { params: params, responseType: 'text' })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
@@ -318,21 +348,25 @@ shareRepository(idRepo,email){
     console.log(error)
     if (error.status == 400) {
       alert("username o password errata")
+
       return throwError("Bad Credential")
     }
 
     if (error.status == 403) {
       alert("l'email è già in uso da un altro utente")
+
       return throwError("Forbidden")
     }
 
     if (error.status == 0) {
       alert("connessione al server fallita")
+
       return throwError("Server Connection failed")
     }
 
     if (error.status == 404) {
       alert("Account non trovato")
+
       return throwError("Not Found")
     }
 
