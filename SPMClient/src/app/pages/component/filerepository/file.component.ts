@@ -165,6 +165,7 @@ export class FileRepositoryComponent implements OnInit {
   downloadFile(vers) {
     window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)
     this.cambia=false
+    this.vers=null
   }
 
   createFile() {
