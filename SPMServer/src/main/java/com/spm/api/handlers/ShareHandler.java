@@ -28,7 +28,6 @@ public class ShareHandler {
 	private String idNewFile;
 	private String newRepoPath;
 	private String sourceFilePath;
-	private String idSourceFile;
 	private FileEntity newFileEntity;
 	
 	public ShareHandler(ShareService shareService) {
@@ -73,7 +72,6 @@ public class ShareHandler {
 				})
 				.flatMap(f -> {			// file
 					sourceFilePath = f.getPath();
-					idSourceFile = f.getId();
 					
 					FileEntity file = new FileEntity (
 							new ObjectId(idUser),
@@ -111,7 +109,7 @@ public class ShareHandler {
 					
 					return shareService.updateNames(fileName, newRepoPath, newFileEntity);
 				})
-				.flatMap(notUsed -> shareService.sendShareLink(idNewFile, emailTo))
+				.flatMap(notUsed -> shareService.sendShareLink(idNewRepo, idNewFile, emailTo))
 				.flatMap(res -> Responses.ok(res));
 	}
 

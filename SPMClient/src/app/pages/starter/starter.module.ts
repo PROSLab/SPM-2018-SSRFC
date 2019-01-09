@@ -11,16 +11,6 @@ import { NewPasswordComponent } from '../new-password/new-password.component';
 import { PagenotfoundComponent } from '../pagenotfound/pagenotfound.component';
 
 
-/* const routes: Routes = [{
-	path: '',
-	component: StarterComponent,
-	data: {
-        title: 'HomePage',
-        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'HomePage'}]
-    },
-	
-}]; */
-
 const routes: Routes = [
 	{
 		path: '',

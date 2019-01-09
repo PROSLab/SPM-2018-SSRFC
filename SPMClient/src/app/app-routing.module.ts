@@ -7,7 +7,7 @@ const routes: Routes = [
         path: '',
         loadChildren: './pages/pages.module#PagesModule'
     },
-    { path: '**', redirectTo: 'PageNotFound' },
+    //{ path: '**', redirectTo: 'PageNotFound' },
     
 ];
 

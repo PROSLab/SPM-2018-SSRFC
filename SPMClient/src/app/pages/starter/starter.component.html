@@ -48,29 +48,6 @@
         </div>
     </div>
 
-
-    <!--     <div>Lista dei tuoi Repository
-            <table>
-                <thead>
-                    <tr>
-                        <th width="40%">Name</th>
-                        <th width="30%">Created At</th>
-                        <th width="10%">Privacy</th>
-                 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)" >
-                        <th scope="row">{{repo?.repositoryName}}</th>
-                        <th scope="row">{{repo?.createdAt}}</th>
-                        <th scope="row" *ngIf="repo?.publicR" >Public</th>
-                        <th scope="row" *ngIf="!repo?.publicR">Private</th>
-
-                   </tr>
-                </tbody>
-            </table>
-        </div> -->
-
     <div class="row" *ngIf="!repoExist">
         <div class="col-md-12">
             <h3>Non ci sono repository presenti.<br> Clicca su Create Repository per crearne uno!</h3>
@@ -83,20 +60,12 @@
         </div>
     </div>
     <div class="row">
-        <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)">
+        <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)" [routerLink]="['/repositoryID',repo?.id]">
             <h4 class="card2Write" style="cursor:pointer;">
                 <b>{{repo?.repositoryName}}</b> </h4>
         </div>
 
     </div>
-
-
-    <!--  <div class="row">
-            <div class="col-10" style="margin-top:40px;">
-                <button (click)="logout()" class="btn btn-primary">LOGOUT</button>
-            </div>
-        </div> -->
-
 
 <div>
     <div *ngIf="!isLogged">
@@ -115,22 +84,5 @@
         </div>
 
     </div>
-    <!--  <div>Lista dei  Repository Pubblici
-                <table>
-                    <thead>
-                        <tr>
-                            <th width="40%">Name</th>
-                            <th width="30%">Created At</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let repoPublic of reposPublic; let i=index;" (click)="sendToPublic(repoPublic)" >
-                            <th scope="row">{{repoPublic?.repositoryName}}</th>
-                            <th scope="row">{{repoPublic?.createdAt}}</th>
-                       </tr>
-                    </tbody>
-                </table>
-            </div>  -->
-</div>
+   </div>
 </div>

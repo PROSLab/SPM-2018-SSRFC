@@ -20,9 +20,8 @@ const httpOptions = {
 export class Service {
   private baseUrl = 'http://localhost:8080/'
   public errorMsg: string;
+  public isLogged:boolean;
   user: Object;
-
-  isLogged: boolean = false;
   id: any;
   repos: string;
   folder: string =null;
@@ -67,6 +66,7 @@ export class Service {
         catchError(this.handleError)
       );
   }
+
   loginUser(email, psw): Observable<User> {
     let params = new HttpParams();
     params = params.append('email', email)
@@ -74,13 +74,19 @@ export class Service {
 
     return this.http.get<User>(this.baseUrl + 'api/user/login', { params: params })
       .pipe(
-        //tap(userLogged =>{}), //mi salvo tutti i dati di ritorno dal server
+        tap(userLogged =>{
+          localStorage.setItem('isLogged','true')
+          this.isLogged=true;
+          this.router.navigate(['/']);
+          location.reload();
+        }), //mi salvo tutti i dati di ritorno dal server
         catchError(this.handleError)
       );
   }
   logout() {
     localStorage.clear();
     alert('logout effettuato');
+    location.reload();
     this.router.navigate(['/']);
   }
 

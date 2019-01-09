@@ -47,10 +47,12 @@ export class FileComponent implements OnInit {
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
-    this.idRepoSelected = localStorage.getItem("repoSelected.id")
+    this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
-    this.idFolder = localStorage.getItem("folderSelected.id")
-    this.idFile = localStorage.getItem("fileSelected.id")
+    this.idFolder = route.snapshot.params.idFolder
+    this.idFile = route.snapshot.params.idFile
+    this.isLogged=service.isLogged;
+  
   }
 
   selected() {
@@ -87,7 +89,9 @@ export class FileComponent implements OnInit {
   ngOnInit() {
     this.cambia=false
     this.getFileSpec()
-    this.getFolder()
+    if(this.idFolder != null){
+      this.getFolder()
+    }
     this.getRepo()
     this.getAllFolders()
   }
@@ -201,7 +205,7 @@ export class FileComponent implements OnInit {
 
 
   back() {
-    this.router.navigate(['']);
+    this.router.navigate(['repositoryID/',this.idRepoSelected,'folderID',this.idFolder]);
   }
 
   //premdo i dati specifici di quel file che ho selezionato in precedenza

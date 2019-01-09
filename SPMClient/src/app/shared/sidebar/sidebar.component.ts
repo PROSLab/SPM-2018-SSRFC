@@ -14,36 +14,26 @@ export class SidebarComponent implements AfterViewInit {
   isActive = true;
   showMenu = '';
   showSubMenu = '';
-  isLogged: boolean = exportIsLogged;
+  isLogged: boolean;
   user: User
   name: string; surname: string; email: string; password: string;
 
-  constructor(private service: Service,public router: Router) {}
+  constructor(private service: Service,public router: Router) {
+    this.isLogged=this.service.isLogged
+    if(this.isLogged){
+        this.name = localStorage.getItem("name");
+        this.surname = localStorage.getItem("surname");
+        this.email = localStorage.getItem("email");
+        this.password = localStorage.getItem("password");
+    }
+  }
 
-//TODO: PORCATA DA RIVEDERE
   ngOnInit(): void {
-    
-    setInterval(() => {
-      if (localStorage.getItem("login") == 'true') {
-        this.isLogged = true;
-        if (this.isLogged == true) {
-          this.name = localStorage.getItem("name");
-          this.surname = localStorage.getItem("surname");
-          this.email = localStorage.getItem("email");
-          this.password = localStorage.getItem("password");
-        }
-      }else {
-        this.isLogged=false;
-      }
-    }, 1000);
-
 
   }
 
   logout() {
     this.service.logout();
-    location.reload();
-    
   }
 
   addExpandClass(element: any) {

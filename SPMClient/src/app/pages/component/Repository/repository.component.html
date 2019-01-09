@@ -1,5 +1,4 @@
 <div class="container">
-    <button (click)="back()" class="btn btn-info">Back</button>
     <div class="col-5" class="row">
         <div class="col-md-6 offset-md-3">
             <h1>Repository</h1>
@@ -64,7 +63,7 @@
         <div class="col-2">
             <button (click)="shareRepo1()" class="btn btn-warning" style="margin-right:5px;">Share Repo</button>
         </div>
-        
+
     </div>
 
 
@@ -117,6 +116,9 @@
 <div *ngIf="folderExist==false && filesExist==false">
 Your repository is empty.<br> Click on "Create Folder" or "Create File" button, to create an element.
 </div>
+
+
+    <br>
     <div *ngIf="folderExist==true || filesExist==true">
         <div class="row">
             Qui puoi ricercare tutti i models contenuti nel tuo repository
@@ -131,41 +133,44 @@ Your repository is empty.<br> Click on "Create Folder" or "Create File" button, 
 
             <input type="text" [(ngModel)]="search" id="search" name="search" (input)="Search()" placeholder="Search..">
         </div>
-    
-    <br>
 
-    Lista dei tuoi folder e files
-    
-    <table>
-        <thead>
-            <tr>
-                <th width="20%">Name</th>
-                <th width="30%">Created At</th>
-            </tr>
-        </thead>
+        <br>
 
-        <tbody>
+        Lista dei tuoi folder e files
 
-            <tr *ngFor="let fold of folder;" (click)="sendTofolder(fold.id)" [routerLink]="['/repository',fold.id]">
+        <table>
+            <thead>
+                <tr>
+                    <th width="20%">Name</th>
+                    <th width="30%">Created At</th>
+                </tr>
+            </thead>
 
-                <th scope="row">
-                    <i class="material-icons">&#xe2c8; </i>
-                    {{fold?.folderName}}
-                </th>
-                <th scope="row">{{fold?.createdAt}}</th>
+            <tbody>
 
-            </tr>
+                <tr *ngFor="let fold of folder;" (click)="sendTofolder(fold.id)">
 
-            <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)" [routerLink]="['/repository/folder',fil.id]">
-                <th scope="row">
-                    <i class="fa">&#xf016; </i>
-                    {{fil?.originalName}}
-                </th>
-                <th scope="row">{{fil?.createdAt}}</th>
-            </tr>
+                    <th scope="row">
+                        <i class="material-icons">&#xe2c8; </i>
+                        {{fold?.folderName}}
+                    </th>
+                    <th scope="row">{{fold?.createdAt}}</th>
 
-        </tbody>
-    </table>
+                </tr>
+
+                <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)">
+                    <th scope="row">
+                        <i class="fa">&#xf016; </i>
+                        {{fil?.originalName}}
+                    </th>
+                    <th scope="row">{{fil?.createdAt}}</th>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
-</div>
+<br>
+<button (click)="back()" class="btn btn-primary">Back</button>

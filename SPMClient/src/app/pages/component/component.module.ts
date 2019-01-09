@@ -11,7 +11,6 @@ import { FileComponent } from './file/file.component';
 import { RepositoryComponent } from './Repository/repository.component';
 import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { FolderComponent } from './folder/folder.component';
-import { FileRepositoryComponent } from './filerepository/file.component';
 
 @NgModule({
   imports: [
@@ -26,7 +25,6 @@ import { FileRepositoryComponent } from './filerepository/file.component';
     RepositoryComponent,
     FolderComponent,
     FileComponent,
-    FileRepositoryComponent,
     RepoPublicComponent,
   ]
 })
