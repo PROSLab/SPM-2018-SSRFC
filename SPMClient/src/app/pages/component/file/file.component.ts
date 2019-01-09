@@ -14,7 +14,7 @@ import { exportIsLogged } from '../../starter/starter.component'
 
 
 export class FileComponent implements OnInit {
-  isLogged = exportIsLogged
+  isLogged:boolean
   appearRenameFile: boolean = false;
   fileExist = true;
   fileAppear = false;
@@ -69,12 +69,26 @@ export class FileComponent implements OnInit {
 moveTo(id){
   if(id !=null){
     if(id==this.idRepoSelected){
-      console.log('è la repo')
+      console.log(this.file.path)
+      this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path)
+      .subscribe(data => {
+        alert('file spostato nella repository');
+        this.router.navigate(['/repositoryID',id])
+      }, error => {
+        this.errorMessage = <any>error
+      });
+
     }else{
       if(id == this.idFolder){
         alert('selezionare una cartella diversa dall\'originale')
       }else{
-      console.log('è una folder')
+        this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path,this.idFolder)
+        .subscribe(data => {
+          alert('file spostato nella folder selezionata');
+          this.router.navigate(['/repositoryID',this.idRepoSelected,'folderID',id])
+        }, error => {
+          this.errorMessage = <any>error
+        });
     }
   }
 }
