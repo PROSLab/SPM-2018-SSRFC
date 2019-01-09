@@ -1,6 +1,7 @@
 <div class="container">
-    <div class="row card col-8" *ngIf="fileExist">
-        <div>
+      
+    <div class="row" *ngIf="fileExist">
+        <div class="card col-6">
             <div>
                 <div class="card">
                     <div class="card-body">
@@ -21,8 +22,8 @@
 
                         <br>
 
-                        <div class="row">
-                            <button (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">
+                        <div class="row" *ngIf="isLogged">
+                            <button   (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">
                                 Modify file</button>
                             <button (click)="newVersion()" class="btn btn-primary" style="margin-right:5px;">
                                 + Create new version</button>
@@ -32,16 +33,31 @@
                         <br>
 
                         <div class="row">
-                            <button *ngIf="versionExist && cambia && vers!=null" (click)="deleteVersion(vers)" class="btn btn-warning"
+                            <button *ngIf="versionExist && cambia && vers!=null && isLogged" (click)="deleteVersion(vers)" class="btn btn-warning"
                                 style="margin-right:5px;"> Delete Version {{vers}} </button>
                             <button *ngIf="versionExist && cambia && vers!=null" (click)="downloadFile(vers)" class="btn btn-success"
                                 style="margin-right:5px;">Download Version {{vers}}</button>
                             <button *ngIf="versionExist" (click)="downloadAllVersion()" class="btn btn-success"
                                 style="margin-right:5px;">Download ZIP models</button>
-
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        
+        <div class="card col-4" style="margin-left: 10px" *ngIf="isLogged || isLogged==undefined">
+            <br>
+                <h3>Move the path of the file</h3>
+                <br>
+                Move to...
+                    <select [(ngModel)]="sposta" (change)="selectedSposta()" >
+                    <option disabled>Select a folder..</option>
+                    <option  [ngValue]="repo" >Repo: {{repo?.repositoryName}}</option>
+                    <option  [ngValue]="v" *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
+                </select>
+                <br>
+                <div class="col-2">
+                <button *ngIf="spostaButton" (click)="moveTo(sposta.id)" class="btn btn-warning" style="margin-right:5px;"> Move to {{sposta?.folderName}} {{sposta?.repositoryName}} </button>
             </div>
         </div>
     </div>
@@ -78,20 +94,10 @@
         </div>
     </div>
 
-    <div class="row card col-4" *ngIf="isLogged || isLogged==undefined">
-        <div class="card-body">
-            Move to...<select [(ngModel)]="sposta" (change)="selectedSposta()" >
-                <option disabled>Select a folder..</option>
-                <option  [ngValue]="repo" >Repo: {{repo?.repositoryName}}</option>
-                <option  [ngValue]="v" *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
-            </select>
-            <br>
-            <button *ngIf="spostaButton" (click)="moveTo(sposta.id)" class="btn btn-warning" style="margin-right:5px;"> Move to {{sposta?.folderName}} {{sposta?.repositoryName}} </button>
-        </div>
-    </div>
+   
 
     <div>
-        <div *ngIf="vers!=null" style="border:1px solid black;height:70px;">
+        <div *ngIf="vers!=null" style="border:1px solid black;height:70px">
             Stai visualizzando la versione del file n. {{vers}}
         </div>
         <div *ngIf="vers==null">
@@ -101,5 +107,8 @@
     </div>
 </div>
 
+
 <br>
+
 <button (click)="back()" class="btn btn-primary">Back</button>
+        

@@ -7,7 +7,7 @@
                 Folder name : {{folderInfo?.folderName}} <br>
                 Created At : {{folderInfo?.createdAt}}
                 <br>
-                <button (click)="modifyFolder()" class="btn btn-primary">Modify Folder</button>
+                <button  *ngIf="isLogged" (click)="modifyFolder()" class="btn btn-primary">Modify Folder</button>
             </div>
         </div>
         <div>

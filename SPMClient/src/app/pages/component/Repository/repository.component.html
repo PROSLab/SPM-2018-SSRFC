@@ -1,6 +1,10 @@
-<div class="container">
+
+
+<div class="container" style="">
+   
+
     <div class="col-5" class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="  col-md-6 offset-md-3">
             <h1>Repository</h1>
         </div>
     </div>
@@ -12,14 +16,12 @@
                 <div class="card-body">
                     Repository: {{repoInfo?.repositoryName}} <br>
                     Created At: {{repoInfo?.createdAt}} <br>
-                    <!-- <div *ngIf="repo?.publicR==true" style="margin-bottom:5px;"> State: Public <br> </div> -->
                     <div style="margin-bottom:5px;"> State: {{repoInfo?.publicR}} <br> </div>
-                    <button (click)="modifyRepo()" class="btn btn-primary">Modify Repository</button>
+                    <button (click)="modifyRepo()" *ngIf="isLogged" class="btn btn-primary">Modify Repository</button>
                 </div>
             </div>
 
             <div *ngIf="appear" class="col-4">
-
                 <div class="card">
                     <div class="form-group" class="card-body">
                         <div>
@@ -28,16 +30,13 @@
                                 <input type="text" required #n name="filename" />
                             </form>
 
-                        </div><br>
+                        </div>
+                        <br>
 
                         <div class="row">
                             <button (click)="sendNewName(n.value)" class="btn btn-primary col-3" style="margin-right:5px;">Save
                                 repo</button>
-                            <!--     <button (click)="changeRepoVisibility(c.value)" style="margin-right:5px;" *ngIf="repoInfo.publicR=='Private'"
-                                #c value="Private" class="btn btn-primary col-5">Change to public </button>
-                            <button (click)="changeRepoVisibility(c.value)" style="margin-right:5px;" *ngIf="repoInfo.publicR=='Public'"
-                                #c value="Public" class="btn btn-primary col-5">Change to private </button> -->
-                            <button class="btn btn-danger" style="margin-right:10px;" (click)="appear=false">X</button>
+                           <button class="btn btn-danger" style="margin-right:10px;" (click)="appear=false">X</button>
                         </div>
                     </div>
                 </div>
@@ -49,7 +48,6 @@
     <div class="row" *ngIf="isLogged">
         <div class="col-2">
             <button (click)="createFolder()" class="btn btn-primary" style="margin-right:5px;">+ Create Folder</button>
-
         </div>
 
         <div class="col-2">
@@ -63,7 +61,6 @@
         <div class="col-2">
             <button (click)="shareRepo1()" class="btn btn-warning" style="margin-right:5px;">Share Repo</button>
         </div>
-
     </div>
 
 
@@ -88,7 +85,8 @@
                     <div>
                         <label for="reponame">File name</label>
                         <input type="text" required id="namerepo" #n name="namefile" />
-                    </div> <br>
+                    </div>
+                <br>
                     <div class="row">
                         <button (click)="saveFile(n.value)" class="btn btn-primary">Save file
                         </button>

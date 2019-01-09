@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from './model/user'
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ChangePassword } from './model/changePassword';
 import { Repo } from './model/repo';
 import { Options } from 'selenium-webdriver/chrome';
@@ -20,7 +20,7 @@ const httpOptions = {
 export class Service {
   private baseUrl = 'http://localhost:8080/'
   public errorMsg: string;
-  public isLogged:boolean;
+  public isLogged:boolean=false;
   user: Object;
   id: any;
   repos: string;
@@ -85,6 +85,7 @@ export class Service {
   }
   logout() {
     localStorage.clear();
+    this.isLogged=false;
     alert('logout effettuato');
     location.reload();
     this.router.navigate(['/']);
@@ -213,7 +214,11 @@ shareFile(repoName,idUser,idFile,email){
     return this.http.get<any>(this.baseUrl + 'api/file/getRepoSpec', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
-        catchError(this.handleError)
+        catchError(err => {
+          this.router.navigate(['**']);
+          throw err;
+           
+        })
       );
   }
 
@@ -224,7 +229,10 @@ shareFile(repoName,idUser,idFile,email){
     return this.http.get(this.baseUrl + 'api/file/getFolderSpec', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
-        catchError(this.handleError)
+        catchError(err => {
+          this.router.navigate(['**']);
+          throw err;
+        })
       );
   }
 
@@ -247,7 +255,10 @@ shareFile(repoName,idUser,idFile,email){
     return this.http.get(this.baseUrl + 'api/file/getFileSpec', { params: params })
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
-        catchError(this.handleError)
+        catchError(err => {          
+          this.router.navigate(['**']);
+          throw err;
+        })
       );
   }
 
@@ -364,7 +375,6 @@ shareFile(repoName,idUser,idFile,email){
 
   //gestione errori
   private handleError(error: HttpErrorResponse) {
-    console.log(error)
     if (error.status == 400) {
       alert("username o password errata")
 

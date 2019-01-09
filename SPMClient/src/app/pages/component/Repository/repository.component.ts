@@ -41,6 +41,7 @@ fileincartelle=false;
     this.idRepoSelected = route.snapshot.params.idRepo
     this.isLogged=service.isLogged;
     this.idUser = localStorage.getItem("id")  
+
    
   }
 
@@ -50,6 +51,7 @@ fileincartelle=false;
 
 
   ngOnInit() {
+    
     this.getRepo()
     this.getAllfolder()
     this.getAllFile()
@@ -106,7 +108,7 @@ fileincartelle=false;
         data.createdAt = this.troncaData(data.createdAt)
         this.repoInfo = data
       }, error => {
-        this.errorMessage = <any>error
+         this.errorMessage = <any>error
       });
   }
 
@@ -222,11 +224,6 @@ this.allFileFolder =this.allFileFolder.filter(res=>{
   }
 
 
-  changeRepoVisibility(value) {
-    console.log("MANCA DA FARE TUTTA LA FUNZIONE CHE CAMBIA LA VISIBILITA' DELLA REPO.")
-  }
-
-
   saveFolder(folderName) {
     var nameFolder = folderName;
     this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
@@ -283,9 +280,7 @@ this.allFileFolder.length=0;
           });
 
 
-        }
-console.log(this.allFileFolder)
-       
+        }       
         this.folder = (data)
         if (this.folder.length > 0) {
           this.folderExist = true

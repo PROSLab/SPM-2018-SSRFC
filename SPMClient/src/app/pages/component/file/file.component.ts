@@ -96,7 +96,7 @@ this.sposta=null;
     }
     else {
       this.cambia=false
-      alert("vuoi eliminare la versione n." + this.vers + "?")
+      alert("versione eliminata con successo")
       this.service.deleteVersion(this.idFile, this.vers)
         .subscribe(data => {
           var index = this.finalVersion.indexOf(this.vers);
@@ -181,6 +181,7 @@ this.sposta=null;
           this.versionArray[i - 1] = i
         }
         this.cambia=false
+        this.vers=null;
         this.getFileSpec()
         alert("Hai creato una nuova versione del file")
       }, error => {
@@ -256,7 +257,6 @@ this.sposta=null;
       .subscribe(data => {
         data = JSON.parse(data)
         this.folders = data
-        console.log(data)
       }, error => {
         this.errorMessage = <any>error
       });
