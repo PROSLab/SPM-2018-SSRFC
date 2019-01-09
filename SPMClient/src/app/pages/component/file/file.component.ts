@@ -261,11 +261,12 @@ export class FileComponent implements OnInit {
   shareFile(email,nameRepo) {
     this.service.shareFile(this.repoName, this.idUser,this.idFile,email)
       .subscribe(data => {
-        alert("Email inviata!")
-        this.service.changeNameRepo(this.repoId, name)
+        console.log(data)
+        this.service.changeNameRepo(this.repoId, nameRepo)
       .subscribe(data => {
         //this.repoInfo = data
       })
+      alert("Email inviata!")
         this.share = false
       }, error => {
         alert("ERRORE! Invio email non riuscito")

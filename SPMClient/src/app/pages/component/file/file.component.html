@@ -72,9 +72,9 @@
                             <input type="email" required id="email" #e name="email" />
                             <br>
                             <label for="reponame">Enter repo name</label>
-                            <input type="text" required id="text" #e name="text" />
+                            <input type="text" required id="text" #name name="text" />
                         </div><br>
-                        <button (click)="shareFile(e.value)" class="btn btn-primary col-6">Send Email</button>
+                        <button (click)="shareFile(e.value,name.value)" class="btn btn-primary col-6">Send Email</button>
                         <button class="btn btn-danger" padding (click)="share=false">X</button>
                     </div>
                 </div>
