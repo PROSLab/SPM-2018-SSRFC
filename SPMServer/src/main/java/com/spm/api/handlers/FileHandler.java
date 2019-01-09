@@ -22,6 +22,7 @@ import com.spm.api.entity.Repository;
 import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.entity.Folder;
 import com.spm.api.services.FileService;
+import com.spm.api.utils.FileLib;
 import com.spm.api.utils.Responses;
 
 import reactor.core.publisher.Mono;
@@ -156,6 +157,32 @@ public class FileHandler {
 					return Responses.okFile(resource, file, f);
 				});
 	}
+	
+	public Mono<ServerResponse> exportCollection(ServerRequest request){
+			
+		/* Prendere id del file per ricavare originalName e path della hidden folder,
+		 * fare lo zip del contenuto della hidden folder e rinominarla con l'originalName + ".zip",
+		 * poi download .zip*/
+		
+		String idFile = request.queryParam("idFile").get();
+		return fileService.getFileSpec(new ObjectId(idFile))
+				.flatMap(f -> {
+					String originalName = f.getOriginalName();
+					String dirPath = f.getPath();
+					
+					FileLib.zipDirectory(originalName, dirPath, idFile);
+					
+					String zipPath = "TMPZips" + File.separator + idFile + ".zip";
+					Resource resource = new FileSystemResource(zipPath);
+					File file = new File(zipPath);
+					
+					return Responses.okZip(resource, file, f);
+				})
+				.onErrorResume(Exception.class, Responses::internalServerError);
+		
+	}
+		
+	
 	
 	public Mono<ServerResponse> createRepository(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
