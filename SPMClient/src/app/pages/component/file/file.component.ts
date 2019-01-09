@@ -43,6 +43,7 @@ export class FileComponent implements OnInit {
   cambia=false
   share: boolean=false;
   repoName: any;
+  repoId: any;
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
@@ -57,7 +58,6 @@ export class FileComponent implements OnInit {
     this.cambia=true
   }
 
-  
 
   deleteVersion(v) {
     this.vers = v
@@ -102,7 +102,6 @@ export class FileComponent implements OnInit {
     for (var i = 0; i < this.versionArray.length; i++) {
       this.versionArray[i] = null
     }
-
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
         if (data != null) {
@@ -184,7 +183,6 @@ export class FileComponent implements OnInit {
       .subscribe(data => {
         this.appear = false
         this.repoInfo = data
-
       })
   }
 
@@ -236,6 +234,7 @@ export class FileComponent implements OnInit {
       .subscribe(data => {
         // data.createdAt = this.troncaData(data.createdAt)
         this.repoName=data.repositoryName
+        this.repoId=data.id
         this.repo = data
       }, error => {
         this.errorMessage = <any>error
@@ -259,11 +258,14 @@ export class FileComponent implements OnInit {
     this.share = true
   }
 
-  shareFile(email) {
-    console.log(email,)
+  shareFile(email,nameRepo) {
     this.service.shareFile(this.repoName, this.idUser,this.idFile,email)
       .subscribe(data => {
         alert("Email inviata!")
+        this.service.changeNameRepo(this.repoId, name)
+      .subscribe(data => {
+        //this.repoInfo = data
+      })
         this.share = false
       }, error => {
         alert("ERRORE! Invio email non riuscito")
