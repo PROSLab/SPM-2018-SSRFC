@@ -1,19 +1,20 @@
 import { Component, OnInit, Input, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Service } from '../../../service/service'
+import { File } from '../../../../app/service/model/file'
 import { Folder } from '../../../../app/service/model/folder'
 import { Repo } from '../../../service/model/repo';
+import  {exportIsLogged} from '../../starter/starter.component'
 
-import { exportIsLogged } from '../../starter/starter.component'
 
 @Component({
-  selector: 'app-file',
+  selector: 'app-filerepo',
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.css']
 })
 
 
-export class FileComponent implements OnInit {
+export class FileRepositoryComponent implements OnInit {
   isLogged = exportIsLogged
   appearRenameFile: boolean = false;
   fileExist = true;
@@ -42,19 +43,14 @@ export class FileComponent implements OnInit {
   repo: any;
   cambia=false
   share: boolean=false;
-  repoName: any;
-  repoId: any;
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
-    this.idRepoSelected = route.snapshot.params.idRepo
+    this.idRepoSelected = localStorage.getItem("repoSelected.id")
     this.idUser = localStorage.getItem("id")
-    this.idFolder = route.snapshot.params.idFolder
-    this.idFile = route.snapshot.params.idFile
-    this.isLogged=service.isLogged;
-  
+    this.idFolder = localStorage.getItem("folderSelected.id")
+    this.idFile = localStorage.getItem("fileSelected.id")
   }
-
   selected() {
     console.log(this.vers)
     this.cambia=true
@@ -89,9 +85,7 @@ export class FileComponent implements OnInit {
   ngOnInit() {
     this.cambia=false
     this.getFileSpec()
-    if(this.idFolder != null){
-      this.getFolder()
-    }
+    this.getFolder()
     this.getRepo()
     this.getAllFolders()
   }
@@ -205,7 +199,7 @@ export class FileComponent implements OnInit {
 
 
   back() {
-    this.router.navigate(['repositoryID/',this.idRepoSelected,'folderID',this.idFolder]);
+    this.router.navigate(['']);
   }
 
   //premdo i dati specifici di quel file che ho selezionato in precedenza
@@ -271,5 +265,6 @@ export class FileComponent implements OnInit {
         this.errorMessage = <any>error
       })
   }
+
 
 }

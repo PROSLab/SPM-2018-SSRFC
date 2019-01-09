@@ -1,0 +1,104 @@
+<div class="container">
+    <button (click)="back()" class="btn btn-info">Back</button>
+    <br><br>
+
+
+    <div class="row card col-8" *ngIf="fileExist">
+        <div>
+            <div>
+                <div class="card">
+                    <div class="card-body">
+                        <h3>File Details</h3>
+                        <b> File:</b> {{file.originalName}} <br>
+                        <b> Created At: </b> {{file.createdAt}} <br>
+                        <div *ngIf="versionExist">
+                            <b> Version n. : </b>
+                            <select [(ngModel)]="vers" (change)="selected()">
+                                <option [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
+                            </select>
+                        </div>
+
+                        <div *ngIf="!versionExist">
+                            Non ci sono versioni per questo file!
+                            <br> Clicca sul bottone "Create Version" per creare una nuova versione del file.
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <button (click)="modifyFile()" class="btn btn-primary" style="margin-right:5px;">
+                                Modify file</button>
+                            <button (click)="newVersion()" class="btn btn-primary" style="margin-right:5px;">
+                               + Create new version</button>
+                               <button (click)="shareFile1()" class="btn btn-warning" style="margin-right:5px;">Share File</button>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <button *ngIf="versionExist && cambia && vers!=null" (click)="deleteVersion(vers)" class="btn btn-warning"
+                                style="margin-right:5px;"> Delete Version {{vers}} </button>
+                            <button *ngIf="versionExist && cambia && vers!=null" (click)="downloadFile(vers)" class="btn btn-success"
+                                style="margin-right:5px;">Download Version {{vers}}</button>
+                            <button *ngIf="versionExist && cambia" (click)="downloadAllVersion()" class="btn btn-success"
+                                style="margin-right:5px;">Download ZIP models</button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="appearRenameFile">
+            <div class=" row card col-4">
+                <div class="col-4" class="card-body">
+                    <div>
+                        <label for="filename">New name: </label>
+                        <input type="text" required #n name="filename"/>
+                    </div>
+                    <div class="row">
+                        <button (click)="sendNewFileName(n.value)" class="btn btn-primary col-4" style="margin-right:5px;">Save file</button>
+                        <button (click)="appearRenameFile=false" class="btn btn-danger" style="margin-right:5px;">X</button>
+                </div>
+            </div>  
+        </div>
+    </div>
+    <div *ngIf="share" class="col-4">
+            <div class="card">
+                <div class="form-group" class="card-body">
+                    <div>
+                        <label for="reponame">Enter email</label>
+                        <input type="email" required id="email" #e name="email" />
+                        <br>
+                        <label for="reponame">Enter repo name</label>
+                        <input type="text" required id="text" #name name="text" />
+                    </div><br>
+                    <button (click)="shareFile(e.value,name.value)" class="btn btn-primary col-6">Send Email</button>
+                    <button class="btn btn-danger" padding (click)="share=false">X</button>
+                </div>
+            </div>
+        </div>
+
+    <div class="row card col-4" *ngIf="isLogged || isLogged==undefined">
+            <div class="card-body">
+                Move to...<select>
+                    <option disabled>Select a folder..</option>
+                    <option>Repo: {{repo?.repositoryName}}</option>
+                    <option *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
+                </select>
+                <br>
+            </div>
+        </div>
+
+
+    <div >
+        <div *ngIf="vers!=null" style="border:1px solid black;height:70px;">
+            Stai visualizzando la versione del file n. {{vers}}
+        </div>
+        <div *ngIf="vers==null">
+            Non stai visualizzando alcuna versione del file. Clicca sul menu per sceglierne una!
+        </div>
+
+    </div>
+</div>
