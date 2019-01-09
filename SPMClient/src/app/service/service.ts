@@ -335,6 +335,19 @@ shareFile(repoName,idUser,idFile,email){
       );
   }
 
+
+  exportCollection(id): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('idFile', id); //id del file
+    
+    return this.http.get(this.baseUrl + 'api/file/exportCollection', { params: params  , responseType: 'text'})
+      .pipe(
+        tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
+        catchError(this.handleError)
+      );
+  }
+
+
   //create new version of file 
 
   createNewVersion(id, version): Observable<any> {

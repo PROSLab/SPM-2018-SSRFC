@@ -36,7 +36,7 @@
                                 style="margin-right:5px;"> Delete Version {{vers}} </button>
                             <button *ngIf="versionExist && cambia && vers!=null" (click)="downloadFile(vers)" class="btn btn-success"
                                 style="margin-right:5px;">Download Version {{vers}}</button>
-                            <button *ngIf="versionExist && cambia" (click)="downloadAllVersion()" class="btn btn-success"
+                            <button *ngIf="versionExist" (click)="downloadAllVersion()" class="btn btn-success"
                                 style="margin-right:5px;">Download ZIP models</button>
 
                         </div>
@@ -61,6 +61,7 @@
             </div>
         </div>
     </div>
+
     <div *ngIf="share" class="col-4">
         <div class="card">
             <div class="form-group" class="card-body">
@@ -79,15 +80,15 @@
 
     <div class="row card col-4" *ngIf="isLogged || isLogged==undefined">
         <div class="card-body">
-            Move to...<select>
+            Move to...<select [(ngModel)]="sposta" (change)="selectedSposta()" >
                 <option disabled>Select a folder..</option>
-                <option>Repo: {{repo?.repositoryName}}</option>
-                <option *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
+                <option  [ngValue]="repo" >Repo: {{repo?.repositoryName}}</option>
+                <option  [ngValue]="v" *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
             </select>
             <br>
+            <button *ngIf="spostaButton" (click)="moveTo(sposta.id)" class="btn btn-warning" style="margin-right:5px;"> Move to {{sposta?.folderName}} {{sposta?.repositoryName}} </button>
         </div>
     </div>
-
 
     <div>
         <div *ngIf="vers!=null" style="border:1px solid black;height:70px;">
@@ -99,8 +100,6 @@
 
     </div>
 </div>
-
-
 
 <br>
 <button (click)="back()" class="btn btn-primary">Back</button>

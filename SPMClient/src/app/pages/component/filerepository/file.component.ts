@@ -52,7 +52,6 @@ export class FileRepositoryComponent implements OnInit {
     this.idFile = localStorage.getItem("fileSelected.id")
   }
   selected() {
-    console.log(this.vers)
     this.cambia=true
   }
 
@@ -124,13 +123,10 @@ export class FileRepositoryComponent implements OnInit {
               j++
             }
           }
-          console.log(this.finalVersion)
           if (this.finalVersion.length > 0) {
-            console.log("c'è un versione")
             this.versionExist = true;
           }
           else {
-            console.log(" non c'è un versione")
             this.versionExist = false;
           }
         }
@@ -221,7 +217,6 @@ export class FileRepositoryComponent implements OnInit {
       .subscribe(data => {
         data = JSON.parse(data)
         this.folders = data
-        console.log(data)
       }, error => {
         this.errorMessage = <any>error
       });

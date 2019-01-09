@@ -33,17 +33,19 @@ export class FileComponent implements OnInit {
   idFile: string;
   folders: any;
   repoInfo: Repo = <any>[]
-  vers: any;
-  deprecatedVers = [];
-  lastVersion: any;
+  vers: any
+  sposta:any
+  deprecatedVers = []
+  lastVersion: any
   finalVersion = []
-  dataTroncata: string;
-  versionExist: boolean = false;
-  repo: any;
+  dataTroncata: string
+  versionExist: boolean = false
+  repo: any
   cambia=false
-  share: boolean=false;
-  repoName: any;
-  repoId: any;
+  share: boolean=false
+  repoName: any
+  repoId: any
+  spostaButton: boolean=false;
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
@@ -52,13 +54,39 @@ export class FileComponent implements OnInit {
     this.idFolder = route.snapshot.params.idFolder
     this.idFile = route.snapshot.params.idFile
     this.isLogged=service.isLogged;
-  
   }
 
+
   selected() {
-    console.log(this.vers)
     this.cambia=true
   }
+
+
+  selectedSposta() {
+    this.spostaButton=true
+  }
+
+moveTo(id){
+  if(id !=null){
+    if(id==this.idRepoSelected){
+      console.log('è la repo')
+    }else{
+      if(id == this.idFolder){
+        alert('selezionare una cartella diversa dall\'originale')
+      }else{
+      console.log('è una folder')
+    }
+  }
+}
+else {
+  alert('stai cercando di taroccare il sistema.')
+  this.router.navigate(['']);
+}
+this.spostaButton=false;
+this.sposta=null;
+}
+
+
 
 
   deleteVersion(v) {
@@ -130,13 +158,10 @@ export class FileComponent implements OnInit {
               j++
             }
           }
-          console.log(this.finalVersion)
           if (this.finalVersion.length > 0) {
-            console.log("c'è un versione")
             this.versionExist = true;
           }
           else {
-            console.log(" non c'è un versione")
             this.versionExist = false;
           }
         }
@@ -164,7 +189,7 @@ export class FileComponent implements OnInit {
   }
 
   downloadAllVersion(){
-    console.log("STO SCARICANDO TUTTE LE VERSIONI DEL FILE")
+      window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
   }
 
 

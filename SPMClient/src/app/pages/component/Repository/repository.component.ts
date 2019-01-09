@@ -68,7 +68,6 @@ export class RepositoryComponent implements OnInit {
   }
 
   shareRepo(email) {
-    console.log(email,)
     this.service.shareRepository(this.idRepoSelected, email)
       .subscribe(data => {
         alert("Email inviata!")
@@ -212,7 +211,6 @@ Search(){
 
 
   changeRepoVisibility(value) {
-    console.log(value)
     console.log("MANCA DA FARE TUTTA LA FUNZIONE CHE CAMBIA LA VISIBILITA' DELLA REPO.")
   }
 
@@ -256,7 +254,6 @@ Search(){
         if (this.folder.length > 0) {
           this.folderExist = true
         }
-        //console.log(this.folder)
       }, error => {
         this.errorMessage = <any>error
       });
