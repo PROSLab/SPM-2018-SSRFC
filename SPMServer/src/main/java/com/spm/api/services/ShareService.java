@@ -37,10 +37,16 @@ public class ShareService {
 		
 	}
 	
-	public Mono<Boolean> sendShareLink(String idOfResource, String emailTo) {
-		String link = "http://localhost:4200/"+idOfResource;
+	public Mono<Boolean> sendShareLink(String idRepository, String emailTo) {
+		String link = "http://localhost:4200/repositoryID/"+idRepository;
 		
 		return emailClient.sendSimpleMessage(emailTo, "Share Repository", link);
+	}
+	
+	public Mono<Boolean> sendShareLink(String idRepository, String idFile, String emailTo) {
+		String link = "http://localhost:4200/repositoryID/"+idRepository+"/fileID/"+idFile;
+		
+		return emailClient.sendSimpleMessage(emailTo, "Share Model", link);
 	}
 	
 	public Mono<Repository> createRepositorySchema(Repository repo) {
