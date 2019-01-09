@@ -24,6 +24,8 @@ import com.spm.api.entity.Folder;
 import com.spm.api.services.FileService;
 import com.spm.api.utils.FileLib;
 import com.spm.api.utils.Responses;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import reactor.core.publisher.Mono;
 
@@ -387,6 +389,23 @@ public class FileHandler {
 				.onErrorResume(BadRequestException.class, Responses::badRequest)
 				.onErrorResume(Exception.class, Responses::internalServerError);
 
+	}
+	public Mono<ServerResponse> moveFile(ServerRequest request) {
+		String idUser = request.queryParam("idUser").get();
+		String idRepository= request.queryParam("idRepository").get();
+		Optional<String> idFolder= request.queryParam("idFolder");
+		String idFile = request.queryParam("idFile").get();
+		String mimetype = "bpmn";
+		String paths= request.queryParam("paths").get();
+        Path path=  Paths.get(paths);
+		fileName = idFile + '.' + 1;
+		return fileService.updateMoveTo(rootDir, idUser, idRepository, idFolder, fileName, idFile, mimetype, path)
+				.flatMap(str -> {
+					return fileService.updatePathFile(new ObjectId(idFile),str);
+				})
+				.flatMap(res -> Responses.ok(res))
+				
+				.onErrorResume(Exception.class, Responses::badRequest);
 	}
 }
 

@@ -98,6 +98,10 @@ public class FileRouter {
 								GET("/exportCollection"),
 								fileHandler::exportCollection
 						)
+						.andRoute(
+								GET("/moveFile"),
+								fileHandler::moveFile
+						)
 						
 						
 				);
