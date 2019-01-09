@@ -113,6 +113,10 @@
         </div>
     </div>
 <br>
+
+<div *ngIf="folderExist==false && filesExist==false">
+Your repository is empty.<br> Click on "Create Folder" or "Create File" button, to create an element.
+</div>
     <div *ngIf="folderExist==true || filesExist==true">
         <div class="row">
             Qui puoi ricercare tutti i models contenuti nel tuo repository

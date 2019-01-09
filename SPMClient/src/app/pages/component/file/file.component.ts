@@ -232,9 +232,7 @@ export class FileComponent implements OnInit {
   getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
-        // data.createdAt = this.troncaData(data.createdAt)
-        this.repoName=data.repositoryName
-        this.repoId=data.id
+        data.createdAt = this.troncaData(data.createdAt)
         this.repo = data
       }, error => {
         this.errorMessage = <any>error
@@ -246,6 +244,7 @@ export class FileComponent implements OnInit {
     this.appearRenameFile = true;
   }
 
+  
   sendNewFileName(name) {
     this.service.changeNameFile(this.idFile, name)
       .subscribe(data => {
@@ -259,13 +258,8 @@ export class FileComponent implements OnInit {
   }
 
   shareFile(email,nameRepo) {
-    this.service.shareFile(this.repoName, this.idUser,this.idFile,email)
+    this.service.shareFile(nameRepo, this.idUser,this.idFile,email)
       .subscribe(data => {
-        console.log(data)
-        this.service.changeNameRepo(this.repoId, nameRepo)
-      .subscribe(data => {
-        //this.repoInfo = data
-      })
       alert("Email inviata!")
         this.share = false
       }, error => {
