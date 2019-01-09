@@ -33,12 +33,13 @@ export class FolderComponent implements OnInit {
   exist: boolean;
   dataTroncata: string;
   caricaFile: boolean=false;
-  isLogged = exportIsLogged
+  isLogged:boolean
 
   constructor(private service: Service, public router: Router,route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
+    this.isLogged=service.isLogged;
   }
 
   back() {
