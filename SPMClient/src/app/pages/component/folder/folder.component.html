@@ -1,6 +1,5 @@
 <div class="container">
     
-    <br><br>
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -20,7 +19,7 @@
                             <input type="text" required #n name="filename" />
                         </div>
                         <button (click)="sendNewNameFolder(n.value)" class="btn btn-primary col-6">Save Folder Name</button>
-                        <button (click)="appearFormFolder=false" class="btn btn-primary">X</button>
+                        <button (click)="appearFormFolder=false" class="btn btn-danger">X</button>
                     </div>
                 </div>
             </form>
@@ -31,29 +30,33 @@
         <div class="col-2">
             
             <button (click)="createFile()" *ngIf="isLogged || isLogged==undefined" class="btn btn-primary">+ Create File</button>
-           
-            <form *ngIf="createfile">
-                <div class="card">
-                    <div class="form-group card-body">
-                        <div>
-                            <label for="reponame">File name</label>
-                            <input type="text" required id="namerepo" #n name="namefile" />
-                        </div>
-                    </div>
-                    <button (click)="saveFile(n.value)" class="btn btn-primary">Save file
-                    </button>
-                </div>
-            </form>
         </div>
 
         <div class="col-2" *ngIf="isLogged || isLogged==undefined">
 
-            <label for="file" class="btn btn-primary" >Choose File
+            <label for="file" class="btn btn-success" >
+                Import File
                 <input type="file"  id="file" #f (change)="handleFileInput($event.target.files)">
             </label>
         </div>
 
     </div>
+
+    <div *ngIf="createfile" class="row col-3">
+            <div class="card">
+                <div class="form-group" class="card-body">
+                    <div>
+                        <label for="reponame">File name</label>
+                        <input type="text" required id="namerepo" #n name="namefile" />
+                    </div> <br>
+                    <div class="row">
+                        <button (click)="saveFile(n.value)" class="btn btn-primary">Save file
+                        </button>
+                        <button class="btn btn-danger" (click)="createfile=false">X</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <div *ngIf="exist==true" style="margin:5px">Lista dei tuoi folder e files
         <table>

@@ -41,6 +41,9 @@ export class FileComponent implements OnInit {
   versionExist: boolean = false;
   repo: any;
   cambia=false
+  share: boolean=false;
+  repoName: any;
+  repoId: any;
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
@@ -56,6 +59,7 @@ export class FileComponent implements OnInit {
     console.log(this.vers)
     this.cambia=true
   }
+
 
   deleteVersion(v) {
     this.vers = v
@@ -102,7 +106,6 @@ export class FileComponent implements OnInit {
     for (var i = 0; i < this.versionArray.length; i++) {
       this.versionArray[i] = null
     }
-
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
         if (data != null) {
@@ -160,6 +163,10 @@ export class FileComponent implements OnInit {
       });
   }
 
+  downloadAllVersion(){
+    console.log("STO SCARICANDO TUTTE LE VERSIONI DEL FILE")
+  }
+
 
   downloadFile(vers) {
     window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)
@@ -180,7 +187,6 @@ export class FileComponent implements OnInit {
       .subscribe(data => {
         this.appear = false
         this.repoInfo = data
-
       })
   }
 
@@ -231,7 +237,8 @@ export class FileComponent implements OnInit {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
         // data.createdAt = this.troncaData(data.createdAt)
-
+        this.repoName=data.repositoryName
+        this.repoId=data.id
         this.repo = data
       }, error => {
         this.errorMessage = <any>error
@@ -251,6 +258,24 @@ export class FileComponent implements OnInit {
       })
   }
 
+  shareFile1() {
+    this.share = true
+  }
 
+  shareFile(email,nameRepo) {
+    this.service.shareFile(this.repoName, this.idUser,this.idFile,email)
+      .subscribe(data => {
+        console.log(data)
+        this.service.changeNameRepo(this.repoId, nameRepo)
+      .subscribe(data => {
+        //this.repoInfo = data
+      })
+      alert("Email inviata!")
+        this.share = false
+      }, error => {
+        alert("ERRORE! Invio email non riuscito")
+        this.errorMessage = <any>error
+      })
+  }
 
 }

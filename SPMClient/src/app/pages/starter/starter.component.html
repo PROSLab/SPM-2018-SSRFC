@@ -29,7 +29,7 @@
 
                             <div>
                                 <label for="reponame">Repository name </label>
-                                <input type="text" maxlength="10" required id="namerepo" #n name="namerepo" />
+                                <input type="text" maxlength="13" required id="namerepo" #n name="namerepo" />
                                 <form name="state">
                                     <label for="state">State</label><br>
                                     <input type="radio" name="statep" id="state" value="public" checked>Public<br>
@@ -38,7 +38,7 @@
                             </div>
                             <div class="row">
                                     <button (click)="save(n.value)"  style="margin-right:10px;" class="btn btn-primary col-4" >Save Repository </button>
-                                    <button class="btn btn-primary col-1"  style="margin-right:10px;" (click)="createRepo()">X</button>
+                                    <button class="btn btn-danger col-1"  style="margin-right:10px;" (click)="createRepo()">X</button>
                             </div>
                         </div>
                     </div>
