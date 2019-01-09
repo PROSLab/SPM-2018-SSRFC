@@ -23,66 +23,68 @@
             <div class="col-6">
                 <button (click)="createRepo()" class="btn btn-primary">Create Repository</button>
                 <br><br>
-                
-                    <div *ngIf="createrepo" class="card">
-                        <div class="form-group" class="card-body">
 
-                            <div>
-                                <label for="reponame">Repository name </label>
-                                <input type="text" maxlength="13" required id="namerepo" #n name="namerepo" />
-                                <form name="state">
-                                    <label for="state">State</label><br>
-                                    <input type="radio" name="statep" id="state" value="public" checked>Public<br>
-                                    <input type="radio" name="statep" id="state" value="private"> Private<br>
-                                </form>
-                            </div>
-                            <div class="row">
-                                    <button (click)="save(n.value)"  style="margin-right:10px;" class="btn btn-primary col-4" >Save Repository </button>
-                                    <button class="btn btn-danger col-1"  style="margin-right:10px;" (click)="createRepo()">X</button>
-                            </div>
+                <div *ngIf="createrepo" class="card">
+                    <div class="form-group" class="card-body">
+
+                        <div>
+                            <label for="reponame">Repository name </label>
+                            <input type="text" maxlength="13" required id="namerepo" #n name="namerepo" />
+                            <form name="state">
+                                <label for="state">State</label><br>
+                                <input type="radio" name="statep" id="state" value="public" checked>Public<br>
+                                <input type="radio" name="statep" id="state" value="private"> Private<br>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <button (click)="save(n.value)" style="margin-right:10px;" class="btn btn-primary col-4">Save
+                                Repository </button>
+                            <button class="btn btn-danger col-1" style="margin-right:10px;" (click)="createRepo()">X</button>
                         </div>
                     </div>
+                </div>
 
             </div>
-          
-        </div>
-    </div>
 
-    <div class="row" *ngIf="!repoExist">
-        <div class="col-md-12">
-            <h3>Non ci sono repository presenti.<br> Clicca su Create Repository per crearne uno!</h3>
-        </div>
-    </div>
-
-    <div class="row" *ngIf="repoExist">
-        <div class="col-md-12">
-            <h3>My Repository:</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)" [routerLink]="['/repositoryID',repo?.id]">
-            <h4 class="card2Write" style="cursor:pointer;">
-                <b>{{repo?.repositoryName}}</b> </h4>
         </div>
 
-    </div>
 
-<div>
-    <div *ngIf="!isLogged">
+        <div class="row" *ngIf="!repoExist">
+            <div class="col-md-12">
+                <h3>Non ci sono repository presenti.<br> Clicca su Create Repository per crearne uno!</h3>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="repoExist">
+            <div class="col-md-12">
+                <h3>My Repository:</h3>
+            </div>
+        </div>
         <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        Registrati per entrare a far parte della community VuGit! <br>
-                        Se sei registrato effettua il login!
+            <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="sendTo(repo)"
+                [routerLink]="['/repositoryID',repo?.id]">
+                <h4 class="card2Write" style="cursor:pointer;">
+                    <b>{{repo?.repositoryName}}</b> </h4>
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div *ngIf="!isLogged">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            Registrati per entrare a far parte della community VuGit! <br>
+                            Se sei registrato effettua il login!
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div>
+            <div>
+
+            </div>
 
         </div>
-
     </div>
-   </div>
 </div>
