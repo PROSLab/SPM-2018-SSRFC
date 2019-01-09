@@ -34,7 +34,7 @@
                         <div class="row">
                             <button (click)="sendNewName(n.value)" class="btn btn-primary col-3" style="margin-right:5px;">Save
                                 repo</button>
-                        <!--     <button (click)="changeRepoVisibility(c.value)" style="margin-right:5px;" *ngIf="repoInfo.publicR=='Private'"
+                            <!--     <button (click)="changeRepoVisibility(c.value)" style="margin-right:5px;" *ngIf="repoInfo.publicR=='Private'"
                                 #c value="Private" class="btn btn-primary col-5">Change to public </button>
                             <button (click)="changeRepoVisibility(c.value)" style="margin-right:5px;" *ngIf="repoInfo.publicR=='Public'"
                                 #c value="Public" class="btn btn-primary col-5">Change to private </button> -->
@@ -43,11 +43,9 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
-  
+
 
     <div class="row" *ngIf="isLogged">
         <div class="col-2">
@@ -69,7 +67,7 @@
         </div>
 
     </div>
- 
+
 
     <div class="row">
         <div *ngIf="createfold" class="col-4">
@@ -115,50 +113,56 @@
             </div>
         </div>
     </div>
-
-   
-
-    <br>
-    <div *ngIf="folderExist==true || filesExist==true"> 
+<br>
+    <div *ngIf="folderExist==true || filesExist==true">
         <div class="row">
-            <select  id="select" #select class="col-2" (change)="selected()">
-                    <option selected value="name">NAME</option>
-                    <option value="date">Data</option>
-                   
-                </select>
-        <input type="text" [(ngModel)]="search" id="search" name="search" (input)="Search()" placeholder="Search..">
-        
-    </div>Lista dei tuoi folder e files
-        <table>
-            <thead>
-                <tr>
-                    <th width="20%">Name</th>
-                    <th width="30%">Created At</th>
-                </tr>
-            </thead>
+            Qui puoi ricercare tutti i models contenuti nel tuo repository
+        </div>
 
-            <tbody>
+        <br>
+        <div class="row">
+            <select id="select" #select class="col-2" (change)="selected()">
+                <option selected value="name">Name Model</option>
+                <option value="date">Data Model</option>
+            </select>
 
-                <tr *ngFor="let fold of folder;" (click)="sendTofolder(fold.id)" [routerLink]="['/repository',fold.id]">
+            <input type="text" [(ngModel)]="search" id="search" name="search" (input)="Search()" placeholder="Search..">
+        </div>
+    
+    <br>
 
-                    <th scope="row">
-                        <i class="material-icons">&#xe2c8; </i>
-                        {{fold?.folderName}}
-                    </th>
-                    <th scope="row">{{fold?.createdAt}}</th>
+    Lista dei tuoi folder e files
+    
+    <table>
+        <thead>
+            <tr>
+                <th width="20%">Name</th>
+                <th width="30%">Created At</th>
+            </tr>
+        </thead>
 
-                </tr>
+        <tbody>
 
-                <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)" [routerLink]="['/repository/folder',fil.id]">
-                    <th scope="row">
-                        <i class="fa">&#xf016; </i>
-                        {{fil?.originalName}}
-                    </th>
-                    <th scope="row">{{fil?.createdAt}}</th>
-                </tr>
+            <tr *ngFor="let fold of folder;" (click)="sendTofolder(fold.id)" [routerLink]="['/repository',fold.id]">
 
-            </tbody>
-        </table>
-    </div>
+                <th scope="row">
+                    <i class="material-icons">&#xe2c8; </i>
+                    {{fold?.folderName}}
+                </th>
+                <th scope="row">{{fold?.createdAt}}</th>
+
+            </tr>
+
+            <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)" [routerLink]="['/repository/folder',fil.id]">
+                <th scope="row">
+                    <i class="fa">&#xf016; </i>
+                    {{fil?.originalName}}
+                </th>
+                <th scope="row">{{fil?.createdAt}}</th>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
 
 </div>

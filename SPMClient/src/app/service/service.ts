@@ -158,7 +158,7 @@ shareRepository(idRepo,email){
   params = params.append('idRepository', idRepo); //id repository
   params = params.append('emailTo', email); //email
   console.log(params)
-  return this.http.get(this.baseUrl + 'api/share/repository', { responseType: 'text' })
+  return this.http.get(this.baseUrl + 'api/share/repository', {params:params, responseType: 'text'})
   .pipe(
       tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server
       catchError(this.handleError)

@@ -33,6 +33,7 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
+    background-color:whitesmoke;
   }
   
   td, th {
@@ -51,8 +52,9 @@ input[type="file"] {
 }
 #search {
     width: 130px;
+    height: 40px;
     box-sizing: border-box;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
     background-color: white;
@@ -65,5 +67,5 @@ input[type="file"] {
   }
   
   #search:focus {
-    width: 80%;
+    width: 70%;
   }
