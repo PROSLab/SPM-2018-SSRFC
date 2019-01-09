@@ -165,7 +165,17 @@ Your repository is empty.<br> Click on "Create Folder" or "Create File" button, 
                     </th>
                     <th scope="row">{{fil?.createdAt}}</th>
                 </tr>
-
+                </tbody>
+                <tbody *ngIf="fileincartelle">
+                
+                <tr  *ngFor="let fil of allFileFolder;" (click)="sendTofile(fil.id)">
+                    <th scope="row">
+                        <i class="fa">&#xf016; </i>
+                        {{fil?.originalName}}
+                    </th>
+                    <th scope="row">{{fil?.createdAt}}</th>
+                </tr>
+            
             </tbody>
         </table>
     </div>
