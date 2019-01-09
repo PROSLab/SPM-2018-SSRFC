@@ -1,8 +1,4 @@
 <div class="container">
-    <button (click)="back()" class="btn btn-primary">Back</button>
-    <br><br>
-
-
     <div class="card">
         <div class="card-body">
             <h3>Folder Details</h3>
@@ -11,6 +7,7 @@
             <br>
         </div>
     </div>
+
 
     <div class="row" *ngIf="fileExist">
         <div class="row">
@@ -43,7 +40,8 @@
                             </button>
 
                             <div>
-                                <button *ngIf="versionExist && cambia && vers!=null" (click)="deleteVersion(vers)" class="btn btn-primary" style="margin-right:5px;"> Delete Version {{vers}} </button>
+                                <button *ngIf="versionExist && cambia && vers!=null" (click)="deleteVersion(vers)"
+                                    class="btn btn-primary" style="margin-right:5px;"> Delete Version {{vers}} </button>
                             </div>
 
                             <div>
@@ -100,6 +98,9 @@
     <div>
         <div *ngIf="vers!=null">Stai visualizzando la versione del file n. {{vers}}</div>
         <div *ngIf="vers==null">Non stai visualizzando alcuna versione del file. Clicca sul menu per sceglierne una!</div>
-   
+
     </div>
 </div>
+
+<br>
+<button (click)="back()" class="btn btn-primary">Back</button>

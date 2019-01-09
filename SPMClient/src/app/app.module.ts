@@ -8,6 +8,7 @@ import { HttpClientModule,  } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
+import { Service } from './service/service';
 
 @NgModule({
   declarations: [AppComponent, SpinnerComponent],
@@ -20,6 +21,7 @@ import { SpinnerComponent } from './shared/spinner.component';
     AppRoutingModule,
   ],
   providers: [
+    Service,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy

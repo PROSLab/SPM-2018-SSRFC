@@ -16,21 +16,21 @@ export let exportLocalUser: User;
 export class StarterComponent implements AfterViewInit {
 	repoExist:boolean = false
 	subtitle: string
-	isLogged = exportIsLogged
+	isLogged:boolean
 	fileToUpload: File
 	createrepo = false;
 	risp: boolean;
 	repos: Repo[] = null;
 	errorMessage: any;
 	localUser: User
-	email: string
 	selectedRepo;
 	files: any;
 	idFileSelected: any;
 	reposPublic: any = null;
 
 	constructor(private service: Service, public router: Router) {
-
+		this.isLogged=this.service.isLogged
+		
 	}
 
 	ngOnInit() {
@@ -39,7 +39,7 @@ export class StarterComponent implements AfterViewInit {
 
 	}
 
-	setUser() {
+	 setUser() {
 		if (localStorage.getItem("email") != undefined) {
 			this.localUser = {
 				email: localStorage.getItem("email"),
@@ -48,23 +48,11 @@ export class StarterComponent implements AfterViewInit {
 				surname: localStorage.getItem("surname"),
 				password: localStorage.getItem("password"),
 			};
-			localStorage.setItem("login", 'true')
-			this.isLogged = true;
 			//SET EXPORT 
-			exportLocalUser = this.localUser; exportIsLogged = this.isLogged;
+			exportLocalUser = this.localUser; 
 			this.getAllRepo();
-		}else{
-		this.isLogged = false;
-		exportIsLogged = this.isLogged;
 		}
-	}
-
-
-	logout() {
-		exportIsLogged = false;
-		this.isLogged = exportIsLogged
-		this.service.logout()
-	}
+	} 
 
 
 	//funzione per prendere il file
@@ -96,25 +84,12 @@ export class StarterComponent implements AfterViewInit {
 
 
 	sendTo(repoSelected) {
-		for (var i = 0; i < this.repos.length; i++) {
-			if (repoSelected.id == this.repos[i].id) {
-				localStorage.setItem("repoSelected.id", repoSelected.id)
-			}
-		}
-		this.router.navigate(['/repository']);
+		localStorage.setItem("repoSelected", repoSelected)
+
 	}
 
 
-	//RENDER TO REPOSITORY SELEZIONATA
-	//TODO: Non si fa cosi questa cosa.. ma non so come correggerla :/ e mi ci vorebbe troppo tempo ora
-	sendToPublic(repoSelected) {
-		for (var i = 0; i < this.reposPublic.length; i++) {
-			if (repoSelected.id == this.reposPublic[i].id) {
-				localStorage.setItem("repoSelected.id", repoSelected.id)
-			}
-		}
-		this.router.navigate(['/folder']);
-	}
+	
 	
 	// SALVO IL FILE
 	save(name) {

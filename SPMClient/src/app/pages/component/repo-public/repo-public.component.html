@@ -11,7 +11,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let repoPublic of reposPublic; let i=index;" (click)="sendToPublic(repoPublic)" >
+            <tr *ngFor="let repoPublic of reposPublic; let i=index;" (click)="sendToPublic(repoPublic.id)" >
                 <th scope="row">{{repoPublic?.repositoryName}}</th>
                 <th scope="row">{{repoPublic?.createdAt}}</th>
            </tr>

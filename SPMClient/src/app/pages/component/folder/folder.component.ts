@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
 import { exportIsLogged } from '../../starter/starter.component'
 
@@ -35,14 +35,14 @@ export class FolderComponent implements OnInit {
   caricaFile: boolean=false;
   isLogged = exportIsLogged
 
-  constructor(private service: Service, public router: Router) {
-    this.idRepoSelected = localStorage.getItem("repoSelected.id");
-    this.folderSelected = localStorage.getItem("folderSelected.id")
+  constructor(private service: Service, public router: Router,route: ActivatedRoute) {
+    this.folderSelected = route.snapshot.params.idFolder
+    this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
   }
 
   back() {
-    this.router.navigate(['repository']);
+    this.router.navigate(['repositoryID/',this.idRepoSelected]);
   }
 
 
@@ -82,7 +82,6 @@ export class FolderComponent implements OnInit {
 
 
   ngOnInit() {
-    this.isLogged = exportIsLogged
     this.getFolderInfo()
     this.getAllFile()
   }
@@ -192,7 +191,6 @@ export class FolderComponent implements OnInit {
 
 
   getAllfolder() {
-    console.log(this.idRepoSelected)
     //devo richiamare la funzione del server per inviargli il file
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
@@ -227,6 +225,6 @@ export class FolderComponent implements OnInit {
   }
 
   sendTofile(fileSelected) {
-    localStorage.setItem("fileSelected.id", fileSelected)
-  }
+    this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.folderSelected,'fileID',fileSelected]);
+    }
 }

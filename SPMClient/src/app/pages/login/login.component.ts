@@ -16,7 +16,6 @@ export class LoginComponent implements OnInit {
     submitted = false;
     error = false
     returnUrl: string;
-    public login: boolean = false; //utente non loggato
     errorMsg: string;
 
     constructor(
@@ -28,10 +27,7 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        
-        localStorage.setItem("logged","false")
-
-        this.loginForm = this.formBuilder.group({
+            this.loginForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
         });
@@ -57,14 +53,12 @@ export class LoginComponent implements OnInit {
 
                 //in "data" abbiamo tutti i dati dell'utente
                 //li salviamo in locale
-                localStorage.setItem("logged","true")
                 localStorage.setItem("id", data.id)
                 localStorage.setItem("name", data.name)
                 localStorage.setItem("surname", data.surname)
                 localStorage.setItem("email", data.email)
                 localStorage.setItem("password", data.password)
                 // redirect to home
-                this.login = true;
                 alert('login done!')
 
                 this.router.navigate(['']);

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
 import { File } from '../../../service/model/file'
 import { exportIsLogged } from '../../starter/starter.component'
@@ -13,10 +13,11 @@ import { exportIsLogged } from '../../starter/starter.component'
 })
 
 export class RepositoryComponent implements OnInit {
-  isLogged=exportIsLogged
+  isLogged:boolean
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
+  nameRepoSelect:string
   idUser: string
   folder: Folder[] = null
   repoInfo: Repo = <any>[]
@@ -32,9 +33,11 @@ export class RepositoryComponent implements OnInit {
   fileToUpload;
 
 
-  constructor(private service: Service, public router: Router) {
-    this.idRepoSelected = localStorage.getItem("repoSelected.id");
+  constructor(private service: Service, public router: Router,private route: ActivatedRoute) {
+    this.idRepoSelected = route.snapshot.params.idRepo
+    this.isLogged=service.isLogged;
     this.idUser = localStorage.getItem("id")  
+   
   }
 
   back(){
@@ -230,12 +233,13 @@ return this.dataTroncata = data.substr(0,10)
 
   
   sendTofolder(folderSelected) {
-    localStorage.setItem("folderSelected.id", folderSelected)
+    this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',folderSelected]);
     
   } 
 
 
  sendTofile(fileSelected) {
-  localStorage.setItem("fileSelected.id", fileSelected)
-  } 
+  this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',fileSelected]);
+  }
+  
 }
