@@ -1,6 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { Service } from '../../service/service';
-import { exportIsLogged } from '../../pages/starter/starter.component'
 
 @Component({
     selector: 'ap-navigation',
@@ -8,28 +7,23 @@ import { exportIsLogged } from '../../pages/starter/starter.component'
 })
 export class NavigationComponent implements AfterViewInit {
     name: string;surname:string;email:string;password:string;
-    isLogged: boolean=exportIsLogged
+    isLogged: boolean
     
 
 
-    constructor(private service: Service) { }
+    constructor(private service: Service) { 
+        this.isLogged=this.service.isLogged
+        if(this.isLogged){
+            this.name = localStorage.getItem("name");
+            this.surname = localStorage.getItem("surname");
+            this.email = localStorage.getItem("email");
+            this.password = localStorage.getItem("password");
+        }
+               
+    }
     
-    //TODO: PORCATA DA RIVEDERE
     ngOnInit(): void {
-        setInterval(() => {
-            if (localStorage.getItem("login") == 'true') {
-              this.isLogged = true;
-              if (this.isLogged == true) {
-                this.name = localStorage.getItem("name");
-                this.surname = localStorage.getItem("surname");
-                this.email = localStorage.getItem("email");
-                this.password = localStorage.getItem("password");
-              }
-            }else {
-              this.isLogged=false;
-            }
-          }, 1000);
-      
+       
     }
 
 

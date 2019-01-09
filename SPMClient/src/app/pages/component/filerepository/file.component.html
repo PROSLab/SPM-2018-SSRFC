@@ -1,8 +1,7 @@
 <div class="container">
     <button (click)="back()" class="btn btn-info">Back</button>
     <br><br>
-    
-   
+
 
     <div class="row card col-8" *ngIf="fileExist">
         <div>
@@ -31,6 +30,7 @@
                                 Modify file</button>
                             <button (click)="newVersion()" class="btn btn-primary" style="margin-right:5px;">
                                + Create new version</button>
+                               <button (click)="shareFile1()" class="btn btn-warning" style="margin-right:5px;">Share File</button>
                         </div>
 
                         <br>
@@ -42,13 +42,13 @@
                                 style="margin-right:5px;">Download Version {{vers}}</button>
                             <button *ngIf="versionExist && cambia" (click)="downloadAllVersion()" class="btn btn-success"
                                 style="margin-right:5px;">Download ZIP models</button>
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <div *ngIf="appearRenameFile">
             <div class=" row card col-4">
@@ -64,7 +64,21 @@
             </div>  
         </div>
     </div>
-
+    <div *ngIf="share" class="col-4">
+            <div class="card">
+                <div class="form-group" class="card-body">
+                    <div>
+                        <label for="reponame">Enter email</label>
+                        <input type="email" required id="email" #e name="email" />
+                        <br>
+                        <label for="reponame">Enter repo name</label>
+                        <input type="text" required id="text" #name name="text" />
+                    </div><br>
+                    <button (click)="shareFile(e.value,name.value)" class="btn btn-primary col-6">Send Email</button>
+                    <button class="btn btn-danger" padding (click)="share=false">X</button>
+                </div>
+            </div>
+        </div>
 
     <div class="row card col-4" *ngIf="isLogged || isLogged==undefined">
             <div class="card-body">

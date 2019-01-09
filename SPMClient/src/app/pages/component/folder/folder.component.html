@@ -1,6 +1,5 @@
 <div class="container">
-    <button (click)="back()" class="btn btn-info">Back</button>
-    <br><br>
+    
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -70,7 +69,7 @@
             <tbody>
 
 
-                <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)" [routerLink]="['/repository',folderInfo?.folderName,fil.id]">
+                <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)">
                     <th scope="row">
                         <i class="fa">&#xf016; </i>
                         {{fil?.originalName}}
@@ -81,3 +80,6 @@
         </table>
     </div>
 </div>
+
+<br>
+<button (click)="back()" class="btn btn-primary">Back</button>

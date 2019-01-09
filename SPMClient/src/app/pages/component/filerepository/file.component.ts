@@ -42,6 +42,7 @@ export class FileRepositoryComponent implements OnInit {
   versionExist: boolean = false;
   repo: any;
   cambia=false
+  share: boolean=false;
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
@@ -50,12 +51,11 @@ export class FileRepositoryComponent implements OnInit {
     this.idFolder = localStorage.getItem("folderSelected.id")
     this.idFile = localStorage.getItem("fileSelected.id")
   }
-
   selected() {
-    //in this.vers abbiamo la versione del file cliccata!
     console.log(this.vers)
     this.cambia=true
   }
+
 
   deleteVersion(v) {
     this.vers = v
@@ -63,6 +63,7 @@ export class FileRepositoryComponent implements OnInit {
       alert("seleziona una versione per eliminarla!")
     }
     else {
+      this.cambia=false
       alert("vuoi eliminare la versione n." + this.vers + "?")
       this.service.deleteVersion(this.idFile, this.vers)
         .subscribe(data => {
@@ -71,6 +72,7 @@ export class FileRepositoryComponent implements OnInit {
             this.finalVersion.splice(index, 1);
           }
           this.vers = null
+          this.cambia=false
           this.getFileSpec()
 
         }, error => {
@@ -94,13 +96,12 @@ export class FileRepositoryComponent implements OnInit {
   }
 
   getFileSpec() {
+    this.cambia=false
     for (var i = 0; i < this.versionArray.length; i++) {
       this.versionArray[i] = null
     }
-
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
-        console.log(data)
         if (data != null) {
           data.createdAt = this.troncaData(data.createdAt)
           this.fileExist = true;
@@ -148,6 +149,7 @@ export class FileRepositoryComponent implements OnInit {
         for (var i = 1; i <= data.cVersion; i++) {
           this.versionArray[i - 1] = i
         }
+        this.cambia=false
         this.getFileSpec()
         alert("Hai creato una nuova versione del file")
       }, error => {
@@ -155,9 +157,15 @@ export class FileRepositoryComponent implements OnInit {
       });
   }
 
+  downloadAllVersion(){
+    console.log("STO SCARICANDO TUTTE LE VERSIONI DEL FILE")
+  }
+
 
   downloadFile(vers) {
     window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)
+    this.cambia=false
+    this.vers=null
   }
 
   createFile() {
@@ -174,7 +182,6 @@ export class FileRepositoryComponent implements OnInit {
       .subscribe(data => {
         this.appear = false
         this.repoInfo = data
-
       })
   }
 
@@ -224,8 +231,7 @@ export class FileRepositoryComponent implements OnInit {
   getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
-        // data.createdAt = this.troncaData(data.createdAt)
-
+        data.createdAt = this.troncaData(data.createdAt)
         this.repo = data
       }, error => {
         this.errorMessage = <any>error
@@ -237,6 +243,7 @@ export class FileRepositoryComponent implements OnInit {
     this.appearRenameFile = true;
   }
 
+  
   sendNewFileName(name) {
     this.service.changeNameFile(this.idFile, name)
       .subscribe(data => {
@@ -245,6 +252,20 @@ export class FileRepositoryComponent implements OnInit {
       })
   }
 
+  shareFile1() {
+    this.share = true
+  }
+
+  shareFile(email,nameRepo) {
+    this.service.shareFile(nameRepo, this.idUser,this.idFile,email)
+      .subscribe(data => {
+      alert("Email inviata!")
+        this.share = false
+      }, error => {
+        alert("ERRORE! Invio email non riuscito")
+        this.errorMessage = <any>error
+      })
+  }
 
 
 }

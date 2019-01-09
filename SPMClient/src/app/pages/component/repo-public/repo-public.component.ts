@@ -13,12 +13,10 @@ import { Router } from '@angular/router';
 export class RepoPublicComponent implements OnInit {
   reposPublic: any;
 	errorMessage: any;
-	isLogged: string ="false";
 
   constructor(private service: Service, public router: Router) {}
   
   ngOnInit() {
-	this.isLogged =	localStorage.getItem("logged") //check se l'utente è loggato
     this.getAllPublicRepo();
   }
 
@@ -33,12 +31,8 @@ export class RepoPublicComponent implements OnInit {
 
 	//da rivedere,c ol cambiamento di route è cambiato
   sendToPublic(repoSelected) {
-		for (var i = 0; i < this.reposPublic.length; i++) {
-			if (repoSelected.id == this.reposPublic[i].id) {
-				localStorage.setItem("repoSelected.id", repoSelected.id)
-			}
-		}
-		this.router.navigate(['/folder']);
+	
+		this.router.navigate(['repositoryID/',repoSelected]);
 	}
 
 }

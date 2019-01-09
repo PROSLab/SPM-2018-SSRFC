@@ -47,10 +47,12 @@ export class FileComponent implements OnInit {
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
-    this.idRepoSelected = localStorage.getItem("repoSelected.id")
+    this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
-    this.idFolder = localStorage.getItem("folderSelected.id")
-    this.idFile = localStorage.getItem("fileSelected.id")
+    this.idFolder = route.snapshot.params.idFolder
+    this.idFile = route.snapshot.params.idFile
+    this.isLogged=service.isLogged;
+  
   }
 
   selected() {
@@ -87,7 +89,9 @@ export class FileComponent implements OnInit {
   ngOnInit() {
     this.cambia=false
     this.getFileSpec()
-    this.getFolder()
+    if(this.idFolder != null){
+      this.getFolder()
+    }
     this.getRepo()
     this.getAllFolders()
   }
@@ -167,6 +171,7 @@ export class FileComponent implements OnInit {
   downloadFile(vers) {
     window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)
     this.cambia=false
+    this.vers=null
   }
 
   createFile() {
@@ -201,7 +206,11 @@ export class FileComponent implements OnInit {
 
 
   back() {
-    this.router.navigate(['']);
+    if(this.idFolder !=null){
+      this.router.navigate(['repositoryID/',this.idRepoSelected,'folderID',this.idFolder]);
+    }else {
+      this.router.navigate(['repositoryID/',this.idRepoSelected,]);
+    }
   }
 
   //premdo i dati specifici di quel file che ho selezionato in precedenza
@@ -232,9 +241,7 @@ export class FileComponent implements OnInit {
   getRepo() {
     this.service.getRepoSpec(this.idRepoSelected)
       .subscribe(data => {
-        // data.createdAt = this.troncaData(data.createdAt)
-        this.repoName=data.repositoryName
-        this.repoId=data.id
+        data.createdAt = this.troncaData(data.createdAt)
         this.repo = data
       }, error => {
         this.errorMessage = <any>error
@@ -246,6 +253,7 @@ export class FileComponent implements OnInit {
     this.appearRenameFile = true;
   }
 
+  
   sendNewFileName(name) {
     this.service.changeNameFile(this.idFile, name)
       .subscribe(data => {
@@ -259,13 +267,8 @@ export class FileComponent implements OnInit {
   }
 
   shareFile(email,nameRepo) {
-    this.service.shareFile(this.repoName, this.idUser,this.idFile,email)
+    this.service.shareFile(nameRepo, this.idUser,this.idFile,email)
       .subscribe(data => {
-        console.log(data)
-        this.service.changeNameRepo(this.repoId, nameRepo)
-      .subscribe(data => {
-        //this.repoInfo = data
-      })
       alert("Email inviata!")
         this.share = false
       }, error => {
