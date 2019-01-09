@@ -41,6 +41,7 @@
                                     style="margin-right:5px;">Download Version {{vers}}</button>
                                 <button *ngIf="versionExist && cambia" (click)="downloadAllVersion()" class="btn btn-success"
                                     style="margin-right:5px;">Download ZIP models</button>
+                                <button (click)="shareFile1()" class="btn btn-warning" style="margin-right:5px;">Share File</button>
                             </div>
                         </div>
                     </div>
@@ -63,6 +64,19 @@
                 </div>  
             </div>
         </div>
+        <div *ngIf="share" class="col-4">
+                <div class="card">
+                    <div class="form-group" class="card-body">
+                        <div>
+    
+                            <label for="reponame">Enter email...</label>
+                            <input type="email" required id="email" #e name="email" />
+                        </div><br>
+                        <button (click)="shareFile(e.value)" class="btn btn-primary col-6">Send Email</button>
+                        <button class="btn btn-danger" padding (click)="share=false">X</button>
+                    </div>
+                </div>
+            </div>
     
     
         <div class="row card col-4" *ngIf="isLogged || isLogged==undefined">
