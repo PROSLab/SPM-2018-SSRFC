@@ -33,8 +33,9 @@ export class RepositoryComponent implements OnInit {
   fileToUpload;
   selezione= "name";
   search:string;
+  allFileFolder= [];
   share: boolean = false;
-
+fileincartelle=false;
 
   constructor(private service: Service, public router: Router,private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -118,6 +119,7 @@ export class RepositoryComponent implements OnInit {
   }
 
   selected() {
+
    this.selezione= (<HTMLInputElement>document.getElementById("select")).value;
   }
 
@@ -166,8 +168,10 @@ export class RepositoryComponent implements OnInit {
   }
 
 Search(){
+  this.fileincartelle=true;
   if(this.selezione=="name"){
   if (this.search != ""){
+
     this.files=this.files.filter(res=>{
     return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
     })
@@ -175,8 +179,11 @@ Search(){
     this.folder =this.folder.filter(res=>{
       return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
 })
-
+this.allFileFolder =this.allFileFolder.filter(res=>{
+  return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+})
   }else if (this.search==""){
+    this.fileincartelle=false;
     this.ngOnInit()
   }
   }
@@ -189,7 +196,12 @@ Search(){
       this.folder =this.folder.filter(res=>{
         return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
   })
+  this.allFileFolder =this.allFileFolder.filter(res=>{
+    return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+})
     }else if (this.search==""){
+      this.fileincartelle=false;
+
       this.ngOnInit()
     }
   }
@@ -245,11 +257,35 @@ Search(){
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
         data = JSON.parse(data)
-
+this.allFileFolder.length=0;
         for (var i = 0; i < data.length; i++) {
+          
           data[i].createdAt = this.troncaData(data[i].createdAt)
-        }
 
+          this.service.getFile(this.idRepoSelected,data[i].id)
+          .subscribe(tuttifile => {
+            tuttifile = JSON.parse(tuttifile) 
+          
+            for (var i = 0; i < tuttifile.length; i++) {
+              tuttifile[i].createdAt = this.troncaData(tuttifile[i].createdAt)
+            }
+            var k=0;
+            for ( var j= this.allFileFolder.length; k<tuttifile.length;j++)
+            {
+              
+  this.allFileFolder[j]=tuttifile[k]
+  k++
+            }
+            
+           
+          }, error => {
+            this.errorMessage = <any>error
+          });
+
+
+        }
+console.log(this.allFileFolder)
+       
         this.folder = (data)
         if (this.folder.length > 0) {
           this.folderExist = true

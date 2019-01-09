@@ -34,6 +34,16 @@ public class Responses {
 				.body(BodyInserters.fromObject(result));
 	}
 	
+	public static<T> Mono<ServerResponse> okZip(T result, File file, FileEntity fileE) {
+		return ServerResponse.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileE.getOriginalName() + ".zip")
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.contentLength(file.length())
+				.body(BodyInserters.fromObject(result));
+	}
+	
+	
+	
 	public static Mono<ServerResponse> badRequest(Exception e) {
 	    return fromException(HttpStatus.BAD_REQUEST, e);
 	}

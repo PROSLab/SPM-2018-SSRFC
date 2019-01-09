@@ -231,7 +231,11 @@ this.sposta=null;
 
 
   back() {
-    this.router.navigate(['repositoryID/',this.idRepoSelected,'folderID',this.idFolder]);
+    if(this.idFolder !=null){
+      this.router.navigate(['repositoryID/',this.idRepoSelected,'folderID',this.idFolder]);
+    }else {
+      this.router.navigate(['repositoryID/',this.idRepoSelected,]);
+    }
   }
 
   //premdo i dati specifici di quel file che ho selezionato in precedenza

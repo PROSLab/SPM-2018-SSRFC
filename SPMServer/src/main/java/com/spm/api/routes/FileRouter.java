@@ -94,6 +94,10 @@ public class FileRouter {
 								GET("/deleteVersion"),
 								fileHandler::deleteVersion
 						)
+						.andRoute(
+								GET("/exportCollection"),
+								fileHandler::exportCollection
+						)
 						
 						
 				);
