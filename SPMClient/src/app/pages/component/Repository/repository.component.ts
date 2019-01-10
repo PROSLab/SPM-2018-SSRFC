@@ -300,6 +300,7 @@ this.allFileFolder.length=0;
           data[i].createdAt = this.troncaData(data[i].createdAt)
         }
         this.files = (data)
+        console.log(this.files)
         if (this.files.length > 0) {
           this.filesExist = true
         }
