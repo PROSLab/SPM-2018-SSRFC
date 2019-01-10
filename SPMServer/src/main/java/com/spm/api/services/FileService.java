@@ -450,13 +450,17 @@ return Mono.just(strPath);
 	}
 	
 
-	public Mono<FileEntity> updatePathFile(ObjectId idFile ,ObjectId idRepository,ObjectId idUser, String idFolder, String newPath) {
+	public Mono<FileEntity> updatePathFile(ObjectId idFile ,ObjectId idRepository,ObjectId idUser, String idFolder2, String newPath) {
 		return fileRepository.findFileById(idFile)
 				.flatMap(f -> {
 					f.setPath(newPath);
-					if (idFolder.toString()!="null") {
-					f.setIdFolder(new ObjectId(idFolder));
-				}
+					if (idFolder2 != null) {
+						f.setIdFolder(new ObjectId(idFolder2));
+						}else {
+						f.setIdFolder(null);
+					}
+					
+				
 					f.setIdUser(idUser);
 					f.setIdRepository(idRepository);
 					return fileRepository.save(f);
