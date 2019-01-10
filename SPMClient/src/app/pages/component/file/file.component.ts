@@ -69,7 +69,7 @@ export class FileComponent implements OnInit {
 moveTo(id){
   if(id !=null){
     if(id==this.idRepoSelected){
-      this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path,undefined)
+      this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path)
       .subscribe(data => {
         alert('file spostato nella repository');
         this.router.navigate(['/repositoryID',id])
