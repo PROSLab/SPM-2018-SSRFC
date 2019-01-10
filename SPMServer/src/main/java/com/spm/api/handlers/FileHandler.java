@@ -404,7 +404,7 @@ public class FileHandler {
 				
 				.flatMap(str -> {
 					
-			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser) ,new ObjectId(idFolder),str);
+			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser) ,idFolder,str);
 				})
 				.flatMap(res -> Responses.ok(res))
 				
