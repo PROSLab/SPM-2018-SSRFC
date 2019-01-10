@@ -69,7 +69,6 @@ export class FileComponent implements OnInit {
 moveTo(id){
   if(id !=null){
     if(id==this.idRepoSelected){
-      console.log(this.sposta)
       this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path)
       .subscribe(data => {
         alert('file spostato nella repository');

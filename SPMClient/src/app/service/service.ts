@@ -361,8 +361,8 @@ shareFile(repoName,idUser,idFile,email){
   moveToFolder(idFile,idRepo,idUser,path, idFolder?): Observable<any> {
     let params = new HttpParams();
     params = params.append('idFile', idFile); //id del file
-    if(idFolder !=null){
-      params = params.append('idFolder', idFolder); //id del file
+    if(idFolder!=null){
+    params = params.append('idFolder', idFolder); //id del file
     }
     params = params.append('idRepository', idRepo); //id del file
     params = params.append('idUser', idUser); //id del file
@@ -370,7 +370,10 @@ shareFile(repoName,idUser,idFile,email){
     return this.http.get(this.baseUrl + 'api/file/moveFile', { params: params  , responseType: 'text'})
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
-        catchError(this.handleError)
+        catchError(err => {
+          console.log(err)
+          throw err;
+        })
       );
   }
 
