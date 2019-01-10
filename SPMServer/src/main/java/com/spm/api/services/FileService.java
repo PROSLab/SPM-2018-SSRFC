@@ -424,8 +424,8 @@ public class FileService  {
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
 	
-	public Mono<String> updateMoveTo (String rootDir, String idUser, String idRepository, Optional<String> idFolder, String fileName, String idFile, String mimetype, Path paths) {
-		String suffixPath = idFolder.isPresent() == true ? File.separator + idFolder.get() + 
+	public Mono<String> updateMoveTo (String rootDir, String idUser, String idRepository,String idFolder, String fileName, String idFile, String mimetype, Path paths) {
+		String suffixPath = idFolder != null  ? File.separator + idFolder + 
 	               File.separator + idFile
 				 : File.separator + idFile ;
 				  
@@ -450,10 +450,13 @@ return Mono.just(strPath);
 	}
 	
 
-	public Mono<FileEntity> updatePathFile(ObjectId idFile, String newPath) {
+	public Mono<FileEntity> updatePathFile(ObjectId idFile ,ObjectId idRepository,ObjectId idUser, ObjectId idFolder, String newPath) {
 		return fileRepository.findFileById(idFile)
 				.flatMap(f -> {
 					f.setPath(newPath);
+					f.setIdFolder(idFolder);
+					f.setIdUser(idUser);
+					f.setIdRepository(idRepository);
 					return fileRepository.save(f);
 				})
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));

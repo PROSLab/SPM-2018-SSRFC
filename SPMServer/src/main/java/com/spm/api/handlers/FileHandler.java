@@ -393,15 +393,18 @@ public class FileHandler {
 	public Mono<ServerResponse> moveFile(ServerRequest request) {
 		String idUser = request.queryParam("idUser").get();
 		String idRepository= request.queryParam("idRepository").get();
-		Optional<String> idFolder= request.queryParam("idFolder");
+		String idFolder= request.queryParam("idFolder").get();
 		String idFile = request.queryParam("idFile").get();
 		String mimetype = "bpmn";
 		String paths= request.queryParam("paths").get();
         Path path=  Paths.get(paths);
 		fileName = idFile + '.' + 1;
+		
 		return fileService.updateMoveTo(rootDir, idUser, idRepository, idFolder, fileName, idFile, mimetype, path)
+				
 				.flatMap(str -> {
-					return fileService.updatePathFile(new ObjectId(idFile),str);
+					
+			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser) ,new ObjectId(idFolder),str);
 				})
 				.flatMap(res -> Responses.ok(res))
 				
