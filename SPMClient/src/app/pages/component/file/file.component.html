@@ -52,7 +52,7 @@
                 Move to...
                     <select [(ngModel)]="sposta" (change)="selectedSposta()" >
                     <option disabled>Select a folder..</option>
-                    <option  [ngValue]="repo" >Repo: {{repo?.repositoryName}}</option>
+                    <!-- <option  [ngValue]="repo" >Repo: {{repo?.repositoryName}}</option> -->
                     <option  [ngValue]="v" *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
                 </select>
                 <br>
