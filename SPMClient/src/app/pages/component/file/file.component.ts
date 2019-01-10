@@ -69,7 +69,7 @@ export class FileComponent implements OnInit {
 moveTo(id){
   if(id !=null){
     if(id==this.idRepoSelected){
-      console.log(this.file.path)
+      console.log(this.sposta)
       this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path)
       .subscribe(data => {
         alert('file spostato nella repository');
@@ -82,7 +82,7 @@ moveTo(id){
       if(id == this.idFolder){
         alert('selezionare una cartella diversa dall\'originale')
       }else{
-        this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path,this.idFolder)
+        this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,id)
         .subscribe(data => {
           alert('file spostato nella folder selezionata');
           this.router.navigate(['/repositoryID',this.idRepoSelected,'folderID',id])
@@ -154,6 +154,7 @@ this.sposta=null;
           data.createdAt = this.troncaData(data.createdAt)
           this.fileExist = true;
           this.file = (data)
+          console.log(this.file)
           for (var i = 0; i < this.file.cVersion; i++) {
             this.versionArray[i] = this.file.cVersion - (this.file.cVersion - i) + 1
           }
