@@ -93,32 +93,23 @@ export class FolderComponent implements OnInit {
   modifyFolder() {
     this.appearFormFolder = true;
   }
-
+/* 
   sendNewNameRepo(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
       .subscribe(data => {
         this.appear = false
         this.repoInfo = data
       })
-  }
+  } */
 
   sendNewNameFolder(name) {
     this.service.changeNameFolder(this.folderSelected, name)
       .subscribe(data => {
         this.appearFormFolder = false
         this.folderInfo = data
+        this.getFolderInfo()
       })
   }
-
-  /*   //prendo i dati della repo specifica
-    getRepoInfo() {
-      this.service.getRepoSpec(this.idRepoSelected)
-        .subscribe(data => {
-          this.repoInfo = data
-        }, error => {
-          this.errorMessage = <any>error
-        });
-    } */
 
   getFolderInfo() {
     this.service.getFolderSpec(this.folderSelected)
@@ -153,9 +144,7 @@ export class FolderComponent implements OnInit {
             this.errorMessage = <any>error
           });
         this.createfile = false
-        alert("File creato con successo.")
         this.getAllFile();
-        this.getAllfolder();
       }, error => {
         this.errorMessage = <any>error
         alert("file non creato")
@@ -180,7 +169,6 @@ export class FolderComponent implements OnInit {
             this.errorMessage = <any>error
           });
         this.createfold = false
-        alert("Cartella creata con successo.")
         this.router.navigate(['/folder']);
       }, error => {
         this.errorMessage = <any>error
@@ -190,7 +178,7 @@ export class FolderComponent implements OnInit {
   }
 
 
-
+/* 
   getAllfolder() {
     //devo richiamare la funzione del server per inviargli il file
     this.service.getAllFolder(this.idRepoSelected)
@@ -206,7 +194,7 @@ export class FolderComponent implements OnInit {
       }, error => {
         this.errorMessage = <any>error
       });
-  }
+  } */
 
   //tutti i file
   getAllFile() {

@@ -1,35 +1,42 @@
 <div class="container">
     
-    <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <h3>Folder Details</h3>
                 Folder name : {{folderInfo?.folderName}} <br>
                 Created At : {{folderInfo?.createdAt}}
                 <br>
-                <button  *ngIf="isLogged" (click)="modifyFolder()" class="btn btn-primary">Modify Folder</button>
+                <button  *ngIf="isLogged"  type="button" data-toggle="modal" data-target="#myModalFolder" class="btn btn-primary">Modify Folder</button>
+       
             </div>
         </div>
-        <div>
-            <form *ngIf="appearFormFolder">
-                <div class="card col-4">
-                    <div class="form-group" class="card-body">
-                        <div>
-                            <label for="filename">New name: </label>
-                            <input type="text" required #n name="filename" />
+
+        <div class="modal fade" id="myModalFolder" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Modify folder name</h4>
                         </div>
-                        <button (click)="sendNewNameFolder(n.value)" class="btn btn-primary col-6">Save Folder Name</button>
-                        <button (click)="appearFormFolder=false" class="btn btn-danger">X</button>
+                        <div class="modal-body">
+                            <div>
+                                <label for="reponame"><b>Folder name</b> </label><br>
+                                <input type="text" maxlength="13" required id="namefolder" #nameFolder name="namefolder"/>
+                            </div>
+                        </div>
+                            <div class="modal-footer">
+                                <button (click)="sendNewNameFolder(nameFolder.value)" style="margin-right:10px;" data-dismiss="modal" class="btn btn-primary col-4">Save
+                                    Folder </button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
+            </div>
+ 
 
     <div class="row">
         <div class="col-2">
             
-            <button (click)="createFile()" *ngIf="isLogged || isLogged==undefined" class="btn btn-primary">+ Create File</button>
+            <button  type="button" data-toggle="modal" data-target="#myModalFile"  *ngIf="isLogged || isLogged==undefined" class="btn btn-primary">+ Create File</button>
         </div>
 
         <div class="col-2" *ngIf="isLogged || isLogged==undefined">
@@ -41,22 +48,31 @@
         </div>
 
     </div>
+    <hr>
 
-    <div *ngIf="createfile" class="row col-3">
-            <div class="card">
-                <div class="form-group" class="card-body">
+
+
+ <div class="modal fade" id="myModalFile" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create a new File</h4>
+                </div>
+                <div class="modal-body">
                     <div>
-                        <label for="reponame">File name</label>
-                        <input type="text" required id="namerepo" #n name="namefile" />
-                    </div> <br>
-                    <div class="row">
-                        <button (click)="saveFile(n.value)" class="btn btn-primary">Save file
-                        </button>
-                        <button class="btn btn-danger" (click)="createfile=false">X</button>
+                        <label for="reponame"><b>File name</b> </label><br>
+                        <input type="text" maxlength="13" required id="nameFile" #nameFile name="nameFile"/>
                     </div>
                 </div>
+                    <div class="modal-footer">
+                        <button (click)="saveFile(nameFile.value)" style="margin-right:10px;" data-dismiss="modal" class="btn btn-primary col-4">Save
+                            File </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
             </div>
         </div>
+    </div>
+
 
     <div *ngIf="exist==true" style="margin:5px">Lista dei tuoi folder e files
         <table>
@@ -79,6 +95,7 @@
             </tbody>
         </table>
     </div>
+    <div *ngIf="!exist">Your Folder is empty!<br> Click on "create File" or "Import File" to add something new.</div>
 </div>
 
 <br>

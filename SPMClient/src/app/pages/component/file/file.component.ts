@@ -28,7 +28,7 @@ export class FileComponent implements OnInit {
   filecreato: File = <any>[];
   errorMessage: any;
   idFolder: string;
-  versionArray = [];
+  versionArray=<any>[];
   appear: boolean;
   idFile: string;
   folders: any;
@@ -46,6 +46,7 @@ export class FileComponent implements OnInit {
   repoName: any
   repoId: any
   spostaButton: boolean=false;
+  dataArray: any;
 
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
@@ -298,6 +299,7 @@ this.sposta=null;
       .subscribe(data => {
         this.appearRenameFile = false
         this.file = data
+        this.getFileSpec()
       })
   }
 

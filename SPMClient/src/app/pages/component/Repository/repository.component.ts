@@ -40,9 +40,7 @@ fileincartelle=false;
   constructor(private service: Service, public router: Router,private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.isLogged=service.isLogged;
-    this.idUser = localStorage.getItem("id")  
-
-   
+    this.idUser = localStorage.getItem("id")   
   }
 
   back() {
@@ -84,9 +82,8 @@ fileincartelle=false;
   sendNewName(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
       .subscribe(data => {
-        this.appear = false
         this.repoInfo = data
-
+        this.getRepo()
       })
   }
 
@@ -141,14 +138,11 @@ fileincartelle=false;
           }, error => {
             this.errorMessage = <any>error
           });
-        this.createfile = false
-        alert("File creato con successo.")
         //this.router.navigate(['/folder']);
       }, error => {
         this.errorMessage = <any>error
         alert("file non creato")
       })
-    this.createfile = false
   }
 
   controlFormatFile(f) {
@@ -239,8 +233,6 @@ this.allFileFolder =this.allFileFolder.filter(res=>{
           }, error => {
             this.errorMessage = <any>error
           });
-        this.createfold = false
-        alert("Cartella creata con successo.")
       }, error => {
         this.errorMessage = <any>error
         alert("Cartella non creata")
