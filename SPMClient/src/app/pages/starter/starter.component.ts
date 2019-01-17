@@ -18,7 +18,6 @@ export class StarterComponent implements AfterViewInit {
 	subtitle: string
 	isLogged:boolean
 	fileToUpload: File
-	createrepo = false;
 	risp: boolean;
 	repos: Repo[] = null;
 	errorMessage: any;
@@ -109,29 +108,18 @@ export class StarterComponent implements AfterViewInit {
 					var newRepo: Repo = data
 					var count = this.repos.length
 					this.repos[count] = newRepo
-					this.createrepo=false
 				}, error => {
 					this.errorMessage = <any>error
 				});
 				
-				this.createrepo = false;
-				alert("Repository creata con successo.")
 				this.router.navigate(['/']);
 			}, error => {
 				this.errorMessage = <any>error
 				alert("Repository non creata")
 			})
-		this.createrepo = false
 	}
 
-	createRepo() {
-		if(this.createrepo==true){
-			this.createrepo=false
-		}
-		else if(this.createrepo==false){
-			this.createrepo=true
-		}
-	}
+	
 
 
 	controlFormatFile(f) {
