@@ -30,7 +30,7 @@ export class NavigationComponent implements AfterViewInit {
   
 
     ngAfterViewInit() {
-        $(function () {
+         $(function () {
             $(".preloader").fadeOut();
         });
         var set = function () {
@@ -63,7 +63,7 @@ export class NavigationComponent implements AfterViewInit {
             height: '100%',
             color: '#dcdcdc'
         });
-        $("body").trigger("resize");
+        $("body").trigger("resize"); 
     }
 
     logout() {

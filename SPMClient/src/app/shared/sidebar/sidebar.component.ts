@@ -55,7 +55,7 @@ export class SidebarComponent implements AfterViewInit {
   }
   // End open close
   ngAfterViewInit() {
-    $(function () {
+     $(function () {
       $('.sidebartoggler').on('click', function () {
         if ($('body').hasClass('mini-sidebar')) {
           $('body').trigger('resize');
@@ -77,6 +77,6 @@ export class SidebarComponent implements AfterViewInit {
           // $(".sidebartoggler i").removeClass("ti-menu");
         }
       });
-    });
+    }); 
   }
 }

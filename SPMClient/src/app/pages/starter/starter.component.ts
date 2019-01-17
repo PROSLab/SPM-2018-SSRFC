@@ -92,13 +92,13 @@ export class StarterComponent implements AfterViewInit {
 	
 	// SALVO IL FILE
 	save(name) {
-		var state = $('input[name="statep"]:checked').val();
+		var state = $('input[name="statep"]:checked').val(); 
 		if (state == "public") {
 			this.risp = true; //mando true  al server, quindi la repo è pubblica
 		}
 		else {
 			this.risp = false; //mando false al server, la repo è privata
-		}
+		} 
 		var nameRepo = name;
 		this.service.createRepo(nameRepo, this.risp)
 

@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonpModule } from '@angular/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsRoutes } from './component.routing';
 
 
@@ -19,7 +19,7 @@ import { FolderComponent } from './folder/folder.component';
     FormsModule,
     ReactiveFormsModule,
     JsonpModule,
-    NgbModule
+     NgbModule 
   ],
   declarations: [
     RepositoryComponent,
