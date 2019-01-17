@@ -1,4 +1,4 @@
-import * as $ from 'jquery';
+ import * as $ from 'jquery'; 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
@@ -7,11 +7,12 @@ import { FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule,  } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BpmnComponent } from './bpmn-component/bpmn.component';
 import { SpinnerComponent } from './shared/spinner.component';
-import { Service } from './service/service';
+import { Service } from './service/service'; 
 
 @NgModule({
-  declarations: [AppComponent, SpinnerComponent],
+  declarations: [AppComponent,BpmnComponent ,SpinnerComponent ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -21,7 +22,7 @@ import { Service } from './service/service';
     AppRoutingModule,
   ],
   providers: [
-    Service,
+     Service, 
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
