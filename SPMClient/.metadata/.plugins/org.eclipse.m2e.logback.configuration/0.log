@@ -1,8 +1,0 @@
-2018-11-20 11:51:06,804 [Worker-3: Loading available Gradle versions] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is not available. Remote download required.
-2018-11-20 11:55:57,516 [Worker-14: Importing Maven projects] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.SPM:SPMServer:0.0.1-SNAPSHOT @ C:\Users\Arianna\SPM-2018-SSRFC\SPMServer\pom.xml.
-2018-11-20 11:55:59,688 [Worker-14: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /SPMServer/src/main/java
-2018-11-20 11:55:59,689 [Worker-14: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /SPMServer/src/main/resources
-2018-11-20 11:55:59,699 [Worker-14: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /SPMServer/src/main/resources
-2018-11-20 11:55:59,709 [Worker-14: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /SPMServer/src/test/java
-2018-11-20 11:56:00,189 [Worker-14: Importing Maven projects] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Imported and configured 1 project(s) in 5 sec
-2018-11-20 12:02:23,298 [Worker-15: Loading available Gradle versions] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
