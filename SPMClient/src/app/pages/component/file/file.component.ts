@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Service } from '../../../service/service'
 import { Folder } from '../../../../app/service/model/folder'
 import { Repo } from '../../../service/model/repo';
 
 import { exportIsLogged } from '../../starter/starter.component'
+
+
 
 @Component({
   selector: 'app-file',
@@ -14,6 +16,10 @@ import { exportIsLogged } from '../../starter/starter.component'
 
 
 export class FileComponent implements OnInit {
+
+  @ViewChild("closeModal1") closeModal : ElementRef 
+  @ViewChild("closeModal15") closeModal1 : ElementRef
+
   isLogged:boolean
   appearRenameFile: boolean = false;
   fileExist = true;
@@ -47,7 +53,9 @@ export class FileComponent implements OnInit {
   repoId: any
   spostaButton: boolean=false;
   dataArray: any;
-
+  message: string='';
+  idMoment: any;
+  ok: boolean;
 
   constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -68,29 +76,36 @@ export class FileComponent implements OnInit {
   }
 
 moveTo(id){
+  this.idMoment=id
   if(id !=null){
     if(id==this.idRepoSelected){
       this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path)
       .subscribe(data => {
-        alert('file spostato nella repository');
-        this.router.navigate(['/repositoryID',id])
+        this.message="file spostato nella repository"
+       // this.router.navigate(['/repositoryID',id])
       }, error => {
         this.errorMessage = <any>error
       });
 
     }else{
       if(id == this.idFolder){
-        alert('selezionare una cartella diversa dall\'originale')
+        this.message="selezionare una cartella diversa dall\'originale"
       }else{
         this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,id)
         .subscribe(data => {
-          alert('file spostato nella folder selezionata');
-          this.router.navigate(['/repositoryID',this.idRepoSelected,'folderID',id])
+         this.message="file spostato nella folder selezionata"
+         
+         setTimeout(()=>{
+          this.clearModal(),this.go()}, 2000); 
+        //  document.getElementById("myModalModifyPath").setAttribute("class","custom-close")
+          
+         // this.router.navigate(['/repositoryID',this.idRepoSelected,'folderID',id])
         }, error => {
           this.errorMessage = <any>error
         });
     }
   }
+  this.getFileSpec()
 }
 else {
   alert('stai cercando di taroccare il sistema.')
@@ -100,7 +115,18 @@ this.spostaButton=false;
 this.sposta=null;
 }
 
+//how to close a modal
+clearModal():any{
+this.closeModal.nativeElement.click()
+}
 
+clearModal1():any{
+  this.closeModal1.nativeElement.click()
+  }
+
+go(){
+  this.router.navigate(['/repositoryID',this.idRepoSelected,'folderID',this.idMoment])
+}
 
 
   deleteVersion(v) {
@@ -224,13 +250,6 @@ this.sposta=null;
   }
 
 
-  sendNewNameRepo(name) {
-    this.service.changeNameRepo(this.idRepoSelected, name)
-      .subscribe(data => {
-        this.appear = false
-        this.repoInfo = data
-      })
-  }
 
   saveFile(originalName) {
     this.service.createFile(this.idRepoSelected, this.idFolder, this.idUser, originalName)
@@ -239,6 +258,7 @@ this.sposta=null;
         this.fileExist = true;
         this.file = JSON.parse(data)
         this.versionArray[0] = 1
+       
 
       }, error => {
         this.errorMessage = <any>error
@@ -262,6 +282,7 @@ this.sposta=null;
       .subscribe(data => {
         data.createdAt = this.troncaData(data.createdAt)
         this.folderInfo = data
+        console.log(this.folderInfo)
       }, error => {
         this.errorMessage = <any>error
       });
@@ -293,14 +314,19 @@ this.sposta=null;
     this.appearRenameFile = true;
   }
 
-  
+
   sendNewFileName(name) {
     this.service.changeNameFile(this.idFile, name)
       .subscribe(data => {
         this.appearRenameFile = false
         this.file = data
         this.getFileSpec()
-      })
+        this.ok=true;
+        this.message="Success"
+        setTimeout(()=>{this.clearModal1()}, 2000);
+      }, error => {
+        this.errorMessage = <any>error
+      });
   }
 
   shareFile1() {

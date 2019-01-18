@@ -13,34 +13,35 @@ import { exportIsLogged } from '../../starter/starter.component'
 })
 
 export class RepositoryComponent implements OnInit {
-  isLogged:boolean
+  isLogged: boolean
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
-  nameRepoSelect:string
+  nameRepoSelect: string
   idUser: string
-  folder: Folder[] = null
+  folder = null
   repoInfo: Repo = <any>[]
   folderExist: boolean = false
   createfold = false
   errorMessage: any;
   appear: boolean = false;
   createfile = false;
-  files: File[] = null;
+  files = null;
   idFileSelected: any;
   filesExist: boolean = false;
   dataTroncata: any;
   fileToUpload;
-  selezione= "name";
-  search:string;
-  allFileFolder= [];
+  selezione = "name";
+  search='';
+  allFileFolder = [];
   share: boolean = false;
-fileincartelle=false;
+  fileincartelle = false;
+  refresh: boolean = false;
 
-  constructor(private service: Service, public router: Router,private route: ActivatedRoute) {
+  constructor(private service: Service, public router: Router, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
-    this.isLogged=service.isLogged;
-    this.idUser = localStorage.getItem("id")   
+    this.isLogged = service.isLogged;
+    this.idUser = localStorage.getItem("id")
   }
 
   back() {
@@ -49,7 +50,7 @@ fileincartelle=false;
 
 
   ngOnInit() {
-    
+
     this.getRepo()
     this.getAllfolder()
     this.getAllFile()
@@ -105,7 +106,7 @@ fileincartelle=false;
         data.createdAt = this.troncaData(data.createdAt)
         this.repoInfo = data
       }, error => {
-         this.errorMessage = <any>error
+        this.errorMessage = <any>error
       });
   }
 
@@ -118,8 +119,7 @@ fileincartelle=false;
   }
 
   selected() {
-
-   this.selezione= (<HTMLInputElement>document.getElementById("select")).value;
+    this.selezione = (<HTMLInputElement>document.getElementById("select")).value;
   }
 
   saveFile(fileName) {
@@ -138,7 +138,6 @@ fileincartelle=false;
           }, error => {
             this.errorMessage = <any>error
           });
-        //this.router.navigate(['/folder']);
       }, error => {
         this.errorMessage = <any>error
         alert("file non creato")
@@ -163,45 +162,46 @@ fileincartelle=false;
     }
   }
 
-Search(){
-  this.fileincartelle=true;
-  if(this.selezione=="name"){
-  if (this.search != ""){
+  Search() {
+    this.fileincartelle = true;
+    if (this.selezione == "name") {
+      if (this.search != "") {
+        this.files = this.files.filter(res => {
+          return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
+        this.folder = this.folder.filter(res => {
+          return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
+        this.allFileFolder = this.allFileFolder.filter(res => {
+          return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
 
-    this.files=this.files.filter(res=>{
-    return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
-    })
+      } else if (this.search == "") {
+        this.fileincartelle = false;
+        this.ngOnInit()
+      }
+    }
 
-    this.folder =this.folder.filter(res=>{
-      return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
-})
-this.allFileFolder =this.allFileFolder.filter(res=>{
-  return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
-})
-  }else if (this.search==""){
-    this.fileincartelle=false;
-    this.ngOnInit()
-  }
-  }
-  if (this.selezione=="date"){
-    if (this.search != ""){
-      this.files=this.files.filter(res=>{
-      return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
-      }) 
+    if (this.selezione == "date") {
+      if (this.search != "") {
+        this.files = this.files.filter(res => {
+          return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
 
-      this.folder =this.folder.filter(res=>{
-        return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
-  })
-  this.allFileFolder =this.allFileFolder.filter(res=>{
-    return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
-})
-    }else if (this.search==""){
-      this.fileincartelle=false;
+        this.folder = this.folder.filter(res => {
+          return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
+        this.allFileFolder = this.allFileFolder.filter(res => {
+          return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
+      } else if (this.search == "") {
+        this.fileincartelle = false;
 
-      this.ngOnInit()
+        this.ngOnInit()
+
+      }
     }
   }
-}
 
 
 
@@ -246,33 +246,32 @@ this.allFileFolder =this.allFileFolder.filter(res=>{
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
         data = JSON.parse(data)
-this.allFileFolder.length=0;
+        this.allFileFolder.length = 0;
         for (var i = 0; i < data.length; i++) {
-          
+
           data[i].createdAt = this.troncaData(data[i].createdAt)
 
-          this.service.getFile(this.idRepoSelected,data[i].id)
-          .subscribe(tuttifile => {
-            tuttifile = JSON.parse(tuttifile) 
-          
-            for (var i = 0; i < tuttifile.length; i++) {
-              tuttifile[i].createdAt = this.troncaData(tuttifile[i].createdAt)
-            }
-            var k=0;
-            for ( var j= this.allFileFolder.length; k<tuttifile.length;j++)
-            {
-              
-  this.allFileFolder[j]=tuttifile[k]
-  k++
-            }
-            
-           
-          }, error => {
-            this.errorMessage = <any>error
-          });
+          this.service.getFile(this.idRepoSelected, data[i].id)
+            .subscribe(tuttifile => {
+              tuttifile = JSON.parse(tuttifile)
+
+              for (var i = 0; i < tuttifile.length; i++) {
+                tuttifile[i].createdAt = this.troncaData(tuttifile[i].createdAt)
+              }
+              var k = 0;
+              for (var j = this.allFileFolder.length; k < tuttifile.length; j++) {
+
+                this.allFileFolder[j] = tuttifile[k]
+                k++
+              }
 
 
-        }       
+            }, error => {
+              this.errorMessage = <any>error
+            });
+
+
+        }
         this.folder = (data)
         if (this.folder.length > 0) {
           this.folderExist = true
@@ -304,12 +303,12 @@ this.allFileFolder.length=0;
 
 
   sendTofolder(folderSelected) {
-    this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',folderSelected]);
-    
-  } 
+    this.router.navigate(['repositoryID', this.idRepoSelected, 'folderID', folderSelected]);
 
- sendTofile(fileSelected) {
-  this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',fileSelected]);
   }
-  
+
+  sendTofile(fileSelected) {
+    this.router.navigate(['repositoryID', this.idRepoSelected, 'fileID', fileSelected]);
+  }
+
 }

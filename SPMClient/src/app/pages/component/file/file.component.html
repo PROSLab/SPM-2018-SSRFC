@@ -7,9 +7,10 @@
 
                 <h3>File Details</h3> <button type="button" data-toggle="modal" data-target="#open" class="btn btn-primary"
                     style="margin-left: 100%;margin-top:1%"><i class="fa fa-cog"></i></button>
-
-                <b> File:</b> {{file.originalName}} <br>
+                
+                <b> File name:</b> {{file.originalName}} <br>
                 <b> Created At: </b> {{file.createdAt}} <br>
+                <b>Folder:</b> {{folderInfo?.folderName}}<br>
                 <div *ngIf="versionExist">
                     <b> Version n. : </b>
                     <select [(ngModel)]="vers" (change)="selected()">
@@ -38,15 +39,15 @@
 
                     <div *ngIf="isLogged && fileExist">
                             <h6>Settings of the file</h6><br>   
-                        <button type="button" data-toggle="modal" data-target="#myModalModifyFile" (click)="modifyFile()"
+                        <button type="button" data-toggle="modal"  data-target="#myModalModifyFile" (click)="modifyFile()"
                             class="btn btn-primary" style="margin-right:5px;" data-dismiss="modal">
-                            Modify file</button> <br><br>
-                        <button type="button" data-dismiss="modal" data-toggle="modal" data-target="#myModalModifyPath"
+                            Modify File</button> <br><br>
+                        <button  type="button" data-dismiss="modal" data-toggle="modal" data-target="#myModalModifyPath"
                             class="btn btn-primary" style="margin-right:5px;" data-dismiss="modal">
                             Modify Path</button> <br><br>
                         <button data-dismiss="modal" type="button" data-toggle="modal" data-target="#myModalCreateNewVersion"
                             class="btn btn-primary" style="margin-right:5px;">
-                            + Create new version</button><br>
+                            + Create new Version</button><br>
                         <hr>
                         <br>
                         <h6>Downloads and Share</h6><br> 
@@ -79,7 +80,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" #closeModal data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -95,7 +96,7 @@
 
 
 
-    <div class="modal fade" id="myModalModifyFile" role="dialog">
+    <div class="modal fade " id="myModalModifyFile" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -108,12 +109,16 @@
                         <label for="reponame"><b>File name</b> </label><br>
                         <input type="text" maxlength="13" required id="nameFile" #nameFile name="nameFile" />
                     </div>
+                    <br>
+                    <div *ngIf="ok" class="alert alert-success alert-dismissible col-4" id="myAlert">
+                            <!-- <a href="#" class="close">&times;</a> -->
+                            <strong>{{message}}</strong> </div>
                 </div>
                 <div class="modal-footer">
-                    <button (click)="sendNewFileName(nameFile.value)" style="margin-right:10px;" data-dismiss="modal"
-                        class="btn btn-primary col-4">Save
-                        File </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    
+                    <button (click)="sendNewFileName(nameFile.value)"  style="margin-right:10px;"
+                        class="btn btn-primary col-4">Save File </button>
+                        <button type="button" class="btn btn-danger" #closeModal15 data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -136,7 +141,7 @@
                     <div class="modal-footer">
                         <button (click)="shareFile(e.value,name.value)" style="margin-right:10px;" data-dismiss="modal"
                             class="btn btn-primary col-4">Share </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger"  #closeModal2 data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -155,19 +160,20 @@
                         <br>
                         Move to...
                         <select [(ngModel)]="sposta" (change)="selectedSposta()">
-                            <option disabled>Select a folder..</option>
+                            <option disabled>Select a folder...</option>
                             <option [ngValue]="v" *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
                         </select>
                         <br>
-                        <div class="col-2">
-                            <button *ngIf="spostaButton" (click)="moveTo(sposta.id)" class="btn btn-warning" style="margin-right:5px;">
-                                Move to {{sposta?.folderName}} {{sposta?.repositoryName}} </button>
+                        <div>
+                           {{message}}
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button (click)="shareFile(e.value,name.value)" style="margin-right:10px;" data-dismiss="modal"
-                            class="btn btn-primary col-4">Move </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                        <button *ngIf="spostaButton"  (click)="moveTo(sposta.id)"  class="btn btn-warning" style="margin-right:5px;">
+                                    Move to {{sposta?.folderName}} {{sposta?.repositoryName}} </button>
+                        <button  type="button" (click)="go()" class="btn btn-danger" data-dismiss="modal">Go to the folder</button>
+                        <button type="button" class="btn btn-danger" #closeModal1 data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

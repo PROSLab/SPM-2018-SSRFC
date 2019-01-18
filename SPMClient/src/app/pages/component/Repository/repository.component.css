@@ -52,7 +52,7 @@ input[type="file"] {
 }
 #search {
     width: 130px;
-    height: 40px;
+    height: 37px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -68,4 +68,18 @@ input[type="file"] {
   
   #search:focus {
     width: 70%;
+  }
+
+  .refresh{
+      background-color: white;
+      border:1px solid grey;
+      border-radius:0%;
+      height: 37px;
+      width: 42px;
+  }
+
+
+  .select1{
+      height: 37px;
+     /*  width: 10px; */
   }
