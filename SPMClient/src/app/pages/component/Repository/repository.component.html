@@ -1,7 +1,5 @@
-
-
 <div class="container">
-   
+
 
     <div class="col-5" class="row">
         <div class="  col-md-6 offset-md-3">
@@ -16,36 +14,34 @@
                     Repository: {{repoInfo?.repositoryName}} <br>
                     Created At: {{repoInfo?.createdAt}} <br>
                     <div style="margin-bottom:5px;"> State: {{repoInfo?.publicR}} <br> </div>
-                    <button (click)="modifyRepo()" *ngIf="isLogged" type="button" data-toggle="modal" data-target="#myModalRepo" class="btn btn-primary">Modify Repository</button>
-                      <br><br>
+                    <button *ngIf="isLogged" type="button" data-toggle="modal" data-target="#myModalRepoModify" class="btn btn-primary">Modify
+                        Repository</button>
+                    <br><br>
                 </div>
             </div>
 
-            <div *ngIf="appear" class="col-4">
+            <div class="modal fade" id="myModalRepoModify" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Modify repository</h4>
+                        </div>
 
-                <div class="modal fade" id="myModalRepo" role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Modify repository</h4>
+                        <div class="modal-body">
+
+                            <div>
+                                <label for="reponame"><b>Repository name</b> </label><br>
+                                <input type="text" maxlength="13" required id="namerepo" [(ngModel)]="reset" #n name="namerepo" />
                             </div>
-        
-                            <div class="modal-body">
-                              
-                                <div>
-                                    <label for="reponame"><b>Repository name</b> </label><br>
-                                    <input type="text" maxlength="13" required id="namerepo" #n name="namerepo"/>
-                                </div>
-        
-                              
+                            <br>
+                            <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
+                                <strong>{{message}}</strong> 
                             </div>
-        
-                                <div class="modal-footer">
-                                    <button (click)="sendNewName(n.value)" style="margin-right:10px;" data-dismiss="modal" class="btn btn-primary col-4">Save
-                                        Repository </button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                           
+                        </div>
+                        <div class="modal-footer">
+                            <button (click)="sendNewName(n.value)" style="margin-right:10px;" class="btn btn-primary col-4">Save
+                                Repository </button>
+                            <button type="button" class="btn btn-danger" #closeModalModifyRepo data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -56,12 +52,14 @@
 
     <div class="row" *ngIf="isLogged">
         <div class="col-2">
-                
-            <button  class="btn btn-primary"  type="button" data-toggle="modal" data-target="#myModalFolder" style="margin-right:5px;">+ Create Folder</button>
+
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModalFolder" style="margin-right:5px;">+
+                Create Folder</button>
         </div>
 
         <div class="col-2">
-            <button  class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModalFile"  style="margin-right:5px;">+ Create File</button>
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModalFile" style="margin-right:5px;">+
+                Create File</button>
         </div>
         <div class="col-2">
             <label for="file" class="btn btn-success" style="margin-right:5px;">Import File
@@ -69,107 +67,120 @@
             </label>
         </div>
         <div class="col-2">
-            <button type="button" data-toggle="modal" data-target="#myModalShareRepo" class="btn btn-warning" style="margin-right:5px;">Share Repo</button>
+            <button type="button" data-toggle="modal" data-target="#myModalShareRepo" class="btn btn-warning" style="margin-right:5px;">Share
+                Repo</button>
         </div>
     </div>
     <hr>
 
-        <div class="modal fade" id="myModalFolder" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Create a new Folder</h4>
-                        </div>
-    
-                        <div class="modal-body">
-                          
-                            <div>
-                                <label for="reponame"><b>Folder name</b> </label><br>
-                                <input type="text" maxlength="13" required id="namefolder" #nameFolder name="namefolder"/>
-                            </div>
-    
-                          
-                        </div>
-    
-                            <div class="modal-footer">
-                                <button (click)="saveFolder(nameFolder.value)" style="margin-right:10px;" data-dismiss="modal" class="btn btn-primary col-4">Save
-                                    Folder </button>
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            </div>
-                       
+    <div class="modal fade" id="myModalFolder" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create a new Folder</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div>
+                        <label for="reponame"><b>Folder name</b> </label><br>
+                        <input type="text" maxlength="13" required id="namefolder" [(ngModel)]="reset" #nameFolder name="namefolder" />
+                    </div>
+                    <br>
+                    <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
+                        <strong>{{message}}</strong> 
                     </div>
                 </div>
+
+                <div class="modal-footer">
+                    <button (click)="saveFolder(nameFolder.value)" style="margin-right:10px;" class="btn btn-primary col-4">Save
+                        Folder </button>
+                    <button type="button" class="btn btn-danger" #closeModalCreateFolder data-dismiss="modal">Close</button>
+                </div>
+
             </div>
+        </div>
+    </div>
 
 
-        <div class="modal fade" id="myModalFile" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Modify File name</h4>
-                        </div>
-    
-                        <div class="modal-body">
-                          
-                            <div>
-                                <label for="reponame"><b>File name</b> </label><br>
-                                <input type="text" maxlength="13" required id="namerepo" #nameFile name="namerepo"/>
-                            </div>
-                        </div>
-    
-                            <div class="modal-footer">
-                                <button (click)="saveFile(nameFile.value)" style="margin-right:10px;" data-dismiss="modal" class="btn btn-primary col-4">Save
-                                    File </button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            </div>
-                       
+    <div class="modal fade" id="myModalFile" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create a new File</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div>
+                        <label for="reponame"><b>File name</b> </label><br>
+                        <input type="text" maxlength="13" required id="namerepo" #nameFile name="namerepo" />
+                    </div>
+                        <br>
+                    <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
+                        <strong>{{message}}</strong> 
                     </div>
                 </div>
-            </div>
 
-        <div class="modal fade col-12" id="myModalShareRepo" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Share Repository </h4>
-                        </div>
-    
-                        <div class="modal-body">
-                          
-                            <div>
-                                <label for="reponame"><b>Email:</b> </label><br>
-                                <input type="email"  required id="namerepo" #emailShare name="namerepo"/>
-                            </div>
-                        </div>
-    
-                            <div class="modal-footer">
-                                <button (click)="shareRepo(emailShare.value)" style="margin-right:10px;" data-dismiss="modal" class="btn btn-primary col-4">Share Repo </button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            </div>
+                <div class="modal-footer">
+                    <button (click)="saveFile(nameFile.value)" style="margin-right:10px;" class="btn btn-primary col-4">Save
+                        File </button>
+                    <button type="button" class="btn btn-danger" #closeModalCreateFile data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade col-12" id="myModalShareRepo" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Share Repository </h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div>
+                        <label for="reponame"><b>Email:</b> </label><br>
+                        <input type="email" required id="namerepo" [(ngModel)]="reset" #emailShare name="namerepo" />
+                    </div>
+
+                    <br>
+                    
+                    <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
+                        <strong>{{message}}</strong> 
                     </div>
                 </div>
-            </div>
-<br>
 
-<div *ngIf="folderExist==false && filesExist==false">
-Your repository is empty.<br> You can create a folder or a file, or import a file from your system.
-</div>
+                <div class="modal-footer">
+                    <button (click)="shareRepo(emailShare.value)" style="margin-right:10px;" class="btn btn-primary col-4">Share
+                        Repo </button>
+                    <button type="button" class="btn btn-danger" #closeModalShareRepo data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div *ngIf="folderExist==false && filesExist==false">
+        Your repository is empty.<br> You can create a folder or a file, or import a file from your system.
+    </div>
 
     <div *ngIf="folderExist==true || filesExist==true">
         <div class="row">
             Here you can search models contains in this repository.
         </div>
-
         <br>
         <div class="row">
             <button *ngIf="refresh==true" class="btn btn-default refresh"><i class="fa fa-refresh fa-spin" style="font-size:24px"></i></button>
-            <select id="select"  class="col-2 select1" (onchange)="selected()">
+            <select id="select" class="col-2 select1" (onchange)="selected()">
                 <option selected value="name">Name Model</option>
                 <option value="date">Date Model</option>
             </select>
 
             <input type="text" [(ngModel)]="search" id="search" name="search" (input)="Search()" placeholder="Search..">
-      </div>
+        </div>
 
         <br>
 
@@ -202,17 +213,17 @@ Your repository is empty.<br> You can create a folder or a file, or import a fil
                     </th>
                     <th scope="row">{{fil?.createdAt}}</th>
                 </tr>
-                </tbody>
-                <tbody *ngIf="fileincartelle">
-                
-                <tr  *ngFor="let fil of allFileFolder;" (click)="sendTofile(fil.id)">
+            </tbody>
+            <tbody *ngIf="fileincartelle">
+
+                <tr *ngFor="let fil of allFileFolder;" (click)="sendTofile(fil.id)">
                     <th scope="row">
                         <i class="fa">&#xf016; </i>
                         {{fil?.originalName}}
                     </th>
                     <th scope="row">{{fil?.createdAt}}</th>
                 </tr>
-            
+
             </tbody>
         </table>
     </div>

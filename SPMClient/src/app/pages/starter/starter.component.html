@@ -29,7 +29,7 @@
                       
                         <div>
                             <label for="reponame"><b>Repository name</b> </label><br>
-                            <input type="text" maxlength="13" required id="namerepo" #n name="namerepo"/>
+                            <input type="text" maxlength="13" required id="namerepo" [(ngModel)]="reset" #n name="namerepo"/>
                         </div>
 
                         <br>
@@ -38,13 +38,17 @@
                                 <input type="radio" name="statep" id="state" value="public" checked>Public<br>
                                 <input type="radio" name="statep" id="state" value="private"> Private<br>
                             </div>
+
+                            <br>
+                    <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
+                            <!-- <a href="#" class="close">&times;</a> -->
+                            <strong>{{message}}</strong> </div>
                       
                     </div>
 
                         <div class="modal-footer">
-                            <button (click)="save(n.value)" style="margin-right:10px;" data-dismiss="modal" class="btn btn-primary col-4">Save
-                                Repository </button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button (click)="save(n.value)" style="margin-right:10px;" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-default" #closeModal data-dismiss="modal">Close</button>
                         </div>
                    
                 </div>
