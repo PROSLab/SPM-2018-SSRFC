@@ -7,7 +7,7 @@
 
                 <h3>File Details</h3> <button type="button" data-toggle="modal" data-target="#open" class="btn btn-primary"
                     style="margin-left: 100%;margin-top:1%"><i class="fa fa-cog"></i></button>
-                
+
                 <b> File name:</b> {{file.originalName}} <br>
                 <b> Created At: </b> {{file.createdAt}} <br>
                 <b>Folder:</b> {{folderInfo?.folderName}}<br>
@@ -38,11 +38,11 @@
                 <div class="modal-body">
 
                     <div *ngIf="isLogged && fileExist">
-                            <h6>Settings of the file</h6><br>   
-                        <button type="button" data-toggle="modal"  data-target="#myModalModifyFile" (click)="modifyFile()"
+                        <h6>Settings of the file</h6><br>
+                        <button type="button" data-toggle="modal" data-target="#myModalModifyFile" (click)="modifyFile()"
                             class="btn btn-primary" style="margin-right:5px;" data-dismiss="modal">
                             Modify File</button> <br><br>
-                        <button  type="button" data-dismiss="modal" data-toggle="modal" data-target="#myModalModifyPath"
+                        <button type="button" data-dismiss="modal" data-toggle="modal" data-target="#myModalModifyPath"
                             class="btn btn-primary" style="margin-right:5px;" data-dismiss="modal">
                             Modify Path</button> <br><br>
                         <button data-dismiss="modal" type="button" data-toggle="modal" data-target="#myModalCreateNewVersion"
@@ -50,13 +50,13 @@
                             + Create new Version</button><br>
                         <hr>
                         <br>
-                        <h6>Downloads and Share</h6><br> 
+                        <h6>Downloads and Share</h6><br>
                         <button data-dismiss="modal" class="btn btn-success" type="button" data-toggle="modal"
-                            data-target="#myModalShareFile" style="margin-right:5px;">Share File</button><br>
+                            data-target="#myModalShareFile" (click)="shareFiles()" style="margin-right:5px;">Share File</button><br>
                     </div>
 
                     <br>
-                    
+
                     <button *ngIf="versionExist" data-dismiss="modal" (click)="downloadAllVersion()" class="btn btn-success"
                         style="margin-right:5px;">Download
                         ZIP models</button><br>
@@ -66,7 +66,7 @@
                         class="btn btn-success" style="margin-right:5px;">Download
                         Version {{vers}}</button><br>
                     <hr>
-                    <h6>Delete</h6><br> 
+                    <h6>Delete</h6><br>
                     <br>
 
                     <button *ngIf="versionExist && cambia && vers!=null && isLogged" data-dismiss="modal" (click)="deleteVersion(vers)"
@@ -94,102 +94,123 @@
     </div>
 
 
-
-
+    <!--   -->
     <div class="modal fade " id="myModalModifyFile" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Modify file name</h4>
                 </div>
+                <form [formGroup]="modifyNameForm" (ngSubmit)="sendNewFileName(nameFile.value)">
                 <div class="modal-body">
-                    
-                    <div>
+                
+
+                   
                         
                         <label for="reponame"><b>File name</b> </label><br>
-                        <input type="text" maxlength="13" required id="nameFile" #nameFile name="nameFile" />
-                    </div>
-                    <br>
-                    <div *ngIf="ok" class="alert alert-success alert-dismissible col-4" id="myAlert">
+                        <input type="text"  class="form-control" formControlName="reponame" maxlength="13" required id="nameFile" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
+                            #nameFile name="nameFile" />
+                       
+                        <br>
+                        <div *ngIf="ok" class="alert alert-success alert-dismissible col-4" id="myAlert">
                             <!-- <a href="#" class="close">&times;</a> -->
                             <strong>{{message}}</strong> </div>
-                </div>
-                <div class="modal-footer">
-                    
-                    <button (click)="sendNewFileName(nameFile.value)"  style="margin-right:10px;"
-                        class="btn btn-primary col-4">Save File </button>
-                        <button type="button" class="btn btn-danger" #closeModal15 data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="myModalShareFile" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Share File</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <label for="reponame">Enter email</label>
-                        <input type="email" required id="email" #e name="email" />
-                        <br>
-                        <label for="reponame">Enter repo name</label>
-                        <input type="text" required id="text" #name name="text" />
-                    </div>
+                            <div *ngIf="submitted && f.reponame.errors" class="invalid-feedback">
+                                   
+                                    <div *ngIf="f.reponame.errors.required">RepoName is Required</div>
+                                </div>
+                   </div>
                     <div class="modal-footer">
-                        <button (click)="shareFile(e.value,name.value)" style="margin-right:10px;" data-dismiss="modal"
-                            class="btn btn-primary col-4">Share </button>
-                        <button type="button" class="btn btn-danger"  #closeModal2 data-dismiss="modal">Close</button>
+
+                        <button style="margin-right:10px;" class="btn btn-primary col-4">Save File </button>
+                        <button type="button" class="btn btn-danger" #closeModal15 data-dismiss="modal">Close</button>
+                        
+                    </div> 
+                   
+                </form>
+                </div>
+               
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModalShareFile" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Share File</h4>
+                    </div>               
+                     <form [formGroup]="shareFileForm" (ngSubmit)="shareFile(e.value,name.value)">
+
+                    <div class="modal-body">
+                        
+                            <label for="email">Enter email</label>
+                            <input  class="form-control" formControlName="email" type="email"  id="email" #e name="email"  [ngClass]="{ 'is-invalid': submitted && g.email.errors }"/>
+                            <div *ngIf="submitted && g.email.errors" class="invalid-feedback">
+                                    <div *ngIf="g.email.errors.email">Email must be a valid email address</div>
+                                    <div *ngIf="g.email.errors.required">Email is Required</div>
+                                </div>
+                            <br>
+                            <label for="reponame">Enter repo name</label>
+                            <input type="text"  class="form-control" formControlName="reponame"  id="text" #name name="text"  [ngClass]="{ 'is-invalid': submitted && g.reponame.errors }"/>
+                            <div *ngIf="submitted && g.reponame.errors" class="invalid-feedback">
+                                   
+                                    <div *ngIf="g.reponame.errors.required">RepoName is Required</div>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button  style="margin-right:10px;"
+                                class="btn btn-primary col-4">Share </button>
+                            <button type="button" class="btn btn-danger" #closeModal2 data-dismiss="modal">Close</button>
+                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="myModalModifyPath" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Change Path</h4>
-                </div>
-                <div class="modal-body">
-                    <div *ngIf="isLogged || isLogged==undefined">
-                        <br>
-                        <br>
-                        Move to...
-                        <select [(ngModel)]="sposta" (change)="selectedSposta()">
-                            <option disabled>Select a folder...</option>
-                            <option [ngValue]="v" *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
-                        </select>
-                        <br>
-                        <div>
-                           {{message}}
+        <div class="modal fade" id="myModalModifyPath" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Change Path</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div *ngIf="isLogged || isLogged==undefined">
+                            <br>
+                            <br>
+                            Move to...
+                            <select [(ngModel)]="sposta" (change)="selectedSposta()">
+                                <option disabled>Select a folder...</option>
+                                <option [ngValue]="v" *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
+                            </select>
+                            <br>
+                            <div>
+                                {{message}}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+
+                            <button *ngIf="spostaButton" (click)="moveTo(sposta.id)" class="btn btn-warning" style="margin-right:5px;">
+                                Move to {{sposta?.folderName}} {{sposta?.repositoryName}} </button>
+                            <button type="button" (click)="go()" class="btn btn-danger" data-dismiss="modal">Go to the
+                                folder</button>
+                            <button type="button" class="btn btn-danger" #closeModal1 data-dismiss="modal">Close</button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-
-                        <button *ngIf="spostaButton"  (click)="moveTo(sposta.id)"  class="btn btn-warning" style="margin-right:5px;">
-                                    Move to {{sposta?.folderName}} {{sposta?.repositoryName}} </button>
-                        <button  type="button" (click)="go()" class="btn btn-danger" data-dismiss="modal">Go to the folder</button>
-                        <button type="button" class="btn btn-danger" #closeModal1 data-dismiss="modal">Close</button>
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
-    <div>
-        <div *ngIf="vers!=null" style="border:1px solid black;height:70px">
-            Stai visualizzando la versione del file n. {{v}}!
+        <div>
+            <div *ngIf="vers!=null" style="border:1px solid black;height:70px">
+                Stai visualizzando la versione del file n. {{v}}!
+            </div>
+            <div *ngIf="vers==null">
+                Non stai visualizzando alcuna versione del file. Clicca sul menu per sceglierne una!
+            </div>
+
         </div>
-        <div *ngIf="vers==null">
-            Non stai visualizzando alcuna versione del file. Clicca sul menu per sceglierne una!
-        </div>
 
-    </div>
-
-    <br>
-    <button (click)="back()" class="btn btn-primary">Back</button>
+        <br>
+        <button (click)="back()" class="btn btn-primary">Back</button>
