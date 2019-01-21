@@ -58,6 +58,7 @@ export class BpmnComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.load()
     this.modeler = new Modeler({
       container: '#canvas',
       width: '100%',
@@ -89,9 +90,10 @@ export class BpmnComponent implements OnInit {
   }
 
   load(): void {
-    const url = '/assets/bpmn/initial.bpmn';
-    this.http.get(url, {
-      headers: {observe: 'response'}, responseType: 'text'
+    const url = "http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+1
+/*     const url = '/assets/bpmn/initial.bpmn';
+ */    this.http.get(url, {
+      headers: {}, responseType: 'text'
     }).subscribe(
       (x: any) => {
         console.log('Fetched XML, now importing: ', x);
