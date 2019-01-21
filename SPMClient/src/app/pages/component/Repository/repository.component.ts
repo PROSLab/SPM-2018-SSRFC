@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
 import { File } from '../../../service/model/file'
 import { exportIsLogged } from '../../starter/starter.component'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-Repository',
@@ -17,7 +18,7 @@ export class RepositoryComponent implements OnInit {
   @ViewChild("closeModalCreateFolder") closeModal2: ElementRef
   @ViewChild("closeModalCreateFile") closeModal3: ElementRef
   @ViewChild("closeModalShareRepo") closeModal4: ElementRef
-  
+  @ViewChild("closeModalImport") closeModal5: ElementRef
   isLogged: boolean
   selectedfolder: any
   createFold: boolean
@@ -45,8 +46,11 @@ export class RepositoryComponent implements OnInit {
   ok: boolean=false;
   message: string='';
   reset: string='';
+  ok2: boolean;
+open1=false
+info=false
 
-  constructor(private service: Service, public router: Router, private route: ActivatedRoute) {
+  constructor(private service: Service, public router: Router, private route: ActivatedRoute, private modal: NgbModal) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.isLogged = service.isLogged;
     this.idUser = localStorage.getItem("id")
@@ -58,29 +62,27 @@ export class RepositoryComponent implements OnInit {
 
 
   ngOnInit() {
-
     this.getRepo()
     this.getAllfolder()
     this.getAllFile()
   }
 
-
   shareRepo(email) {
-
+    this.clearModal(this.closeModal4)
     this.service.shareRepository(this.idRepoSelected, email)
       .subscribe(data => {
         this.ok=true
         this.message="Repository condivisa correttamente!"
 
         setTimeout(() => {
-          this.clearModal(this.closeModal4)
 					this.ok = false
-					this.message = '',
+					this.message = ''
           this.reset = ''
         }, 2000)
-        
+
       this.share = false
-      }, error => {
+      }, 
+      error => {
         this.ok=true
         this.message="ERRORE! Invio email non riuscito"
         this.errorMessage = <any>error
@@ -95,18 +97,19 @@ export class RepositoryComponent implements OnInit {
   sendNewName(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
       .subscribe(data => {
+        this.clearModal(this.closeModal1)
+        this.repoInfo = data
         this.ok=true
         this.message="Repository modificata correttamente!"
-        this.repoInfo = data
-        
+
         setTimeout(() => {
-          this.clearModal(this.closeModal1)
 					this.ok = false
 					this.message = '',
           this.reset = ''
-				}, 2000);
-
+        }, 2000);
+        
         this.getRepo()
+
       }, error => {
         this.message="Errore!"
         this.errorMessage = <any>error
@@ -129,6 +132,7 @@ export class RepositoryComponent implements OnInit {
         }
 
         data.createdAt = this.troncaData(data.createdAt)
+        
         this.repoInfo = data
       }, error => {
         this.errorMessage = <any>error
@@ -139,9 +143,6 @@ export class RepositoryComponent implements OnInit {
     this.createfold = true;
   }
 
-  createFile() {
-    this.createfile = true;
-  }
 
   selected() {
     this.selezione = (<HTMLInputElement>document.getElementById("select")).value;
@@ -153,18 +154,19 @@ export class RepositoryComponent implements OnInit {
     
     this.service.createFile(this.idRepoSelected, this.idUser, name, idfolder)
       .subscribe(data => {
+        var file = JSON.parse(data)
+
         this.ok=true
         this.message="File creato correttamente!"
-        var file = JSON.parse(data)
+        this.clearModal(this.closeModal3)
+
         setTimeout(() => {
-          this.clearModal(this.closeModal3)
           this.ok = false
           this.message = '',
           this.reset = ''
-        }, 2000);
+        }, 3000);
 
         this.service.getFileSpec(file.id)
-        
           .subscribe(data => {
             var newFile: File = data
             newFile.createdAt = this.troncaData(newFile.createdAt)
@@ -181,15 +183,26 @@ export class RepositoryComponent implements OnInit {
       })
   }
 
+
   controlFormatFile(f) {
     if (f.name.split('.').pop() == "bpmn") {
       return true;
     }
-    else {
-      alert("formato file non corretto")
+    else  if(f.name.split('.').pop() != "bpmn"){
+
+      
+        this.ok2=true
+        this.message="Formato file non corretto"
+        setTimeout(() => {
+          this.ok2 = false
+          this.message = ''
+        }, 2000);
+      
+     
       return false;
     }
   }
+
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
@@ -197,6 +210,7 @@ export class RepositoryComponent implements OnInit {
     if (a == true) {
       this.uploadFileToActivity()
     }
+  
   }
 
   Search() {
@@ -233,7 +247,6 @@ export class RepositoryComponent implements OnInit {
         })
       } else if (this.search == "") {
         this.fileincartelle = false;
-
         this.ngOnInit()
 
       }
@@ -241,14 +254,20 @@ export class RepositoryComponent implements OnInit {
   }
 
 
-
   uploadFileToActivity() {
     this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload).subscribe(data => {
-      alert("Hai caricato il file correttamente.")
+     
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
       this.files[count] = newFile
+      this.ok=true
+      this.message="File importato correttamente"
+
+      setTimeout(() => {
+        this.ok = false
+        this.message = ''
+      }, 2000);
     }, error => {
       console.log(error);
     });
@@ -256,24 +275,23 @@ export class RepositoryComponent implements OnInit {
 
 
   saveFolder(folderName) {
-    
     var nameFolder = folderName;
     this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
       .subscribe(data => {
+        this.clearModal(this.closeModal2)
         this.ok=true
         this.message="Folder creata correttamente!"
         var folder = JSON.parse(data)
         this.service.getFolderSpec(folder.id)
           .subscribe(data => {
-           
             var newFolder: Folder = data
             newFolder.createdAt = this.troncaData(newFolder.createdAt)
             var count = this.folder.length
             this.folder[count] = newFolder
             this.folderExist = true
-
+           
+            
             setTimeout(() => {
-              this.clearModal(this.closeModal2)
               this.ok = false
               this.message = '',
               this.reset = ''
@@ -285,7 +303,7 @@ export class RepositoryComponent implements OnInit {
           });
       }, error => {
         this.errorMessage = <any>error
-        alert("Cartella non creata")
+       this.message="Errore"
       })
     this.createfold = false
   }
@@ -348,9 +366,13 @@ export class RepositoryComponent implements OnInit {
   }
 
 
+  sendToRepo() {
+    this.router.navigate(['']);
+
+  }
+
   sendTofolder(folderSelected) {
     this.router.navigate(['repositoryID', this.idRepoSelected, 'folderID', folderSelected]);
-
   }
 
   sendTofile(fileSelected) {

@@ -183,7 +183,8 @@
 
     <div>
         <div *ngIf="vers!=null" style="border:1px solid black;height:70px">
-            Stai visualizzando la versione del file n. {{v}}!
+            Stai visualizzando la versione del file n. {{vers}}!
+            <button (click)="sendToEditor(vers)" class="btn btn-primary">Open -> </button>
         </div>
         <div *ngIf="vers==null">
             Non stai visualizzando alcuna versione del file. Clicca sul menu per sceglierne una!

@@ -176,6 +176,7 @@ go(){
     }
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
+        console.log(data)
         if (data != null) {
           data.createdAt = this.troncaData(data.createdAt)
           this.fileExist = true;
@@ -234,8 +235,16 @@ go(){
       window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
   }
 
-
   downloadFile(vers) {
+    console.log(vers)
+    this.service.downloadFile(this.idFile,vers)
+    .subscribe(data => {
+     console.log(data)
+    
+    }, error => {
+      this.errorMessage = <any>error
+    });
+
     window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)
     this.cambia=false
     this.vers=null
@@ -342,6 +351,11 @@ go(){
         alert("ERRORE! Invio email non riuscito")
         this.errorMessage = <any>error
       })
+  }
+
+  sendToEditor(v) {
+    this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.idFolder,'fileID',this.idFile,'editorBPMN',v]);
+    
   }
 
 }

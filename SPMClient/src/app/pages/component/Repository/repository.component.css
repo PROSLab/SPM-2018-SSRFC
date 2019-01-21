@@ -33,7 +33,6 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    background-color:whitesmoke;
   }
   
   td, th {
@@ -51,8 +50,8 @@ input[type="file"] {
     display: none;
 }
 #search {
-    width: 130px;
-    height: 37px;
+    width: 280px;
+    height: 35px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -74,12 +73,30 @@ input[type="file"] {
       background-color: white;
       border:1px solid grey;
       border-radius:0%;
-      height: 37px;
-      width: 42px;
+      height: 30px;
+      width: 32px;
   }
 
-
   .select1{
-      height: 37px;
-     /*  width: 10px; */
+      height: 35px;
+      width: 40px;
+  }
+
+  .top{
+    position: fixed;
+    top: 5px; 
+    left:2%;
+    width: 96%;
+}
+
+.central{
+    margin-left: 20%
+}
+
+  .numero1:hover{
+border-color: grey
+  }
+
+  .menus:hover{
+      background-color: rgb(209, 192, 94);
   }

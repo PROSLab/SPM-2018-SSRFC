@@ -12,7 +12,7 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { Service } from './service/service'; 
 
 @NgModule({
-  declarations: [AppComponent,BpmnComponent ,SpinnerComponent ],
+  declarations: [AppComponent,SpinnerComponent ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

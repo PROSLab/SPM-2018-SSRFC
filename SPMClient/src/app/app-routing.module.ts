@@ -8,10 +8,7 @@ const routes: Routes = [
         path: '',
         loadChildren: './pages/pages.module#PagesModule'
     },
-    {
-        path:'ciao',
-        component:BpmnComponent
-    },
+   
     { path: '**', redirectTo: 'PageNotFound' },
    
     

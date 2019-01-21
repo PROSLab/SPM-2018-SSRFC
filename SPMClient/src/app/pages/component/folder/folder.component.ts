@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,6 +12,8 @@ import { exportIsLogged } from '../../starter/starter.component'
 })
 
 export class FolderComponent implements OnInit {
+  @ViewChild("closeModifyName") closeModal1: ElementRef
+  @ViewChild("closeNewFile") closeModal2: ElementRef
   
   selectedfolder: any
   createFold: boolean
@@ -34,6 +36,9 @@ export class FolderComponent implements OnInit {
   dataTroncata: string;
   caricaFile: boolean=false;
   isLogged:boolean
+  ok: boolean=false;
+  message: string='';
+  reset: string='';
 
   constructor(private service: Service, public router: Router,route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -46,6 +51,10 @@ export class FolderComponent implements OnInit {
     this.router.navigate(['repositoryID/',this.idRepoSelected]);
   }
 
+ 	//how to close a modal
+   clearModal(modal): any {
+		modal.nativeElement.click()
+	}
 
   controlFormatFile(f) {
 		if (f.name.split('.').pop() == "bpmn") {
@@ -66,6 +75,7 @@ export class FolderComponent implements OnInit {
   }
 
   uploadFileToActivity() {
+    console.log(this.fileToUpload)
     this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,this.folderSelected).subscribe(data => {
       alert("Hai caricato il file correttamente.")
       var newFile = data
@@ -93,22 +103,26 @@ export class FolderComponent implements OnInit {
   modifyFolder() {
     this.appearFormFolder = true;
   }
-/* 
-  sendNewNameRepo(name) {
-    this.service.changeNameRepo(this.idRepoSelected, name)
-      .subscribe(data => {
-        this.appear = false
-        this.repoInfo = data
-      })
-  } */
 
   sendNewNameFolder(name) {
     this.service.changeNameFolder(this.folderSelected, name)
       .subscribe(data => {
-        this.appearFormFolder = false
         this.folderInfo = data
-        this.getFolderInfo()
-      })
+        this.ok=true
+        this.message="Folder modificata correttamente!"
+        setTimeout(() => {
+          this.clearModal(this.closeModal1)
+					this.ok = false
+					this.message = '',
+          this.reset = ''
+				}, 2000);
+      this.getFolderInfo()
+      }, error => {
+        this.message='Errore!'
+        this.reset=''
+        this.ok=false
+        this.errorMessage = <any>error
+      });
   }
 
   getFolderInfo() {
@@ -136,6 +150,15 @@ export class FolderComponent implements OnInit {
         var file = JSON.parse(data)
         this.service.getFileSpec(file.id)
           .subscribe(data => {
+            this.ok=true
+            this.message="File creato correttamente!"
+            setTimeout(() => {
+              this.clearModal(this.closeModal2)
+              this.ok = false
+              this.message = '',
+              this.reset = ''
+            }, 2000);
+
             var newFile = data
             newFile.createdAt = this.troncaData(newFile.createdAt)
             var count = this.files.length

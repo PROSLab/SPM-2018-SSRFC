@@ -3,14 +3,13 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonpModule } from '@angular/http';
- import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+ import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsRoutes } from './component.routing';
-
-
 import { FileComponent } from './file/file.component';
 import { RepositoryComponent } from './Repository/repository.component';
 import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { FolderComponent } from './folder/folder.component';
+import { BpmnComponent } from '../../bpmn-component/bpmn.component';
 
 @NgModule({
   imports: [
@@ -18,14 +17,13 @@ import { FolderComponent } from './folder/folder.component';
     RouterModule.forChild(ComponentsRoutes),
     FormsModule,
     ReactiveFormsModule,
-    JsonpModule,
-     NgbModule 
-  ],
+    JsonpModule  ],
   declarations: [
     RepositoryComponent,
     FolderComponent,
     FileComponent,
     RepoPublicComponent,
+    BpmnComponent
   ]
 })
 

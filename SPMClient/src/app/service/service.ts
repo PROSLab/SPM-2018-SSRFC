@@ -396,25 +396,25 @@ shareFile(repoName,idUser,idFile,email){
   //gestione errori
   private handleError(error: HttpErrorResponse) {
     if (error.status == 400) {
-      alert("username o password errata")
+     // alert("username o password errata")
 
       return throwError("Bad Credential")
     }
 
     if (error.status == 403) {
-      alert("l'email è già in uso da un altro utente")
+     // alert("l'email è già in uso da un altro utente")
 
       return throwError("Forbidden")
     }
 
     if (error.status == 0) {
-      alert("connessione al server fallita")
+     // alert("connessione al server fallita")
 
       return throwError("Server Connection failed")
     }
 
     if (error.status == 404) {
-      alert("Account non trovato")
+     // alert("Account non trovato")
 
       return throwError("Not Found")
     }

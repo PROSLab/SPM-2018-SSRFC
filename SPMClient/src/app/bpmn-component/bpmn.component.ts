@@ -3,6 +3,10 @@ import {HttpClient} from '@angular/common/http';
 import {Modeler, OriginalPropertiesProvider, PropertiesPanelModule, InjectionNames, OriginalPaletteProvider} from "../bpmn-js/bpmn-js";
 import {CustomPropsProvider} from '../props-provider/CustomPropsProvider';
 import {CustomPaletteProvider} from "../props-provider/CustomPaletteProvider";
+import { Service } from '../service/service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { RightSidebarToggleDirective } from '../shared/sidebar.directive';
+import {saveAs as importedSaveAs} from "file-saver";
 
 const customModdle = {
   name: "customModdle",
@@ -37,9 +41,21 @@ const customModdle = {
 export class BpmnComponent implements OnInit {
   title = 'Angular/BPMN';
   modeler;
+  folderSelected: any;
+  idRepoSelected: any;
+  idUser: string;
+  isLogged: any;
+  idFile: any;
+  file
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private service: Service,public router: Router,route: ActivatedRoute) {
+    this.folderSelected = route.snapshot.params.idFolder
+    this.idRepoSelected = route.snapshot.params.idRepo
+    this.idUser = localStorage.getItem("id")
+    this.isLogged=service.isLogged;
+    this.idFile= route.snapshot.params.idFile
   }
+
 
   ngOnInit(): void {
     this.modeler = new Modeler({
@@ -85,7 +101,25 @@ export class BpmnComponent implements OnInit {
     );
   }
 
+
+  sendTofile(fileSelected) {
+    this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.folderSelected,'fileID',fileSelected]);
+    }
+    
   save(): void {
-    this.modeler.saveXML((err: any, xml: any) => console.log('Result of saving XML: ', err, xml));
+   
+    //creazione di un nuovo file salvandolo dall'editor
+   this.modeler.saveXML((err: any, xml: any) =>    this.file = new File([xml], name)); 
+
+     this.service.postFile(this.idRepoSelected,this.idUser,this.file,this.folderSelected).subscribe(data => {
+       
+      console.log(data)
+    this.sendTofile(this.idFile)
+      // do something, if upload success
+    }, error => {
+      console.log(error);
+    }); 
   }
+
+  
 }
