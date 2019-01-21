@@ -5,6 +5,7 @@ import { Folder } from '../../../../app/service/model/folder'
 import { Repo } from '../../../service/model/repo';
 
 import { exportIsLogged } from '../../starter/starter.component'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 
@@ -56,8 +57,11 @@ export class FileComponent implements OnInit {
   message: string='';
   idMoment: any;
   ok: boolean;
+  modifyNameForm: FormGroup;
+  submitted=false;
+  shareFileForm: FormGroup;
 
-  constructor(public router: Router, private service: Service, private route: ActivatedRoute) {
+  constructor(public router: Router, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
     this.idFolder = route.snapshot.params.idFolder
@@ -118,6 +122,7 @@ this.sposta=null;
 //how to close a modal
 clearModal():any{
 this.closeModal.nativeElement.click()
+
 }
 
 clearModal1():any{
@@ -155,6 +160,15 @@ go(){
 
 
   ngOnInit() {
+    this.modifyNameForm=this.formBuilder.group({
+      reponame:['',Validators.required]
+    
+    });
+    this.shareFileForm=this.formBuilder.group({
+      reponame:['',Validators.required],
+      email:['',[Validators.required,Validators.email]]
+    })
+   
     this.cambia=false
     this.getFileSpec()
     if(this.idFolder != null){
@@ -164,7 +178,14 @@ go(){
     this.getAllFolders()
   }
 
+  get f() { 
+   
+    return this.modifyNameForm.controls;
+   }
+get g() {
 
+  return this.shareFileForm.controls;
+}
   troncaData(data: String) {
     return this.dataTroncata = data.substr(0, 10)
   }
@@ -317,14 +338,23 @@ go(){
         this.errorMessage = <any>error
       });
   }
+  shareFiles(){
+    this.submitted=false
 
+  }
 
   modifyFile() {
+    this.submitted=false
     this.appearRenameFile = true;
   }
 
 
   sendNewFileName(name) {
+    this.submitted = true;
+    if (this.modifyNameForm.invalid) {
+      
+      return;
+  }
     this.service.changeNameFile(this.idFile, name)
       .subscribe(data => {
         this.appearRenameFile = false
@@ -343,6 +373,11 @@ go(){
   }
 
   shareFile(email,nameRepo) {
+
+    this.submitted = true;
+    if (this.shareFileForm.invalid) {
+      return;
+  }
     this.service.shareFile(nameRepo, this.idUser,this.idFile,email)
       .subscribe(data => {
       alert("Email inviata!")
