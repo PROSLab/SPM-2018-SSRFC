@@ -26,7 +26,18 @@ export const ComponentsRoutes: Routes = [
         component: FileComponent
       },
       {
+        path: 'repositoryID/:idRepo/editorBPMN',
+        component: BpmnComponent
+      }, 
+      {
+        path: 'repositoryID/:idRepo/folderID/:idFolder/editorBPMN',
+        component: BpmnComponent
+      }, 
+      {
         path: 'repositoryID/:idRepo/folderID/:idFolder/fileID/:idFile/editorBPMN/:version',
+        component:BpmnComponent
+      }, {
+        path: 'repositoryID/:idRepo/fileID/:idFile/editorBPMN/:version',
         component:BpmnComponent
       },
       {

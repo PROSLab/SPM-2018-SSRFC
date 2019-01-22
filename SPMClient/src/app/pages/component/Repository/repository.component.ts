@@ -148,23 +148,24 @@ info=false
     this.selezione = (<HTMLInputElement>document.getElementById("select")).value;
   }
 
-  saveFile(fileName) {
-    var name = fileName
+  saveFile() {
+    this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMN']);
+  /*   var name = fileName
     var idfolder = null
     
     this.service.createFile(this.idRepoSelected, this.idUser, name, idfolder)
       .subscribe(data => {
         var file = JSON.parse(data)
 
-        this.ok=true
+         this.ok=true
         this.message="File creato correttamente!"
-        this.clearModal(this.closeModal3)
+        this.clearModal(this.closeModal3) 
 
-        setTimeout(() => {
+         setTimeout(() => {
           this.ok = false
           this.message = '',
           this.reset = ''
-        }, 3000);
+        }, 3000); 
 
         this.service.getFileSpec(file.id)
           .subscribe(data => {
@@ -180,7 +181,7 @@ info=false
         this.ok=true
         this.message="Errore!"
         this.errorMessage = <any>error
-      })
+      }) */
   }
 
 

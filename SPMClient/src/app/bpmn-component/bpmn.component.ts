@@ -47,22 +47,33 @@ export class BpmnComponent implements OnInit {
   isLogged: any;
   idFile: any;
   file
+  idFileCreato: any;
+  version: boolean;
 
   constructor(private http: HttpClient,private service: Service,public router: Router,route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
+    this.version = route.snapshot.params.version
     this.isLogged=service.isLogged;
     this.idFile= route.snapshot.params.idFile
   }
 
 
   ngOnInit(): void {
+    if(this.idFile==undefined){
+      console.log("lo sto creando")
+      this.createFile()
+    }
+    else{
+      console.log("lo sto modificando")
     this.load()
+  }
+   
     this.modeler = new Modeler({
       container: '#canvas',
       width: '100%',
-      height: '600px',
+      height: '500px',
       additionalModules: [
         PropertiesPanelModule,
 
@@ -89,8 +100,24 @@ export class BpmnComponent implements OnInit {
     }
   }
 
+
+
+  createFile(){
+
+        const url = '/assets/bpmn/initial.bpmn';
+        this.http.get(url, {
+          headers: {}, responseType: 'text'
+        }).subscribe(
+          (x: any) => {
+            console.log('Fetched XML, now importing: ', x);
+            this.modeler.importXML(x, this.handleError);
+          },
+          this.handleError
+        );
+  }
+
   load(): void {
-    const url = "http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+1
+    const url = "http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+this.version
 /*     const url = '/assets/bpmn/initial.bpmn';
  */    this.http.get(url, {
       headers: {}, responseType: 'text'
@@ -105,22 +132,35 @@ export class BpmnComponent implements OnInit {
 
 
   sendTofile(fileSelected) {
-    this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.folderSelected,'fileID',fileSelected]);
+    if(this.folderSelected==undefined){
+      this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',fileSelected]);
+    }
+   else{
+    this.router.navigate(['repositoryID',this.idRepoSelected,'folderID', this.folderSelected,'fileID',fileSelected]);
+   }
     }
     
-  save(): void {
+  save(nameFile) {
    
     //creazione di un nuovo file salvandolo dall'editor
-   this.modeler.saveXML((err: any, xml: any) =>    this.file = new File([xml], name)); 
+   this.modeler.saveXML((err: any, xml: any) =>    this.file = new File([xml], nameFile)); 
 
-     this.service.postFile(this.idRepoSelected,this.idUser,this.file,this.folderSelected).subscribe(data => {
-       
-      console.log(data)
-    this.sendTofile(this.idFile)
+    this.service.postFile(this.idRepoSelected,this.idUser,this.file,this.folderSelected)
+    .subscribe(async data => {
+    this.idFileCreato = data.id
+    console.log(this.idFileCreato)
+    //this.sendTofile(this.idFile)
+    await this.sendTofile(this.idFileCreato)
       // do something, if upload success
     }, error => {
       console.log(error);
     }); 
+
+ /*    setTimeout(() => {
+     
+    }, 3000); 
+ */
+  
   }
 
   

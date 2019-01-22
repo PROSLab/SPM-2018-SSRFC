@@ -38,7 +38,8 @@
                             <a class="dropdown-item bianco menus">Create Folder </a>
                         </div>
 
-                        <div data-toggle="modal" data-target="#myModalFile">
+                       <!--  <div data-toggle="modal" data-target="#myModalFile"> -->
+                           <div (click)="saveFile()">
                             <a class="dropdown-item bianco menus">Create File </a>
                         </div>
 
@@ -163,7 +164,7 @@
 
 
 <!-- Modal crea file -->
-    <div class="modal fade" id="myModalFile" role="dialog">
+    <!-- <div class="modal fade" id="myModalFile" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -177,9 +178,7 @@
                         <input type="text" maxlength="13" required id="namerepo" #nameFile name="namerepo" />
                     </div>
                     <br>
-                    <!-- <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
-                        <strong>{{message}}</strong> 
-                    </div> -->
+                    
                 </div>
 
                 <div class="modal-footer">
@@ -190,7 +189,7 @@
 
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Modal share repository -->
     <div class="modal fade col-12" id="myModalShareRepo" role="dialog">

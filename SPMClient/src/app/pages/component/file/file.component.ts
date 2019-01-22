@@ -389,8 +389,15 @@ get g() {
   }
 
   sendToEditor(v) {
-    this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.idFolder,'fileID',this.idFile,'editorBPMN',v]);
-    
+    if(this.idFolder==undefined){
+      this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',this.idFile,'editorBPMN',v]);
+    }else{
+      this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.idFolder,'fileID',this.idFile,'editorBPMN',v]);
+
+    }
+   
+   
+
   }
 
 }
