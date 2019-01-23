@@ -1,5 +1,6 @@
 package com.spm.api.repository;
 
+
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
@@ -12,7 +13,7 @@ public interface FileRepository extends ReactiveMongoRepository<FileEntity, Stri
 
 	Flux<FileEntity> findFileByIdFolderAndIdRepository(ObjectId idFolder,ObjectId idRepository);
 Mono<FileEntity> findFileById(ObjectId id);
-Mono <FileEntity> deleteFileById(ObjectId id);
+Mono <FileEntity> deleteById(ObjectId id);
 }
 
 
