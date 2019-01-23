@@ -60,3 +60,22 @@ table {
 input[type="file"] {
     display: none;
 }
+.numero1:hover{
+    border-color: grey;
+    padding:3px 12px;
+  }
+
+  .menus:hover{
+      background-color: rgba(86, 170, 226, 0.39);
+  }
+
+  .numero2:hover{
+      
+      border-radius: 10%;
+      background-color: rgba(151, 150, 150, 0.158);
+      padding:3px 8px;
+  }
+
+  .numero2{
+    padding:3px 8px;
+  }

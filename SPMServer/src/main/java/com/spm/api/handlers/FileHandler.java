@@ -398,13 +398,24 @@ public class FileHandler {
 		String paths= request.queryParam("paths").get();
         Path path=  Paths.get(paths);
 		fileName = idFile + '.' + 1;
-		Optional <String> idFolder=request.queryParam("idFolder");
+		 String idFolder = null;
+         
+         if(request.queryParam("idFolder").get() != null) {
+        	 idFolder=request.queryParam("idFolder").get();
+         }  
 		return fileService.updateMoveTo(rootDir, idUser, idRepository, idFolder, fileName, idFile, mimetype, path)
 				
 				.flatMap(str -> {
-			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser),str);
+					String idFolder2 = null;
+			         
+			         if(request.queryParam("idFolder").get() != null) {
+			        	 idFolder2=request.queryParam("idFolder").get();
+			         }  
+					
+			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser) ,idFolder2,str);
 				})
 				.flatMap(res -> Responses.ok(res))
+				
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
 	
@@ -428,7 +439,10 @@ public class FileHandler {
                     // idFile
                     FormFieldPart idFile = (FormFieldPart)map.get("idFile");                 
                     // version
-                    FormFieldPart version = (FormFieldPart)map.get("version");             
+                    FormFieldPart version = (FormFieldPart)map.get("version");  
+                    //originalName
+                   /* FormFieldPart originalName = (FormFieldPart)map.get("originalName");     */        
+
                     // files
                     FilePart filePart = (FilePart) map.get("files"); 
                     
