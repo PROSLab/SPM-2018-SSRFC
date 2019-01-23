@@ -460,7 +460,7 @@ public class FileHandler {
 	public Mono <ServerResponse> deleteFile(ServerRequest request) {
 		String idFile = request.queryParam("idFile").get();
 		
-		return fileService.deteFile(idFile)
+		return fileService.deleteFile(idFile)
 				.flatMap(f -> {
 					return fileService.deleteFileSistem(f, rootDir);
 				})

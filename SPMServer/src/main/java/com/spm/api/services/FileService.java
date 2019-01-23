@@ -522,17 +522,15 @@ return Mono.just(strPath);
 		return Mono.just(fileEntity);
 	}*/
 	
-	public Mono <FileEntity> deteFile(String idFile) {
-		return fileRepository.deleteFileById(new ObjectId(idFile));
-		/* DA TROVARE IL MODO PER CANCELLARE LO SCHEMA DEL DB*/		
+	public Mono<FileEntity>  deleteFile(String idFile) {
+	/*	return fileRepository.deleteById(new ObjectId(idFile));*/
+		return fileRepository.deleteById(new ObjectId(idFile))
+				.flatMap(f -> {
+					return fileRepository.save(f);
+				});
+				
 		}
-		/*MongoClient client = new MongoClient( "localhost" , 8080);
-		MongoDatabase db = client.getDatabase("spmdatabase");
-		MongoCollection<Document> collection = db.getCollection("FileEntitys");
 		
-	collection.deleteOne(new Document("_id", new ObjectId(idFile)));
-	
-		*/
 	
 public Mono<Boolean> deleteFileSistem(FileEntity sourceFile, String rootDir ) {
 	String prefix = rootDir 
