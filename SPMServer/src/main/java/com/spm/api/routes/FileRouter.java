@@ -102,6 +102,10 @@ public class FileRouter {
 								GET("/moveFile"),
 								fileHandler::moveFile
 						)
+						.andRoute(
+								GET("/modifyBodyFile"),
+								fileHandler::modifyBodyFile
+						)
 						
 						
 				);
