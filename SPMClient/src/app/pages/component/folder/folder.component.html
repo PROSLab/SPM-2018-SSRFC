@@ -1,6 +1,61 @@
 <div class="container">
+    <div class="row">
 
-    <div class="card">
+        <div  style="height: 40%;">
+              <button class="btn btn-default numero2" (click)="sendToRepo()"><h4>My Repositories</h4> </button> 
+        </div>
+            <div>
+             <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
+          </div>
+          <div  style="height: 40%;">
+            <button class="btn btn-default numero2" (click)="sendToRepo()"><h4>{{repoInfo?.repositoryName}}</h4> </button> 
+      </div>
+      <div>
+        <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
+     </div>
+              <div class=" dropdown dropdown-toggle" style="height: 20%;margin-left:1%">
+                  <a class="btn btn-default numero2 " role="button" id="dropdownMenuLink"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <h4>{{folderInfo?.folderName}}</h4>
+                  </a>
+  
+                  <div class="dropdown-menu " aria-labelledby="dropdownMenuLink">
+  
+                      <div *ngIf="isLogged">
+                        
+                          <div data-toggle="modal" data-target="#myModalFolder">
+                              <a class="dropdown-item bianco menus">Modify Name Folder </a>
+                          </div>
+  
+                         <!--  <div data-toggle="modal" data-target="#myModalFile"> -->
+                             <div (click)="saveFile()">
+                              <a class="dropdown-item bianco menus">Create File </a>
+                          </div>
+  
+                          <div>
+                              <a class="dropdown-item bianco menus">
+                                  <label for="file">Import File
+                                      <input type="file" id="file" #f (change)="handleFileInput($event.target.files)">
+                                  </label>
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-7"></div>
+      
+  <div class="col-2;">
+  
+          <div  data-toggle="modal" data-target="#info">   
+           <button style="background-color: transparent;border:transparent;left:150px;position : relative;" (click)="info=true">
+                  <i style="font-size:24px;" class="fa">&#xf05a;</i>
+           </button> 
+          </div>  
+          </div>
+          
+      </div>
+
+  <!--   <div class="card">
         <div class="card-body">
             <h3>Folder Details</h3>
             Folder name : {{folderInfo?.folderName}} <br>
@@ -11,18 +66,19 @@
 
         </div>
 
-    </div>
+    </div> -->
 
     <br>
 
-    <div *ngIf="ok" class="alert alert-success   alert-dismissible" id="top" #myAlertImport>
+  <!--   <div *ngIf="ok" class="alert alert-success   alert-dismissible" id="top" #myAlertImport>
             <strong>{{message}}</strong> 
     </div>
     
     <div *ngIf="ok2" class="alert alert-danger alert-dismissible" id="top" #myAlertImport>
             <strong>{{message}}</strong> 
     </div>
-
+ -->
+ 
     <div class="modal fade" id="myModalFolder" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -31,7 +87,7 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        <label for="reponame"><b>Folder name</b> </label><br>
+                        <label for="foldername"><b>Folder name</b> </label><br>
                         <input type="text" maxlength="13" [(ngModel)]="reset" required id="namefolder" #nameFolder name="namefolder" />
                     </div>
 
@@ -42,16 +98,46 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button (click)="sendNewNameFolder(nameFolder.value)" style="margin-right:10px;" 
+                    <button (click)="sendNewNameFolder(nameFolder.value)" data-dismiss="modal" style="margin-right:10px;" 
                         class="btn btn-primary">Save Folder </button>
                     <button type="button" class="btn btn-danger" #closeModifyName data-dismiss="modal"> Close </button>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="info" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Info</h4>
+                </div>
+                <div class="modal-body">
+                        Folder: {{folderInfo?.folderName}} <br>
+                       
+                        Created At: {{folderInfo?.createdAt}} <br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div>
+            <div *ngIf="ok" class="alert alert-success  col-5 alert-dismissible" style="position: center;"  id="top" #myAlertImport>
+                <strong>{{message}}</strong>
+            </div>
+        
+            <div *ngIf="ok2" class="alert alert-danger col-5 alert-dismissible"    id="top" #myAlertImport>
+                <strong>{{message}}</strong>
+            </div>
+        
+        </div>
 
 
-    <div class="row">
+   <!--  <div class="row">
         <div class="col-2">
 
             <button type="button" data-toggle="modal" data-target="#myModalFile" *ngIf="isLogged || isLogged==undefined"
@@ -66,11 +152,11 @@
             </label>
         </div>
 
-    </div>
-    <hr>
+    </div> -->
+    
 
 
-    <div class="modal fade" id="myModalFile" role="dialog">
+    <!-- <div class="modal fade" id="myModalFile" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -83,9 +169,7 @@
                     </div>
 
                     <br>
-                   <!--  <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
-                        <strong>{{message}}</strong>
-                    </div> -->
+                   
                 </div>
 
                 <div class="modal-footer">
@@ -97,7 +181,7 @@
             </div>
         </div>
     </div>
-
+ -->
 
     <div *ngIf="exist==true" style="margin:5px">Lista dei tuoi folder e files
         <table>

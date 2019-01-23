@@ -21,7 +21,7 @@ export class FolderComponent implements OnInit {
   idUser: string
   folder: Folder[] = null
   folderInfo: Folder[] = null
-  repoInfo: Repo = <any>[]
+  repoInfo: Repo[] = null
   folderExist: boolean = false
   createfold = false
   errorMessage: any;
@@ -93,6 +93,7 @@ export class FolderComponent implements OnInit {
 
 
   ngOnInit() {
+    this.getRepo()
     this.getFolderInfo()
     this.getAllFile()
   }
@@ -110,12 +111,13 @@ export class FolderComponent implements OnInit {
         this.folderInfo = data
         this.ok=true
         this.message="Folder modificata correttamente!"
-        setTimeout(() => {
-          this.clearModal(this.closeModal1)
+       
+       setTimeout(() => {
+         
 					this.ok = false
 					this.message = '',
           this.reset = ''
-				}, 2000);
+				}, 2000); 
       this.getFolderInfo()
       }, error => {
         this.message='Errore!'
@@ -143,8 +145,10 @@ export class FolderComponent implements OnInit {
     this.createfile = true;
   }
 
-  saveFile(fileName) {
-    var name = fileName
+  
+    saveFile() {
+      this.router.navigate(['repositoryID', this.idRepoSelected,'folderID',this.folderSelected, 'editorBPMN']);
+    /* var name = fileName
     this.service.createFile(this.idRepoSelected, this.idUser, name, this.folderSelected)
       .subscribe(data => {
         var file = JSON.parse(data)
@@ -172,12 +176,12 @@ export class FolderComponent implements OnInit {
         this.errorMessage = <any>error
         alert("file non creato")
       })
-    this.createfile = false
+    this.createfile = false */
   }
 
 
 
-  saveFolder(folderName) {
+ /*  saveFolder(folderName) {
     var nameFolder = folderName;
     this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
       .subscribe(data => {
@@ -192,13 +196,13 @@ export class FolderComponent implements OnInit {
             this.errorMessage = <any>error
           });
         this.createfold = false
-        this.router.navigate(['/folder']);
-      }, error => {
+         this.router.navigate(['/folder']);
+       }, error => {
         this.errorMessage = <any>error
         alert("Cartella non creata")
       })
     this.createfold = false
-  }
+  } */
 
 
 /* 
@@ -235,7 +239,28 @@ export class FolderComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
+  getRepo() {
+    this.service.getRepoSpec(this.idRepoSelected)
+      .subscribe(data => {
+        if (data.publicR == true) {
+          data.publicR = "Public"
+        }
+        else {
+          data.publicR = "Private"
+        }
 
+        data.createdAt = this.troncaData(data.createdAt)
+        
+        this.repoInfo = data
+        console.log(this.repoInfo)
+      }, error => {
+        this.errorMessage = <any>error
+      });
+  }
+  sendToRepo() {
+    this.router.navigate(['']);
+
+  }
   sendTofile(fileSelected) {
     this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.folderSelected,'fileID',fileSelected]);
     }
