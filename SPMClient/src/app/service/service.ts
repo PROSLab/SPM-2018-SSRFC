@@ -367,7 +367,6 @@ shareFile(repoName,idUser,idFile,email){
     params = params.append('idRepository', idRepo); //id del file
     params = params.append('idUser', idUser); //id del file
     params = params.append('paths', path);
-    console.log(params)
     return this.http.get(this.baseUrl + 'api/file/moveFile', { params: params  , responseType: 'text'})
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server

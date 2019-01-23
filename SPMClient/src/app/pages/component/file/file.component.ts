@@ -18,9 +18,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class FileComponent implements OnInit {
 
-  @ViewChild("closeModal1") closeModal : ElementRef 
-  @ViewChild("closeModal15") closeModal1 : ElementRef
-
+  @ViewChild("closeModal1") closeModal1 : ElementRef 
+  @ViewChild("closeModal2") closeModal2 : ElementRef
+  @ViewChild("closeModal3") closeModal3 : ElementRef
   isLogged:boolean
   appearRenameFile: boolean = false;
   fileExist = true;
@@ -43,7 +43,7 @@ export class FileComponent implements OnInit {
   vers: any
   sposta:any
   deprecatedVers = []
-  lastVersion: any
+  lastVersion: any = null
   finalVersion = []
   dataTroncata: string
   versionExist: boolean = false
@@ -60,6 +60,8 @@ export class FileComponent implements OnInit {
   modifyNameForm: FormGroup;
   submitted=false;
   shareFileForm: FormGroup;
+  reset: string='';
+  secondButton: boolean=null;
 
   constructor(public router: Router, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -83,10 +85,9 @@ moveTo(id){
   this.idMoment=id
   if(id !=null){
     if(id==this.idRepoSelected){
-      this.service.moveToFolder(this.idFile,id,this.idUser,this.file.path)
+      this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,this.idFolder)
       .subscribe(data => {
         this.message="file spostato nella repository"
-       // this.router.navigate(['/repositoryID',id])
       }, error => {
         this.errorMessage = <any>error
       });
@@ -98,9 +99,9 @@ moveTo(id){
         this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,id)
         .subscribe(data => {
          this.message="file spostato nella folder selezionata"
-         
+         this.clearModal(this.closeModal1)
          setTimeout(()=>{
-          this.clearModal(),this.go()}, 2000); 
+          this.go()}, 2000); 
         //  document.getElementById("myModalModifyPath").setAttribute("class","custom-close")
           
          // this.router.navigate(['/repositoryID',this.idRepoSelected,'folderID',id])
@@ -120,38 +121,55 @@ this.sposta=null;
 }
 
 //how to close a modal
-clearModal():any{
-this.closeModal.nativeElement.click()
-
+clearModal(modal):any{
+modal.nativeElement.click()
 }
-
-clearModal1():any{
-  this.closeModal1.nativeElement.click()
-  }
 
 go(){
   this.router.navigate(['/repositoryID',this.idRepoSelected,'folderID',this.idMoment])
 }
 
 
+deleteFile(){
+  alert("funzione da fare")
+}
+
+//da fixare
+checkDeleted(v){
+  if(this.finalVersion.length==1){
+    this.secondButton=true
+    console.log("sto eliminando l'ultima versione, quindi chiedo se veramente voglio eliminare il file o no")
+    return 1
+  }
+  else{
+    //this.secondButton=false
+    return 0
+    //this.deleteVersion(v)
+  }
+}
+
   deleteVersion(v) {
+   
     this.vers = v
     if (this.vers == null) {
       alert("seleziona una versione per eliminarla!")
     }
     else {
-      this.cambia=false
-      alert("versione eliminata con successo")
       this.service.deleteVersion(this.idFile, this.vers)
         .subscribe(data => {
+          data = JSON.parse(data)
           var index = this.finalVersion.indexOf(this.vers);
           if (index > -1) {
             this.finalVersion.splice(index, 1);
           }
-          this.vers = null
-          this.cambia=false
+        this.vers =null
+        this.ok=true
+        this.message="Versione eliminata correttamente"
+          setTimeout(()=>{
+            this.ok=false
+            this.message=""
+          }, 2000);
           this.getFileSpec()
-
         }, error => {
           console.log(error);
         });
@@ -182,15 +200,19 @@ go(){
    
     return this.modifyNameForm.controls;
    }
-get g() {
+
+  get g() {
 
   return this.shareFileForm.controls;
-}
+  }
+
   troncaData(data: String) {
     return this.dataTroncata = data.substr(0, 10)
   }
 
   getFileSpec() {
+    
+    console.log("entra")
     this.cambia=false
     for (var i = 0; i < this.versionArray.length; i++) {
       this.versionArray[i] = null
@@ -198,17 +220,17 @@ get g() {
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
         console.log(data)
+
         if (data != null) {
+
           data.createdAt = this.troncaData(data.createdAt)
           this.fileExist = true;
           this.file = (data)
-          console.log(this.file)
           for (var i = 0; i < this.file.cVersion; i++) {
             this.versionArray[i] = this.file.cVersion - (this.file.cVersion - i) + 1
           }
-          // mi salvo il valore dell'ultima versione corrente
-          this.lastVersion = this.file.cVersion
 
+          this.versionExist=true
           //mi salvo le versioni deprecate
           for (var i = 0; i < this.file.deletedVersions.length; i++) {
             this.deprecatedVers[i] = this.file.deletedVersions[i]
@@ -221,6 +243,13 @@ get g() {
               j++
             }
           }
+
+          //lunghezza dell'array delle versioni non deprecate
+          var length = this.finalVersion.length
+
+          // mi salvo il valore dell'ultima versione corrente per stamparla poi  nel dropdown
+          this.vers=this.finalVersion[length-1]
+          console.log(this.vers)
           if (this.finalVersion.length > 0) {
             this.versionExist = true;
           }
@@ -240,13 +269,21 @@ get g() {
   newVersion() {
     this.service.createNewVersion(this.idFile, this.file.cVersion)
       .subscribe(data => {
+       data = JSON.parse(data)
+
         for (var i = 1; i <= data.cVersion; i++) {
           this.versionArray[i - 1] = i
         }
         this.cambia=false
-        this.vers=null;
+        this.vers=data.cVersion;
+        this.ok=true
+        this.message="Versione creata correttamente"
+         
+        setTimeout(()=>{
+          this.ok=false
+          this.message=""
+        }, 2000); 
         this.getFileSpec()
-        alert("Hai creato una nuova versione del file")
       }, error => {
         this.errorMessage = <any>error
       });
@@ -257,10 +294,8 @@ get g() {
   }
 
   downloadFile(vers) {
-    console.log(vers)
     this.service.downloadFile(this.idFile,vers)
     .subscribe(data => {
-     console.log(data)
     
     }, error => {
       this.errorMessage = <any>error
@@ -279,8 +314,6 @@ get g() {
     this.appear = true;
   }
 
-
-
   saveFile(originalName) {
     this.service.createFile(this.idRepoSelected, this.idFolder, this.idUser, originalName)
       .subscribe(data => {
@@ -288,7 +321,6 @@ get g() {
         this.fileExist = true;
         this.file = JSON.parse(data)
         this.versionArray[0] = 1
-       
 
       }, error => {
         this.errorMessage = <any>error
@@ -312,7 +344,6 @@ get g() {
       .subscribe(data => {
         data.createdAt = this.troncaData(data.createdAt)
         this.folderInfo = data
-        console.log(this.folderInfo)
       }, error => {
         this.errorMessage = <any>error
       });
@@ -338,39 +369,39 @@ get g() {
         this.errorMessage = <any>error
       });
   }
-  shareFiles(){
-    this.submitted=false
 
-  }
+
 
   modifyFile() {
     this.submitted=false
-    this.appearRenameFile = true;
+    this.reset = ''
   }
 
 
   sendNewFileName(name) {
     this.submitted = true;
     if (this.modifyNameForm.invalid) {
-      
       return;
   }
     this.service.changeNameFile(this.idFile, name)
       .subscribe(data => {
-        this.appearRenameFile = false
         this.file = data
         this.getFileSpec()
         this.ok=true;
-        this.message="Success"
-        setTimeout(()=>{this.clearModal1()}, 2000);
+        this.message="Nome cambiato correttamente!"
+        this.submitted=false
+        this.clearModal(this.closeModal3)
+        
+
+        setTimeout(()=>{
+          this.ok = false
+          this.message = ''
+        }, 2000);
       }, error => {
         this.errorMessage = <any>error
       });
   }
 
-  shareFile1() {
-    this.share = true
-  }
 
   shareFile(email,nameRepo) {
 
@@ -380,7 +411,14 @@ get g() {
   }
     this.service.shareFile(nameRepo, this.idUser,this.idFile,email)
       .subscribe(data => {
-      alert("Email inviata!")
+        this.ok=true
+        this.message="File condiviso correttamente"
+         this.clearModal(this.closeModal2)
+         this.reset = ''
+        setTimeout(()=>{
+          this.ok=false
+          this.message=""
+        }, 2000); 
         this.share = false
       }, error => {
         alert("ERRORE! Invio email non riuscito")
@@ -398,6 +436,15 @@ get g() {
    
    
 
+  }
+
+  sendToRepo() {
+    this.router.navigate(['repositoryID', this.idRepoSelected]);
+
+  }
+
+  sendTofolder() {
+    this.router.navigate(['repositoryID', this.idRepoSelected, 'folderID', this.idFolder]);
   }
 
 }
