@@ -456,6 +456,22 @@ public class FileHandler {
                 .flatMap(res -> Responses.ok(res));
 				//.onErrorResume(Exception.class, Responses::internalServerError);
     }
+	
+	public Mono <ServerResponse> deleteFile(ServerRequest request) {
+		String idFile = request.queryParam("idFile").get();
+		
+		return fileService.deteFile(idFile)
+				.flatMap(f -> {
+					return fileService.deleteFileSistem(f, rootDir);
+				})
+				.flatMap(res -> Responses.ok(res))
+				.onErrorResume(BadRequestException.class, Responses::badRequest)
+				.onErrorResume(Exception.class, Responses::internalServerError);
+
+	}
+	
+	
+	
 }
 	
 	

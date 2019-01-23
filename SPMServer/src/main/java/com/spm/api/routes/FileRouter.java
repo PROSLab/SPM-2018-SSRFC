@@ -106,7 +106,10 @@ public class FileRouter {
 								POST("/modifyBodyFile").and(accept(MediaType.MULTIPART_FORM_DATA)),
 								fileHandler::modifyBodyFile
 						)
-						
+						.andRoute(
+								GET("/deleteFile"),
+								fileHandler::deleteFile
+						)
 						
 				);
 	}
