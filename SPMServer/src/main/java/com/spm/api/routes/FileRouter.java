@@ -103,7 +103,7 @@ public class FileRouter {
 								fileHandler::moveFile
 						)
 						.andRoute(
-								GET("/modifyBodyFile"),
+								POST("/modifyBodyFile").and(accept(MediaType.MULTIPART_FORM_DATA)),
 								fileHandler::modifyBodyFile
 						)
 						

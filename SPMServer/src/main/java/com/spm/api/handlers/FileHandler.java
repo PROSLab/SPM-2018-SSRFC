@@ -436,7 +436,7 @@ public class FileHandler {
                     fileName = idFile.value() + '.' + version.value();
                     
                     // Overloading di uploadFilePath
-                    return fileService.uploadFilePath(rootDir, idUser.value(), idRepository.value(), idFolder, fileName, idFile.value(), mimetype, filePart);
+                    return fileService.pathForReplaceFile(rootDir, idUser.value(), idRepository.value(), idFolder, fileName, idFile.value(), mimetype, filePart);
                     
                 })
                 .flatMap(res -> Responses.ok(res));

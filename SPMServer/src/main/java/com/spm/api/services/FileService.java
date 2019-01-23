@@ -115,7 +115,7 @@ public class FileService  {
 		return Mono.just(fileEntity);
 	}
 	
-	public Mono<String> uploadFilePath(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String idFile, String mimetype, FilePart filePart) {
+	public Mono<String> pathForReplaceFile(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String idFile, String mimetype, FilePart filePart) {
 		String suffixPath = idFolder != null ? File.separator + idFolder + 
 		          							   File.separator + idFile +
       							               File.separator + fileName + "." + mimetype
