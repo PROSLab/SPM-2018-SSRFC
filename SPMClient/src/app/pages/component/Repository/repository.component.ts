@@ -49,6 +49,10 @@ export class RepositoryComponent implements OnInit {
   ok2: boolean;
 open1=false
 info=false
+  originalfiles: any;
+  originalAllFileFolder: any[];
+  originalfolder: any;
+  lastSelected: string;
 
   constructor(private service: Service, public router: Router, private route: ActivatedRoute, private modal: NgbModal) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -145,7 +149,15 @@ info=false
 
 
   selected() {
+    
     this.selezione = (<HTMLInputElement>document.getElementById("select")).value;
+    if(this.selezione!=this.lastSelected){
+      this.lastSelected =this.selezione
+      this.search=''
+      this.fileincartelle=false;
+      this.ngOnInit()
+    }
+   
   }
 
   saveFile() {
@@ -218,13 +230,16 @@ info=false
     this.fileincartelle = true;
     if (this.selezione == "name") {
       if (this.search != "") {
-        this.files = this.files.filter(res => {
+        
+        this.files = this.originalfiles.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-        this.folder = this.folder.filter(res => {
+        this.folder = this.originalfolder.filter(res => {
           return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-        this.allFileFolder = this.allFileFolder.filter(res => {
+       
+
+        this.allFileFolder = this.originalAllFileFolder.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
 
@@ -235,15 +250,16 @@ info=false
     }
 
     if (this.selezione == "date") {
+      
       if (this.search != "") {
-        this.files = this.files.filter(res => {
+        this.files = this.originalfiles.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
 
-        this.folder = this.folder.filter(res => {
+        this.folder = this.originalfolder.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-        this.allFileFolder = this.allFileFolder.filter(res => {
+        this.allFileFolder = this.originalAllFileFolder.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
       } else if (this.search == "") {
@@ -333,11 +349,13 @@ info=false
                 this.allFileFolder[j] = tuttifile[k]
                 k++
               }
+              this.originalAllFileFolder=this.allFileFolder
             }, error => {
               this.errorMessage = <any>error
             });
         }
         this.folder = (data)
+        this.originalfolder=this.folder
         if (this.folder.length > 0) {
           this.folderExist = true
         }
@@ -356,7 +374,8 @@ info=false
           data[i].createdAt = this.troncaData(data[i].createdAt)
         }
         this.files = (data)
-        console.log(this.files)
+        this.originalfiles=this.files
+        
         if (this.files.length > 0) {
           this.filesExist = true
         }
