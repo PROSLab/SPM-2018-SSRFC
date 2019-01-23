@@ -398,27 +398,54 @@ public class FileHandler {
 		String paths= request.queryParam("paths").get();
         Path path=  Paths.get(paths);
 		fileName = idFile + '.' + 1;
-		 String idFolder = null;
-         
-         if(request.queryParam("idFolder").get() != null) {
-        	 idFolder=request.queryParam("idFolder").get();
-         }  
+		Optional <String> idFolder=request.queryParam("idFolder");
 		return fileService.updateMoveTo(rootDir, idUser, idRepository, idFolder, fileName, idFile, mimetype, path)
 				
 				.flatMap(str -> {
-					String idFolder2 = null;
-			         
-			         if(request.queryParam("idFolder").get() != null) {
-			        	 idFolder2=request.queryParam("idFolder").get();
-			         }  
-					
-			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser) ,idFolder2,str);
+			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser),str);
 				})
 				.flatMap(res -> Responses.ok(res))
-				
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
+	
+	public Mono<ServerResponse> modifyBodyFile(ServerRequest request) {// just a test for files upload
+		return request.body(BodyExtractors.toMultipartData())
+                .flatMap(parts -> {
+                    map = parts.toSingleValueMap();
+                    
+                    // PARAMETRI PASSARE ALL'API: idUser, idRepository, idFolder, idFile, version, files
+                    
+                    // idUser
+                    FormFieldPart idUser = (FormFieldPart)map.get("idUser");                 
+                    // idRepository
+                    FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");                
+                    // idFolder
+                    String idFolder = null;
+                    if(map.get("idFolder") != null) {
+                    	FormFieldPart idFolderPart = (FormFieldPart)map.get("idFolder");
+                    	idFolder = idFolderPart.value();
+                    }                 
+                    // idFile
+                    FormFieldPart idFile = (FormFieldPart)map.get("idFile");                 
+                    // version
+                    FormFieldPart version = (FormFieldPart)map.get("version");             
+                    // files
+                    FilePart filePart = (FilePart) map.get("files"); 
+                    
+                    String mimetype = "bpmn";
+                    fileName = idFile.value() + '.' + version.value();
+                    
+                    // Overloading di uploadFilePath
+                    return fileService.uploadFilePath(rootDir, idUser.value(), idRepository.value(), idFolder, fileName, idFile.value(), mimetype, filePart);
+                    
+                })
+                .flatMap(res -> Responses.ok(res));
+				//.onErrorResume(Exception.class, Responses::internalServerError);
+    }
 }
+	
+	
+
 
 
 

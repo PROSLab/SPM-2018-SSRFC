@@ -2,7 +2,6 @@ package com.spm.api.services;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -114,6 +113,29 @@ public class FileService  {
 		filePart.transferTo( new File(strPath) );
 		
 		return Mono.just(fileEntity);
+	}
+	
+	public Mono<String> uploadFilePath(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String idFile, String mimetype, FilePart filePart) {
+		String suffixPath = idFolder != null ? File.separator + idFolder + 
+		          							   File.separator + idFile +
+      							               File.separator + fileName + "." + mimetype
+											 : File.separator + idFile +
+											   File.separator + fileName + "." + mimetype;
+		
+		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + suffixPath;
+		
+		/*Path path = Paths.get(strPath);
+		
+		try {
+			Files.createDirectories(path.getParent());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Mono.error(new Exception(e.getMessage()));
+		}*/
+		
+		filePart.transferTo( new File(strPath) );
+		
+		return Mono.just("OK");
 	}
 	
 	
@@ -424,8 +446,8 @@ public class FileService  {
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
 	
-	public Mono<String> updateMoveTo (String rootDir, String idUser, String idRepository,String idFolder, String fileName, String idFile, String mimetype, Path paths) {
-		String suffixPath = idFolder != null  ? File.separator + idFolder + 
+	public Mono<String> updateMoveTo (String rootDir, String idUser, String idRepository, Optional <String> idFolder, String fileName, String idFile, String mimetype, Path paths) {
+		String suffixPath = idFolder.isPresent() == true  ? File.separator + idFolder + 
 	               File.separator + idFile
 				 : File.separator + idFile ;
 				  
@@ -450,23 +472,48 @@ return Mono.just(strPath);
 	}
 	
 
-	public Mono<FileEntity> updatePathFile(ObjectId idFile ,ObjectId idRepository,ObjectId idUser, String idFolder2, String newPath) {
+	public Mono<FileEntity> updatePathFile(ObjectId idFile ,ObjectId idRepository,ObjectId idUser, String newPath) {
 		return fileRepository.findFileById(idFile)
 				.flatMap(f -> {
-					f.setPath(newPath);
-					if (idFolder2 != null) {
-						f.setIdFolder(new ObjectId(idFolder2));
-						}else {
-						f.setIdFolder(null);
-					}
 					
-				
+					f.setPath(newPath);
 					f.setIdUser(idUser);
 					f.setIdRepository(idRepository);
 					return fileRepository.save(f);
 				})
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
+	
+	
+	public Mono<FileEntity> searchFile(String idFile) {
+		return fileRepository.findById(idFile);
+				
+	}
+	
+	/*public Mono<FileEntity> pathForReplaceFile(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String idFile, String mimetype, FilePart filePart, FileEntity fileEntity) {
+		String suffixPath = idFolder != null ? File.separator + idFolder + 
+		          							               File.separator + idFile +
+		          							               File.separator + fileName + "." + mimetype
+														 : File.separator + idFile +
+														   File.separator + fileName + "." + mimetype;
+		
+		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + suffixPath;
+		
+		Path path = Paths.get(strPath);
+		
+		try {
+			Files.createDirectories(path.getParent());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Mono.error(new Exception(e.getMessage()));
+		}
+		
+		filePart.transferTo( new File(strPath) );
+		
+		return Mono.just(fileEntity);
+	}*/
+	
+		
 }
  
 
