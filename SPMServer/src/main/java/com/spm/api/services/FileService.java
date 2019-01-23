@@ -9,10 +9,15 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Vector;
 
+import org.apache.commons.io.FileUtils;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Component;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.spm.api.entity.FileEntity;
 import com.spm.api.entity.Repository;
 import com.spm.api.exceptions.BadRequestException;
@@ -22,7 +27,6 @@ import com.spm.api.repository.FileRepository;
 import com.spm.api.repository.FolderRepository;
 import com.spm.api.repository.RepositoryRepository;
 import com.spm.api.utils.FileLib;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -31,7 +35,6 @@ public class FileService  {
 	private FolderRepository folderRepository;
 	private RepositoryRepository repositoryRepository;
 	private FileRepository fileRepository;
-	
 	public FileService(RepositoryRepository repositoryRepository, FileRepository fileRepository, FolderRepository folderRepository) {
 		this.repositoryRepository = repositoryRepository;
 		this.fileRepository = fileRepository;
@@ -519,8 +522,45 @@ return Mono.just(strPath);
 		return Mono.just(fileEntity);
 	}*/
 	
+	public Mono <FileEntity> deteFile(String idFile) {
+		return fileRepository.deleteFileById(new ObjectId(idFile));
+		/* DA TROVARE IL MODO PER CANCELLARE LO SCHEMA DEL DB*/		
+		}
+		/*MongoClient client = new MongoClient( "localhost" , 8080);
+		MongoDatabase db = client.getDatabase("spmdatabase");
+		MongoCollection<Document> collection = db.getCollection("FileEntitys");
+		
+	collection.deleteOne(new Document("_id", new ObjectId(idFile)));
+	
+		*/
+	
+public Mono<Boolean> deleteFileSistem(FileEntity sourceFile, String rootDir ) {
+	String prefix = rootDir 
+			+ File.separator + sourceFile.getIdUser().toHexString() 
+			+ File.separator + sourceFile.getIdRepository().toHexString();
+	
+	if(sourceFile.getIdFolder() != null) prefix += File.separator + sourceFile.getIdFolder().toHexString();
+	
+	String suffix = File.separator + sourceFile.getId(); 
+	File file = new File(prefix + suffix);
+	try {
+		FileUtils.cleanDirectory(file); ;
+	} catch (IOException e) {
+		e.printStackTrace();
+		return Mono.error(new Exception(e.getMessage()));
+	}
+	
+	
+	if(FileLib.deleteFile(file)) {
+		return Mono.just(true);
+	}
+	
+	return Mono.error(new Exception("Can not delete file"));		
 		
 }
+	
+}
+
  
 
 

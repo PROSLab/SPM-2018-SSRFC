@@ -43,7 +43,7 @@ export class FileComponent implements OnInit {
   vers: any
   sposta:any
   deprecatedVers = []
-  lastVersion: any
+  lastVersion: any = null
   finalVersion = []
   dataTroncata: string
   versionExist: boolean = false
@@ -61,6 +61,7 @@ export class FileComponent implements OnInit {
   submitted=false;
   shareFileForm: FormGroup;
   reset: string='';
+  secondButton: boolean=null;
 
   constructor(public router: Router, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -87,7 +88,6 @@ moveTo(id){
       this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,this.idFolder)
       .subscribe(data => {
         this.message="file spostato nella repository"
-       // this.router.navigate(['/repositoryID',id])
       }, error => {
         this.errorMessage = <any>error
       });
@@ -130,15 +130,31 @@ go(){
 }
 
 
+deleteFile(){
+  alert("funzione da fare")
+}
+
+//da fixare
+checkDeleted(v){
+  if(this.finalVersion.length==1){
+    this.secondButton=true
+    console.log("sto eliminando l'ultima versione, quindi chiedo se veramente voglio eliminare il file o no")
+    return 1
+  }
+  else{
+    //this.secondButton=false
+    return 0
+    //this.deleteVersion(v)
+  }
+}
+
   deleteVersion(v) {
-    console.log(v)
+   
     this.vers = v
     if (this.vers == null) {
       alert("seleziona una versione per eliminarla!")
     }
     else {
-   
-      alert("versione eliminata con successo")
       this.service.deleteVersion(this.idFile, this.vers)
         .subscribe(data => {
           data = JSON.parse(data)
@@ -146,10 +162,14 @@ go(){
           if (index > -1) {
             this.finalVersion.splice(index, 1);
           }
-          this.vers =null
-       
+        this.vers =null
+        this.ok=true
+        this.message="Versione eliminata correttamente"
+          setTimeout(()=>{
+            this.ok=false
+            this.message=""
+          }, 2000);
           this.getFileSpec()
-
         }, error => {
           console.log(error);
         });
@@ -191,12 +211,16 @@ go(){
   }
 
   getFileSpec() {
+    
+    console.log("entra")
     this.cambia=false
     for (var i = 0; i < this.versionArray.length; i++) {
       this.versionArray[i] = null
     }
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
+        console.log(data)
+
         if (data != null) {
 
           data.createdAt = this.troncaData(data.createdAt)
@@ -205,8 +229,7 @@ go(){
           for (var i = 0; i < this.file.cVersion; i++) {
             this.versionArray[i] = this.file.cVersion - (this.file.cVersion - i) + 1
           }
-          // mi salvo il valore dell'ultima versione corrente per stamparla poi  nel dropdown
-          this.vers=this.file.cVersion
+
           this.versionExist=true
           //mi salvo le versioni deprecate
           for (var i = 0; i < this.file.deletedVersions.length; i++) {
@@ -220,6 +243,13 @@ go(){
               j++
             }
           }
+
+          //lunghezza dell'array delle versioni non deprecate
+          var length = this.finalVersion.length
+
+          // mi salvo il valore dell'ultima versione corrente per stamparla poi  nel dropdown
+          this.vers=this.finalVersion[length-1]
+          console.log(this.vers)
           if (this.finalVersion.length > 0) {
             this.versionExist = true;
           }
@@ -284,8 +314,6 @@ go(){
     this.appear = true;
   }
 
-
-
   saveFile(originalName) {
     this.service.createFile(this.idRepoSelected, this.idFolder, this.idUser, originalName)
       .subscribe(data => {
@@ -293,7 +321,6 @@ go(){
         this.fileExist = true;
         this.file = JSON.parse(data)
         this.versionArray[0] = 1
-       
 
       }, error => {
         this.errorMessage = <any>error

@@ -34,22 +34,26 @@ export class RepositoryComponent implements OnInit {
   createfile = false;
   files = null;
   idFileSelected: any;
-  filesExist: boolean ;
+  filesExist: boolean;
   dataTroncata: any;
   fileToUpload;
   selezione = "name";
-  search='';
+  search = '';
   allFileFolder = [];
   share: boolean = false;
   fileincartelle = false;
   refresh: boolean = false;
-  ok: boolean=false;
-  message: string='';
-  reset: string='';
+  ok: boolean = false;
+  message: string = '';
+  reset: string = '';
   ok2: boolean;
-open1=false
-info=false
-openSearch=false
+  open1 = false
+  info = false
+  originalfiles: any;
+  originalAllFileFolder: any[];
+  originalfolder: any;
+  lastSelected: string;
+  openSearch = false
 
   constructor(private service: Service, public router: Router, private route: ActivatedRoute, private modal: NgbModal) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -72,47 +76,47 @@ openSearch=false
     this.clearModal(this.closeModal4)
     this.service.shareRepository(this.idRepoSelected, email)
       .subscribe(data => {
-        this.ok=true
-        this.message="Repository condivisa correttamente!"
+        this.ok = true
+        this.message = "Repository condivisa correttamente!"
 
         setTimeout(() => {
-					this.ok = false
-					this.message = ''
+          this.ok = false
+          this.message = ''
           this.reset = ''
         }, 2000)
 
-      this.share = false
-      }, 
-      error => {
-        this.ok=true
-        this.message="ERRORE! Invio email non riuscito"
-        this.errorMessage = <any>error
-      })
+        this.share = false
+      },
+        error => {
+          this.ok = true
+          this.message = "ERRORE! Invio email non riuscito"
+          this.errorMessage = <any>error
+        })
   }
 
-  	//how to close a modal
-	clearModal(modal): any {
-		modal.nativeElement.click()
-	}
+  //how to close a modal
+  clearModal(modal): any {
+    modal.nativeElement.click()
+  }
 
   sendNewName(name) {
     this.service.changeNameRepo(this.idRepoSelected, name)
       .subscribe(data => {
         this.clearModal(this.closeModal1)
         this.repoInfo = data
-        this.ok=true
-        this.message="Repository modificata correttamente!"
+        this.ok = true
+        this.message = "Repository modificata correttamente!"
 
         setTimeout(() => {
-					this.ok = false
-					this.message = '',
-          this.reset = ''
+          this.ok = false
+          this.message = '',
+            this.reset = ''
         }, 2000);
-        
+
         this.getRepo()
 
       }, error => {
-        this.message="Errore!"
+        this.message = "Errore!"
         this.errorMessage = <any>error
       });
   }
@@ -133,7 +137,7 @@ openSearch=false
         }
 
         data.createdAt = this.troncaData(data.createdAt)
-        
+
         this.repoInfo = data
       }, error => {
         this.errorMessage = <any>error
@@ -146,43 +150,51 @@ openSearch=false
 
 
   selected() {
+
     this.selezione = (<HTMLInputElement>document.getElementById("select")).value;
+    if (this.selezione != this.lastSelected) {
+      this.lastSelected = this.selezione
+      this.search = ''
+      this.fileincartelle = false;
+      this.ngOnInit()
+    }
+
   }
 
   saveFile() {
     this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMN']);
-  /*   var name = fileName
-    var idfolder = null
-    
-    this.service.createFile(this.idRepoSelected, this.idUser, name, idfolder)
-      .subscribe(data => {
-        var file = JSON.parse(data)
-
-         this.ok=true
-        this.message="File creato correttamente!"
-        this.clearModal(this.closeModal3) 
-
-         setTimeout(() => {
-          this.ok = false
-          this.message = '',
-          this.reset = ''
-        }, 3000); 
-
-        this.service.getFileSpec(file.id)
-          .subscribe(data => {
-            var newFile: File = data
-            newFile.createdAt = this.troncaData(newFile.createdAt)
-            var count = this.files.length
-            this.files[count] = newFile
-            this.filesExist = true
-          }, error => {
-            this.errorMessage = <any>error
-          });
-      }, error => {
-        this.ok=true
-        this.message="Errore!"
-        this.errorMessage = <any>error
-      }) */
+    /*   var name = fileName
+      var idfolder = null
+      
+      this.service.createFile(this.idRepoSelected, this.idUser, name, idfolder)
+        .subscribe(data => {
+          var file = JSON.parse(data)
+  
+           this.ok=true
+          this.message="File creato correttamente!"
+          this.clearModal(this.closeModal3) 
+  
+           setTimeout(() => {
+            this.ok = false
+            this.message = '',
+            this.reset = ''
+          }, 3000); 
+  
+          this.service.getFileSpec(file.id)
+            .subscribe(data => {
+              var newFile: File = data
+              newFile.createdAt = this.troncaData(newFile.createdAt)
+              var count = this.files.length
+              this.files[count] = newFile
+              this.filesExist = true
+            }, error => {
+              this.errorMessage = <any>error
+            });
+        }, error => {
+          this.ok=true
+          this.message="Errore!"
+          this.errorMessage = <any>error
+        }) */
   }
 
 
@@ -190,17 +202,17 @@ openSearch=false
     if (f.name.split('.').pop() == "bpmn") {
       return true;
     }
-    else  if(f.name.split('.').pop() != "bpmn"){
+    else if (f.name.split('.').pop() != "bpmn") {
 
-      
-        this.ok2=true
-        this.message="Formato file non corretto"
-        setTimeout(() => {
-          this.ok2 = false
-          this.message = ''
-        }, 2000);
-      
-     
+
+      this.ok2 = true
+      this.message = "Formato file non corretto"
+      setTimeout(() => {
+        this.ok2 = false
+        this.message = ''
+      }, 2000);
+
+
       return false;
     }
   }
@@ -212,20 +224,24 @@ openSearch=false
     if (a == true) {
       this.uploadFileToActivity()
     }
-  
+
   }
 
   Search() {
     this.fileincartelle = true;
     if (this.selezione == "name") {
+      console.log(this.selezione)
       if (this.search != "") {
-        this.files = this.files.filter(res => {
+
+        this.files = this.originalfiles.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-        this.folder = this.folder.filter(res => {
+        this.folder = this.originalfolder.filter(res => {
           return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-        this.allFileFolder = this.allFileFolder.filter(res => {
+
+
+        this.allFileFolder = this.originalAllFileFolder.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
 
@@ -237,14 +253,14 @@ openSearch=false
 
     if (this.selezione == "date") {
       if (this.search != "") {
-        this.files = this.files.filter(res => {
+        this.files = this.originalfiles.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
 
-        this.folder = this.folder.filter(res => {
+        this.folder = this.originalfolder.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-        this.allFileFolder = this.allFileFolder.filter(res => {
+        this.allFileFolder = this.originalAllFileFolder.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
       } else if (this.search == "") {
@@ -258,13 +274,13 @@ openSearch=false
 
   uploadFileToActivity() {
     this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload).subscribe(data => {
-     
+
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
       this.files[count] = newFile
-      this.ok=true
-      this.message="File importato correttamente"
+      this.ok = true
+      this.message = "File importato correttamente"
 
       setTimeout(() => {
         this.ok = false
@@ -281,8 +297,8 @@ openSearch=false
     this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
       .subscribe(data => {
         this.clearModal(this.closeModal2)
-        this.ok=true
-        this.message="Folder creata correttamente!"
+        this.ok = true
+        this.message = "Folder creata correttamente!"
         var folder = JSON.parse(data)
         this.service.getFolderSpec(folder.id)
           .subscribe(data => {
@@ -291,21 +307,21 @@ openSearch=false
             var count = this.folder.length
             this.folder[count] = newFolder
             this.folderExist = true
-           
-            
+
+
             setTimeout(() => {
               this.ok = false
               this.message = '',
-              this.reset = ''
+                this.reset = ''
             }, 2000);
 
           }, error => {
-            this.message="Errore"
+            this.message = "Errore"
             this.errorMessage = <any>error
           });
       }, error => {
         this.errorMessage = <any>error
-       this.message="Errore"
+        this.message = "Errore"
       })
     this.createfold = false
   }
@@ -317,8 +333,8 @@ openSearch=false
       .subscribe(data => {
         data = JSON.parse(data)
 
-        if(  data.length==0){ this.filesExist=false}
-        else{this.filesExist=true}
+        if (data.length == 0) { this.filesExist = false }
+        else { this.filesExist = true }
 
         this.allFileFolder.length = 0;
         for (var i = 0; i < data.length; i++) {
@@ -327,7 +343,7 @@ openSearch=false
 
           this.service.getFile(this.idRepoSelected, data[i].id)
             .subscribe(tuttifile => {
-           
+
 
               tuttifile = JSON.parse(tuttifile)
 
@@ -340,11 +356,13 @@ openSearch=false
                 this.allFileFolder[j] = tuttifile[k]
                 k++
               }
+              this.originalAllFileFolder = this.allFileFolder
             }, error => {
               this.errorMessage = <any>error
             });
         }
         this.folder = (data)
+        this.originalfolder = this.folder
         if (this.folder.length > 0) {
           this.folderExist = true
         }
@@ -358,13 +376,14 @@ openSearch=false
     this.service.getFile(this.idRepoSelected, null)
       .subscribe(data => {
         data = JSON.parse(data)
-        if(  data.length==0){ this.folderExist=false}
-        else{this.filesExist=true}
+        if (data.length == 0) { this.folderExist = false }
+        else { this.filesExist = true }
         for (var i = 0; i < data.length; i++) {
           data[i].createdAt = this.troncaData(data[i].createdAt)
         }
         this.files = (data)
-        console.log(this.files)
+        this.originalfiles = this.files
+
         if (this.files.length > 0) {
           this.filesExist = true
         }
@@ -375,8 +394,9 @@ openSearch=false
   }
 
 
-  refreshTable(){
-    this.search=""
+  refreshTable() {
+    this.search = ""
+    this.fileincartelle=false;
     this.getAllfolder();
     this.getAllFile();
   }
