@@ -27,14 +27,14 @@ export class RepositoryComponent implements OnInit {
   idUser: string
   folder = null
   repoInfo: Repo = <any>[]
-  folderExist: boolean = false
+  folderExist: boolean
   createfold = false
   errorMessage: any;
   appear: boolean = false;
   createfile = false;
   files = null;
   idFileSelected: any;
-  filesExist: boolean = false;
+  filesExist: boolean ;
   dataTroncata: any;
   fileToUpload;
   selezione = "name";
@@ -49,6 +49,7 @@ export class RepositoryComponent implements OnInit {
   ok2: boolean;
 open1=false
 info=false
+openSearch=false
 
   constructor(private service: Service, public router: Router, private route: ActivatedRoute, private modal: NgbModal) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -315,6 +316,10 @@ info=false
     this.service.getAllFolder(this.idRepoSelected)
       .subscribe(data => {
         data = JSON.parse(data)
+
+        if(  data.length==0){ this.filesExist=false}
+        else{this.filesExist=true}
+
         this.allFileFolder.length = 0;
         for (var i = 0; i < data.length; i++) {
 
@@ -322,6 +327,8 @@ info=false
 
           this.service.getFile(this.idRepoSelected, data[i].id)
             .subscribe(tuttifile => {
+           
+
               tuttifile = JSON.parse(tuttifile)
 
               for (var i = 0; i < tuttifile.length; i++) {
@@ -351,7 +358,8 @@ info=false
     this.service.getFile(this.idRepoSelected, null)
       .subscribe(data => {
         data = JSON.parse(data)
-
+        if(  data.length==0){ this.folderExist=false}
+        else{this.filesExist=true}
         for (var i = 0; i < data.length; i++) {
           data[i].createdAt = this.troncaData(data[i].createdAt)
         }
@@ -366,6 +374,12 @@ info=false
         });
   }
 
+
+  refreshTable(){
+    this.search=""
+    this.getAllfolder();
+    this.getAllFile();
+  }
 
   sendToRepo() {
     this.router.navigate(['']);
