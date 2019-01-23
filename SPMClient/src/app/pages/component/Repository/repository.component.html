@@ -15,15 +15,15 @@
     <div class="row">
 
       <div  style="height: 40%;">
-            <button class="btn btn-default numero1" (click)="sendToRepo()"><h4>My repositories</h4> </button> 
+            <button class="btn btn-default numero2" (click)="sendToRepo()"><h4>My repositories</h4> </button> 
       </div>
           <div>
-           <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 25%"></i>
+           <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
         </div>
-            <div class=" dropdown dropdown-toggle " style="height: 30%;margin-left:2%">
-                <a class="btn btn-default numero1  " role="button" id="dropdownMenuLink"
+            <div class=" dropdown dropdown-toggle" style="height: 20%;margin-left:1%">
+                <a class="btn btn-default numero2 " role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <h4>{{repoInfo?.repositoryName}}</h4> 
+                  <h4>{{repoInfo?.repositoryName}}</h4>
                 </a>
 
                 <div class="dropdown-menu " aria-labelledby="dropdownMenuLink">
@@ -62,7 +62,7 @@
 <div class="col-2;">
 
         <div  data-toggle="modal" data-target="#info">   
-         <button style="background-color: transparent;border:transparent;left:30px;position : relative;" (click)="info=true">
+         <button style="background-color: transparent;border:transparent;left:150px;position : relative;" (click)="info=true">
                 <i style="font-size:24px;" class="fa">&#xf05a;</i>
          </button> 
         </div>  
@@ -225,12 +225,15 @@
 
 
     <div *ngIf="folderExist==false && filesExist==false">
-        Your repository is empty.<br> You can create a folder or a file, or import a file from your system.
+            <div class="alert alert-danger  col-7 alert-dismissible" style="position: center;" >
+                    <strong> Your repository is empty.<br> You can create a folder, file or import a file from your system clicking on "{{repoInfo?.repositoryName}}" button.</strong>
+                </div>
+       
     </div>
 
 
 
-    <div class="row col-10">
+    <div class="row col-10" *ngIf="folderExist==true || filesExist==true">
         <br>
 
         <table>

@@ -20,16 +20,16 @@ export class StarterComponent implements AfterViewInit {
 	isLogged: boolean
 	fileToUpload: File
 	risp: boolean;
-	repos: Repo[] = null;
-	errorMessage: any;
+	repos: Repo[] = null
+	errorMessage: any
 	localUser: User
-	selectedRepo;
-	files: any;
-	idFileSelected: any;
-	reposPublic: any = null;
-	message: string = '';
-	ok: boolean = false;
-	reset: string = '';
+	selectedRepo
+	files: any
+	idFileSelected: any
+	reposPublic: any = null
+	message: string = ''
+	ok: boolean = false
+	reset: string = ''
 
 	constructor(private service: Service, public router: Router) {
 		this.isLogged = this.service.isLogged
@@ -56,8 +56,8 @@ export class StarterComponent implements AfterViewInit {
 				password: localStorage.getItem("password"),
 			};
 			//SET EXPORT 
-			exportLocalUser = this.localUser;
-			this.getAllRepo();
+			exportLocalUser = this.localUser
+			this.getAllRepo()
 		}
 	}
 
@@ -103,24 +103,25 @@ export class StarterComponent implements AfterViewInit {
 		this.ok = true
 		var state = $('input[name="statep"]:checked').val();
 		if (state == "public") {
-			this.risp = true; //mando true  al server, quindi la repo è pubblica
+			this.risp = true //mando true  al server, quindi la repo è pubblica
 		}
 		else {
-			this.risp = false; //mando false al server, la repo è privata
+			this.risp = false //mando false al server, la repo è privata
 		}
 		var nameRepo = name;
 		this.service.createRepo(nameRepo, this.risp)
 
 			.subscribe(data => {
+				this.repoExist=true
 				this.message = "Repository creata correttamente."
 
 				var newRepos = JSON.parse(data)
-
+				this.clearModal()
 				setTimeout(() => {
-					this.clearModal()
+					
 					this.ok = false
 					this.message = '',
-						this.reset = ''
+					this.reset = ''
 				}, 2000);
 
 				this.service.getRepoSpec(newRepos.repository).subscribe(data => {

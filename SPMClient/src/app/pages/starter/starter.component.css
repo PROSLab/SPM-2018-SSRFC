@@ -72,3 +72,7 @@ table {
     font-style: normal;
     margin-top:5%
   }
+
+  .message{
+    margin-top:-5px;
+  }
