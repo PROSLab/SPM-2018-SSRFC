@@ -410,61 +410,37 @@ public class FileHandler {
 	
 	public Mono<ServerResponse> modifyBodyFile(ServerRequest request) {// just a test for files upload
 		return request.body(BodyExtractors.toMultipartData())
-
                 .flatMap(parts -> {
-
                     map = parts.toSingleValueMap();
-                    FormFieldPart idUser = (FormFieldPart)map.get("idUser");
-                    FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
-                    FilePart filePart = (FilePart) map.get("files");
-
-                    String idFolder = null;
                     
+                    // PARAMETRI PASSARE ALL'API: idUser, idRepository, idFolder, idFile, version, files
+                    
+                    // idUser
+                    FormFieldPart idUser = (FormFieldPart)map.get("idUser");                 
+                    // idRepository
+                    FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");                
+                    // idFolder
+                    String idFolder = null;
                     if(map.get("idFolder") != null) {
                     	FormFieldPart idFolderPart = (FormFieldPart)map.get("idFolder");
                     	idFolder = idFolderPart.value();
-                    }                   
+                    }                 
+                    // idFile
+                    FormFieldPart idFile = (FormFieldPart)map.get("idFile");                 
+                    // version
+                    FormFieldPart version = (FormFieldPart)map.get("version");             
+                    // files
+                    FilePart filePart = (FilePart) map.get("files"); 
                     
-                    String originalName = filePart.filename();
                     String mimetype = "bpmn";
+                    fileName = idFile.value() + '.' + version.value();
                     
-                    
-                   
+                    // Overloading di uploadFilePath
+                    return fileService.uploadFilePath(rootDir, idUser.value(), idRepository.value(), idFolder, fileName, idFile.value(), mimetype, filePart);
                     
                 })
-                .flatMap(f -> {
-                    FormFieldPart idFile = (FormFieldPart)map.get("idFile");
-					fileName = idFile + '.' + 1;
-                    FilePart filePart = (FilePart) map.get("files");
-                    FormFieldPart idUser = (FormFieldPart)map.get("idUser");
-                    FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
-                    String mimetype = "bpmn";
-
-                    String idFolder = null;
-                    
-                    if(map.get("idFolder") != null) {
-                    	FormFieldPart idFolderPart = (FormFieldPart)map.get("idFolder");
-                    	idFolder = idFolderPart.value();
-                    }  
-					return fileService.pathForReplaceFile(rootDir, idUser.value(), idRepository.value(), idFolder, fileName, idFile, mimetype,filePart,f);
-
-					/*
-					 * TODO
-					 * Fare nel service: (l'upload può essere o a livello di repo o di folder. Ricorda la "cartella nascosta").
-					 * -- filePart.transferTo( new File(rootDir + "/" + filePart.filename()) ); --
-					 * Aggiornare path e filename db.
-					 * 
-					 * ISSUE
-					 * - l'upload di un file può essere considerato come nuova versione di un file esistente? NO!
-					 */
-					
-					
-                })
-               
-                .flatMap(res -> Responses.ok(res))
-				.onErrorResume(Exception.class, Responses::internalServerError);
-
-                
+                .flatMap(res -> Responses.ok(res));
+				//.onErrorResume(Exception.class, Responses::internalServerError);
     }
 }
 	

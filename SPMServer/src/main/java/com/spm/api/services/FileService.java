@@ -1,18 +1,11 @@
 package com.spm.api.services;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Vector;
 
@@ -120,6 +113,29 @@ public class FileService  {
 		filePart.transferTo( new File(strPath) );
 		
 		return Mono.just(fileEntity);
+	}
+	
+	public Mono<String> uploadFilePath(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String idFile, String mimetype, FilePart filePart) {
+		String suffixPath = idFolder != null ? File.separator + idFolder + 
+		          							   File.separator + idFile +
+      							               File.separator + fileName + "." + mimetype
+											 : File.separator + idFile +
+											   File.separator + fileName + "." + mimetype;
+		
+		String strPath = rootDir + File.separator + idUser + File.separator + idRepository + suffixPath;
+		
+		/*Path path = Paths.get(strPath);
+		
+		try {
+			Files.createDirectories(path.getParent());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Mono.error(new Exception(e.getMessage()));
+		}*/
+		
+		filePart.transferTo( new File(strPath) );
+		
+		return Mono.just("OK");
 	}
 	
 	
@@ -474,7 +490,7 @@ return Mono.just(strPath);
 				
 	}
 	
-	public Mono<FileEntity> pathForReplaceFile(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String idFile, String mimetype, FilePart filePart, FileEntity fileEntity) {
+	/*public Mono<FileEntity> pathForReplaceFile(String rootDir, String idUser, String idRepository, String idFolder, String fileName, String idFile, String mimetype, FilePart filePart, FileEntity fileEntity) {
 		String suffixPath = idFolder != null ? File.separator + idFolder + 
 		          							               File.separator + idFile +
 		          							               File.separator + fileName + "." + mimetype
@@ -495,8 +511,7 @@ return Mono.just(strPath);
 		filePart.transferTo( new File(strPath) );
 		
 		return Mono.just(fileEntity);
-	}
-	
+	}*/
 	
 		
 }
