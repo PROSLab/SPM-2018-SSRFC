@@ -16,15 +16,15 @@ export class CustomPaletteProvider implements IPaletteProvider {
 
   getPaletteEntries() {
     // console.log(this.constructor.name, "getPaletteEntries", this.palette, this.originalPaletteProvider);
-    return {
+   /*  return {
       save: {
         group: 'tools',
         className: ['fa-save', 'fa'],
-        title: 'TEST',
+        title: 'SAVE',
         action: {
           click: () => console.log( 'TEST Action clicked!')
         }
-      },
-    };
+      }, */
+   /*  }; */
   }
 }
