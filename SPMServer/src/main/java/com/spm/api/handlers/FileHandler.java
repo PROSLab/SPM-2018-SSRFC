@@ -441,7 +441,7 @@ public class FileHandler {
                     // version
                     FormFieldPart version = (FormFieldPart)map.get("version");  
                     //originalName
-                    FormFieldPart originalName = (FormFieldPart)map.get("originalName");             
+                   /* FormFieldPart originalName = (FormFieldPart)map.get("originalName");     */        
 
                     // files
                     FilePart filePart = (FilePart) map.get("files"); 
