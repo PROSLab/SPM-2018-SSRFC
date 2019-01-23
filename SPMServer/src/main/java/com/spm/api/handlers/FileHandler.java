@@ -418,7 +418,48 @@ public class FileHandler {
 				
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}
+	
+	public Mono<ServerResponse> modifyBodyFile(ServerRequest request) {// just a test for files upload
+		return request.body(BodyExtractors.toMultipartData())
+                .flatMap(parts -> {
+                    map = parts.toSingleValueMap();
+                    
+                    // PARAMETRI PASSARE ALL'API: idUser, idRepository, idFolder, idFile, version, files
+                    
+                    // idUser
+                    FormFieldPart idUser = (FormFieldPart)map.get("idUser");                 
+                    // idRepository
+                    FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");                
+                    // idFolder
+                    String idFolder = null;
+                    if(map.get("idFolder") != null) {
+                    	FormFieldPart idFolderPart = (FormFieldPart)map.get("idFolder");
+                    	idFolder = idFolderPart.value();
+                    }                 
+                    // idFile
+                    FormFieldPart idFile = (FormFieldPart)map.get("idFile");                 
+                    // version
+                    FormFieldPart version = (FormFieldPart)map.get("version");  
+                    //originalName
+                   /* FormFieldPart originalName = (FormFieldPart)map.get("originalName");     */        
+
+                    // files
+                    FilePart filePart = (FilePart) map.get("files"); 
+                    
+                    String mimetype = "bpmn";
+                    fileName = idFile.value() + '.' + version.value();
+                    
+                    // Overloading di uploadFilePath
+                    return fileService.pathForReplaceFile(rootDir, idUser.value(), idRepository.value(), idFolder, fileName, idFile.value(), mimetype, filePart);
+                    
+                })
+                .flatMap(res -> Responses.ok(res));
+				//.onErrorResume(Exception.class, Responses::internalServerError);
+    }
 }
+	
+	
+
 
 
 

@@ -102,6 +102,10 @@ public class FileRouter {
 								GET("/moveFile"),
 								fileHandler::moveFile
 						)
+						.andRoute(
+								POST("/modifyBodyFile").and(accept(MediaType.MULTIPART_FORM_DATA)),
+								fileHandler::modifyBodyFile
+						)
 						
 						
 				);

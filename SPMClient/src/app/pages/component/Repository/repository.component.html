@@ -1,28 +1,17 @@
 <div class="container">
-    <div class="row central">
-        <select id="select" class="col-2 select1" (click)="selected()">
-            <option selected value="name">Name</option>
-            <option value="date">Date</option>
-        </select>
-
-        <input type="text" [(ngModel)]="search" id="search" name="search" (input)="Search()" placeholder="Search..">
-    </div>
-    <br>
-
 
 
     <div class="row">
-
-        <div style="height: 40%;">
-            <button class="btn btn-default numero1" (click)="sendToRepo()">
+        <div style="height:40%;">
+            <button class="btn btn-default numero2" (click)="sendToRepo()">
                 <h4>My repositories</h4>
             </button>
         </div>
         <div>
-            <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 25%"></i>
+            <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
         </div>
-        <div class=" dropdown dropdown-toggle " style="height: 30%;margin-left:2%">
-            <a class="btn btn-default numero1  " role="button" id="dropdownMenuLink" data-toggle="dropdown"
+        <div class=" dropdown dropdown-toggle" style="height: 20%;margin-left:1%">
+            <a class="btn btn-default numero2 " role="button" id="dropdownMenuLink" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <h4>{{repoInfo?.repositoryName}}</h4>
             </a>
@@ -63,7 +52,8 @@
         <div class="col-2;">
 
             <div data-toggle="modal" data-target="#info">
-                <button style="background-color: transparent;border:transparent;left:30px;position : relative;" (click)="info=true">
+                <button style="background-color: transparent;border:transparent;left:150px;position : relative;"
+                    (click)="info=true">
                     <i style="font-size:24px;" class="fa">&#xf05a;</i>
                 </button>
             </div>
@@ -99,7 +89,18 @@
         </div>
     </div>
     <hr>
-
+    <br>
+    <!--  SEARCH  -->
+    <div class="row" *ngIf="folderExist==true || filesExist==true">
+        <button (click)="refreshTable()" style="border-radius:0%;background-color: white;border:1px solid rgba(128, 128, 128, 0.466);height: 35px;"
+            class="btn btn-default"><i style="font-size:15px" class="fa">&#xf021;</i></button>
+        <select id="select" style="width: 10%;border:1px solid rgba(128, 128, 128, 0.5) " class=" select1" (click)="selected()">
+            <option selected style="margin-left: 5px;" value="name">Name</option>
+            <option style="margin-left: 5px;" value="date">Date</option>
+        </select>
+        <input type="text" [(ngModel)]="search" id="search" name="search" (input)="Search()" placeholder="Search..">
+    </div>
+    <br>
     <div>
         <div *ngIf="ok" class="alert alert-success  col-5 alert-dismissible" style="position: center;" id="top"
             #myAlertImport>
@@ -152,7 +153,6 @@
                 </div>
                 <div class="modal-body">
                     Repository: {{repoInfo?.repositoryName}} <br>
-
                     Created At: {{repoInfo?.createdAt}} <br>
                     <div style="margin-bottom:5px;"> State: {{repoInfo?.publicR}} <br> </div>
                 </div>
@@ -172,9 +172,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Create a new File</h4>
                 </div>
-
                 <div class="modal-body">
-
                     <div>
                         <label for="reponame"><b>File name</b> </label><br>
                         <input type="text" maxlength="13" required id="namerepo" #nameFile name="namerepo" />
@@ -182,13 +180,11 @@
                     <br>
                     
                 </div>
-
                 <div class="modal-footer">
                     <button (click)="saveFile(nameFile.value)" style="margin-right:10px;" class="btn btn-primary col-4">Save
                         File </button>
                     <button type="button" class="btn btn-danger" #closeModalCreateFile data-dismiss="modal">Close</button>
                 </div>
-
             </div>
         </div>
     </div> -->
@@ -227,12 +223,17 @@
 
 
     <div *ngIf="folderExist==false && filesExist==false">
-        Your repository is empty.<br> You can create a folder or a file, or import a file from your system.
+        <div class="alert alert-danger  col-7 alert-dismissible" style="position: center;">
+            <strong>
+                Your repository is empty. <br>
+                You can create a folder, file or import a file from your system clicking on
+                "{{repoInfo?.repositoryName}}" button.
+            </strong>
+        </div>
     </div>
 
 
-
-    <div class="row col-10">
+    <div class="row col-10" *ngIf="folderExist==true || filesExist==true">
         <br>
 
         <table>
@@ -287,4 +288,4 @@
 </div>
 
 <br>
-<button (click)="back()" class="btn btn-primary">Back</button>
+<button (click)="back()" class="btn btn-info">Back</button>
