@@ -218,6 +218,7 @@ openSearch=false
   Search() {
     this.fileincartelle = true;
     if (this.selezione == "name") {
+      console.log(this.selezione)
       if (this.search != "") {
         this.files = this.files.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
@@ -236,6 +237,7 @@ openSearch=false
     }
 
     if (this.selezione == "date") {
+      console.log(this.selezione)
       if (this.search != "") {
         this.files = this.files.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
