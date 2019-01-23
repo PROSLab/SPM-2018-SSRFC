@@ -135,18 +135,16 @@ deleteFile(){
 }
 
 //da fixare
-checkDeleted(v){
+/* checkDeleted(v){
   if(this.finalVersion.length==1){
-    this.secondButton=true
     console.log("sto eliminando l'ultima versione, quindi chiedo se veramente voglio eliminare il file o no")
-    return 1
+    
   }
   else{
-    //this.secondButton=false
-    return 0
-    //this.deleteVersion(v)
+  
+    this.deleteVersion(v)
   }
-}
+} */
 
   deleteVersion(v) {
    
@@ -154,7 +152,9 @@ checkDeleted(v){
     if (this.vers == null) {
       alert("seleziona una versione per eliminarla!")
     }
-    else {
+    else if (this.finalVersion.length !=1) {
+      document.getElementById("buttonDelete").setAttribute("data-target","")
+
       this.service.deleteVersion(this.idFile, this.vers)
         .subscribe(data => {
           data = JSON.parse(data)
@@ -173,6 +173,9 @@ checkDeleted(v){
         }, error => {
           console.log(error);
         });
+    }else{
+      console.log("sono entrato")
+      document.getElementById("buttonDelete").setAttribute("data-target","#myModalDeleteFile")
     }
   }
 

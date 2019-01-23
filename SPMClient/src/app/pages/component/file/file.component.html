@@ -91,9 +91,9 @@
                         <div style="margin-left:65%;margin-top:-3%">
                             <div>
                                 <button class="btn btn-warning" (click)="newVersion()"><i class="icon-plus"></i> Create Version</button>
-                                <button class="btn btn-danger" *ngIf="!secondButton" style="margin-left:1%" (click)="checkDeleted(vers)"><i class="icon-trash" ></i> Delete Version {{vers}}</button>
-                                <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeleteFile" *ngIf="secondButton" style="margin-left:1%"><i class="icon-trash" ></i> Delete Version {{vers}}</button>
-                            </div>
+                                <button id="buttonDelete"class="btn btn-danger"  data-toggle="modal" data-target=""style="margin-left:1%" (click)="deleteVersion(vers)"><i class="icon-trash" ></i> Delete Version {{vers}}</button>
+<!--                                 <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeleteFile" *ngIf="secondButton" style="margin-left:1%"><i class="icon-trash" ></i> Delete Version {{vers}}</button>
+ -->                            </div>
                         </div>
                     </div>
                 </div>
