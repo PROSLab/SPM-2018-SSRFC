@@ -459,10 +459,18 @@ public class FileHandler {
 	
 	public Mono <ServerResponse> deleteFile(ServerRequest request) {
 		String idFile = request.queryParam("idFile").get();
+		String idRepository = request.queryParam("idRepository").get();
+		String idUser = request.queryParam("idUser").get();
+		String idFolder = null;
+         
+         if( request.queryParam("idFolder").get() != null) {
+        	 idFolder=request.queryParam("idFolder").get();
+         }            
 		
-		return fileService.deleteFile(idFile)
+		return fileService.deleteFileSistem(idUser,idRepository,idFile,idFolder, rootDir)
+		
 				.flatMap(f -> {
-					return fileService.deleteFileSistem(f, rootDir);
+					return fileService.deleteFile(idFile);
 				})
 				.flatMap(res -> Responses.ok(res))
 				.onErrorResume(BadRequestException.class, Responses::badRequest)

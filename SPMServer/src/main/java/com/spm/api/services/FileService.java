@@ -524,22 +524,20 @@ return Mono.just(strPath);
 	
 	public Mono<FileEntity>  deleteFile(String idFile) {
 	/*	return fileRepository.deleteById(new ObjectId(idFile));*/
-		return fileRepository.deleteById(new ObjectId(idFile))
-				.flatMap(f -> {
-					return fileRepository.save(f);
-				});
+		return fileRepository.deleteById(new ObjectId(idFile));
+				
 				
 		}
 		
 	
-public Mono<Boolean> deleteFileSistem(FileEntity sourceFile, String rootDir ) {
+public Mono<Boolean> deleteFileSistem( String idUser,String idRepository,String idFile, String idFolder, String rootDir ) {
 	String prefix = rootDir 
-			+ File.separator + sourceFile.getIdUser().toHexString() 
-			+ File.separator + sourceFile.getIdRepository().toHexString();
+			+ File.separator + idUser
+			+ File.separator + idRepository;
 	
-	if(sourceFile.getIdFolder() != null) prefix += File.separator + sourceFile.getIdFolder().toHexString();
+	if(idFolder != null) prefix += File.separator +idFolder;
 	
-	String suffix = File.separator + sourceFile.getId(); 
+	String suffix = File.separator + idFile; 
 	File file = new File(prefix + suffix);
 	try {
 		FileUtils.cleanDirectory(file); ;
