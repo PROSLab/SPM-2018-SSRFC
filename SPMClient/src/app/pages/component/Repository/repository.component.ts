@@ -163,38 +163,6 @@ export class RepositoryComponent implements OnInit {
 
   saveFile() {
     this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMN']);
-    /*   var name = fileName
-      var idfolder = null
-      
-      this.service.createFile(this.idRepoSelected, this.idUser, name, idfolder)
-        .subscribe(data => {
-          var file = JSON.parse(data)
-  
-           this.ok=true
-          this.message="File creato correttamente!"
-          this.clearModal(this.closeModal3) 
-  
-           setTimeout(() => {
-            this.ok = false
-            this.message = '',
-            this.reset = ''
-          }, 3000); 
-  
-          this.service.getFileSpec(file.id)
-            .subscribe(data => {
-              var newFile: File = data
-              newFile.createdAt = this.troncaData(newFile.createdAt)
-              var count = this.files.length
-              this.files[count] = newFile
-              this.filesExist = true
-            }, error => {
-              this.errorMessage = <any>error
-            });
-        }, error => {
-          this.ok=true
-          this.message="Errore!"
-          this.errorMessage = <any>error
-        }) */
   }
 
 

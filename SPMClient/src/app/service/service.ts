@@ -92,7 +92,7 @@ export class Service {
   }
 
   // @@@@ Service per la gestione dei file @@@@ ///
-  postFile(idRepo, idUser, fileToUpload,idFolder?: File): Observable<any> {
+  postFile(idRepo, idUser, fileToUpload,idFolder?): Observable<any> {
      const formData: FormData = new FormData();
      if(idFolder!=null){
      formData.append('idFolder', idFolder); 
@@ -154,7 +154,22 @@ export class Service {
       );
   }
 
+SaveModificatedFile(idUser,idRepository,idFolder,idFile,version,fileToUpload):Observable<any>{
+    const formData: FormData = new FormData();
+    formData.append('idFile', idFile); //id 
+     if(idFolder!=null){
+     formData.append('idFolder', idFolder); 
+     }
+     formData.append('idRepository', idRepository);
+     formData.append('idUser', idUser);
+     formData.append('files', fileToUpload)
+     formData.append('version', version); //num. version
+     return this.http.post(this.baseUrl + "api/file/modifyBodyFile",{formData ,responseType: 'text'})
+      .pipe(
+        catchError(this.handleError)
+      );
 
+}
 
   downloadFile(idFile,version):Observable<any> {
     let params = new HttpParams();
