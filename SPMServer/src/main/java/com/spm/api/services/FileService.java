@@ -449,8 +449,8 @@ public class FileService  {
 				.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("File not found"))));
 	}
 	
-	public Mono<String> updateMoveTo (String rootDir, String idUser, String idRepository,String idFolder, String fileName, String idFile, String mimetype, Path paths) {
-		String suffixPath = idFolder != null  ? File.separator + idFolder + 
+	public Mono<String> updateMoveTo (String rootDir, String idUser, String idRepository,Optional <String> idFolder, String fileName, String idFile, String mimetype, Path paths) {
+		String suffixPath = idFolder.isPresent() != false  ? File.separator + idFolder.get() + 
 	               File.separator + idFile
 				 : File.separator + idFile ;
 				  
@@ -475,17 +475,13 @@ return Mono.just(strPath);
 	}
 	
 
-	public Mono<FileEntity> updatePathFile(ObjectId idFile ,ObjectId idRepository,ObjectId idUser, String idFolder2, String newPath) {
+	public Mono<FileEntity> updatePathFile(ObjectId idFile ,ObjectId idRepository,ObjectId idUser,Optional < String> idFolder, String newPath) {
+		String foldergiusto = idFolder.isPresent() != false  ? foldergiusto=idFolder.get()
+				:null;
 		return fileRepository.findFileById(idFile)
 				.flatMap(f -> {
 					f.setPath(newPath);
-					if (idFolder2 != null) {
-						f.setIdFolder(new ObjectId(idFolder2));
-						}else {
-						f.setIdFolder(null);
-					}
-					
-				
+					f.setIdFolder(new ObjectId(foldergiusto));
 					f.setIdUser(idUser);
 					f.setIdRepository(idRepository);
 					return fileRepository.save(f);
@@ -530,12 +526,12 @@ return Mono.just(strPath);
 		}
 		
 	
-public Mono<Boolean> deleteFileSistem( String idUser,String idRepository,String idFile, String idFolder, String rootDir ) {
+public Mono<Boolean> deleteFileSistem( String idUser,String idRepository,String idFile,Optional <String> idFolder, String rootDir ) {
 	String prefix = rootDir 
 			+ File.separator + idUser
 			+ File.separator + idRepository;
 	
-	if(idFolder != null) prefix += File.separator +idFolder;
+	if(idFolder.isPresent() != false) prefix += File.separator +idFolder.get();
 	
 	String suffix = File.separator + idFile; 
 	File file = new File(prefix + suffix);
