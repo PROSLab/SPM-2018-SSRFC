@@ -123,12 +123,15 @@ export class BpmnComponent implements OnInit {
       });
   }
 
-  async modify(){
-alert("voglio modificare il file!!!!")
- this.modeler.saveXML((err: any, xml: any) =>    this.filetoUpload = new File([xml], this.file.originalName)); 
-await this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.folderSelected,this.idFile,this.version,this.filetoUpload)
-.subscribe(async data => {
-  console.log(data)
+ modify(){
+ this.modeler.saveXML(
+   (err: any, xml: any) =>   
+  this.filetoUpload = new File([xml],
+     this.file.originalName
+  )); 
+ this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.folderSelected,this.idFile,this.version,this.filetoUpload)
+.subscribe( data => {
+
   }, error => {
     console.log(error);
   });
@@ -141,7 +144,6 @@ await this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.fold
           headers: {}, responseType: 'text'
         }).subscribe(
           (x: any) => {
-            console.log('Fetched XML, now importing: ', x);
             this.modeler.importXML(x, this.handleError);
           },
           this.handleError
@@ -155,7 +157,6 @@ await this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.fold
     })
     .subscribe(
       (x: any) => {
-        console.log('Fetched XML, now importing: ', x);
         this.modeler.importXML(x, this.handleError);
       },
       this.handleError
@@ -203,7 +204,6 @@ exportModel(){
     this.service.postFile(this.idRepoSelected,this.idUser,this.file,this.folderSelected)
     .subscribe(async data => {
     this.idFileCreato = data.id
-    console.log(this.idFileCreato)
     //this.sendTofile(this.idFile)
     await this.sendTofile(this.idFileCreato)
       // do something, if upload success

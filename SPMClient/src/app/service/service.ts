@@ -154,28 +154,28 @@ export class Service {
       );
   }
 
-SaveModificatedFile(idUser,idRepository,idFolder,idFile,version,fileToUpload):Observable<any>{
+SaveModificatedFile(idUser,idRepository,idFolder,idFile,version,fileToUpload): Observable<any>{
     const formData: FormData = new FormData();
     formData.append('idFile', idFile); //id 
      if(idFolder!=null){
-     formData.append('idFolder', idFolder); 
+        formData.append('idFolder', idFolder); 
      }
      formData.append('idRepository', idRepository);
      formData.append('idUser', idUser);
      formData.append('files', fileToUpload)
      formData.append('version', version); //num. version
-     return this.http.post(this.baseUrl + "api/file/modifyBodyFile",{formData ,responseType: 'text'})
+     return this.http.post(this.baseUrl + "api/file/modifyBodyFile", formData )
       .pipe(
         catchError(this.handleError)
       );
-
 }
+
 
   downloadFile(idFile,version):Observable<any> {
     let params = new HttpParams();
     params = params.append('idFile', idFile); //id file
     params = params.append('version', version); //num. version
-console.log(params)
+    console.log(params)
     return this.http.get(this.baseUrl + 'api/file/downloadFile', {params:params, responseType: 'json' })
       .pipe(
         tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server
