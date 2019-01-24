@@ -28,7 +28,8 @@
                "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/angular-calendar/css/angular-calendar.css",
               "node_modules/chartist/dist/chartist.css",
-              "node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
+              "node_modules/ng2-toastr/ng2-toastr.css",
+              
               "node_modules/quill/dist/quill.snow.css",
               "node_modules/dragula/dist/dragula.css",
               "src/assets/scss/style.scss",
@@ -43,12 +44,7 @@
           },
           "configurations": {
             "production": {
-             "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
+             
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -98,7 +94,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [],
+            
             "styles": [
               "src/styles.scss",
 "node_modules/bootstrap/dist/css/bootstrap.min.css",
