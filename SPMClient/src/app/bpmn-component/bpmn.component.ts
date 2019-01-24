@@ -5,9 +5,7 @@ import {CustomPropsProvider} from '../props-provider/CustomPropsProvider';
 import {CustomPaletteProvider} from "../props-provider/CustomPaletteProvider";
 import { Service } from '../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RightSidebarToggleDirective } from '../shared/sidebar.directive';
-import {saveAs} from "file-saver";
-import { map } from 'rxjs/operators';
+/* import {saveAs} from 'file-saver'; */
 
 const customModdle = {
   name: "customModdle",
@@ -159,8 +157,8 @@ alert("vogli modificare il file!!!!")
 exportModel(){
   if(this.version==null){
     this.modeler.saveXML((err: any, xml: any) =>    this.file = new File([xml], "diagram")); 
-    saveAs(this.file, "diagram.bpmn")
-    
+/*      saveAs(this.file, "diagram.bpmn") 
+ */    
   } else{
   window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+this.version)
 /*  this.downloadFile() */

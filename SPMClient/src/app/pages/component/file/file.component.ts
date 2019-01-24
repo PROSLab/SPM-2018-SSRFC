@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Service } from '../../../service/service'
 import { Folder } from '../../../../app/service/model/folder'
 import { Repo } from '../../../service/model/repo';
-
+import {ToastrService} from 'ngx-toastr'
 import {HttpClient} from '@angular/common/http';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -64,7 +64,7 @@ export class FileComponent implements OnInit {
   secondButton: boolean=null;
   ok2: boolean;
 
-  constructor(public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
+  constructor(private toastr:ToastrService,public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
     this.idFolder = route.snapshot.params.idFolder
@@ -133,20 +133,20 @@ deleteFile(){
  this.service.deleteFile(this.idFile,this.idRepoSelected,this.idUser,this.idFolder)
  .subscribe(data=>{
    //this.ok=true
-   this.message="file Eliminato"
-  document.getElementById("deleteFileVersion").setAttribute("data-target","#myModalDeleteFileTotal")
-  console.log(document.getElementById("deleteFileVersion"))
+   this.toastr.success('File eliminato con successo', 'File Eliminato')
+
+  
   
   setTimeout(()=>{
     if (this.idFolder==undefined){
      // document.getElementById("deleteFileVersion").setAttribute("data-target","")
      // this.ok=false
-      this.message=""
+    
       this.sendToRepo()
     }else{
      // document.getElementById("deleteFileVersion").setAttribute("data-target","")
      // this.ok=false
-  this.message=""
+ 
       this.sendTofolder()
     }}, 3000); 
  },
@@ -186,7 +186,7 @@ error => {
           }
         this.vers =null
         this.ok=true
-        this.message="Versione eliminata correttamente"
+        this.toastr.success('Versione Eliminata con successo', 'Versione Eliminata')
         
           setTimeout(()=>{
             this.ok=false
@@ -203,6 +203,7 @@ error => {
 
 
   ngOnInit() {
+    
     this.modifyNameForm=this.formBuilder.group({
       reponame:['',Validators.required]
     

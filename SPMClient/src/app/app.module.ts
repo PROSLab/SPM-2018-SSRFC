@@ -10,10 +10,16 @@ import { AppComponent } from './app.component';
 import { BpmnComponent } from './bpmn-component/bpmn.component';
 import { SpinnerComponent } from './shared/spinner.component';
 import { Service } from './service/service'; 
-
+import {ToastrModule} from 'ngx-toastr'
 @NgModule({
   declarations: [AppComponent,SpinnerComponent ],
   imports: [
+    ToastrModule.forRoot({
+timeOut:2000,
+positionClass:'toast-top-right',
+preventDuplicates:true,
+
+    }),
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
