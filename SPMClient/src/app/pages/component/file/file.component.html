@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row">
+    <div class="row col-12">
         <div style="height:40%;">
             <button class="btn btn-default numero2" (click)="sendToRepo()">
                 <h4>{{repo?.repositoryName}}</h4>
@@ -57,14 +57,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-7"></div>
-
-        <div class="col-2;">
+<div class="col-6"></div>
+        <div>
 
             <div data-toggle="modal" data-target="#info">
                 <button style="background-color: transparent;border:transparent;left:150px;position : relative;"
                     (click)="info=true">
-                    <i style="font-size:24px;" class="fa">&#xf05a;</i>
+                    <i style="font-size:24px" class="fa">&#xf05a;</i>
                 </button>
             </div>
         </div>
@@ -75,28 +74,23 @@
         <strong>{{message}}</strong>
     </div>
 
-    <div class="row" *ngIf="fileExist">
+    <div class="row " *ngIf="fileExist">
         <div class="card col-11" *ngIf="versionExist">
             <div class="card-body">
-
-                <div >
-                    <div class="">
-                        <div class="col-3">
-                            <b> Version n. : </b>
-                            <select [(ngModel)]="vers" (change)="selected()">
+                
+                        <div class="row" style="height:20%;">
+                            <h5>Version n.  </h5>
+                            <select [(ngModel)]="vers" (change)="selected()" style="margin-left:1%;height:20%;">
                                 <option [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
                             </select>
-                        </div>
 
-                        <div style="margin-left:65%;margin-top:-3%">
+                        <div style="margin-left:38%;margin-top:-1%" class="col-6">
                             <div>
                                 <button class="btn btn-warning" (click)="newVersion()"><i class="icon-plus"></i> Create Version</button>
-                                <button id="buttonDelete"class="btn btn-danger"  data-toggle="modal" data-target="" style="margin-left:1%" (click)="deleteVersion(vers)"><i class="icon-trash" ></i> Delete Version {{vers}}</button>
-<!--                                 <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeleteFile" *ngIf="secondButton" style="margin-left:1%"><i class="icon-trash" ></i> Delete Version {{vers}}</button>
- -->                            </div>
+                                 <button id="buttonDelete"class="btn btn-danger"  data-toggle="modal" data-target="" style="margin-left:1%" (click)="deleteVersion(vers)"><i class="icon-trash" ></i> Delete Version {{vers}}</button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
                 
             </div>
@@ -267,6 +261,14 @@
     <div *ngIf="vers!=null" style="border:1px solid black;height:70px">
         Stai visualizzando la versione del file n. {{vers}}!
         <button (click)="sendToEditor(vers)" class="btn btn-primary">Open -> </button>
+
+        <div>
+            Anteprima<br><br>
+            <div #modeler class="modeler">
+                <div #canvas style="background-color:white"id="canvas"></div>
+                <div id="properties"></div>
+              </div>
+        </div>
     </div>
 
 </div>

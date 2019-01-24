@@ -4,9 +4,10 @@ import { Service } from '../../../service/service'
 import { Folder } from '../../../../app/service/model/folder'
 import { Repo } from '../../../service/model/repo';
 
-import { exportIsLogged } from '../../starter/starter.component'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Modeler } from '../../../bpmn-js/bpmn-js';
 
 
 @Component({
@@ -62,8 +63,10 @@ export class FileComponent implements OnInit {
   shareFileForm: FormGroup;
   reset: string='';
   secondButton: boolean=null;
+  modeler
+  x: any;
 
-  constructor(public router: Router, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
+  constructor(public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
     this.idFolder = route.snapshot.params.idFolder
@@ -197,6 +200,35 @@ deleteFile(){
     }
     this.getRepo()
     this.getAllFolders()
+   this.load()
+  }
+
+
+  createModeler(){
+   
+  }
+
+  load(): void {
+    const url = "http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+this.vers
+/*     const url = '/assets/bpmn/initial.bpmn';
+ */    this.http.get(url, {
+      headers: {}, responseType: 'text'
+    }).subscribe(
+      (x: any) => {
+        console.log(x)
+      this.x=x
+        console.log('Fetched XML, now importing: ', x)
+        this.modeler = new Modeler({
+          container: '#canvas',
+          width: '100%'
+        });
+        this.modeler.importXML(this.x);
+      //  this.createModeler()
+        
+        
+      }
+    );
+  
   }
 
   get f() { 

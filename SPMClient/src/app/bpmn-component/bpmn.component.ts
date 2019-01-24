@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RightSidebarToggleDirective } from '../shared/sidebar.directive';
 import {saveAs as importedSaveAs} from "file-saver";
 
+
 const customModdle = {
   name: "customModdle",
   uri: "http://example.com/custom-moddle",
