@@ -1,10 +1,18 @@
 <div class="container">
     <div class="row col-12">
         <div style="height:40%;">
+            
             <button class="btn btn-default numero2" (click)="sendToRepo()">
                 <h4>{{repo?.repositoryName}}</h4>
             </button>
         </div>
+        <div>
+            <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
+         </div>
+        <div  style="height:40%;">
+            <button class="btn btn-default numero2" (click)="sendToRepo()"><h4>My Repositories</h4> </button> 
+      </div>
+          
         <div>
             <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
         </div>
@@ -59,7 +67,7 @@
                 </div>
             </div>
         </div>
-<div class="col-6"></div>
+<div class="col-4" style="margin-left:13%"></div>
         <div>
 
             <div data-toggle="modal" data-target="#info">
@@ -69,12 +77,9 @@
                 </button>
             </div>
         </div>
-
     </div>
     <hr>
-    <div *ngIf="ok" class="alert alert-success alert-dismissible col-4" id="myAlert">
-        <strong>{{message}}</strong>
-    </div>
+   <br>
 
     <div class="row " *ngIf="fileExist">
         <div class="card col-11" *ngIf="versionExist">
@@ -103,6 +108,10 @@
 
     <br>
 
+    <div *ngIf="ok" class="alert alert-success alert-dismissible col-4" id="myAlert">
+        <strong>{{message}}</strong>
+    </div>
+    <br>
     <!--modal info file-->
     <div class="modal fade" id="info" role="dialog">
         <div class="modal-dialog">
@@ -184,7 +193,7 @@
                         </h3>
                     </div>
                     <div class="modal-footer">
-                        <button style="margin-right:10px;" (click)="deleteFile()" data-dismiss="modal" class="btn btn-primary col-4">Yes</button>
+                        <button style="margin-right:10px;"  id="deleteFileVersion" data-toggle="modal" data-target="myModalModifyFile"  class="btn btn-primary col-4">Yes</button>
                         <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
                     </div>
 
@@ -193,6 +202,7 @@
 
         </div>
     </div>
+
     <div class="modal fade " id="myModalDeleteFileTotal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -212,6 +222,19 @@
                     </div>
 
                 </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="modal fade " id="myModalMessage" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>{{message}}
+                        </h4>
+                    </div>
             </div>
 
         </div>
@@ -266,8 +289,8 @@
                         <option [ngValue]="v" *ngFor="let v of folders; index as i">Folder: {{v?.folderName}}</option>
                     </select>
                     <br>
-                    <div>
-                        {{message}}
+                    <div *ngIf="ok2" class="alert alert-success alert-dismissible" id="myAlert">
+                        <strong>{{message}}</strong>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -289,10 +312,6 @@
 
         <div>
             Anteprima<br><br>
-            <div #modeler class="modeler">
-                <div #canvas style="background-color:white"id="canvas"></div>
-                <div id="properties"></div>
-              </div>
         </div>
     </div>
 

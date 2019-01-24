@@ -7,7 +7,6 @@ import { Repo } from '../../../service/model/repo';
 import {HttpClient} from '@angular/common/http';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Modeler } from '../../../bpmn-js/bpmn-js';
 
 
 @Component({
@@ -63,8 +62,7 @@ export class FileComponent implements OnInit {
   shareFileForm: FormGroup;
   reset: string='';
   secondButton: boolean=null;
-  modeler
-  x: any;
+  ok2: boolean;
 
   constructor(public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -97,17 +95,14 @@ moveTo(id){
 
     }else{
       if(id == this.idFolder){
+        this.ok2=true
         this.message="selezionare una cartella diversa dall\'originale"
       }else{
         this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,id)
         .subscribe(data => {
-         this.message="file spostato nella folder selezionata"
          this.clearModal(this.closeModal1)
          setTimeout(()=>{
           this.go()}, 2000); 
-        //  document.getElementById("myModalModifyPath").setAttribute("class","custom-close")
-          
-         // this.router.navigate(['/repositoryID',this.idRepoSelected,'folderID',id])
         }, error => {
           this.errorMessage = <any>error
         });
@@ -137,14 +132,23 @@ deleteFile(){
   console.log(this.idFolder)
  this.service.deleteFile(this.idFile,this.idRepoSelected,this.idUser,this.idFolder)
  .subscribe(data=>{
-  this.message="file Eliminato"
+   //this.ok=true
+   this.message="file Eliminato"
+  document.getElementById("deleteFileVersion").setAttribute("data-target","#myModalDeleteFileTotal")
+  console.log(document.getElementById("deleteFileVersion"))
+  
   setTimeout(()=>{
     if (this.idFolder==undefined){
+     // document.getElementById("deleteFileVersion").setAttribute("data-target","")
+     // this.ok=false
+      this.message=""
       this.sendToRepo()
     }else{
+     // document.getElementById("deleteFileVersion").setAttribute("data-target","")
+     // this.ok=false
+  this.message=""
       this.sendTofolder()
-    }}, 2000); 
-
+    }}, 3000); 
  },
 error => {
   this.errorMessage = <any>error
@@ -183,16 +187,16 @@ error => {
         this.vers =null
         this.ok=true
         this.message="Versione eliminata correttamente"
+        
           setTimeout(()=>{
             this.ok=false
             this.message=""
-          }, 2000);
+          }, 3000);
           this.getFileSpec()
         }, error => {
           console.log(error);
         });
     }else{
-      console.log("sono entrato")
       document.getElementById("buttonDelete").setAttribute("data-target","#myModalDeleteFile")
     }
   }
@@ -215,36 +219,10 @@ error => {
     }
     this.getRepo()
     this.getAllFolders()
-   this.load()
   }
 
 
-  createModeler(){
-   
-  }
-
-  load(): void {
-    const url = "http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+this.vers
-/*     const url = '/assets/bpmn/initial.bpmn';
- */    this.http.get(url, {
-      headers: {}, responseType: 'text'
-    }).subscribe(
-      (x: any) => {
-        console.log(x)
-      this.x=x
-        console.log('Fetched XML, now importing: ', x)
-        this.modeler = new Modeler({
-          container: '#canvas',
-          width: '100%'
-        });
-        this.modeler.importXML(this.x);
-      //  this.createModeler()
-        
-        
-      }
-    );
   
-  }
 
   get f() { 
    
@@ -343,18 +321,6 @@ error => {
       window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
   }
 
-  downloadFile(vers) {
-    this.service.downloadFile(this.idFile,vers)
-    .subscribe(data => {
-    
-    }, error => {
-      this.errorMessage = <any>error
-    });
-
-    window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+vers)
-    this.cambia=false
-    this.vers=null
-  }
 
   createFile() {
     this.fileAppear = true;

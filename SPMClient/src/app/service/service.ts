@@ -156,12 +156,12 @@ export class Service {
 
 
 
-  downloadFile(idFile,version): Observable<any> {
+  downloadFile(idFile,version):Observable<any> {
     let params = new HttpParams();
     params = params.append('idFile', idFile); //id file
     params = params.append('version', version); //num. version
-
-    return this.http.get<any>(this.baseUrl + 'api/file/downloadFile')
+console.log(params)
+    return this.http.get(this.baseUrl + 'api/file/downloadFile', {params:params, responseType: 'json' })
       .pipe(
         tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server
         catchError(this.handleError)

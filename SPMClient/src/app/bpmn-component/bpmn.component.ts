@@ -6,8 +6,8 @@ import {CustomPaletteProvider} from "../props-provider/CustomPaletteProvider";
 import { Service } from '../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RightSidebarToggleDirective } from '../shared/sidebar.directive';
-import {saveAs as importedSaveAs} from "file-saver";
-
+import {saveAs} from "file-saver";
+import { map } from 'rxjs/operators';
 
 const customModdle = {
   name: "customModdle",
@@ -50,6 +50,7 @@ export class BpmnComponent implements OnInit {
   file
   idFileCreato: any;
   version: boolean;
+  data: any;
 
   constructor(private http: HttpClient,private service: Service,public router: Router,route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -102,7 +103,21 @@ export class BpmnComponent implements OnInit {
   }
 
 
+  openModal(){
 
+    if(this.idFile==undefined){
+        document.getElementById("saveModal").setAttribute("data-target","#myModalFile")
+
+    }else{
+      document.getElementById("saveModal").setAttribute("data-target","")
+      this.modify()
+    }
+  }
+
+
+modify(){
+alert("vogli modificare il file!!!!")
+}
   createFile(){
 
         const url = '/assets/bpmn/initial.bpmn';
@@ -119,10 +134,10 @@ export class BpmnComponent implements OnInit {
 
   load(): void {
     const url = "http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+this.version
-/*     const url = '/assets/bpmn/initial.bpmn';
- */    this.http.get(url, {
+    this.http.get(url, {
       headers: {}, responseType: 'text'
-    }).subscribe(
+    })
+    .subscribe(
       (x: any) => {
         console.log('Fetched XML, now importing: ', x);
         this.modeler.importXML(x, this.handleError);
@@ -141,11 +156,34 @@ export class BpmnComponent implements OnInit {
    }
     }
     
-  save(nameFile) {
+exportModel(){
+  if(this.version==null){
+    this.modeler.saveXML((err: any, xml: any) =>    this.file = new File([xml], "diagram")); 
+    saveAs(this.file, "diagram.bpmn")
+    
+  } else{
+  window.open("http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+this.version)
+/*  this.downloadFile() */
+  }
+}
+
+/* downloadFile() {
+  this.service.downloadFile(this.idFile,this.version)
+  .subscribe(response => 
+    {
+      saveAs(response)
+    })
+    
+  /* .map( data => {
    
+  }, error => {
+  }); 
+} */
+
+  save(nameFile) {
     //creazione di un nuovo file salvandolo dall'editor
    this.modeler.saveXML((err: any, xml: any) =>    this.file = new File([xml], nameFile)); 
-
+  console.log(this.file)
     this.service.postFile(this.idRepoSelected,this.idUser,this.file,this.folderSelected)
     .subscribe(async data => {
     this.idFileCreato = data.id
