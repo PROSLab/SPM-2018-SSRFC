@@ -248,6 +248,27 @@ shareFile(repoName,idUser,idFile,email){
       );
   }
 
+  deleteFile(id,idRepository, idUser,idFolder?){
+    let params = new HttpParams();
+    console.log(idFolder)
+    if (idFolder != null){
+      params = params.append('idFolder', idFolder)
+      console.log(idFolder)
+    }
+    
+
+    params = params.append('idUser', idUser)
+    params = params.append('idRepository', idRepository)
+    params = params.append('idFile', id); //gli passo l'id del file
+   //gli passo la versione del file
+
+    return this.http.get(this.baseUrl + 'api/file/deleteFile', { params: params, responseType: 'text' })
+      .pipe(
+        tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
+        catchError(this.handleError)
+      );
+  }
+
   getFileSpec(id): Observable<any> {
     let params = new HttpParams();
     params = params.append('id', id); //gli passo l'id del file

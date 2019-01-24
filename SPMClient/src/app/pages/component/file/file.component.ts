@@ -134,8 +134,23 @@ go(){
 
 
 deleteFile(){
-  alert("funzione da fare")
+  console.log(this.idFolder)
+ this.service.deleteFile(this.idFile,this.idRepoSelected,this.idUser,this.idFolder)
+ .subscribe(data=>{
+  this.message="file Eliminato"
+  setTimeout(()=>{
+    if (this.idFolder==undefined){
+      this.sendToRepo()
+    }else{
+      this.sendTofolder()
+    }}, 2000); 
+
+ },
+error => {
+  this.errorMessage = <any>error
+});
 }
+
 
 //da fixare
 /* checkDeleted(v){

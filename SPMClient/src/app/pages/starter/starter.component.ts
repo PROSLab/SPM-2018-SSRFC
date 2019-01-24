@@ -15,7 +15,7 @@ export let exportLocalUser: User;
 
 export class StarterComponent implements AfterViewInit {
 	@ViewChild("closeModal") closeModal: ElementRef
-	repoExist: boolean = false
+	repoExist: boolean =null
 	subtitle: string
 	isLogged: boolean
 	fileToUpload: File
@@ -72,8 +72,10 @@ export class StarterComponent implements AfterViewInit {
 	getAllRepo() {
 		this.service.getAllRepo().subscribe(data => {
 			this.repos = JSON.parse(data)
-			if (this.repos.length > 0) {
-				this.repoExist = true
+			if (this.repos.length == 0) {
+				this.repoExist = false
+			}else if (this.repos.length > 0){
+				this.repoExist=true
 			}
 		}, error => {
 			this.errorMessage = <any>error

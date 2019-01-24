@@ -398,21 +398,15 @@ public class FileHandler {
 		String paths= request.queryParam("paths").get();
         Path path=  Paths.get(paths);
 		fileName = idFile + '.' + 1;
-		 String idFolder = null;
+		 Optional <String> idFolder= request.queryParam("idFolder");
          
-         if(request.queryParam("idFolder").get() != null) {
-        	 idFolder=request.queryParam("idFolder").get();
-         }  
+        
 		return fileService.updateMoveTo(rootDir, idUser, idRepository, idFolder, fileName, idFile, mimetype, path)
 				
 				.flatMap(str -> {
-					String idFolder2 = null;
-			         
-			         if(request.queryParam("idFolder").get() != null) {
-			        	 idFolder2=request.queryParam("idFolder").get();
-			         }  
 					
-			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser) ,idFolder2,str);
+					
+			return fileService.updatePathFile(new ObjectId(idFile),new ObjectId(idRepository), new ObjectId(idUser) ,idFolder,str);
 				})
 				.flatMap(res -> Responses.ok(res))
 				
@@ -459,10 +453,16 @@ public class FileHandler {
 	
 	public Mono <ServerResponse> deleteFile(ServerRequest request) {
 		String idFile = request.queryParam("idFile").get();
+		String idRepository = request.queryParam("idRepository").get();
+		String idUser = request.queryParam("idUser").get();
+		Optional <String> idFolder = request.queryParam("idFolder");
+         
+                   
 		
-		return fileService.deleteFile(idFile)
+		return fileService.deleteFileSistem(idUser,idRepository,idFile,idFolder, rootDir)
+		
 				.flatMap(f -> {
-					return fileService.deleteFileSistem(f, rootDir);
+					return fileService.deleteFile(idFile);
 				})
 				.flatMap(res -> Responses.ok(res))
 				.onErrorResume(BadRequestException.class, Responses::badRequest)

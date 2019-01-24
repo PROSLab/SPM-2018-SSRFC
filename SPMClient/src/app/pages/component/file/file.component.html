@@ -20,6 +20,8 @@
         <div class=" dropdown dropdown-toggle" style="height: 20%;margin-left:1%">
             <a class="btn btn-default numero2 " role="button" id="dropdownMenuLink" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
+
+
                 <h4>{{file?.originalName}}</h4>
             </a>
 
@@ -44,14 +46,14 @@
                         <a class="dropdown-item bianco menus">Share File</a>
                     </div>
 
-                    <div *ngIf="versionExist" data-dismiss="modal" (click)="downloadAllVersion()">
+                    <div *ngIf="versionExist"  (click)="downloadAllVersion()">
                         <a class="dropdown-item bianco menus">Download ZIP Models</a>
                     </div>
 
-                    <div *ngIf="versionExist && vers!=null && isLogged" (click)="deleteFile()" data-dismiss="modal"
-                        data-target="#myModalDeleteF">
+                   <div *ngIf="isLogged"  data-toggle="modal"
+                        data-target="#myModalDeleteFileTotal">
                         <a class="dropdown-item bianco menus">Delete File</a>
-                    </div>
+                    </div> 
                     <div>
                     </div>
                 </div>
@@ -182,7 +184,30 @@
                         </h3>
                     </div>
                     <div class="modal-footer">
-                        <button style="margin-right:10px;" (click)="deleteFile()" class="btn btn-primary col-4">Yes</button>
+                        <button style="margin-right:10px;" (click)="deleteFile()" data-dismiss="modal" class="btn btn-primary col-4">Yes</button>
+                        <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade " id="myModalDeleteFileTotal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Version</h4>
+                </div>
+                <form [formGroup]="modifyNameForm" >
+
+                    <div class="modal-body">
+                        <h3>Vuoi cancellare il file?<br>
+                            Accettando cancellarai il file e tutte le sue versioni.
+                        </h3>
+                    </div>
+                    <div class="modal-footer">
+                        <button style="margin-right:10px;" (click)="deleteFile()" data-dismiss="modal" class="btn btn-primary col-4">Yes</button>
                         <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
                     </div>
 
