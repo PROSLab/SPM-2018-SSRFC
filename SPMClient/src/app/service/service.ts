@@ -154,7 +154,7 @@ export class Service {
       );
   }
 
-SaveModificatedFile(idUser,idRepository,idFolder,idFile,version,fileToUpload): Observable<any>{
+SaveModificatedFile(idUser,idRepository,idFile,version,fileToUpload,idFolder?):Observable<any>{
     const formData: FormData = new FormData();
     formData.append('idFile', idFile); //id 
      if(idFolder!=null){

@@ -49,7 +49,8 @@ export class BpmnComponent implements OnInit {
   idFileCreato: any;
   version: boolean;
   data: any;
-  filetoUpload: any;
+  filetoUpload;
+  proviamo: any;
 
   constructor(private http: HttpClient,private service: Service,public router: Router,route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -123,18 +124,14 @@ export class BpmnComponent implements OnInit {
       });
   }
 
- modify(){
+ modify():any{
  this.modeler.saveXML(
    (err: any, xml: any) =>   
   this.filetoUpload = new File([xml],
      this.file.originalName
   )); 
- this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.folderSelected,this.idFile,this.version,this.filetoUpload)
-.subscribe( data => {
-
-  }, error => {
-    console.log(error);
-  });
+  console.log(this.filetoUpload)
+  this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.idFile,this.version,this.filetoUpload,this.folderSelected)
 
 }
   createFile(){
