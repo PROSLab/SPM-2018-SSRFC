@@ -98,7 +98,8 @@ export class Service {
   }
 
   // @@@@ Service per la gestione dei file @@@@ ///
-  postFile(idRepo, idUser, fileToUpload,idFolder?): Observable<any> {
+  postFile(idRepo, idUser, fileToUpload,autore,idFolder?): Observable<any> {
+    console.log(idFolder)
      const formData: FormData = new FormData();
      if(idFolder!=null){
      formData.append('idFolder', idFolder); 
@@ -106,7 +107,7 @@ export class Service {
      formData.append('idRepository', idRepo);
      formData.append('idUser', idUser);
      formData.append('files', fileToUpload)
-
+     formData.append('autore', autore)
      return this.http.post(this.baseUrl + "api/file/uploadFile",formData )
       .pipe(
         catchError(this.handleError)
@@ -155,7 +156,9 @@ export class Service {
 
     return this.http.get<any>(this.baseUrl + 'api/file/getAllRepoPublic')
       .pipe(
-        tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
+        tap(success => {
+          this.user = success
+        }), //mi salvo tutti i dati di ritorno dal server
         catchError(this.handleError)
       );
   }
@@ -180,7 +183,6 @@ SaveModificatedFile(idUser,idRepository,idFile,version,fileToUpload,idFolder?):O
     let params = new HttpParams();
     params = params.append('idFile', idFile); //id file
     params = params.append('version', version); //num. version
-    console.log(params)
     return this.http.get(this.baseUrl + 'api/file/downloadFile', {params:params, responseType: 'json' })
       .pipe(
         tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server
@@ -276,10 +278,8 @@ shareFile(repoName,idUser,idFile,email){
 
   deleteFile(id,idRepository, idUser,idFolder?){
     let params = new HttpParams();
-    console.log(idFolder)
     if (idFolder != null){
       params = params.append('idFolder', idFolder)
-      console.log(idFolder)
     }
     
 
@@ -309,7 +309,7 @@ shareFile(repoName,idUser,idFile,email){
       );
   }
 
-  createRepo(name, state): Observable<any> {
+  createRepo(name, state,autore): Observable<any> {
     let params = new HttpParams();
     let id = localStorage.getItem("id")
 
@@ -317,7 +317,7 @@ shareFile(repoName,idUser,idFile,email){
     params = params.append('idUser', id); //id dell'utente
     params = params.append('publicR', state); //stato della repo
     params = params.append('repositoryName', name); //nome della repo scelto
-
+    params =params.append('autore',autore);
     return this.http.get(this.baseUrl + 'api/file/createRepository', { params: params, responseType: 'text' })
       .pipe(
         tap(success => localStorage.setItem("User", success.toString())),
@@ -325,15 +325,15 @@ shareFile(repoName,idUser,idFile,email){
       );
   }
 
-  createFile(idRepository,idUser,originalName,idFolder?): Observable<any> {
+  createFile(idRepository,idUser,originalName,autore,idFolder?): Observable<any> {
     let params = new HttpParams();
-    params = params.append('idUser', idUser); //nome id utente
-    params = params.append('idRepository', idRepository); //id repo
-    if(idFolder!=null){
-    params = params.append('idFolder', idFolder); //id cartella
-    }
-    params = params.append('originalName', originalName); //nome del file scelto
-
+      params = params.append('idUser', idUser); //nome id utente
+      params = params.append('idRepository', idRepository); //id repo
+      if(idFolder!=null){
+      params = params.append('idFolder', idFolder); //id cartella
+      }
+      params = params.append('originalName', originalName); //nome del file scelto
+      params = params.append('autore',autore)
     return this.http.get(this.baseUrl + 'api/file/createFile', { params: params, responseType: 'text' })
       .pipe(
         tap(success => this.repos = success), //mi salvo tutti i dati di ritorno dal server
@@ -341,12 +341,12 @@ shareFile(repoName,idUser,idFile,email){
       );
   }
 
-  createFolder(idRepository, idUser, folderName): Observable<any> {
+  createFolder(idRepository, idUser, folderName,autore): Observable<any> {
     let params = new HttpParams();
-    params = params.append('idUser', idUser); //id dell'utente
-    params = params.append('idRepository', idRepository); //id della repository
-    params = params.append('folderName', folderName); //nome della cartella scelto
-
+      params = params.append('idUser', idUser); //id dell'utente
+      params = params.append('idRepository', idRepository); //id della repository
+      params = params.append('folderName', folderName); //nome della cartella scelto
+      params = params.append('autore',autore);
     return this.http.get(this.baseUrl + 'api/file/createFolder', { params: params, responseType: 'text' })
       .pipe(
         tap(success => this.repos = success), //mi salvo tutti i dati di ritorno dal server

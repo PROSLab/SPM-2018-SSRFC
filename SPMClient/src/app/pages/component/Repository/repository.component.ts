@@ -211,7 +211,6 @@ export class RepositoryComponent implements OnInit {
   Search() {
     this.fileincartelle = true;
     if (this.selezione == "name") {
-      console.log(this.selezione)
       if (this.search != "") {
 
         this.files = this.originalfiles.filter(res => {
@@ -253,13 +252,10 @@ export class RepositoryComponent implements OnInit {
   }
 
   uploadFileToActivity() {
-    document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
-    document.getElementById("menu").setAttribute("aria-expanded", "false")
-    document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
-   
-    this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload).subscribe(data => {
-      alert("Hai caricato il file correttamente.")
-      this.filesExist=true
+    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
+    
+    this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload,autore).subscribe(data => {
+
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
@@ -279,7 +275,9 @@ export class RepositoryComponent implements OnInit {
 
   saveFolder(folderName) {
     var nameFolder = folderName;
-    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
+    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname');
+    
+    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder,autore)
       .subscribe(data => {
         this.clearModal(this.closeModal2)
         this.ok = true

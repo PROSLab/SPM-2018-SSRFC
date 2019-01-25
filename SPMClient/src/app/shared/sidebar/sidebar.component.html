@@ -6,9 +6,10 @@
             <!-- User profile image -->
             <div class="profile-img"> <img src="assets/images/users/1.png" alt="user" /> </div>
             <!-- User profile text-->
-            <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button"
-                    aria-haspopup="true" aria-expanded="true">{{name}} {{surname}} <span class="caret"></span></a>
-                <div class="dropdown-menu animated flipInY">
+            <div class="profile-text"> {{name}} {{surname}}
+                <!-- <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button"
+                    aria-haspopup="true" aria-expanded="true">  <span class="caret"></span> </a> -->
+                <!-- <div class="dropdown-menu animated flipInY">
                     <a class="dropdown-item"><i class="ti-user"></i> My Profile</a>
                     <a class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
                     <a class="dropdown-item"><i class="ti-email"></i> Inbox</a>
@@ -16,8 +17,7 @@
                         Account
                         Setting
                     </a>
-<!--                     <div class="dropdown-divider"></div> <a  (click)="logout()" class="dropdown-item"><i class="fa fa-power-off"></i>Logout</a>
- -->                </div>
+                </div> -->
             </div>
         </div>
         <!-- End User profile text #DA MODIFICARE QUANDO ABBIAMO IL LOGIN -->
@@ -41,9 +41,9 @@
                             class="mdi mdi-file"></i><span class="hide-menu">Home Page</span></a>
                 </li>
                 <li [class.active]="showMenu === 'repo-public'">
-                        <a routerLink="/repo-public" (click)="addExpandClass('repo-public')" ><i
-                                class="mdi mdi-file"></i><span class="hide-menu">Repository Pubblici</span></a>
-                    </li>
+                    <a routerLink="/repo-public" (click)="addExpandClass('repo-public')"><i class="mdi mdi-file"></i><span
+                            class="hide-menu">Repository Pubblici</span></a>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
@@ -55,12 +55,12 @@
 
     <!-- funzioni ancora in fase di sviluppo-->
     <div class="sidebar-footer" *ngIf="isLogged">
-        <!-- item-->
+<!-- 
         <a class="link" data-toggle="tooltip" title="Settings"><i class="ti-settings"></i></a>
-        <!-- item-->
-        <a class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
-        <!-- item-->
-        <a (click)="logout()"  class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
+
+        <a class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a> -->
+   
+        <a (click)="logout()" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
     </div>
     <!-- End Bottom points-->
 </aside>

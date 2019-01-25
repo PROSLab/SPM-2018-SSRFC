@@ -222,10 +222,12 @@ exportModel(){
 } */
 
   save(nameFile) {
+    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname');
     //creazione di un nuovo file salvandolo dall'editor
-   this.modeler.saveXML((err: any, xml: any) =>    this.file = new File([xml], nameFile)); 
+   this.modeler.saveXML((err: any, xml: any) =>    this.file = new File([xml],nameFile)); 
   console.log(this.file)
-    this.service.postFile(this.idRepoSelected,this.idUser,this.file,this.folderSelected)
+    
+    this.service.postFile(this.idRepoSelected,this.idUser,this.file,autore,this.folderSelected)
     .subscribe(async data => {
     this.idFileCreato = data.id
     //this.sendTofile(this.idFile)

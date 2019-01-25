@@ -18,16 +18,17 @@
             <!-- ============================================================== -->
             <!--  search -->
             <!-- ============================================================== -->
+
+            <!-- ============================================================== -->
+            <!-- USER PROFILE -->
+            <!-- ============================================================== -->
             <ul class="navbar-nav my-lg-0">
-                
-                <!-- ============================================================== -->
-                <!-- USER PROFILE -->
-                <!-- ============================================================== -->
+
                 <li *ngIf="isLogged" class="nav-item dropdown" else loggedOut>
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false"><img src="assets/images/users/1.png" alt="user"
                             class="profile-pic" /></a>
-                    <div class="dropdown-menu dropdown-menu-right animated flipInY">
+                    <!-- <div class="dropdown-menu dropdown-menu-right animated flipInY">
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
@@ -40,19 +41,18 @@
                                 </div>
                             </li>
                             <li role="separator" class="divider"></li>
-                            <li><a ><i class="ti-user"></i> My Profile</a></li>
-                            <li><a ><i class="ti-wallet"></i> My Balance</a></li>
-                            <li><a ><i class="ti-email"></i> Inbox</a></li>
+                            <li><a><i class="ti-user"></i> My Profile</a></li>
+                            <li><a><i class="ti-wallet"></i> My Balance</a></li>
+                            <li><a><i class="ti-email"></i> Inbox</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
                             <li role="separator" class="divider"></li>
-<!--                             <li (click)="logout()"><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
- -->                        </ul>
-                    </div>
+                        </ul>
+                    </div> -->
                 </li>
 
                 <li *ngIf="!isLogged" #loggedOut class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark"  data-toggle="dropdown"
+                    <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false"><img src="assets/images/users/0.png" alt="user"
                             class="profile-pic" /></a>
                     <div class="dropdown-menu dropdown-menu-right animated flipInY">

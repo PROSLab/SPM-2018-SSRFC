@@ -52,6 +52,7 @@ public class FileHandler {
                     map = parts.toSingleValueMap();
                     FormFieldPart idUser = (FormFieldPart)map.get("idUser");
                     FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
+                    FormFieldPart autore = (FormFieldPart)map.get("autore");
                     FilePart filePart = (FilePart) map.get("files");
 
                     String idFolder = null;
@@ -76,7 +77,9 @@ public class FileHandler {
             				mimetype,
             				null,
             				1,
-            				new Vector<Integer>()
+            				new Vector<Integer>(),
+            				autore.value()
+            				
             		);
                     
                     return fileService.createFileSchema(file);
@@ -190,8 +193,9 @@ public class FileHandler {
 		String idUser = request.queryParam("idUser").get();
 		Boolean publicR = request.queryParam("publicR").get().equals("true") ? true : false;
 		String repositoryName = request.queryParam("repositoryName").get();
+		String autore= request.queryParam("autore").get();
 		
-		Repository repo = new Repository(new ObjectId(idUser), new Date(), publicR, repositoryName);
+		Repository repo = new Repository(new ObjectId(idUser), new Date(), publicR, repositoryName,autore);
 		
 		return fileService.createRepositorySchema(repo) // create Repository Schema on DB
 				.flatMap(repository -> fileService.createRepositoryPath(rootDir, repository.getIdUser().toHexString() , repository.getId()))
@@ -205,6 +209,7 @@ public class FileHandler {
 		Optional<String> idFolder= request.queryParam("idFolder");
 		String originalName = request.queryParam("originalName").get();
 		String mimetype = "bpmn";
+		String autore = request.queryParam("autore").get();
 		
 		FileEntity file = new FileEntity (
 				new ObjectId(idUser),
@@ -216,7 +221,8 @@ public class FileHandler {
 				mimetype,
 				null,
 				1,
-				new Vector<Integer>()
+				new Vector<Integer>(),
+				autore
 		);
 		
 		return fileService.createFileSchema(file)
@@ -284,7 +290,10 @@ public class FileHandler {
 		String idUser = request.queryParam("idUser").get();
 		String idRepository=request.queryParam("idRepository").get();
 		String folderName= request.queryParam("folderName").get();
-		Folder fold = new Folder (new ObjectId(idUser),new ObjectId(idRepository),new Date(),folderName,null);
+		String autore = request.queryParam("autore").get();
+		Folder fold = new Folder (new ObjectId(idUser),new ObjectId(idRepository),new Date(),folderName,null,autore);
+		
+		
 		return fileService.createFolderSchema(fold)
 				.flatMap(folder -> fileService.createFolderPath(rootDir,folder.getIdUser().toHexString(),folder.getIdRepository().toHexString(),folder.getId()))
 						
