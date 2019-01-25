@@ -9,6 +9,7 @@ import { PswRecoveryComponent } from '../psw-recovery/psw-recovery.component';
 import { RegistrazioneComponent } from '../registrazione/registrazione.component';
 import { NewPasswordComponent } from '../new-password/new-password.component';
 import { PagenotfoundComponent } from '../pagenotfound/pagenotfound.component';
+import { LoginGuard } from './login.guard';
 
 
 const routes: Routes = [
@@ -17,7 +18,9 @@ const routes: Routes = [
 		children: [
 			{
 				path: '',
+				canActivate:[LoginGuard],
 				component: StarterComponent,
+				
 			},
 			{
 				path: 'login',

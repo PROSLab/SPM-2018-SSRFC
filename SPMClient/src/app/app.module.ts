@@ -11,6 +11,7 @@ import { BpmnComponent } from './bpmn-component/bpmn.component';
 import { SpinnerComponent } from './shared/spinner.component';
 import { Service } from './service/service'; 
 import {ToastrModule} from 'ngx-toastr'
+import { LoginGuard } from './pages/starter/login.guard';
 @NgModule({
   declarations: [AppComponent,SpinnerComponent ],
   imports: [
@@ -32,7 +33,8 @@ preventDuplicates:true,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
-    }
+    },
+    LoginGuard
   ],
   bootstrap: [AppComponent]
 })
