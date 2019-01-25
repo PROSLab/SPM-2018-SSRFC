@@ -88,7 +88,8 @@ moveTo(id){
     if(id==this.idRepoSelected){
       this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,this.idFolder)
       .subscribe(data => {
-        this.message="file spostato nella repository"
+        this.toastr.success('File spostato nella cartella di destinazione', 'Move File')
+
       }, error => {
         this.errorMessage = <any>error
       });
@@ -96,7 +97,8 @@ moveTo(id){
     }else{
       if(id == this.idFolder){
         this.ok2=true
-        this.message="selezionare una cartella diversa dall\'originale"
+        this.toastr.warning('Selezionare una cartella diversa dall origine', 'Folder')
+
       }else{
         this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,id)
         .subscribe(data => {
@@ -111,7 +113,6 @@ moveTo(id){
   this.getFileSpec()
 }
 else {
-  alert('stai cercando di taroccare il sistema.')
   this.router.navigate(['']);
 }
 this.spostaButton=false;
@@ -172,7 +173,8 @@ error => {
    
     this.vers = v
     if (this.vers == null) {
-      alert("seleziona una versione per eliminarla!")
+      this.toastr.warning('Devi selezionare una versione per eliminarla', 'Versione File')
+
     }
     else if (this.finalVersion.length !=1) {
       document.getElementById("buttonDelete").setAttribute("data-target","")
@@ -185,13 +187,10 @@ error => {
             this.finalVersion.splice(index, 1);
           }
         this.vers =null
-        this.ok=true
+        
         this.toastr.success('Versione Eliminata con successo', 'Versione Eliminata')
         
-          setTimeout(()=>{
-            this.ok=false
-            this.message=""
-          }, 3000);
+         
           this.getFileSpec()
         }, error => {
           console.log(error);
@@ -305,13 +304,7 @@ error => {
         }
         this.cambia=false
         this.vers=data.cVersion;
-        this.ok=true
-        this.message="Versione creata correttamente"
-         
-        setTimeout(()=>{
-          this.ok=false
-          this.message=""
-        }, 2000); 
+        this.toastr.success('Nuova versione del file creata con successo', 'Versione File')
         this.getFileSpec()
       }, error => {
         this.errorMessage = <any>error
@@ -404,16 +397,13 @@ error => {
       .subscribe(data => {
         this.file = data
         this.getFileSpec()
-        this.ok=true;
-        this.message="Nome cambiato correttamente!"
+        this.toastr.success('Nome  del file modificato con successo', 'Name File')
+
         this.submitted=false
         this.clearModal(this.closeModal3)
         
 
-        setTimeout(()=>{
-          this.ok = false
-          this.message = ''
-        }, 2000);
+       
       }, error => {
         this.errorMessage = <any>error
       });
@@ -429,13 +419,11 @@ error => {
     this.service.shareFile(nameRepo, this.idUser,this.idFile,email)
       .subscribe(data => {
         this.ok=true
-        this.message="File condiviso correttamente"
+        this.toastr.success('File condiviso con successo', 'Share File')
+
          this.clearModal(this.closeModal2)
-         this.reset = ''
-        setTimeout(()=>{
-          this.ok=false
-          this.message=""
-        }, 2000); 
+        
+       
         this.share = false
       }, error => {
         alert("ERRORE! Invio email non riuscito")
@@ -454,7 +442,10 @@ error => {
    
 
   }
+  sendToRepoFold() {
+    this.router.navigate(['']);
 
+  }
   sendToRepo() {
     this.router.navigate(['repositoryID', this.idRepoSelected]);
 

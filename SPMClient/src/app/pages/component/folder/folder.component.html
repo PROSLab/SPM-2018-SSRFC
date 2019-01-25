@@ -2,7 +2,7 @@
     <div class="row">
 
         <div  style="height: 40%;">
-              <button class="btn btn-default numero2" (click)="sendToRepo()"><h4>My Repositories</h4> </button> 
+              <button class="btn btn-default numero2" (click)="sendToRepoFold()"><h4>My Repositories</h4> </button> 
         </div>
             <div>
              <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
@@ -23,7 +23,7 @@
   
                       <div *ngIf="isLogged">
                         
-                          <div data-toggle="modal" data-target="#myModalFolder">
+                          <div (click)="modifyName()"data-toggle="modal" data-target="#myModalFolder">
                               <a class="dropdown-item bianco menus">Modify Name Folder </a>
                           </div>
   
@@ -85,23 +85,26 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Modify folder name</h4>
                 </div>
+                <form [formGroup]="modifyNameFolder" (ngSubmit)="sendNewNameFolder(folderName.value)">
                 <div class="modal-body">
-                    <div>
-                        <label for="foldername"><b>Folder name</b> </label><br>
-                        <input type="text" maxlength="13" [(ngModel)]="reset" required id="namefolder" #nameFolder name="namefolder" />
-                    </div>
+                    
+                    <label for="reponame"><b>Folder name</b> </label><br>
+                    <input type="text" maxlength="13" class="form-control" formControlName="foldername" [ngClass]="{ 'is-invalid': submitted && f.foldername.errors }" required  [(ngModel)]="reset" #folderName  />
+                
+                <br>
+                <div *ngIf="submitted && f.foldername.errors" class="invalid-feedback">
 
-                    <br>
-                   <!--  <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
-                        <strong>{{message}}</strong>
-                    </div> -->
+                    <div *ngIf="f.foldername.errors.required">FolderName is Required</div>
+                </div>
+
                 </div>
 
                 <div class="modal-footer">
-                    <button (click)="sendNewNameFolder(nameFolder.value)" data-dismiss="modal" style="margin-right:10px;" 
-                        class="btn btn-primary">Save Folder </button>
+                    <button   style="margin-right:10px;" 
+                                                           class="btn btn-primary">Save Folder </button>
                     <button type="button" class="btn btn-danger" #closeModifyName data-dismiss="modal"> Close </button>
                 </div>
+            </form >
             </div>
         </div>
     </div>
@@ -126,14 +129,7 @@
     <hr>
 
     <div>
-            <div *ngIf="ok" class="alert alert-success  col-5 alert-dismissible" style="position: center;"  id="top" #myAlertImport>
-                <strong>{{message}}</strong>
-            </div>
-        
-            <div *ngIf="ok2" class="alert alert-danger col-5 alert-dismissible"    id="top" #myAlertImport>
-                <strong>{{message}}</strong>
-            </div>
-        
+         
         </div>
 
 

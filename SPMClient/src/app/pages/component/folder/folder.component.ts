@@ -4,6 +4,9 @@ import { Service } from '../../../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
 import { exportIsLogged } from '../../starter/starter.component'
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-Folder',
@@ -39,8 +42,10 @@ export class FolderComponent implements OnInit {
   ok: boolean=false;
   message: string='';
   reset: string='';
+  modifyNameFolder: FormGroup;
+  submitted=false;
 
-  constructor(private service: Service, public router: Router,route: ActivatedRoute) {
+  constructor(private toastr:ToastrService,private formBuilder:FormBuilder,private service: Service, public router: Router,route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
@@ -77,7 +82,7 @@ export class FolderComponent implements OnInit {
   uploadFileToActivity() {
     console.log(this.fileToUpload)
     this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,this.folderSelected).subscribe(data => {
-      alert("Hai caricato il file correttamente.")
+      this.toastr.success('File Importato con successo', 'File Import')
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
@@ -90,14 +95,26 @@ export class FolderComponent implements OnInit {
       console.log(error);
     });
 }
-
+modifyName(){
+  this.submitted=false;
+  this.reset= ""
+}
 
   ngOnInit() {
+    this.modifyNameFolder=this.formBuilder.group({
+      foldername:['',Validators.required]
+    
+    });
     this.getRepo()
     this.getFolderInfo()
     this.getAllFile()
   }
-
+  
+  get f() { 
+   
+    return this.modifyNameFolder.controls;
+   }
+   
   modifyRepo() {
     this.appear = true;
   }
@@ -106,23 +123,22 @@ export class FolderComponent implements OnInit {
   }
 
   sendNewNameFolder(name) {
+    this.submitted = true;
+    if (this.modifyNameFolder.invalid) {
+
+      return;
+  }
     this.service.changeNameFolder(this.folderSelected, name)
       .subscribe(data => {
         this.folderInfo = data
         this.ok=true
-        this.message="Folder modificata correttamente!"
+        this.toastr.success('Nome della cartella modificato correttamente', 'Folder Name')
        
-       setTimeout(() => {
-         
-					this.ok = false
-					this.message = '',
-          this.reset = ''
-				}, 2000); 
+       this.clearModal(this.closeModal1)
+
       this.getFolderInfo()
       }, error => {
-        this.message='Errore!'
-        this.reset=''
-        this.ok=false
+        this.toastr.error('Errore cambio nome della cartella', 'Cartella')
         this.errorMessage = <any>error
       });
   }
@@ -257,8 +273,12 @@ export class FolderComponent implements OnInit {
         this.errorMessage = <any>error
       });
   }
-  sendToRepo() {
+  sendToRepoFold() {
     this.router.navigate(['']);
+
+  }
+  sendToRepo() {
+    this.router.navigate(['repositoryID', this.idRepoSelected]);
 
   }
   sendTofile(fileSelected) {

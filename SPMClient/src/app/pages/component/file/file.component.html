@@ -1,16 +1,16 @@
 <div class="container">
     <div class="row col-12">
         <div style="height:40%;">
-            
-            <button class="btn btn-default numero2" (click)="sendToRepo()">
-                <h4>{{repo?.repositoryName}}</h4>
-            </button>
+            <button class="btn btn-default numero2" (click)="sendToRepoFold" ><h4>My Repositories</h4> </button> 
+           
         </div>
         <div>
             <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
          </div>
         <div  style="height:40%;">
-            <button class="btn btn-default numero2" (click)="sendToRepo()"><h4>My Repositories</h4> </button> 
+            <button class="btn btn-default numero2" (click)="sendToRepo()">
+                <h4>{{repo?.repositoryName}}</h4>
+            </button>
       </div>
           
         <div>
@@ -153,8 +153,8 @@
                     <div class="modal-body">
 
                         <label for="reponame"><b>File name</b> </label><br>
-                        <input type="text" class="form-control" formControlName="reponame" [(ngModel)]="reset"
-                            maxlength="13" required id="nameFile" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
+                        <input type="text" class="form-control"  [(ngModel)]="reset"
+                            maxlength="13" required id="nameFile" formControlName="reponame" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
                             #nameFile name="nameFile" />
 
                         <br>
@@ -185,7 +185,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Version</h4>
                 </div>
-                <form [formGroup]="modifyNameForm" >
+                
 
                     <div class="modal-body">
                         <h3>Vuoi cancellare l'ultima versione del file?<br>
@@ -197,7 +197,6 @@
                         <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
                     </div>
 
-                </form>
             </div>
 
         </div>
@@ -209,8 +208,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Version</h4>
                 </div>
-                <form [formGroup]="modifyNameForm" >
-
+                
                     <div class="modal-body">
                         <h3>Vuoi cancellare il file?<br>
                             Accettando cancellarai il file e tutte le sue versioni.
@@ -220,8 +218,7 @@
                         <button style="margin-right:10px;" (click)="deleteFile()" data-dismiss="modal" class="btn btn-primary col-4">Yes</button>
                         <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
                     </div>
-
-                </form>
+ù
             </div>
 
         </div>
@@ -231,10 +228,7 @@
     <div class="modal fade " id="myModalMessage" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>{{message}}
-                        </h4>
-                    </div>
+                    
             </div>
 
         </div>

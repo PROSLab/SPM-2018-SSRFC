@@ -15,7 +15,7 @@
         </div>
 <div class="row">
     <div class="col-4">
-            <button (click)="createRepo()" class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"> + Create
+            <button (click)="verification()" class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"> + Create
                     a new Repository</button>
                     
     </div>
@@ -32,12 +32,19 @@
                     <div class="modal-header">
                         <h4 class="modal-title">Create e a new repository</h4>
                     </div>
-
+                    <form [formGroup]="modifyNameRepoForm" (ngSubmit)="save(nameRepo.value)">
                     <div class="modal-body">
                       
-                        <div>
-                            <label for="reponame"><b>Repository name</b> </label><br>
-                            <input type="text" maxlength="13" required id="namerepo" [(ngModel)]="reset" #n name="namerepo"/>
+                        <label for="reponame"><b>RepoName</b> </label><br>
+                        <input type="text" class="form-control" formControlName="reponame" [(ngModel)]="reset"
+                            maxlength="13" required id="nameRepo" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
+                            #nameRepo name="nameRepo" />
+
+                        <br>
+
+                        <div *ngIf="submitted && f.reponame.errors" class="invalid-feedback">
+
+                            <div *ngIf="f.reponame.errors.required">Name is Required</div>
                         </div>
 
                         <br>
@@ -49,9 +56,10 @@
                             <br>
                     </div>
                         <div class="modal-footer">
-                            <button (click)="save(n.value)" style="margin-right:10px;" class="btn btn-primary">Save</button>
+                            <button  style="margin-right:10px;" class="btn btn-primary">Save</button>
                             <button type="button" class="btn btn-danger" #closeModal data-dismiss="modal">Close</button>
                         </div>
+                        </form>
                 </div>
             </div>
         </div>

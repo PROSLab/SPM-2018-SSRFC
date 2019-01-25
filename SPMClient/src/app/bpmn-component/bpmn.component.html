@@ -1,7 +1,7 @@
 
 <div class="row">
     <h3>
-        {{title}}
+  {{file?.originalName}} Editor
       </h3>
       <div style="margin-left:30%">
         <button (click)="exportModel()"  data-dismiss="modal" class="btn btn-success">Export Model <i class="fa">&#xf019;</i> </button>
@@ -16,7 +16,7 @@
   <div id="properties"></div>
 </div>
 
-
+<button (click)="back()" class="btn btn-info">Back</button>
 <!-- Modal crea file -->
   <div class="modal fade" id="myModalFile" role="dialog">
       <div class="modal-dialog">
