@@ -208,7 +208,6 @@ error => {
     
     });
     this.shareFileForm=this.formBuilder.group({
-      reponame:['',Validators.required],
       email:['',[Validators.required,Validators.email]]
     })
    
@@ -415,8 +414,10 @@ error => {
 
     this.submitted = true;
     if (this.shareFileForm.invalid) {
+      console.log("invalid")
       return;
   }
+  
     this.service.shareFile(nameRepo, this.idUser,this.idFile,email)
       .subscribe(data => {
         this.ok=true

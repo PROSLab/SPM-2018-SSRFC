@@ -246,8 +246,12 @@
                     <div class="modal-body">
 
                         <label for="email">Enter email</label>
-                        <input class="form-control" formControlName="email" [(ngModel)]="reset" type="email" id="email"
-                            #e name="email" [(ngModel)]="reset" [ngClass]="{ 'is-invalid': submitted && g.email.errors }" />
+                        <input class="form-control" formControlName="email"   id="email"
+                            #e name="email" [(ngModel)]="reset"  [ngClass]="{ 'is-invalid': submitted && g.email.errors }" />
+
+
+
+
                         <div *ngIf="submitted && g.email.errors" class="invalid-feedback">
                             <div *ngIf="g.email.errors.email">Email must be a valid email address</div>
                             <div *ngIf="g.email.errors.required">Email is Required</div>
