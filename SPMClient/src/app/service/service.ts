@@ -7,10 +7,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ChangePassword } from './model/changePassword';
 import { Repo } from './model/repo';
 import { Options } from 'selenium-webdriver/chrome';
+import { headersToString } from 'selenium-webdriver/http';
 
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
-  headers: new HttpHeaders({ "Content-Type": "multipart/form-data"})
+  headers: new HttpHeaders({"Content-Type":"multipart/form-data"})
+};
+
+
+const httpOptions2 = {
+  headers: new HttpHeaders({"Content-Type":"text/plain"})
 };
 
 @Injectable({
@@ -170,7 +176,6 @@ SaveModificatedFile(idUser,idRepository,idFile,version,fileToUpload,idFolder?):O
       );
 }
 
-
   downloadFile(idFile,version):Observable<any> {
     let params = new HttpParams();
     params = params.append('idFile', idFile); //id file
@@ -196,6 +201,12 @@ SaveModificatedFile(idUser,idRepository,idFile,version,fileToUpload,idFolder?):O
     );
 }
 
+safenessAndSoundness(xml){
+  return this.http.post("http://pros.unicam.it:8080/S3/rest/BPMN/Verifier",xml,httpOptions2)
+  .pipe(
+    catchError(this.handleError)
+  );
+}
 
 shareFile(repoName,idUser,idFile,email){
   let params = new HttpParams();
