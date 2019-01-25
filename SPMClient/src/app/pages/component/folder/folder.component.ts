@@ -80,9 +80,10 @@ export class FolderComponent implements OnInit {
   }
 
   uploadFileToActivity() {
-    console.log(this.fileToUpload)
-    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,this.folderSelected).subscribe(data => {
-      this.toastr.success('File Importato con successo', 'File Import')
+    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
+
+    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,autore,this.folderSelected).subscribe(data => {
+      alert("Hai caricato il file correttamente.")
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
@@ -268,7 +269,6 @@ modifyName(){
         data.createdAt = this.troncaData(data.createdAt)
         
         this.repoInfo = data
-        console.log(this.repoInfo)
       }, error => {
         this.errorMessage = <any>error
       });

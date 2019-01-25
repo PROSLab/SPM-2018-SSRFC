@@ -133,7 +133,9 @@ verification(){
 			this.risp = false //mando false al server, la repo è privata
 		}
 		var nameRepo = name;
-		this.service.createRepo(nameRepo, this.risp)
+		var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname');
+		
+		this.service.createRepo(nameRepo, this.risp,autore)
 
 			.subscribe(data => {
 				this.repoExist=true

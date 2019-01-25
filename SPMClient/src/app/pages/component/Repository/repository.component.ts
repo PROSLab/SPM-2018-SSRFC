@@ -222,7 +222,6 @@ this.submitted=false;
   Search() {
     this.fileincartelle = true;
     if (this.selezione == "name") {
-      console.log(this.selezione)
       if (this.search != "") {
 
         this.files = this.originalfiles.filter(res => {
@@ -265,7 +264,9 @@ this.submitted=false;
 
 
   uploadFileToActivity() {
-    this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload).subscribe(data => {
+    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
+    
+    this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload,autore).subscribe(data => {
 
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
@@ -287,7 +288,9 @@ this.submitted=false;
       return;
   }
     var nameFolder = folderName;
-    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
+    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname');
+    
+    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder,autore)
       .subscribe(data => {
         this.clearModal(this.closeModal2)
         this.ok = true

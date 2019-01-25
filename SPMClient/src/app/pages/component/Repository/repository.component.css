@@ -112,3 +112,9 @@ input[type="file"] {
   .numero2{
     padding:3px 8px;
   }
+
+ .grassetto{
+     font-size: 26px;
+     background-color: rgba(151, 150, 150, 0.158);
+     border-radius:10%
+ }

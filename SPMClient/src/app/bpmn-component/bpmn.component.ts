@@ -63,7 +63,6 @@ export class BpmnComponent implements OnInit {
     this.idFile = route.snapshot.params.idFile
   }
 
-
   ngOnInit(): void {
     if (this.idFile == undefined) {
       console.log("lo sto creando")
@@ -126,27 +125,21 @@ export class BpmnComponent implements OnInit {
       });
   }
 
-  modify(): any {
-    debugger
-   
-    this.modeler.saveXML(
-      (err: any, xml: any) =>
-        this.filetoUpload = new File([xml],
-          this.file.originalName
-        ),
-      
-      );
-  
-    
-    this.service.SaveModificatedFile(this.idUser, this.idRepoSelected, this.idFile,
-      this.version, this.filetoUpload, this.folderSelected)
-      this.toastr.success('File modificato Correttamente', 'Modifiche file')
+ modify():any{
+ this.modeler.saveXML(
+   (err: any, xml: any) =>   
+  this.filetoUpload = new File([xml],
+     this.file.originalName
+  )); 
+  console.log(this.filetoUpload)
+  this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.idFile,this.version,this.filetoUpload,this.folderSelected)
+  this.toastr.success('File modificato Correttamente', 'Modifiche file')
+   error => {
+    };
+}
 
-       error => {
-        console.log(error)
-      };
-      
-  }
+
+
   createFile() {
 
     const url = '/assets/bpmn/initial.bpmn';
@@ -155,10 +148,13 @@ export class BpmnComponent implements OnInit {
     }).subscribe(
       (x: any) => {
         this.modeler.importXML(x, this.handleError);
-        
-
+        this.service.safenessAndSoundness(x)
+        .subscribe( data => {
+          console.log(data)
+          }, error => {
+            console.log(error);
+          }); 
       },
-      this.handleError
     );
   }
 
