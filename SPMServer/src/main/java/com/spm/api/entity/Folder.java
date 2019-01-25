@@ -15,13 +15,15 @@ public class Folder {
 	Date createdAt; 	// Date of repository creation
 	String folderName;
 	String path;
+	String autore;
 	
-	public Folder(ObjectId idUser,ObjectId idRepository, Date createdAt,String folderName, String path) {
+	public Folder(ObjectId idUser,ObjectId idRepository, Date createdAt,String folderName, String path,String autore) {
 		this.idUser = idUser;
 		this.idRepository=idRepository;
 		this.createdAt = createdAt;
 		this.folderName = folderName;
 		this.path=path;
+		this.autore=autore;
 	}
 
 	
@@ -68,6 +70,16 @@ public class Folder {
 
 	public void setFolderName(String folderName) {
 		this.folderName = folderName;
+	}
+
+
+	public String getAutore() {
+		return autore;
+	}
+
+
+	public void setAutore(String autore) {
+		this.autore = autore;
 	}
 
 	

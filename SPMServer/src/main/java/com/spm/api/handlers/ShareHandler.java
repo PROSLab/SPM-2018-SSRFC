@@ -52,7 +52,7 @@ public class ShareHandler {
 		String emailTo = request.queryParam("emailTo").get();
 		String repositoryName = request.queryParam("repositoryName").get();
 		String idUser = request.queryParam("idUser").get();
-		
+		String autore =request.queryParam("autore").get();
 		/*
 		 * Create repository schema and get the id
 		 * Get the file schema 
@@ -63,7 +63,7 @@ public class ShareHandler {
 		 * Update fileName and path
 		 * */
 		
-		Repository repo = new Repository(new ObjectId(idUser), new Date(), true, repositoryName);
+		Repository repo = new Repository(new ObjectId(idUser), new Date(), true, repositoryName,autore);
 		
 		return shareService.createRepositorySchema(repo)
 				.flatMap(r -> {			// repository
@@ -83,7 +83,8 @@ public class ShareHandler {
 							f.getMimetype(),
 							null,					// path
 							f.getcVersion(),
-							f.getDeletedVersions()
+							f.getDeletedVersions(),
+							f.getAutore()
 					);
 					
 					return shareService.createFileSchema(file);

@@ -49,12 +49,14 @@ public class Repository {
 	Date createdAt; 	// Date of repository creation
 	Boolean publicR;	// if true repository is public; if false repository is private.
 	String repositoryName;
+	String autore;
 	
-	public Repository(ObjectId idUser, Date createdAt, Boolean publicR, String repositoryName) {
+	public Repository(ObjectId idUser, Date createdAt, Boolean publicR, String repositoryName,String autore) {
 		this.idUser = idUser;
 		this.createdAt = createdAt;
 		this.publicR = publicR;
 		this.repositoryName = repositoryName;
+		this.autore=autore;
 	}
 
 	public String getId() {
@@ -92,5 +94,14 @@ public class Repository {
 	public void setRepositoryName(String repositoryName) {
 		this.repositoryName = repositoryName;
 	}
+
+	public String getAutore() {
+		return autore;
+	}
+
+	public void setAutore(String autore) {
+		this.autore = autore;
+	}
+	
 	
 }
