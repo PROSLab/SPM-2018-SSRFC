@@ -108,10 +108,10 @@ get h(){
       return;
 
   }
-    this.clearModal(this.closeModal4)
+    
     this.service.shareRepository(this.idRepoSelected, email)
       .subscribe(data => {
-        
+        this.clearModal(this.closeModal4)
       	this.toastr.success('Repository condivisa con successo', 'Share Repository')
 
         this.share = false

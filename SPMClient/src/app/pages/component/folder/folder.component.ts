@@ -66,7 +66,7 @@ export class FolderComponent implements OnInit {
 			return true;
 		}
 		else {
-			alert("formato file non corretto")
+      this.toastr.error('Errore puoi caricare esclusivamente file .bpmn', 'Formato File')
 			return false;
 		}
 	}
@@ -83,7 +83,7 @@ export class FolderComponent implements OnInit {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
 
     this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,autore,this.folderSelected).subscribe(data => {
-      alert("Hai caricato il file correttamente.")
+      this.toastr.success('Hai Caricato il file correttamente', 'Load File')
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length

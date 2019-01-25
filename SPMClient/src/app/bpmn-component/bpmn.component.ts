@@ -133,9 +133,11 @@ export class BpmnComponent implements OnInit {
   )); 
   console.log(this.filetoUpload)
   this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.idFile,this.version,this.filetoUpload,this.folderSelected)
-  this.toastr.success('File modificato Correttamente', 'Modifiche file')
-   error => {
-    };
+  .subscribe(data => {
+  }, error => {
+  });
+    this.toastr.success('File modificato Correttamente', 'Modifiche file')
+
 }
 
 
