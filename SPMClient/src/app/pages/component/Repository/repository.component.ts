@@ -6,6 +6,8 @@ import { Repo } from '../../../service/model/repo';
 import { File } from '../../../service/model/file'
 import { exportIsLogged } from '../../starter/starter.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-Repository',
@@ -54,8 +56,12 @@ export class RepositoryComponent implements OnInit {
   originalfolder: any;
   lastSelected: string;
   openSearch = false
+  shareRepoForm:FormGroup
+  createFolderForm:FormGroup
+  modifyNameRepo:FormGroup
+  submitted= false;
 
-  constructor(private service: Service, public router: Router, private route: ActivatedRoute, private modal: NgbModal) {
+  constructor(private toastr:ToastrService,private formBuilder:FormBuilder,private service: Service, public router: Router, private route: ActivatedRoute, private modal: NgbModal) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.isLogged = service.isLogged;
     this.idUser = localStorage.getItem("id")
@@ -67,34 +73,53 @@ export class RepositoryComponent implements OnInit {
 
 
   ngOnInit() {
+    this.modifyNameRepo=this.formBuilder.group({
+
+      reponame:['',Validators.required]
+    
+    });
+    this.createFolderForm=this.formBuilder.group({
+
+      foldername:['',Validators.required]
+    
+    });
+    this.shareRepoForm=this.formBuilder.group({
+
+      shareRepo:['',[Validators.required,Validators.email]]
+    
+    });
     this.getRepo()
     this.getAllfolder()
   }
-
-
-
+get f(){
+  return this.modifyNameRepo.controls;
+}
+get g(){
+  return this.createFolderForm.controls;
+}
+get h(){
+  return this.shareRepoForm.controls;
+}
   shareRepo(email) {
     document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
     document.getElementById("menu").setAttribute("aria-expanded", "false")
     document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
-   
-    this.clearModal(this.closeModal4)
+    this.submitted = true;
+    if (this.shareRepoForm.invalid) {
+    
+      return;
+
+  }
+    
     this.service.shareRepository(this.idRepoSelected, email)
       .subscribe(data => {
-        this.ok = true
-        this.message = "Repository condivisa correttamente!"
-
-        setTimeout(() => {
-          this.ok = false
-          this.message = ''
-          this.reset = ''
-        }, 2000)
+        this.clearModal(this.closeModal4)
+      	this.toastr.success('Repository condivisa con successo', 'Share Repository')
 
         this.share = false
       },
         error => {
-          this.ok = true
-          this.message = "ERRORE! Invio email non riuscito"
+          this.toastr.error('Errore nell invio del Repository', 'Share Repository')
           this.errorMessage = <any>error
         })
   }
@@ -103,29 +128,31 @@ export class RepositoryComponent implements OnInit {
   clearModal(modal): any {
     modal.nativeElement.click()
   }
-
+reset1(){
+this.reset=""
+this.submitted=false;
+}
   sendNewName(name) {
     document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
     document.getElementById("menu").setAttribute("aria-expanded", "false")
     document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
    
+    this.submitted = true;
+    if (this.modifyNameRepo.invalid) {
+      console.log(this.modifyNameRepo.invalid, this.submitted, this.f.reponame.errors)
+      return;
+  }
     this.service.changeNameRepo(this.idRepoSelected, name)
       .subscribe(data => {
         this.clearModal(this.closeModal1)
         this.repoInfo = data
         this.ok = true
-        this.message = "Repository modificata correttamente!"
-
-        setTimeout(() => {
-          this.ok = false
-          this.message = '',
-            this.reset = ''
-        }, 2000);
+        this.toastr.success('Nome del Repository modificata correttamente', 'Repository Name')
 
         this.getRepo()
 
       }, error => {
-        this.message = "Errore!"
+        this.toastr.error('Errore nella modifica del nome della cartella', 'Repository name')
         this.errorMessage = <any>error
       });
   }
@@ -182,14 +209,7 @@ export class RepositoryComponent implements OnInit {
       return true;
     }
     else if (f.name.split('.').pop() != "bpmn") {
-      this.ok2 = true
-      this.message = "Formato file non corretto"
-      setTimeout(() => {
-        this.ok2 = false
-        this.message = ''
-      }, 2000);
-
-
+      this.toastr.error('Formato file non corretto', 'Formato File')
       return false;
     }
   }
@@ -260,13 +280,8 @@ export class RepositoryComponent implements OnInit {
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
       this.files[count] = newFile
-      this.ok = true
-      this.message = "File importato correttamente"
-
-      setTimeout(() => {
-        this.ok = false
-        this.message = ''
-      }, 2000);
+      
+      this.toastr.success('File Importato con successo', 'Import File')
     }, error => {
       console.log(error);
     });
@@ -274,6 +289,12 @@ export class RepositoryComponent implements OnInit {
 
 
   saveFolder(folderName) {
+
+    this.submitted = true;
+
+    if (this.createFolderForm.invalid) {
+      return;
+  }
     var nameFolder = folderName;
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname');
     
@@ -281,7 +302,7 @@ export class RepositoryComponent implements OnInit {
       .subscribe(data => {
         this.clearModal(this.closeModal2)
         this.ok = true
-        this.message = "Folder creata correttamente!"
+      	this.toastr.success('Cartella creata con successo', 'Folder')
         var folder = JSON.parse(data)
         this.service.getFolderSpec(folder.id)
           .subscribe(data => {
@@ -295,19 +316,13 @@ export class RepositoryComponent implements OnInit {
             document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
            
 
-            setTimeout(() => {
-              this.ok = false
-              this.message = '',
-                this.reset = ''
-            }, 2000);
-
           }, error => {
-            this.message = "Errore"
+           
             this.errorMessage = <any>error
           });
       }, error => {
         this.errorMessage = <any>error
-        this.message = "Errore"
+        this.toastr.error('Cartella non creata', 'Cartella')
       })
     this.createfold = false
   }

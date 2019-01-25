@@ -4,6 +4,8 @@ import { File } from '../../service/model/file'
 import { Router } from '@angular/router'
 import { Repo } from '../../../app/service/model/repo'
 import { User } from '../../service/model/user';
+import {ToastrService} from 'ngx-toastr'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export var exportIsLogged: boolean;
 export let exportLocalUser: User;
@@ -30,17 +32,28 @@ export class StarterComponent implements AfterViewInit {
 	message: string = ''
 	ok: boolean = false
 	reset: string = ''
+	submitted: boolean=false;
+	modifyNameRepoForm: FormGroup;
+	
+	
 
-	constructor(private service: Service, public router: Router) {
+	constructor(private formBuilder:FormBuilder,private toastr:ToastrService,private service: Service, public router: Router) {
 		this.isLogged = this.service.isLogged
 
 	}
 
 	ngOnInit() {
+		this.modifyNameRepoForm=this.formBuilder.group({
+			reponame:['',Validators.required]
+		  
+		  });
 		this.setUser();
 		this.getAllPublicRepo();
 	}
-
+	get f() { 
+   
+		return this.modifyNameRepoForm.controls;
+	   }
 	//how to close a modal
 	clearModal(): any {
 		this.closeModal.nativeElement.click()
@@ -97,12 +110,21 @@ export class StarterComponent implements AfterViewInit {
 
 	}
 
-
+verification(){
+	this.submitted = false;
+	this.reset=""
+}
 
 
 	// SALVO IL FILE
 	save(name) {
-		this.ok = true
+
+		this.submitted = true;
+
+		if (this.modifyNameRepoForm.invalid) {
+		  return;
+	  }
+		
 		var state = $('input[name="statep"]:checked').val();
 		if (state == "public") {
 			this.risp = true //mando true  al server, quindi la repo è pubblica
@@ -117,15 +139,15 @@ export class StarterComponent implements AfterViewInit {
 
 			.subscribe(data => {
 				this.repoExist=true
-				this.message = "Repository creata correttamente."
+
+				this.toastr.success('Repository creata con successo', 'Repository Creato')
+
 
 				var newRepos = JSON.parse(data)
 				this.clearModal()
-				setTimeout(() => {
-					this.ok = false
-					this.message = '',
-					this.reset = ''
-				}, 2000);
+
+			
+
 
 				this.service.getRepoSpec(newRepos.repository).subscribe(data => {
 					var newRepo: Repo = data
@@ -137,9 +159,10 @@ export class StarterComponent implements AfterViewInit {
 
 				this.router.navigate(['/']);
 			}, error => {
-				this.message = "Errore nella creazione della repository."
+				        this.toastr.error('Errore nella creazione del database', 'Errore')
+
 				this.errorMessage = <any>error
-				alert("Repository non creata")
+				
 			})
 	}
 
@@ -148,11 +171,13 @@ export class StarterComponent implements AfterViewInit {
 
 	controlFormatFile(f) {
 		if (f.name.split('.').pop() == "bpmn") {
-			alert("formato file corretto")
+			
+
 			return true;
 		}
 		else {
-			alert("formato file non corretto")
+			this.toastr.error('Formato file non corretto', 'FormatoFile')
+
 			return false;
 		}
 	}

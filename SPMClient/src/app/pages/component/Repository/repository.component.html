@@ -20,11 +20,11 @@
 
                 <div *ngIf="isLogged">
 
-                    <div data-target="#myModalRepoModify" data-toggle="modal">
+                    <div data-target="#myModalRepoModify" (click)="reset1()" data-toggle="modal">
                         <a class="dropdown-item bianco menus">Modify Repository </a>
                     </div>
 
-                    <div data-toggle="modal" data-target="#myModalFolder">
+                    <div data-toggle="modal" (click)="reset1()" data-target="#myModalFolder">
                         <a class="dropdown-item bianco menus">Create Folder </a>
                     </div>
 
@@ -33,7 +33,7 @@
                         <a class="dropdown-item bianco menus">Create File </a>
                     </div>
 
-                    <div data-toggle="modal" data-target="#myModalShareRepo">
+                    <div data-toggle="modal" (click)="reset1()" data-target="#myModalShareRepo">
                         <a class="dropdown-item bianco menus">Share Repo</a>
                     </div>
 
@@ -68,23 +68,26 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Modify repository</h4>
                 </div>
-
+                <form [formGroup]="modifyNameRepo" (ngSubmit)="sendNewName(n.value)">
                 <div class="modal-body">
 
-                    <div>
+                   
                         <label for="reponame"><b>Repository name</b> </label><br>
-                        <input type="text" maxlength="13" required id="namerepo" [(ngModel)]="reset" #n name="namerepo" />
-                    </div>
+                        <input type="text" class="form-control"  [(ngModel)]="reset"
+                        maxlength="13" required id="nameFile" formControlName="reponame" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
+                        #n name="nameFile" />                   
                     <br>
-                    <!--  <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
-                                <strong>{{message}}</strong> 
-                            </div> -->
+                    <div *ngIf="submitted && f.reponame.errors" class="invalid-feedback">
+                        <div *ngIf="f.reponame.errors.required">Name is Required</div>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
-                    <button (click)="sendNewName(n.value)" style="margin-right:10px;" class="btn btn-primary col-4">Save
+                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Save
                         Repository </button>
                     <button type="button" class="btn btn-danger" #closeModalModifyRepo data-dismiss="modal">Close</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -102,11 +105,7 @@
     </div>
     <br>
     <div>
-        <div *ngIf="ok" class="alert alert-success  col-5 alert-dismissible" style="position: center;" id="top"
-            #myAlertImport>
-            <strong>{{message}}</strong>
-        </div>
-
+        
        
 
     </div>
@@ -119,25 +118,26 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Create a new Folder</h4>
                 </div>
-
+                <form [formGroup]="createFolderForm" (ngSubmit)="saveFolder(nameFolder.value)">
                 <div class="modal-body">
 
-                    <div>
                         <label for="reponame"><b>Folder name</b> </label><br>
-                        <input type="text" maxlength="13" required id="namefolder" [(ngModel)]="reset" #nameFolder name="namefolder" />
-                    </div>
+                        <input type="text" maxlength="13" class="form-control" formControlName="foldername" [ngClass]="{ 'is-invalid': submitted && g.foldername.errors }" required  [(ngModel)]="reset" #nameFolder  />
+                    
                     <br>
-                    <!--   <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
-                        <strong>{{message}}</strong> 
-                    </div> -->
+                    <div *ngIf="submitted && g.foldername.errors" class="invalid-feedback">
+
+                        <div *ngIf="g.foldername.errors.required">FolderName is Required</div>
+                    </div>
+                    
                 </div>
 
                 <div class="modal-footer">
-                    <button (click)="saveFolder(nameFolder.value)" style="margin-right:10px;" class="btn btn-primary col-4">Save
+                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Save
                         Folder </button>
                     <button type="button" class="btn btn-danger" #closeModalCreateFolder data-dismiss="modal">Close</button>
                 </div>
-
+</form>
             </div>
         </div>
     </div>
@@ -194,15 +194,20 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Share Repository </h4>
                 </div>
+                <form [formGroup]="shareRepoForm" (ngSubmit)=shareRepo(emailShare.value)>
 
                 <div class="modal-body">
 
-                    <div>
+                    
                         <label for="reponame"><b>Email:</b> </label><br>
-                        <input type="email" required id="namerepo" [(ngModel)]="reset" #emailShare name="namerepo" />
-                    </div>
+                        <input type="email" class="form-control" required id="namerepo" [(ngModel)]="reset" formControlName="shareRepo" [ngClass]="{ 'is-invalid': submitted && h.shareRepo.errors }" #emailShare name="namerepo" />
+                    
 
                     <br>
+                    <div *ngIf="submitted && h.shareRepo.errors" class="invalid-feedback">
+                        <div *ngIf="h.shareRepo.errors.email">Email errata, inserire email validata</div>
+                        <div *ngIf="h.shareRepo.errors.required">Email richiesta</div>
+                    </div>
 
                     <!--  <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
                         <strong>{{message}}</strong> 
@@ -210,10 +215,11 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button (click)="shareRepo(emailShare.value)" style="margin-right:10px;" class="btn btn-primary col-4">Share
+                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Share
                         Repo </button>
                     <button type="button" class="btn btn-danger" #closeModalShareRepo data-dismiss="modal">Close</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>

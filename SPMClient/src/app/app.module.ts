@@ -18,7 +18,7 @@ import { LoginGuard } from './pages/starter/login.guard';
     ToastrModule.forRoot({
 timeOut:2000,
 positionClass:'toast-top-right',
-preventDuplicates:true,
+preventDuplicates:false,
 
     }),
     BrowserModule,
