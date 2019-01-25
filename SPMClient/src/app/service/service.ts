@@ -16,7 +16,7 @@ const httpOptions = {
 
 
 const httpOptions2 = {
-  headers: new HttpHeaders({"Content-Type":"text/plain"})
+  headers: new HttpHeaders({"Content-Type":"appication/xml"})
 };
 
 @Injectable({

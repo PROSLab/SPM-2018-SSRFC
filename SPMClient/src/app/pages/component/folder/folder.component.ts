@@ -77,7 +77,7 @@ export class FolderComponent implements OnInit {
   uploadFileToActivity() {
     console.log(this.fileToUpload)
     this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,this.folderSelected).subscribe(data => {
-      alert("Hai caricato il file correttamente.")
+      this.exist=true
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
@@ -108,6 +108,7 @@ export class FolderComponent implements OnInit {
   sendNewNameFolder(name) {
     this.service.changeNameFolder(this.folderSelected, name)
       .subscribe(data => {
+        this.exist=true
         this.folderInfo = data
         this.ok=true
         this.message="Folder modificata correttamente!"
@@ -234,6 +235,14 @@ export class FolderComponent implements OnInit {
         this.files = (data)
         if (this.files.length > 0) {
           this.exist = true;
+        }
+        else{
+          if(this.files.length<=0){
+            document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto show")
+            document.getElementById("menu").setAttribute("aria-expanded", "true")
+            document.getElementById("menu2").setAttribute("class", "dropdown-menu show")
+              this.exist = false
+          }
         }
       }, error => {
         this.errorMessage = <any>error

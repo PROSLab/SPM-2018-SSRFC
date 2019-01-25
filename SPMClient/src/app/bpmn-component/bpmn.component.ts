@@ -142,9 +142,12 @@ createFile(){
         const url = '/assets/bpmn/initial.bpmn';
         this.http.get(url, {
           headers: {}, responseType: 'text'
-        }).subscribe(
+        })
+        .subscribe(
           (x: any) => {
             this.modeler.importXML(x, this.handleError);
+            console.log(x)
+           
           },
           this.handleError
         );
@@ -159,12 +162,27 @@ createFile(){
     .subscribe(
       (x: any) => {
         this.modeler.importXML(x, this.handleError);
-        this.service.safenessAndSoundness(x)
+
+
+        /* const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
+        this.http.post(url2, {
+          headers: {"Content-Type":"application/xml"}, x
+        })
+        .subscribe(
+          (x: any) => {
+           console.log(x)
+          },
+          this.handleError
+        ); */
+        
+
+
+             /*   this.service.safenessAndSoundness(x)
         .subscribe( data => {
           console.log(data)
           }, error => {
             console.log(error);
-          }); 
+          });  */
       },
     );
   }

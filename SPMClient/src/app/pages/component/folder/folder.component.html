@@ -13,13 +13,13 @@
       <div>
         <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
      </div>
-              <div class=" dropdown dropdown-toggle" style="height: 20%;margin-left:1%">
-                  <a class="btn btn-default numero2 " role="button" id="dropdownMenuLink"
+              <div class=" dropdown dropdown-toggle  grassetto" id="menu" style="height: 20%;margin-left:1%">
+                  <a class="btn btn-default  " role="button" id="dropdownMenuLink"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <h4>{{folderInfo?.folderName}}</h4>
                   </a>
   
-                  <div class="dropdown-menu " aria-labelledby="dropdownMenuLink">
+                  <div class="dropdown-menu "  id="menu2"  aria-labelledby="dropdownMenuLink">
   
                       <div *ngIf="isLogged">
                         
@@ -204,7 +204,14 @@
             </tbody>
         </table>
     </div>
-    <div *ngIf="!exist">Your Folder is empty!<br> You can create or import a file.</div>
+    <div *ngIf="!exist">
+            <div class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
+                    <strong>
+                       <h4> Your folder is empty. <br>
+                        You can create or import a file from your system clicking on
+                        <b>"{{folderInfo?.folderName}}"</b> button.</h4>
+                    </strong>
+                </div>
 </div>
 
 <br>

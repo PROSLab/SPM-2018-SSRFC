@@ -69,10 +69,15 @@ export class RepositoryComponent implements OnInit {
   ngOnInit() {
     this.getRepo()
     this.getAllfolder()
-    this.getAllFile()
   }
 
+
+
   shareRepo(email) {
+    document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+    document.getElementById("menu").setAttribute("aria-expanded", "false")
+    document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
+   
     this.clearModal(this.closeModal4)
     this.service.shareRepository(this.idRepoSelected, email)
       .subscribe(data => {
@@ -100,6 +105,10 @@ export class RepositoryComponent implements OnInit {
   }
 
   sendNewName(name) {
+    document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+    document.getElementById("menu").setAttribute("aria-expanded", "false")
+    document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
+   
     this.service.changeNameRepo(this.idRepoSelected, name)
       .subscribe(data => {
         this.clearModal(this.closeModal1)
@@ -158,21 +167,21 @@ export class RepositoryComponent implements OnInit {
       this.fileincartelle = false;
       this.ngOnInit()
     }
-
   }
 
   saveFile() {
     this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMN']);
   }
 
-
   controlFormatFile(f) {
+    document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+    document.getElementById("menu").setAttribute("aria-expanded", "false")
+    document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
+   
     if (f.name.split('.').pop() == "bpmn") {
       return true;
     }
     else if (f.name.split('.').pop() != "bpmn") {
-
-
       this.ok2 = true
       this.message = "Formato file non corretto"
       setTimeout(() => {
@@ -187,6 +196,10 @@ export class RepositoryComponent implements OnInit {
 
 
   handleFileInput(files: FileList) {
+    document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+    document.getElementById("menu").setAttribute("aria-expanded", "false")
+    document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
+   
     this.fileToUpload = files.item(0);
     var a = this.controlFormatFile(this.fileToUpload)
     if (a == true) {
@@ -239,10 +252,14 @@ export class RepositoryComponent implements OnInit {
     }
   }
 
-
   uploadFileToActivity() {
+    document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+    document.getElementById("menu").setAttribute("aria-expanded", "false")
+    document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
+   
     this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload).subscribe(data => {
-
+      alert("Hai caricato il file correttamente.")
+      this.filesExist=true
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
@@ -275,7 +292,10 @@ export class RepositoryComponent implements OnInit {
             var count = this.folder.length
             this.folder[count] = newFolder
             this.folderExist = true
-
+            document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+            document.getElementById("menu").setAttribute("aria-expanded", "false")
+            document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
+           
 
             setTimeout(() => {
               this.ok = false
@@ -298,11 +318,15 @@ export class RepositoryComponent implements OnInit {
   getAllfolder() {
     //prende tutte le cartelle create
     this.service.getAllFolder(this.idRepoSelected)
-      .subscribe(data => {
+      .subscribe(async data => {
         data = JSON.parse(data)
 
-        if (data.length == 0) { this.filesExist = false }
-        else { this.filesExist = true }
+        if (data.length == 0) { this.folderExist = false }
+        else { this.folderExist = true
+          document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+          document.getElementById("menu").setAttribute("aria-expanded", "false")
+          document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
+         }
 
         this.allFileFolder.length = 0;
         for (var i = 0; i < data.length; i++) {
@@ -311,10 +335,7 @@ export class RepositoryComponent implements OnInit {
 
           this.service.getFile(this.idRepoSelected, data[i].id)
             .subscribe(tuttifile => {
-
-
               tuttifile = JSON.parse(tuttifile)
-
               for (var i = 0; i < tuttifile.length; i++) {
                 tuttifile[i].createdAt = this.troncaData(tuttifile[i].createdAt)
               }
@@ -334,6 +355,7 @@ export class RepositoryComponent implements OnInit {
         if (this.folder.length > 0) {
           this.folderExist = true
         }
+       await this.getAllFile()
       }, error => {
         this.errorMessage = <any>error
       });
@@ -344,8 +366,25 @@ export class RepositoryComponent implements OnInit {
     this.service.getFile(this.idRepoSelected, null)
       .subscribe(data => {
         data = JSON.parse(data)
-        if (data.length == 0) { this.folderExist = false }
-        else { this.filesExist = true }
+        if (data.length <= 0) { 
+          this.filesExist  = false
+        }
+        else { 
+          this.filesExist = true
+          document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+              document.getElementById("menu").setAttribute("aria-expanded", "false")
+              document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
+         }
+         console.log(this.filesExist,this.folderExist)
+
+         if(this.folderExist==false && this.filesExist==false){
+              document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto show")
+              document.getElementById("menu").setAttribute("aria-expanded", "true")
+              document.getElementById("menu2").setAttribute("class", "dropdown-menu show")
+             
+            }
+
+        
         for (var i = 0; i < data.length; i++) {
           data[i].createdAt = this.troncaData(data[i].createdAt)
         }

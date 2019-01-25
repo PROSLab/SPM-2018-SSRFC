@@ -10,13 +10,13 @@
         <div>
             <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
         </div>
-        <div class=" dropdown dropdown-toggle grassetto" style="height: 20%;margin-left:1%">
-            <a class="btn btn-default numero2  " role="button" id="dropdownMenuLink" data-toggle="dropdown"
+        <div class=" dropdown dropdown-toggle grassetto" id="menu" style="height: 18%;margin-left:1%">
+            <a class="btn btn-default " role="button" id="dropdownMenuLink" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <h4><b>{{repoInfo?.repositoryName}}</b></h4>
             </a>
 
-            <div class="dropdown-menu " aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-menu " id="menu2" aria-labelledby="dropdownMenuLink">
 
                 <div *ngIf="isLogged">
 
@@ -221,11 +221,11 @@
 
 
     <div *ngIf="folderExist==false && filesExist==false">
-        <div class="alert alert-danger  col-7 alert-dismissible" style="position: center;">
+        <div class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
             <strong>
-                Your repository is empty. <br>
+               <h4> Your repository is empty. <br>
                 You can create a folder, file or import a file from your system clicking on
-                "{{repoInfo?.repositoryName}}" button.
+                <b>"{{repoInfo?.repositoryName}}"</b> button.</h4>
             </strong>
         </div>
     </div>
