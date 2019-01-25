@@ -75,8 +75,9 @@ export class FolderComponent implements OnInit {
   }
 
   uploadFileToActivity() {
-    console.log(this.fileToUpload)
-    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,this.folderSelected).subscribe(data => {
+    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
+
+    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,this.folderSelected,autore).subscribe(data => {
       alert("Hai caricato il file correttamente.")
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
@@ -252,7 +253,6 @@ export class FolderComponent implements OnInit {
         data.createdAt = this.troncaData(data.createdAt)
         
         this.repoInfo = data
-        console.log(this.repoInfo)
       }, error => {
         this.errorMessage = <any>error
       });
