@@ -239,6 +239,7 @@
                 <tr>
                     <th width="20%">Name</th>
                     <th width="30%">Created At</th>
+                    <th width="30%">Author</th>
                 </tr>
             </thead>
 
@@ -251,7 +252,7 @@
                         {{fold?.folderName}}
                     </th>
                     <th scope="row">{{fold?.createdAt}}</th>
-
+                    <th scope="row">{{fold?.autore}}</th>
                 </tr>
 
                 <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)">
@@ -260,8 +261,9 @@
                         {{fil?.originalName}}
                     </th>
                     <th scope="row">{{fil?.createdAt}}</th>
+                    <th scope="row">{{fil?.autore}}</th>
                 </tr>
-
+                
             </tbody>
 
 
@@ -275,6 +277,7 @@
                         {{fil?.originalName}}
                     </th>
                     <th scope="row">{{fil?.createdAt}}</th>
+                    <th scope="row">{{fil?.autore}}</th>
                 </tr>
 
             </tbody>

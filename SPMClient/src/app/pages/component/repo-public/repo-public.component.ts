@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 
 
 export class RepoPublicComponent implements OnInit {
-  reposPublic: any;
+  reposPublic=[];
   errorMessage: any;
 
   constructor(private service: Service, public router: Router) { }
@@ -39,12 +39,19 @@ export class RepoPublicComponent implements OnInit {
   getAllPublicRepo() {
     this.service.getAllRepoPublic().subscribe(data => {
       this.reposPublic = data
-      console.log(this.reposPublic)
+
+      for(var x=0;x<this.reposPublic.length;x++){
+      
+        this.reposPublic[x].createdAt = this.reposPublic[x].createdAt.substr(0,10)
+      }
+   
     }, error => {
       this.errorMessage = <any>error
     });
   }
-
+  
+  
+ 
 
   //da rivedere,c ol cambiamento di route è cambiato
   sendToPublic(repoSelected) {
