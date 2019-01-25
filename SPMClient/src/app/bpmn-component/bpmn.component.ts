@@ -61,7 +61,6 @@ export class BpmnComponent implements OnInit {
     this.idFile= route.snapshot.params.idFile
   }
 
-
   ngOnInit(): void {
     if(this.idFile==undefined){
       console.log("lo sto creando")
@@ -132,9 +131,13 @@ export class BpmnComponent implements OnInit {
   )); 
   console.log(this.filetoUpload)
   this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.idFile,this.version,this.filetoUpload,this.folderSelected)
-
+  .subscribe(data => {
+    }, error => {
+    });
 }
-  createFile(){
+
+
+createFile(){
 
         const url = '/assets/bpmn/initial.bpmn';
         this.http.get(url, {
@@ -147,6 +150,7 @@ export class BpmnComponent implements OnInit {
         );
   }
 
+
   load(): void {
     const url = "http://localhost:8080/api/file/downloadFile?idFile="+this.idFile+"&version="+this.version
     this.http.get(url, {
@@ -155,8 +159,13 @@ export class BpmnComponent implements OnInit {
     .subscribe(
       (x: any) => {
         this.modeler.importXML(x, this.handleError);
+        this.service.safenessAndSoundness(x)
+        .subscribe( data => {
+          console.log(data)
+          }, error => {
+            console.log(error);
+          }); 
       },
-      this.handleError
     );
   }
 
