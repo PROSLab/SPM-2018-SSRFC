@@ -294,6 +294,7 @@ error => {
       });
   }
 
+
   newVersion() {
     this.service.createNewVersion(this.idFile, this.file.cVersion)
       .subscribe(data => {

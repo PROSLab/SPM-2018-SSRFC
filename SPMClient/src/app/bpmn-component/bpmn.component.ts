@@ -6,7 +6,7 @@ import { CustomPaletteProvider } from "../props-provider/CustomPaletteProvider";
 import { Service } from '../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
- import {saveAs} from 'file-saver'; 
+import {saveAs} from 'file-saver';  
 import { unescapeIdentifier } from '@angular/compiler';
 
 const customModdle = {
@@ -162,7 +162,7 @@ export class BpmnComponent implements OnInit {
       headers: {}, responseType: 'text'
     }).subscribe(
       (x: any) => {
-        this.modeler.importXML(x, this.handleError);
+        this.modeler.importXML(x, this.handleError)
 
 
         /* const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
@@ -251,7 +251,8 @@ export class BpmnComponent implements OnInit {
     //creazione di un nuovo file salvandolo dall'editor
     this.modeler.saveXML((err: any, xml: any) => this.file = new File([xml], nameFile));
     console.log(this.file)
-    this.service.postFile(this.idRepoSelected, this.idUser, this.file, this.folderSelected)
+    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
+    this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
       .subscribe(async data => {
         this.idFileCreato = data.id
         //this.sendTofile(this.idFile)

@@ -167,35 +167,7 @@ modifyName(){
   
     saveFile() {
       this.router.navigate(['repositoryID', this.idRepoSelected,'folderID',this.folderSelected, 'editorBPMN']);
-    /* var name = fileName
-    this.service.createFile(this.idRepoSelected, this.idUser, name, this.folderSelected)
-      .subscribe(data => {
-        var file = JSON.parse(data)
-        this.service.getFileSpec(file.id)
-          .subscribe(data => {
-            this.ok=true
-            this.message="File creato correttamente!"
-            setTimeout(() => {
-              this.clearModal(this.closeModal2)
-              this.ok = false
-              this.message = '',
-              this.reset = ''
-            }, 2000);
 
-            var newFile = data
-            newFile.createdAt = this.troncaData(newFile.createdAt)
-            var count = this.files.length
-            this.files[count] = newFile
-          }, error => {
-            this.errorMessage = <any>error
-          });
-        this.createfile = false
-        this.getAllFile();
-      }, error => {
-        this.errorMessage = <any>error
-        alert("file non creato")
-      })
-    this.createfile = false */
   }
 
 
