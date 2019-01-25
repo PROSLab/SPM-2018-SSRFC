@@ -77,7 +77,7 @@ export class FolderComponent implements OnInit {
   uploadFileToActivity() {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
 
-    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,this.folderSelected,autore).subscribe(data => {
+    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,autore,this.folderSelected).subscribe(data => {
       alert("Hai caricato il file correttamente.")
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)

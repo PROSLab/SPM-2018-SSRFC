@@ -99,6 +99,7 @@ export class Service {
 
   // @@@@ Service per la gestione dei file @@@@ ///
   postFile(idRepo, idUser, fileToUpload,autore,idFolder?): Observable<any> {
+    console.log(idFolder)
      const formData: FormData = new FormData();
      if(idFolder!=null){
      formData.append('idFolder', idFolder); 
