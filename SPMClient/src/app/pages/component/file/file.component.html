@@ -101,18 +101,10 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
-
     </div>
 
-
-    <br>
-
-
-    <br>
     <!--modal info file-->
     <div class="modal fade" id="info" role="dialog">
         <div class="modal-dialog">
@@ -137,10 +129,6 @@
     </div>
 
     <br>
-
-    <div class="row">
-
-    </div>
 
 
     <!--  modal modify file name -->
@@ -268,17 +256,28 @@
             </div>
         </div>
     </div>
-    <div #canvas style="background-color:white" id="canvas"></div>
+
+<hr>
 <br>
-<div class="row">
+    <div class=" row">
+        <label>
+            <h2>Preview</h2>
+        </label>
+        <button (click)="sendToEditor(vers)" style="margin-left:82%" class="btn btn-primary">Open Modal</button>
+    </div>
+    <br>
+    <div style="border:1px solid grey;zoom:60%;">
+        <div #canvas style="background-color:white" id="canvas"></div>
+    </div>
+    <br>
+    <div class="row">
 
-    <div class="col-2"><button (click)="back()" class="btn btn-info">Back</button></div>
-    <div class="col-8"></div>
-    <div class="col-2"> <button (click)="sendToEditor(vers)" class="btn btn-primary">Open -> </button></div>
+        <div class="col-2"><button (click)="back()" class="btn btn-info">Back</button></div>
+        <div class="col-8"></div>
+    </div>
 
 
 
-</div>
 </div>
 
 
@@ -313,4 +312,3 @@
         </div>
     </div>
 </div>
-
