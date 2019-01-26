@@ -6,7 +6,7 @@ import { CustomPaletteProvider } from "../props-provider/CustomPaletteProvider";
 import { Service } from '../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import {saveAs} from 'file-saver';  
+import { saveAs } from 'file-saver';
 import { unescapeIdentifier } from '@angular/compiler';
 
 const customModdle = {
@@ -54,11 +54,12 @@ export class BpmnComponent implements OnInit {
   proviamo: any;
   nameFile: any;
   bodyFile: any;
-  soundness: any;
-  safeness: any;
+  soundness: string = null;
+  safeness: string = null;
   error: any = null;
+  TerzoValore: any;
 
-  constructor(private toastr:ToastrService,private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
+  constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
@@ -129,21 +130,22 @@ export class BpmnComponent implements OnInit {
       });
   }
 
- modify():any{
- this.modeler.saveXML(
-   (err: any, xml: any) =>{  
-      this.filetoUpload = new File([xml],this.file.originalName)
-      this.bodyFile=xml;
-    } 
-  ); 
+  modify(): any {
+    this.modeler.saveXML(
+      (err: any, xml: any) => {
+        this.filetoUpload = new File([xml], this.file.originalName)
+        this.bodyFile = xml;
+      }
+    );
 
-  this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.idFile,this.version,this.filetoUpload,this.folderSelected)
-  .subscribe(data => {
-  }, error => {
-    this.error=error
-  });
+    this.service.SaveModificatedFile(this.idUser, this.idRepoSelected, this.idFile, this.version, this.filetoUpload, this.folderSelected)
+      .subscribe(data => {
+        this.callToSecondServer(this.idFile)
+      }, error => {
+        this.error = error
+      });
     this.toastr.success('File modificato Correttamente', 'Modifiche file')
-}
+  }
 
   createFile() {
 
@@ -152,7 +154,7 @@ export class BpmnComponent implements OnInit {
       headers: {}, responseType: 'text'
     }).subscribe(
       (x: any) => {
-        this.bodyFile=x
+        this.bodyFile = x
         this.modeler.importXML(x, this.handleError)
       },
     );
@@ -165,11 +167,11 @@ export class BpmnComponent implements OnInit {
       headers: {}, responseType: 'text'
     })
       .subscribe(
-        async (x:any) => {
+        async (x: any) => {
           console.log(x)
           this.modeler.importXML(x, this.handleError);
         },
-      this.handleError
+        this.handleError
       );
   }
 
@@ -178,17 +180,17 @@ export class BpmnComponent implements OnInit {
   }
 
 
- back(){
-  if (this.idFile == undefined && this.folderSelected==undefined) {
-    this.router.navigate(['repositoryID', this.idRepoSelected]);
+  back() {
+    if (this.idFile == undefined && this.folderSelected == undefined) {
+      this.router.navigate(['repositoryID', this.idRepoSelected]);
+    }
+    else if (this.folderSelected == undefined) {
+      this.router.navigate(['repositoryID', this.idRepoSelected, 'fileID', this.idFile]);
+    }
+    else {
+      this.router.navigate(['repositoryID', this.idRepoSelected, 'folderID', this.folderSelected, 'fileID', this.idFile])
+    }
   }
-  else if (this.folderSelected==undefined) {
-    this.router.navigate(['repositoryID', this.idRepoSelected, 'fileID', this.idFile]);
-  }
-  else{
-    this.router.navigate(['repositoryID', this.idRepoSelected, 'folderID', this.folderSelected, 'fileID', this.idFile])
-  }
-} 
 
   sendTofile(fileSelected) {
     if (this.folderSelected == undefined) {
@@ -202,8 +204,8 @@ export class BpmnComponent implements OnInit {
   exportModel() {
     if (this.version == null) {
       this.modeler.saveXML((err: any, xml: any) => this.file = new File([xml], "diagram"));
-           saveAs(this.file, "diagram.bpmn") 
-       
+      saveAs(this.file, "diagram.bpmn")
+
     } else {
       window.open("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version)
       /*  this.downloadFile() */
@@ -212,56 +214,90 @@ export class BpmnComponent implements OnInit {
 
   }
 
+  CheckValidity() {
+    this.modeler.saveXML(
+      (err: any, xml: any) => {
+        var f = new File([xml], 'diagram');
+        this.bodyFile = xml
+      });
 
- callToSecondServer(){
-  
-   var headers: {"Content-Type":"application/xml"} 
-          const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
+    var headers: { "Content-Type": "application/xml" }
+    const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
 
-          this.http.post(url2, this.bodyFile,
-               {headers:headers,responseType:"text"})
-          .subscribe(
-              (data: string) => {
-                 this.soundness=data.substr(0,1).trim()
-                 this.safeness=data.substr(5,5).trim()
-                 console.log('soundness:',this.soundness,'safeness:',this.safeness)
-              },
-            this.handleError
-           );    
-           
-      /*   await   document.getElementById("valModal").setAttribute("data-target", "#validityModal") */
-}
+    this.http.post(url2, this.bodyFile,
+      { headers: headers, responseType: "text" })
+      .subscribe(
+        (data: string) => {
+
+          this.soundness = data.substr(0, 1).trim()
+          var pSafeness = data.indexOf('&&') + 4
+          this.safeness = data.substr(pSafeness, 1).trim()
+          var subData = data.substr(pSafeness + 1)
+          var p3Valore = subData.indexOf('&&') + 3
+          this.TerzoValore = subData.substr(p3Valore).trim()
+          console.log('soundness:', this.soundness, 'safeness:', this.safeness, ' 3valore', this.TerzoValore)
+
+        },
+        this.handleError
+      );
+  }
+  callToSecondServer(idfile) {
+
+    var headers: { "Content-Type": "application/xml" }
+    const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
+
+    this.http.post(url2, this.bodyFile,
+      { headers: headers, responseType: "text" })
+      .subscribe(
+        (data: string) => {
+
+          this.soundness = data.substr(0, 1).trim()
+          var pSafeness = data.indexOf('&&') + 4
+          this.safeness = data.substr(pSafeness, 1).trim()
+          var subData = data.substr(pSafeness + 1)
+          var p3Valore = subData.indexOf('&&') + 3
+          this.TerzoValore = subData.substr(p3Valore).trim()
+          console.log('soundness:', this.soundness, 'safeness:', this.safeness, ' 3valore', this.TerzoValore)
+          this.addValidity(idfile);
+        },
+        this.handleError
+      );
+
+    /*   await   document.getElementById("valModal").setAttribute("data-target", "#validityModal") */
+  }
 
 
   save(nameFile) {
     //creazione di un nuovo file salvandolo dall'editor
     this.modeler.saveXML(
-      (err: any, xml: any) =>{
+      (err: any, xml: any) => {
         console.log(xml)
-       this.file = new File([xml], nameFile),   
-      this.bodyFile=xml});
+        this.file = new File([xml], nameFile),
+          this.bodyFile = xml
+      });
 
 
-    var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
+    var autore = localStorage.getItem('name') + ' ' + localStorage.getItem('surname');
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
-      .subscribe( data => {
+      .subscribe(data => {
         this.idFileCreato = data.id
-        //this.sendTofile(this.idFile)
+        this.callToSecondServer(data.id)
+        //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio
         this.toastr.success('File creato Correttamente', 'Creazione file')
 
-      //  await this.sendTofile(this.idFileCreato)
-        // do something, if upload success
+
       }, error => {
         console.log(error);
       });
 
-    /*    setTimeout(() => {
-        
-       }, 3000); 
-    */
-
   }
 
+  addValidity(idfile) {
+
+    this.service.addValidity(idfile, this.soundness, this.safeness).subscribe(
+      data => { },
+      error => { console.log(error) }
+    )
+  };
 
 }
- 

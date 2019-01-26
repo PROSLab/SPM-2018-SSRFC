@@ -112,7 +112,7 @@ export class Service {
 
   // @@@@ Service per la gestione dei file @@@@ ///
   postFile(idRepo, idUser, fileToUpload,autore,idFolder?): Observable<any> {
-    console.log(idFolder)
+    
      const formData: FormData = new FormData();
      if(idFolder!=null){
      formData.append('idFolder', idFolder); 
@@ -121,6 +121,7 @@ export class Service {
      formData.append('idUser', idUser);
      formData.append('files', fileToUpload)
      formData.append('autore', autore)
+
      return this.http.post(this.baseUrl + "api/file/uploadFile",formData )
       .pipe(
         catchError(this.handleError)
@@ -177,7 +178,6 @@ export class Service {
   }
 
 SaveModificatedFile(idUser,idRepository,idFile,version,fileToUpload,idFolder?):Observable<any>{
-  debugger
     const formData: FormData = new FormData();
     formData.append('idFile', idFile); //id 
      if(idFolder!=null){
@@ -187,6 +187,7 @@ SaveModificatedFile(idUser,idRepository,idFile,version,fileToUpload,idFolder?):O
      formData.append('idUser', idUser);
      formData.append('files', fileToUpload)
      formData.append('version', version); //num. version
+
      return this.http.post(this.baseUrl + "api/file/modifyBodyFile", formData,{responseType:"text"} )
       .pipe(
         catchError(this.handleError)
@@ -447,6 +448,18 @@ shareFile(repoName,idUser,idFile,email){
     params = params.append('version', version); //numero del version
 
     return this.http.get(this.baseUrl + 'api/file/createNewVersion', { params: params  , responseType: 'text'})
+      .pipe(
+        tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
+        catchError(this.handleError)
+      );
+  }
+
+  addValidity(idFile,soundness,safeness): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('idFile', idFile); //id del file
+    params = params.append('soundness', soundness); //numero del soundness
+    params = params.append('safeness', safeness); //safeness
+    return this.http.get(this.baseUrl + 'api/file/addValidity', { params: params  , responseType: 'text'})
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server
         catchError(this.handleError)
