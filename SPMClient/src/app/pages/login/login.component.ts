@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Service } from '../../service/service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
     errorMsg: string;
 
     constructor(
+        private toastr:ToastrService,
         public router: Router,
         private formBuilder: FormBuilder,
         private service: Service
@@ -49,7 +51,7 @@ export class LoginComponent implements OnInit {
 
         this.loading = true;
         this.service.loginUser(email, psw).pipe()
-            .subscribe(data => {
+            .subscribe( data => {
 
                 //in "data" abbiamo tutti i dati dell'utente
                 //li salviamo in locale
@@ -59,9 +61,10 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem("email", data.email)
                 localStorage.setItem("password", data.password)
                 // redirect to home
-                alert('login done!')
+                this.toastr.success('Login effettuato con successo', 'Login')
 
-                this.router.navigate(['']);
+             
+             
 
             }, error => {
                 this.error = true;

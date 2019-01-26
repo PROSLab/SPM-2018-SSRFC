@@ -4,6 +4,7 @@ import { User } from '../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch } from './must-match.validators';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-registrazione',
@@ -24,6 +25,7 @@ export class RegistrazioneComponent implements OnInit {
     errorMsg: any;
 
     constructor(
+        private toastr:ToastrService,
         private formBuilder: FormBuilder,
         private service: Service,
         private router: Router,
@@ -66,9 +68,12 @@ export class RegistrazioneComponent implements OnInit {
         // Crea il nuovo utente con i valori asseggnati
         const newUser: User = { name, surname, email, password } as User;
         this.service.addUser(newUser)
-        .subscribe(data => {
-            alert('Ti sei registrato con successo, effettua il login!');
-            this.router.navigate(['/login']);
+        .subscribe( data => {
+            this.toastr.success('Ti sei registrato con successo,ora puoi effettuare il login', 'Registrazione')
+
+            setTimeout(()=>{
+                this.router.navigate(['/login']);}, 2000); 
+            
         },error => {
             this.error = true;
             this.errorMsg = error

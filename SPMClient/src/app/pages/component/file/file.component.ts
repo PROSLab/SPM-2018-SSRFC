@@ -5,8 +5,10 @@ import { Folder } from '../../../../app/service/model/folder'
 import { Repo } from '../../../service/model/repo';
 import {ToastrService} from 'ngx-toastr'
 import {HttpClient} from '@angular/common/http';
+import { Modeler } from "../../../bpmn-js/bpmn-js";
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 
 
 @Component({
@@ -63,6 +65,10 @@ export class FileComponent implements OnInit {
   reset: string='';
   secondButton: boolean=null;
   ok2: boolean;
+  modeler;
+  v: string;
+  ciao: string;
+  url: string;
 
   constructor(private toastr:ToastrService,public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -70,11 +76,14 @@ export class FileComponent implements OnInit {
     this.idFolder = route.snapshot.params.idFolder
     this.idFile = route.snapshot.params.idFile
     this.isLogged=service.isLogged;
+    
   }
 
 
-  selected() {
-    this.cambia=true
+ async selected() {
+  
+    this.cambia=true  
+    await this.modelerOpen()
   }
 
 
@@ -200,8 +209,44 @@ error => {
     }
   }
 
+modelerOpen(){
+  console.log(this.vers)
+  
+  if (this.vers==undefined)
+  {
+    console.log("è undefined")
+    this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" +this.finalVersion/*  Vedere un modo per metter l utlima versione */
 
+  }else{
+ console.log("non lo è")
+     this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers/*  + this.version */
+
+  }
+  this.http.get(this.url, {
+    headers: {}, responseType: 'text'
+  })
+    .subscribe(
+      (x: any) => {
+        this.modeler.importXML(x, this.handleError);
+      console.log("importato")
+      },
+      this.handleError
+    );
+}
+ handleError(err: any) {
+    if (err) {
+      console.warn('Ups, error: ', err);
+    }
+  }
   ngOnInit() {
+    console.log(this.vers)
+   
+    this.modeler = new Modeler({
+      container: '#canvas',
+      width: '100%',
+      height: '300px',
+    
+    });
     
     this.modifyNameForm=this.formBuilder.group({
       reponame:['',Validators.required]
@@ -218,6 +263,7 @@ error => {
     }
     this.getRepo()
     this.getAllFolders()
+    
   }
 
 
@@ -239,14 +285,13 @@ error => {
 
   getFileSpec() {
     
-    console.log("entra")
+    
     this.cambia=false
     for (var i = 0; i < this.versionArray.length; i++) {
       this.versionArray[i] = null
     }
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
-        console.log(data)
 
         if (data != null) {
 
@@ -276,7 +321,7 @@ error => {
 
           // mi salvo il valore dell'ultima versione corrente per stamparla poi  nel dropdown
           this.vers=this.finalVersion[length-1]
-          console.log(this.vers)
+        
           if (this.finalVersion.length > 0) {
             this.versionExist = true;
           }

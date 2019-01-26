@@ -8,6 +8,7 @@ import { ChangePassword } from './model/changePassword';
 import { Repo } from './model/repo';
 import { Options } from 'selenium-webdriver/chrome';
 import { headersToString } from 'selenium-webdriver/http';
+import { ToastrService } from 'ngx-toastr';
 
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
@@ -33,6 +34,7 @@ export class Service {
   folder: string =null;
 
   constructor(
+    private toastr:ToastrService,
     public router: Router,
     private http: HttpClient,
   ) {
@@ -83,8 +85,13 @@ export class Service {
         tap(userLogged =>{
           localStorage.setItem('isLogged','true')
           this.isLogged=true;
+          setTimeout(()=>{
+           
           this.router.navigate(['/']);
-          location.reload();
+         
+            location.reload();
+         
+            }, 2000); 
         }), //mi salvo tutti i dati di ritorno dal server
         catchError(this.handleError)
       );
@@ -92,9 +99,12 @@ export class Service {
   logout() {
     localStorage.clear();
     this.isLogged=false;
-    alert('logout effettuato');
-    location.reload();
+    this.toastr.success('LogOut effettuato', 'Logout')
+    setTimeout(()=>{
+      location.reload();
     this.router.navigate(['/']);
+      }, 2000); 
+    
   }
 
   // @@@@ Service per la gestione dei file @@@@ ///

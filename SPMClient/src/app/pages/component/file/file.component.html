@@ -1,18 +1,20 @@
 <div class="container">
     <div class="row col-12">
         <div style="height:40%;">
-            <button class="btn btn-default numero2" (click)="sendToRepoFold()" ><h4>My Repositories</h4> </button> 
-           
+            <button class="btn btn-default numero2" (click)="sendToRepoFold()">
+                <h4>My Repositories</h4>
+            </button>
+
         </div>
         <div>
             <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
-         </div>
-        <div  style="height:40%;">
+        </div>
+        <div style="height:40%;">
             <button class="btn btn-default numero2" (click)="sendToRepo()">
                 <h4>{{repo?.repositoryName}}</h4>
             </button>
-      </div>
-          
+        </div>
+
         <div>
             <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
         </div>
@@ -45,7 +47,7 @@
                         <a class="dropdown-item bianco menus">Modify Path</a>
                     </div>
 
-                   <!--  <div>
+                    <!--  <div>
                         <a class="dropdown-item bianco menus" (click)="newVersion()">
                             + Create new Version</a>
                     </div> -->
@@ -54,20 +56,19 @@
                         <a class="dropdown-item bianco menus">Share File</a>
                     </div>
 
-                    <div *ngIf="versionExist"  (click)="downloadAllVersion()">
+                    <div *ngIf="versionExist" (click)="downloadAllVersion()">
                         <a class="dropdown-item bianco menus">Download ZIP Models</a>
                     </div>
 
-                   <div *ngIf="isLogged"  data-toggle="modal"
-                        data-target="#myModalDeleteFileTotal">
+                    <div *ngIf="isLogged" data-toggle="modal" data-target="#myModalDeleteFileTotal">
                         <a class="dropdown-item bianco menus">Delete File</a>
-                    </div> 
+                    </div>
                     <div>
                     </div>
                 </div>
             </div>
         </div>
-<div class="col-4" style="margin-left:13%"></div>
+        <div class="col-4" style="margin-left:13%"></div>
         <div>
 
             <div data-toggle="modal" data-target="#info">
@@ -79,38 +80,38 @@
         </div>
     </div>
     <hr>
-   <br>
+    <br>
 
     <div class="row " *ngIf="fileExist">
         <div class="card col-11" *ngIf="versionExist">
             <div class="card-body">
-                
-                        <div class="row" style="height:20%;">
-                            <h5>Version n.  </h5>
-                            <select [(ngModel)]="vers" (change)="selected()" style="margin-left:1%;height:20%;">
-                                <option [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
-                            </select>
 
-                        <div style="margin-left:38%;margin-top:-1%" class="col-6">
-                            <div>
-                                <button class="btn btn-warning" (click)="newVersion()"><i class="icon-plus"></i> Create Version</button>
-                                 <button id="buttonDelete"class="btn btn-danger"  data-toggle="modal" data-target="" style="margin-left:1%" (click)="deleteVersion(vers)"><i class="icon-trash" ></i> Delete Version {{vers}}</button>
-                            </div>
+                <div class="row" style="height:20%;">
+                    <h5>Version n. </h5>
+                    <select [(ngModel)]="vers" (change)="selected()" style="margin-left:1%;height:20%;">
+                        <option [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
+                    </select>
+
+                    <div style="margin-left:38%;margin-top:-1%" class="col-6">
+                        <div>
+                            <button class="btn btn-warning" (click)="newVersion()"><i class="icon-plus"></i> Create
+                                Version</button>
+                            <button id="buttonDelete" class="btn btn-danger" data-toggle="modal" data-target="" style="margin-left:1%"
+                                (click)="deleteVersion(vers)"><i class="icon-trash"></i> Delete Version {{vers}}</button>
                         </div>
                     </div>
+                </div>
 
-                
+
             </div>
         </div>
-       
+
     </div>
 
 
     <br>
 
-    <div *ngIf="ok" class="alert alert-success alert-dismissible col-4" id="myAlert">
-        <strong>{{message}}</strong>
-    </div>
+
     <br>
     <!--modal info file-->
     <div class="modal fade" id="info" role="dialog">
@@ -153,8 +154,8 @@
                     <div class="modal-body">
 
                         <label for="reponame"><b>File name</b> </label><br>
-                        <input type="text" class="form-control"  [(ngModel)]="reset"
-                            maxlength="13" required id="nameFile" formControlName="reponame" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
+                        <input type="text" class="form-control" [(ngModel)]="reset" maxlength="13" required id="nameFile"
+                            formControlName="reponame" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
                             #nameFile name="nameFile" />
 
                         <br>
@@ -178,24 +179,24 @@
     </div>
 
 
-<!--modal delete LAST version-->
-<div class="modal fade " id="myModalDeleteFile" role="dialog">
+    <!--modal delete LAST version-->
+    <div class="modal fade " id="myModalDeleteFile" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Version</h4>
                 </div>
-                
 
-                    <div class="modal-body">
-                        <h3>Vuoi cancellare l'ultima versione del file?<br>
-                            Cancellando l'utima versione del file stai così cancellando tutto il file.
-                        </h3>
-                    </div>
-                    <div class="modal-footer">
-                        <button style="margin-right:10px;"  data-dismiss="modal" (click)="deleteFile()"  class="btn btn-primary col-4">Yes</button>
-                        <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
-                    </div>
+
+                <div class="modal-body">
+                    <h3>Vuoi cancellare l'ultima versione del file?<br>
+                        Cancellando l'utima versione del file stai così cancellando tutto il file.
+                    </h3>
+                </div>
+                <div class="modal-footer">
+                    <button style="margin-right:10px;" data-dismiss="modal" (click)="deleteFile()" class="btn btn-primary col-4">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
 
             </div>
 
@@ -208,17 +209,17 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Version</h4>
                 </div>
-                
-                    <div class="modal-body">
-                        <h3>Vuoi cancellare il file?<br>
-                            Accettando cancellarai il file e tutte le sue versioni.
-                        </h3>
-                    </div>
-                    <div class="modal-footer">
-                        <button style="margin-right:10px;" (click)="deleteFile()" data-dismiss="modal" class="btn btn-primary col-4">Yes</button>
-                        <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
-                    </div>
-ù
+
+                <div class="modal-body">
+                    <h3>Vuoi cancellare il file?<br>
+                        Accettando cancellarai il file e tutte le sue versioni.
+                    </h3>
+                </div>
+                <div class="modal-footer">
+                    <button style="margin-right:10px;" (click)="deleteFile()" data-dismiss="modal" class="btn btn-primary col-4">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
             </div>
 
         </div>
@@ -228,7 +229,7 @@
     <div class="modal fade " id="myModalMessage" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                    
+
             </div>
 
         </div>
@@ -246,8 +247,8 @@
                     <div class="modal-body">
 
                         <label for="email">Enter email</label>
-                        <input class="form-control" formControlName="email"   id="email"
-                            #e name="email" [(ngModel)]="reset"  [ngClass]="{ 'is-invalid': submitted && g.email.errors }" />
+                        <input class="form-control" formControlName="email" id="email" #e name="email" [(ngModel)]="reset"
+                            [ngClass]="{ 'is-invalid': submitted && g.email.errors }" />
 
 
 
@@ -267,6 +268,17 @@
             </div>
         </div>
     </div>
+    <div #canvas style="background-color:white" id="canvas"></div>
+<br>
+<div class="row">
+
+    <div class="col-2"><button (click)="back()" class="btn btn-info">Back</button></div>
+    <div class="col-8"></div>
+    <div class="col-2"> <button (click)="sendToEditor(vers)" class="btn btn-primary">Open -> </button></div>
+
+
+
+</div>
 </div>
 
 
@@ -302,18 +314,3 @@
     </div>
 </div>
 
-
-<div>
-    <div *ngIf="vers!=null" style="border:1px solid black;height:70px">
-        Stai visualizzando la versione del file n. {{vers}}!
-        <button (click)="sendToEditor(vers)" class="btn btn-primary">Open -> </button>
-
-        <div>
-            Anteprima<br><br>
-        </div>
-    </div>
-
-</div>
-
-<br>
-<button (click)="back()" class="btn btn-info">Back</button>
