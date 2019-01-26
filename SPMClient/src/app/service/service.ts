@@ -19,6 +19,9 @@ const httpOptions = {
 const httpOptions2 = {
   headers: new HttpHeaders({"Content-Type":"appication/xml"})
 };
+const httpOptions3 = {
+  headers: new HttpHeaders({"Content-Type":"appication/json"})
+};
 
 @Injectable({
   providedIn: 'root'
@@ -174,6 +177,7 @@ export class Service {
   }
 
 SaveModificatedFile(idUser,idRepository,idFile,version,fileToUpload,idFolder?):Observable<any>{
+  debugger
     const formData: FormData = new FormData();
     formData.append('idFile', idFile); //id 
      if(idFolder!=null){
@@ -183,7 +187,7 @@ SaveModificatedFile(idUser,idRepository,idFile,version,fileToUpload,idFolder?):O
      formData.append('idUser', idUser);
      formData.append('files', fileToUpload)
      formData.append('version', version); //num. version
-     return this.http.post(this.baseUrl + "api/file/modifyBodyFile", formData )
+     return this.http.post(this.baseUrl + "api/file/modifyBodyFile", formData,{responseType:"text"} )
       .pipe(
         catchError(this.handleError)
       );

@@ -1,15 +1,16 @@
 
 <div class="row">
     <h3>
-  {{file?.originalName}} Editor
-      </h3>
-      <div style="margin-left:30%">
+        {{file?.originalName}} Editor
+    </h3>
+    <div style="margin-left:30%">
         <button (click)="exportModel()"  data-dismiss="modal" class="btn btn-success">Export Model <i class="fa">&#xf019;</i> </button>
-        <button  (click)="openModal()" data-toggle="modal" id="saveModal" data-target="" class="btn btn-primary">Save <i class="fa fa-save"></i></button>
-      </div>
-      </div>
+        <button (click)="openModal()" data-toggle="modal" id="saveModal" data-target="" class="btn btn-primary">Save <i class="fa fa-save"></i></button>
+        <button (click)="callToSecondServer()" data-toggle="modal" id="valModal" data-target="" class="btn btn-danger">Validity <i class="fa fa-shield"></i></button>
+   
+    </div>
+</div>
 <br>
-
 
 <div #modeler class="modeler">
   <div #canvas style="background-color:white"id="canvas"></div>
@@ -17,6 +18,8 @@
 </div>
 
 <button (click)="back()" class="btn btn-info">Back</button>
+
+
 <!-- Modal crea file -->
   <div class="modal fade" id="myModalFile" role="dialog">
       <div class="modal-dialog">
@@ -45,3 +48,26 @@
             </div>
       </div>
   </div>
+
+  <!--modal validity model-->
+<!--   <div class="modal fade" id="validityModal" role="dialog">
+    <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="modal-title">Validity of your modal</h4>
+              </div>
+
+              <div class="modal-body">
+
+                <div *ngIf="error!=null">Error 500</div>
+                    <label>Soundness:</label> {{soundness}}
+                    <label>Safeness:</label> {{safeness}}
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" #closeModalCreateFile data-dismiss="modal">Close</button>
+              </div>
+
+          </div>
+    </div>
+</div> -->

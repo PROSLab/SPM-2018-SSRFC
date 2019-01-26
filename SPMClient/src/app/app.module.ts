@@ -15,12 +15,13 @@ import { LoginGuard } from './pages/starter/login.guard';
 @NgModule({
   declarations: [AppComponent,SpinnerComponent ],
   imports: [
-    ToastrModule.forRoot({
-timeOut:2000,
-positionClass:'toast-top-right',
-preventDuplicates:false,
 
+    ToastrModule.forRoot({
+    timeOut:2000,
+    positionClass:'toast-top-right',
+    preventDuplicates:false,
     }),
+
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,

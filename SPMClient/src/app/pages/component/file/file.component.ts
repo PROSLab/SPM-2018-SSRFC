@@ -6,17 +6,13 @@ import { Repo } from '../../../service/model/repo';
 import {ToastrService} from 'ngx-toastr'
 import {HttpClient} from '@angular/common/http';
 import { Modeler } from "../../../bpmn-js/bpmn-js";
-
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-
 
 @Component({
   selector: 'app-file',
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.css']
 })
-
 
 export class FileComponent implements OnInit {
 
@@ -337,7 +333,6 @@ modelerOpen(){
             this.versionExist = false;
           }
         }
-
         else {
           this.fileExist = false;
         }
@@ -370,7 +365,6 @@ modelerOpen(){
   downloadAllVersion(){
       window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
   }
-
 
   createFile() {
     this.fileAppear = true;

@@ -53,6 +53,10 @@ export class BpmnComponent implements OnInit {
   filetoUpload;
   proviamo: any;
   nameFile: any;
+  bodyFile: any;
+  soundness: any;
+  safeness: any;
+  error: any = null;
 
   constructor(private toastr:ToastrService,private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -127,33 +131,19 @@ export class BpmnComponent implements OnInit {
 
  modify():any{
  this.modeler.saveXML(
-   (err: any, xml: any) =>   
-  this.filetoUpload = new File([xml],
-     this.file.originalName
-  )); 
-  console.log(this.filetoUpload)
+   (err: any, xml: any) =>{  
+      this.filetoUpload = new File([xml],this.file.originalName)
+      this.bodyFile=xml;
+    } 
+  ); 
+
   this.service.SaveModificatedFile(this.idUser,this.idRepoSelected,this.idFile,this.version,this.filetoUpload,this.folderSelected)
   .subscribe(data => {
   }, error => {
+    this.error=error
   });
     this.toastr.success('File modificato Correttamente', 'Modifiche file')
-
 }
-
-
-    /*     const url = '/assets/bpmn/initial.bpmn';
-        this.http.get(url, {
-          headers: {}, responseType: 'text'
-        })
-        .subscribe(
-          (x: any) => {
-            this.modeler.importXML(x, this.handleError);
-            console.log(x)
-           
-          },
-          this.handleError
-        );
-  } */
 
   createFile() {
 
@@ -162,31 +152,12 @@ export class BpmnComponent implements OnInit {
       headers: {}, responseType: 'text'
     }).subscribe(
       (x: any) => {
+        this.bodyFile=x
         this.modeler.importXML(x, this.handleError)
-
-
-        /* const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
-        this.http.post(url2, {
-          headers: {"Content-Type":"application/xml"}, x
-        })
-        .subscribe(
-          (x: any) => {
-           console.log(x)
-          },
-          this.handleError
-        ); */
-        
-
-
-             /*   this.service.safenessAndSoundness(x)
-        .subscribe( data => {
-          console.log(data)
-          }, error => {
-            console.log(error);
-          });  */
       },
     );
   }
+
 
   load(): void {
     const url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version
@@ -194,12 +165,19 @@ export class BpmnComponent implements OnInit {
       headers: {}, responseType: 'text'
     })
       .subscribe(
-        (x: any) => {
+        async (x:any) => {
+          console.log(x)
           this.modeler.importXML(x, this.handleError);
         },
-        this.handleError
+      this.handleError
       );
   }
+
+  headers(url2: string, headers: any, x: string): any {
+    throw new Error("Method not implemented.");
+  }
+
+
  back(){
   if (this.idFile == undefined && this.folderSelected==undefined) {
     this.router.navigate(['repositoryID', this.idRepoSelected]);
@@ -234,31 +212,44 @@ export class BpmnComponent implements OnInit {
 
   }
 
-  /* downloadFile() {
-    this.service.downloadFile(this.idFile,this.version)
-    .subscribe(response => 
-      {
-        saveAs(response)
-      })
-      
-    /* .map( data => {
-     
-    }, error => {
-    }); 
-  } */
+
+ callToSecondServer(){
+  
+   var headers: {"Content-Type":"application/xml"} 
+          const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
+
+          this.http.post(url2, this.bodyFile,
+               {headers:headers,responseType:"text"})
+          .subscribe(
+              (data: string) => {
+                 this.soundness=data.substr(0,1).trim()
+                 this.safeness=data.substr(5,5).trim()
+                 console.log('soundness:',this.soundness,'safeness:',this.safeness)
+              },
+            this.handleError
+           );    
+           
+      /*   await   document.getElementById("valModal").setAttribute("data-target", "#validityModal") */
+}
+
 
   save(nameFile) {
     //creazione di un nuovo file salvandolo dall'editor
-    this.modeler.saveXML((err: any, xml: any) => this.file = new File([xml], nameFile));
-    console.log(this.file)
+    this.modeler.saveXML(
+      (err: any, xml: any) =>{
+        console.log(xml)
+       this.file = new File([xml], nameFile),   
+      this.bodyFile=xml});
+
+
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
-      .subscribe(async data => {
+      .subscribe( data => {
         this.idFileCreato = data.id
         //this.sendTofile(this.idFile)
         this.toastr.success('File creato Correttamente', 'Creazione file')
 
-        await this.sendTofile(this.idFileCreato)
+      //  await this.sendTofile(this.idFileCreato)
         // do something, if upload success
       }, error => {
         console.log(error);
