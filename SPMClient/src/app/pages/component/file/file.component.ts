@@ -238,15 +238,9 @@ modelerOpen(){
       console.warn('Ups, error: ', err);
     }
   }
+
+
   ngOnInit() {
-    console.log(this.vers)
-   
-    this.modeler = new Modeler({
-      container: '#canvas',
-      width: '100%',
-      height: '300px',
-    
-    });
     
     this.modifyNameForm=this.formBuilder.group({
       reponame:['',Validators.required]
@@ -258,12 +252,26 @@ modelerOpen(){
    
     this.cambia=false
     this.getFileSpec()
+
     if(this.idFolder != null){
       this.getFolder()
     }
     this.getRepo()
     this.getAllFolders()
+   
+
+    this.modeler = new Modeler({
+      container: '#canvas',
+      width: '100%',
+      height: '300px',
     
+    });
+
+
+  
+
+
+
   }
 
 
@@ -291,7 +299,7 @@ modelerOpen(){
       this.versionArray[i] = null
     }
     this.service.getFileSpec(this.idFile)
-      .subscribe(data => {
+      .subscribe(async data => {
 
         if (data != null) {
 
@@ -321,7 +329,7 @@ modelerOpen(){
 
           // mi salvo il valore dell'ultima versione corrente per stamparla poi  nel dropdown
           this.vers=this.finalVersion[length-1]
-        
+          console.log(this.vers)
           if (this.finalVersion.length > 0) {
             this.versionExist = true;
           }
@@ -333,6 +341,9 @@ modelerOpen(){
         else {
           this.fileExist = false;
         }
+
+      await  this.modelerOpen()
+
       }, error => {
         this.errorMessage = <any>error
       });
