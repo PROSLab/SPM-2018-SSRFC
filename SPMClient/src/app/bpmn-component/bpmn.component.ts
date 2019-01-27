@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
 import { unescapeIdentifier } from '@angular/compiler';
 
-const customModdle = {
+/* const customModdle = {
   name: "customModdle",
   uri: "http://example.com/custom-moddle",
   prefix: "custom",
@@ -32,7 +32,7 @@ const customModdle = {
       ]
     },
   ]
-};
+}; */
 
 @Component({
   selector: 'app-root',
@@ -58,6 +58,7 @@ export class BpmnComponent implements OnInit {
   safeness: string = null;
   error: any = null;
   TerzoValore: any;
+  errorProblem: boolean=null;
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -97,9 +98,9 @@ export class BpmnComponent implements OnInit {
       propertiesPanel: {
         parent: '#properties'
       },
-      moddleExtension: {
+     /*  moddleExtension: {
         custom: customModdle
-      }
+      } */
     });
   }
 
@@ -131,6 +132,7 @@ export class BpmnComponent implements OnInit {
   }
 
   modify(): any {
+    
     this.modeler.saveXML(
       (err: any, xml: any) => {
         this.filetoUpload = new File([xml], this.file.originalName)
@@ -162,6 +164,7 @@ export class BpmnComponent implements OnInit {
 
 
   load(): void {
+   
     const url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version
     this.http.get(url, {
       headers: {}, responseType: 'text'
@@ -219,6 +222,7 @@ export class BpmnComponent implements OnInit {
       (err: any, xml: any) => {
         var f = new File([xml], 'diagram');
         this.bodyFile = xml
+        console.log(this.bodyFile)
       });
 
     var headers: { "Content-Type": "application/xml" }
@@ -227,8 +231,9 @@ export class BpmnComponent implements OnInit {
     this.http.post(url2, this.bodyFile,
       { headers: headers, responseType: "text" })
       .subscribe(
-        (data: string) => {
-
+        async (data: string) => {
+          
+          this.errorProblem=false
           this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
           this.safeness = data.substr(pSafeness, 1).trim()
@@ -236,10 +241,12 @@ export class BpmnComponent implements OnInit {
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
           console.log('soundness:', this.soundness, 'safeness:', this.safeness, ' 3valore', this.TerzoValore)
-
+        await this.setImage(this.soundness,this.safeness)
         },
-        this.handleError
-      );
+        error => {
+          this.errorProblem=true
+          console.log(error);
+        });
   }
   callToSecondServer(idfile) {
 
@@ -250,7 +257,7 @@ export class BpmnComponent implements OnInit {
       { headers: headers, responseType: "text" })
       .subscribe(
         (data: string) => {
-
+          this.errorProblem=false
           this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
           this.safeness = data.substr(pSafeness, 1).trim()
@@ -258,9 +265,13 @@ export class BpmnComponent implements OnInit {
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
           console.log('soundness:', this.soundness, 'safeness:', this.safeness, ' 3valore', this.TerzoValore)
+          this.setImage(this.soundness,this.safeness)
           this.addValidity(idfile);
         },
-        this.handleError
+        error => {
+          this.errorProblem=true
+          console.log(error);
+        }
       );
 
     /*   await   document.getElementById("valModal").setAttribute("data-target", "#validityModal") */
@@ -299,5 +310,35 @@ export class BpmnComponent implements OnInit {
       error => { console.log(error) }
     )
   };
+
+  setImage(soundness,safeness){
+    //PARAMETRI PER IL SOUNDNESS
+    if(parseInt(soundness)==0) { //0 Unsound for dead token
+        document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+        document.getElementById("imageSoundness").setAttribute("alt", "Unsound for dead token")
+    }
+    if(parseInt(soundness)==1){  // 1 Unsound for proper completion violation
+      document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("imageSoundness").setAttribute("alt", "Unsound for proper completion violation")
+    }
+    if(parseInt(soundness)==2){ //2 Message disregarding sound
+      document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
+      document.getElementById("imageSoundness").setAttribute("alt", "Message disregarding sound")
+    }
+if(parseInt(soundness)==3){ //3 Sound
+  document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+  document.getElementById("imageSoundness").setAttribute("alt", "Sound")
+}
+
+//PARAMETRI PER IL SAFENESS
+    if(parseInt(safeness)==4){ //4 Safe
+      document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+      document.getElementById("imageSafeness").setAttribute("alt", "Safe")
+    }
+    if(parseInt(safeness)==5){ // 5 Unsafe
+      document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("imageSafeness").setAttribute("alt", "Unsafe")
+    }
+  }
 
 }
