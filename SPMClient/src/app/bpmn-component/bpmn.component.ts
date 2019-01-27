@@ -59,6 +59,8 @@ export class BpmnComponent implements OnInit {
   error: any = null;
   TerzoValore: any;
   errorProblem: boolean=null;
+  validity: boolean=false;
+  appVal: boolean =false;
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -106,6 +108,7 @@ export class BpmnComponent implements OnInit {
 
   handleError(err: any) {
     if (err) {
+      console.log("errroreee")
       console.warn('Ups, error: ', err);
     }
   }
@@ -240,14 +243,17 @@ export class BpmnComponent implements OnInit {
           var subData = data.substr(pSafeness + 1)
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
-          console.log('soundness:', this.soundness, 'safeness:', this.safeness, ' 3valore', this.TerzoValore)
-        await this.setImage(this.soundness,this.safeness)
+          console.log('soundness:', this.soundness, 'safeness:', this.safeness)
+          await this.setImage(this.soundness,this.safeness)
         },
         error => {
           this.errorProblem=true
+          this.handleError
+          this.toastr.error('Invalid bpmn file', 'Errore editor')
           console.log(error);
         });
-  }
+    }
+
   callToSecondServer(idfile) {
 
     var headers: { "Content-Type": "application/xml" }
@@ -256,7 +262,8 @@ export class BpmnComponent implements OnInit {
     this.http.post(url2, this.bodyFile,
       { headers: headers, responseType: "text" })
       .subscribe(
-        (data: string) => {
+
+        async (data: string) => {
           this.errorProblem=false
           this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
@@ -264,17 +271,17 @@ export class BpmnComponent implements OnInit {
           var subData = data.substr(pSafeness + 1)
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
-          console.log('soundness:', this.soundness, 'safeness:', this.safeness, ' 3valore', this.TerzoValore)
-          this.setImage(this.soundness,this.safeness)
-          this.addValidity(idfile);
+
+          console.log('soundness:', this.soundness, 'safeness:', this.safeness)
+          await this.setImage(this.soundness,this.safeness);
+          await this.addValidity(idfile);
         },
+
         error => {
-          this.errorProblem=true
+        
           console.log(error);
         }
       );
-
-    /*   await   document.getElementById("valModal").setAttribute("data-target", "#validityModal") */
   }
 
 
@@ -287,7 +294,6 @@ export class BpmnComponent implements OnInit {
           this.bodyFile = xml
       });
 
-
     var autore = localStorage.getItem('name') + ' ' + localStorage.getItem('surname');
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
       .subscribe(data => {
@@ -298,16 +304,19 @@ export class BpmnComponent implements OnInit {
 
 
       }, error => {
+       
+		
         console.log(error);
       });
 
   }
 
   addValidity(idfile) {
-
     this.service.addValidity(idfile, this.soundness, this.safeness).subscribe(
-      data => { },
-      error => { console.log(error) }
+      data => { console.log("validity:",data) },
+      error => { 
+        console.log(error) 
+      }
     )
   };
 
@@ -325,10 +334,11 @@ export class BpmnComponent implements OnInit {
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
       document.getElementById("imageSoundness").setAttribute("alt", "Message disregarding sound")
     }
-if(parseInt(soundness)==3){ //3 Sound
-  document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
-  document.getElementById("imageSoundness").setAttribute("alt", "Sound")
-}
+
+    if(parseInt(soundness)==3){ //3 Sound
+      document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("imageSoundness").setAttribute("alt", "Sound")
+    }
 
 //PARAMETRI PER IL SAFENESS
     if(parseInt(safeness)==4){ //4 Safe
@@ -339,6 +349,7 @@ if(parseInt(soundness)==3){ //3 Sound
       document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
       document.getElementById("imageSafeness").setAttribute("alt", "Unsafe")
     }
+        
   }
 
 }
