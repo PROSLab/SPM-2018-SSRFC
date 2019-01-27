@@ -53,6 +53,7 @@ public class ShareHandler {
 		String repositoryName = request.queryParam("repositoryName").get();
 		String idUser = request.queryParam("idUser").get();
 		String autore =request.queryParam("autore").get();
+
 		/*
 		 * Create repository schema and get the id
 		 * Get the file schema 
@@ -84,7 +85,9 @@ public class ShareHandler {
 							null,					// path
 							f.getcVersion(),
 							f.getDeletedVersions(),
-							f.getAutore()
+							f.getAutore(),
+							f.getSoundness(),
+							f.getSafeness()
 					);
 					
 					return shareService.createFileSchema(file);

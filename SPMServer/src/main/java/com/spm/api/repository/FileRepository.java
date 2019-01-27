@@ -14,6 +14,7 @@ public interface FileRepository extends ReactiveMongoRepository<FileEntity, Stri
 	Flux<FileEntity> findFileByIdFolderAndIdRepository(ObjectId idFolder,ObjectId idRepository);
 Mono<FileEntity> findFileById(ObjectId id);
 Mono <FileEntity> deleteById(ObjectId id);
+Mono <FileEntity> findById(String id);
 }
 
 

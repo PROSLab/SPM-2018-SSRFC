@@ -53,6 +53,7 @@ public class FileHandler {
                     FormFieldPart idUser = (FormFieldPart)map.get("idUser");
                     FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
                     FormFieldPart autore = (FormFieldPart)map.get("autore");
+
                     FilePart filePart = (FilePart) map.get("files");
 
                     String idFolder = null;
@@ -78,7 +79,10 @@ public class FileHandler {
             				null,
             				1,
             				new Vector<Integer>(),
-            				autore.value()
+            				autore.value(),
+            				null,
+            				null
+
             				
             		);
                     
@@ -210,6 +214,7 @@ public class FileHandler {
 		String originalName = request.queryParam("originalName").get();
 		String mimetype = "bpmn";
 		String autore = request.queryParam("autore").get();
+
 		
 		FileEntity file = new FileEntity (
 				new ObjectId(idUser),
@@ -222,7 +227,9 @@ public class FileHandler {
 				null,
 				1,
 				new Vector<Integer>(),
-				autore
+				autore,
+				null,
+				null
 		);
 		
 		return fileService.createFileSchema(file)
@@ -451,7 +458,7 @@ public class FileHandler {
                     
                     String mimetype = "bpmn";
                     fileName = idFile.value() + '.' + version.value();
-                    
+ 
                     // Overloading di uploadFilePath
                     return fileService.pathForReplaceFile(rootDir, idUser.value(), idRepository.value(), idFolder, fileName, idFile.value(), mimetype, filePart);
                     
@@ -477,6 +484,16 @@ public class FileHandler {
 				.onErrorResume(BadRequestException.class, Responses::badRequest)
 				.onErrorResume(Exception.class, Responses::internalServerError);
 
+	}
+	
+	public Mono<ServerResponse> addValidity(ServerRequest request) {
+		String idFile = request.queryParam("idFile").get();
+		String soundness = request.queryParam("soundness").get();;
+		String safeness = request.queryParam("safeness").get();
+		
+		return fileService.updateValidity(idFile, soundness,safeness)
+				.flatMap(repo -> Responses.ok(repo))
+				.onErrorResume(Exception.class, Responses::badRequest);
 	}
 	
 	

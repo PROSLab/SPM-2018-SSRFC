@@ -28,9 +28,11 @@ public class FileEntity {
 	
 	Vector<Integer> deletedVersions;	// Array for deleted version of the file
 	String autore;
+	String soundness;
+	String safeness;
 	
 	public FileEntity(ObjectId idUser, ObjectId idRepository, ObjectId idFolder, Date createdAt, String fileName, String originalName,
-			String mimetype, String path, int cVersion, Vector<Integer> deletedVersions,String autore) {
+			String mimetype, String path, int cVersion, Vector<Integer> deletedVersions,String autore,String soundness,String safeness) {
 		this.idUser = idUser;
 		this.idRepository = idRepository;
 		this.idFolder = idFolder;
@@ -42,7 +44,30 @@ public class FileEntity {
 		this.cVersion = cVersion;
 		this.deletedVersions = deletedVersions;
 		this.autore=autore;
+		this.soundness=soundness;
+		this.safeness=safeness;
 	}
+
+
+	public String getSoundness() {
+		return soundness;
+	}
+
+
+	public void setSoundness(String soundness) {
+		this.soundness = soundness;
+	}
+
+
+	public String getSafeness() {
+		return safeness;
+	}
+
+
+	public void setSafeness(String safeness) {
+		this.safeness = safeness;
+	}
+
 
 	public String getAutore() {
 		return autore;

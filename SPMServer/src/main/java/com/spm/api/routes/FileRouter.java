@@ -110,6 +110,10 @@ public class FileRouter {
 								GET("/deleteFile"),
 								fileHandler::deleteFile
 						)
+						.andRoute(
+								GET("/addValidity"),
+								fileHandler::addValidity
+						)
 						
 				);
 	}
