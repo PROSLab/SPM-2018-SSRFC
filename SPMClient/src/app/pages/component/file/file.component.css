@@ -17,19 +17,9 @@
   .numero2{
     padding:3px 8px;
   }
-  
-  .djs-palette .entry {
-      display:none;
-  }
-  
- 
-  .djs-palette .entry, .djs-palette .djs-palette-toggle {
-      display: none;
-  }
-  .djs-palette .separator {
 
+  .diagram-container {
+    height: 100%;
+    width: 100%;
   }
-.djs-palette.two-column.open {
-   display: none;
-}
  

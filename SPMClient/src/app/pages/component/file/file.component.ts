@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterContentInit, OnDestroy, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Service } from '../../../service/service'
 import { Folder } from '../../../../app/service/model/folder'
@@ -8,6 +8,7 @@ import {HttpClient} from '@angular/common/http';
 import { Modeler } from "../../../bpmn-js/bpmn-js";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+
 @Component({
   selector: 'app-file',
   templateUrl: './file.component.html',
@@ -15,7 +16,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 
 export class FileComponent implements OnInit {
-
+  @ViewChild('ref') private el: ElementRef;
   @ViewChild("closeModal1") closeModal1 : ElementRef 
   @ViewChild("closeModal2") closeModal2 : ElementRef
   @ViewChild("closeModal3") closeModal3 : ElementRef
@@ -65,7 +66,8 @@ export class FileComponent implements OnInit {
   v: string;
   ciao: string;
   url: string;
-
+  diagramUrl;
+  importError?: Error;
   constructor(private toastr:ToastrService,public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
@@ -73,19 +75,21 @@ export class FileComponent implements OnInit {
     this.idFile = route.snapshot.params.idFile
     this.isLogged=service.isLogged;
     
+    
   }
-
 
  async selected() {
   
     this.cambia=true  
-    await this.modelerOpen()
+    this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
+   /*  await this.modelerOpen() */
   }
 
 
   selectedSposta() {
     this.spostaButton=true
   }
+ 
 
 moveTo(id){
   this.idMoment=id
@@ -205,17 +209,16 @@ error => {
     }
   }
 
-modelerOpen(){
+/* modelerOpen(){
   console.log(this.vers)
   
   if (this.vers==undefined)
   {
-    console.log("è undefined")
-    this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" +this.finalVersion/*  Vedere un modo per metter l utlima versione */
-
+    this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" +this.finalVersion
+   
   }else{
  console.log("non lo è")
-     this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers/*  + this.version */
+    this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
 
   }
   this.http.get(this.url, {
@@ -228,7 +231,7 @@ modelerOpen(){
       },
       this.handleError
     );
-}
+} */
  handleError(err: any) {
     if (err) {
       console.warn('Ups, error: ', err);
@@ -237,7 +240,7 @@ modelerOpen(){
 
 
   ngOnInit() {
-    
+   
     this.modifyNameForm=this.formBuilder.group({
       reponame:['',Validators.required]
     
@@ -336,8 +339,19 @@ modelerOpen(){
         else {
           this.fileExist = false;
         }
-
-      await  this.modelerOpen()
+        if (this.vers==undefined)
+        {
+          this.diagramUrl= this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" +this.finalVersion
+          console.log("è undefined")
+         /*  Vedere un modo per metter l utlima versione */
+      
+        }else{
+       console.log("non lo è")
+          /*  this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers *//*  + this.version */
+          this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
+      
+        }
+      /* await  this.modelerOpen() */
 
       }, error => {
         this.errorMessage = <any>error

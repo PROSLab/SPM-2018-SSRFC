@@ -10,7 +10,7 @@ import { RepositoryComponent } from './Repository/repository.component';
 import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { FolderComponent } from './folder/folder.component';
 import { BpmnComponent } from '../../bpmn-component/bpmn.component';
-
+import {DiagramComponent} from './diagram/diagram';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +19,8 @@ import { BpmnComponent } from '../../bpmn-component/bpmn.component';
     ReactiveFormsModule,
     JsonpModule  ],
   declarations: [
+    DiagramComponent,
+
     RepositoryComponent,
     FolderComponent,
     FileComponent,

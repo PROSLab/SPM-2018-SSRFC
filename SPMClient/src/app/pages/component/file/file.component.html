@@ -265,9 +265,18 @@
         <button (click)="sendToEditor(vers)" style="margin-left:82%" class="btn btn-primary">Open Modal</button>
     </div>
     <br>
-    <div style="border:1px solid grey;zoom:60%;">
+    <div class="diagram-parent">
+        <app-diagram  [url]="diagramUrl"></app-diagram>
+      
+        <div class="import-error" *ngIf="importError">
+          <strong>Failed to render diagram: </strong>
+          {{ importError.message }}
+        </div>
+      </div>
+    
+   <!--  <div style="border:1px solid grey;zoom:60%;">
         <div #canvas style="background-color:white" id="canvas"></div>
-    </div>
+    </div> -->
     <br>
     <div class="row">
 

@@ -7,7 +7,6 @@ import { Service } from '../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
-import { unescapeIdentifier } from '@angular/compiler';
 
 /* const customModdle = {
   name: "customModdle",
@@ -145,7 +144,7 @@ export class BpmnComponent implements OnInit {
 
     this.service.SaveModificatedFile(this.idUser, this.idRepoSelected, this.idFile, this.version, this.filetoUpload, this.folderSelected)
       .subscribe(data => {
-        this.callToSecondServer(this.idFile)
+       
       }, error => {
         this.error = error
       });
@@ -193,7 +192,10 @@ export class BpmnComponent implements OnInit {
     else if (this.folderSelected == undefined) {
       this.router.navigate(['repositoryID', this.idRepoSelected, 'fileID', this.idFile]);
     }
-    else {
+    else if (this.idFile==undefined && this.folderSelected!= undefined){
+     this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.folderSelected])
+    }
+    else{
       this.router.navigate(['repositoryID', this.idRepoSelected, 'folderID', this.folderSelected, 'fileID', this.idFile])
     }
   }
@@ -298,10 +300,15 @@ export class BpmnComponent implements OnInit {
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
       .subscribe(data => {
         this.idFileCreato = data.id
-        this.callToSecondServer(data.id)
+        
         //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio
         this.toastr.success('File creato Correttamente', 'Creazione file')
+if(this.folderSelected==undefined){
+  this.router.navigate(['repositoryID',this.idRepoSelected])
 
+}else{
+  this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.folderSelected])
+}
 
       }, error => {
        
