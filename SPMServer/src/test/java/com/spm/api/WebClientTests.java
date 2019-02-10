@@ -45,4 +45,14 @@ public class WebClientTests {
 			.isEqualTo("HELLO WAR");
 	}
 	
+	@Test
+    public void helloWorldFailTest2() throws Exception {
+		webClient
+			.get().uri("/api/user/")
+			.exchange()
+			.expectStatus().isOk()
+			.expectBody(String.class)
+			.isEqualTo("HELLO PUPPY");
+	}
+	
 }
