@@ -236,8 +236,11 @@ export class BpmnComponent implements OnInit {
     this.http.post(url2, this.bodyFile,
       { headers: headers, responseType: "text" })
       .subscribe(
-        async (data: string) => {
-          
+         async (data: string) => {
+    document.getElementById("validation").setAttribute("data-target","#validityModal")
+       document.getElementById("validityModal").setAttribute("class", "modal fade show")
+      document.getElementById("validityModal").setAttribute("style", "padding-right:16px;display:block")
+
           this.errorProblem=false
           this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
@@ -246,8 +249,9 @@ export class BpmnComponent implements OnInit {
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
           console.log('soundness:', this.soundness, 'safeness:', this.safeness)
-          await this.setImage(this.soundness,this.safeness)
-        },
+           this.setImage(this.soundness,this.safeness)
+           
+          },
         error => {
           this.errorProblem=true
           this.handleError
@@ -256,7 +260,14 @@ export class BpmnComponent implements OnInit {
         });
     }
 
-  callToSecondServer(idfile) {
+
+    close(){
+      document.getElementById("validation").setAttribute("data-target","")
+      document.getElementById("validityModal").setAttribute("class", "modal fade")
+     document.getElementById("validityModal").setAttribute("style", "display:none")
+    }
+
+  callToSecondServer() {
 
     var headers: { "Content-Type": "application/xml" }
     const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
@@ -276,7 +287,7 @@ export class BpmnComponent implements OnInit {
 
           console.log('soundness:', this.soundness, 'safeness:', this.safeness)
           await this.setImage(this.soundness,this.safeness);
-          await this.addValidity(idfile);
+       
         },
 
         error => {
