@@ -35,7 +35,7 @@ public class WebClientTests {
 			.isEqualTo("HELLO WORLD");
 	}
 	
-	/*@Test
+	@Test
     public void helloWorldFailTest() throws Exception {
 		webClient
 			.get().uri("/api/user/")
@@ -44,15 +44,5 @@ public class WebClientTests {
 			.expectBody(String.class)
 			.isEqualTo("HELLO WAR");
 	}
-	
-	@Test
-    public void helloWorldFailTest2() throws Exception {
-		webClient
-			.get().uri("/api/user/")
-			.exchange()
-			.expectStatus().isOk()
-			.expectBody(String.class)
-			.isEqualTo("HELLO PUPPY");
-	}*/
 	
 }
