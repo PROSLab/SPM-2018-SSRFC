@@ -60,6 +60,7 @@ export class BpmnComponent implements OnInit {
   errorProblem: boolean=null;
   validity: boolean=false;
   appVal: boolean =false;
+  title: string;
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -71,7 +72,9 @@ export class BpmnComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     if (this.idFile == undefined) {
+      this.title="FileInCreazione"
       console.log("lo sto creando")
       this.createFile()
     }
@@ -129,6 +132,8 @@ export class BpmnComponent implements OnInit {
     this.service.getFileSpec(this.idFile)
       .subscribe(data => {
         this.file = data
+        this.title=this.file.originalName
+
       }, error => {
       });
   }
@@ -248,12 +253,18 @@ export class BpmnComponent implements OnInit {
           var subData = data.substr(pSafeness + 1)
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
+          this.toastr.success('Validity and Soundness Verificata', 'Verifica Validity')
+
           console.log('soundness:', this.soundness, 'safeness:', this.safeness)
            this.setImage(this.soundness,this.safeness)
            
           },
         error => {
           this.errorProblem=true
+          document.getElementById("imageSoundness").setAttribute("src","")
+        document.getElementById("imageSafeness").setAttribute("src", "")
+        document.getElementById("imageSoundness").setAttribute("alt","")
+        document.getElementById("imageSafeness").setAttribute("alt", "")
           this.handleError
           this.toastr.error('Invalid bpmn file', 'Errore editor')
           console.log(error);
@@ -311,7 +322,7 @@ export class BpmnComponent implements OnInit {
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
       .subscribe(data => {
         this.idFileCreato = data.id
-        
+        this.addValidity(this.idFileCreato)
         //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio
         this.toastr.success('File creato Correttamente', 'Creazione file')
 if(this.folderSelected==undefined){
