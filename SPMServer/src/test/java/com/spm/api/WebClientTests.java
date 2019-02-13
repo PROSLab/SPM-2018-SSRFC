@@ -1,8 +1,13 @@
 package com.spm.api;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -12,19 +17,26 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class WebClientTests {
+	
 	@Autowired
     ApplicationContext context;
 	
     WebTestClient webClient;
+    
+    /*Selenium variables*/
+    public static String browser;
+	static WebDriver driver;
+	static String projectPath = System.getProperty("user.dir"); 
+    
     
     @Before
     public void setup() {
         this.webClient = WebTestClient
             .bindToApplicationContext(this.context)
             .configureClient()
-            .build();
+            .build();        
     }
-    
+      
 	@Test
     public void helloWorldTest() throws Exception {
 		webClient
@@ -54,5 +66,21 @@ public class WebClientTests {
         .expectBody(String.class)
         .isEqualTo("Johnson");
 	}
+	
+	/*Selenium Chrome test - Login*/
+	@Test
+    public void seleniumLoginTest() throws Exception {
+		browser = "Chrome";
+		String location = File.separator + "drivers" + File.separator + "chromedriver.exe";  
+		System.setProperty("webdriver.chrome.driver", projectPath + location);
+		driver = new ChromeDriver();
+		driver.get("http://localhost:4200/login");
+		driver.findElement(By.id("loginEmail")).sendKeys("scalaemanuele92@gmail.com");
+		Thread.sleep(1000);
+		driver.findElement(By.id("loginPassword")).sendKeys("fabiobello92");
+		driver.findElement(By.id("loginButton")).click();
+		Thread.sleep(2000);
+	}
+	
 	
 }
