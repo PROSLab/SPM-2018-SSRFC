@@ -3,6 +3,7 @@ import { Service } from '../../service/service'
 import { User } from '../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -19,7 +20,9 @@ export class PswRecoveryComponent implements OnInit {
   loading = false
   pswRecoveryForm: FormGroup;
   http: any;
-  constructor(private formBuilder: FormBuilder,private service: Service) { }
+  constructor(private formBuilder: FormBuilder,private service: Service,  private toastr:ToastrService) {
+    
+   }
 
   ngOnInit() {
     this.pswRecoveryForm = this.formBuilder.group({
@@ -41,12 +44,16 @@ export class PswRecoveryComponent implements OnInit {
     //rimuove gli spazi all'inizio ed alla fine della stringa
     email = this.f.email.value.trim();
     // verifica se è diversa da null
+    console.log(email)
     if (!email)  return; 
     this.service.sendEmail(email)
     //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione
     .subscribe(_=>{
-      alert('email inviata'), 
-      this.loading = false;});
+      this.toastr.success('Email sent')
+      this.loading = false;},
+      error =>{
+        this.toastr.error('Email error')
+      });
     return;
 }
 }

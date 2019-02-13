@@ -98,7 +98,7 @@
                                 Version</button>
                             <button  *ngIf="isLogged" id="buttonDelete" class="btn btn-danger" data-toggle="modal" data-target="" style="margin-left:1%"
                                 (click)="deleteVersion(vers)"><i class="icon-trash"></i> Delete Version {{vers}}</button>
-                                <button (click)="exportModel()"  data-dismiss="modal" class="btn btn-success">Download version {{vers}} <i class="fa">&#xf019;</i> </button>
+                                <button (click)="exportModel()" style="margin-left:1%" data-dismiss="modal" class="btn btn-success"><i class="fa">&#xf019;</i> Download version {{vers}}  </button>
                         </div>
                     </div>
                 </div>

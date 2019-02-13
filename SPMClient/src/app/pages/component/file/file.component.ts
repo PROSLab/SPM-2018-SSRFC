@@ -448,6 +448,7 @@ error => {
       .subscribe(data => {
         data.createdAt = this.troncaData(data.createdAt)
         this.repo = data
+        console.log(this.repo)
       }, error => {
         this.errorMessage = <any>error
       });
@@ -490,8 +491,10 @@ error => {
       console.log("invalid")
       return;
   }
+
   
-    this.service.shareFile(nameRepo, this.idUser,this.idFile,email)
+
+    this.service.shareFile( this.repo.repositoryName, this.idUser,this.idFile,email)
       .subscribe(data => {
         this.ok=true
         this.toastr.success('File condiviso con successo', 'Share File')
