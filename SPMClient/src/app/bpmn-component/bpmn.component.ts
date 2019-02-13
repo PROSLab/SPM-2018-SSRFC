@@ -317,12 +317,10 @@ export class BpmnComponent implements OnInit {
           this.soundness=null
           this.validity=true
           if( this.idFile!= undefined){
-            this.addValidity( this.idFile)
+            this.addValidity(this.idFile)
            }  
           this.toastr.success('This model is valid','Validity of Model')
-      
         },
-
         error => {
           this.safeness=null
           this.soundness=null
@@ -337,7 +335,6 @@ export class BpmnComponent implements OnInit {
         }
       );
   }
-
 
   save(nameFile) {
     //creazione di un nuovo file salvandolo dall'editor

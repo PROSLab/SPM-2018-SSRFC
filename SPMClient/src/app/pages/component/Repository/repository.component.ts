@@ -51,9 +51,9 @@ export class RepositoryComponent implements OnInit {
   ok2: boolean;
   open1 = false
   info = false
-  originalfiles: any;
-  originalAllFileFolder: any[];
-  originalfolder: any;
+  originalfiles: any=null;
+  originalAllFileFolder: any[]=null;
+  originalfolder: any=null;
   lastSelected: string;
   openSearch = false
   shareRepoForm:FormGroup
@@ -230,22 +230,25 @@ this.submitted=false;
 
   Search() {
     this.fileincartelle = true;
+    console.log(this.originalAllFileFolder)
     console.log(this.files)
     if (this.selezione == "name") {
       if (this.search != "") {
-
+        if(this.originalfiles.length>0){
         this.files = this.originalfiles.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
+      }
+      if(this.originalfolder.length>0){
         this.folder = this.originalfolder.filter(res => {
           return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-
-
+      }
+      if(this.originalAllFileFolder!=null){
         this.allFileFolder = this.originalAllFileFolder.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-
+      }
       } else if (this.search == "") {
         this.fileincartelle = false;
         this.ngOnInit()
@@ -254,24 +257,53 @@ this.submitted=false;
 
     if (this.selezione == "date") {
       if (this.search != "") {
+        if(this.originalfiles.length>0){
         this.files = this.originalfiles.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
-
+      }
+        if(this.originalfolder.length>0){
         this.folder = this.originalfolder.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
+      }
+
+        if(this.originalAllFileFolder!=null){
         this.allFileFolder = this.originalAllFileFolder.filter(res => {
           return res.createdAt.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
+      }
       } else if (this.search == "") {
         this.fileincartelle = false;
         this.ngOnInit()
 
       }
     }
+    if (this.selezione == "author") {
+      if (this.search != "") {
 
+        if(this.originalfiles.length>0){
+        this.files = this.originalfiles.filter(res => {
+          return res.autore.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
+      }
 
+      if(this.originalfolder.length>0){
+        this.folder = this.originalfolder.filter(res => {
+          return res.autore.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
+      }
+      
+      if(this.originalAllFileFolder!=null){
+        this.allFileFolder = this.originalAllFileFolder.filter(res => {
+          return res.autore.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+        })
+      }   
+      } else if (this.search == "") {
+        this.fileincartelle = false;
+        this.ngOnInit()
+      }
+    }
   }
 
   uploadFileToActivity() {
