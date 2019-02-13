@@ -34,12 +34,7 @@ public class WebClientTests {
         this.webClient = WebTestClient
             .bindToApplicationContext(this.context)
             .configureClient()
-            .build();
-        
-        browser = "Chrome";
-		String location = File.separator + "drivers" + File.separator + "chromedriver.exe";  
-		System.setProperty("webdriver.chrome.driver", projectPath + location);
-		driver = new ChromeDriver();
+            .build();        
     }
       
 	@Test
@@ -75,6 +70,10 @@ public class WebClientTests {
 	/*Selenium Chrome test - Login*/
 	@Test
     public void seleniumLoginTest() throws Exception {
+		browser = "Chrome";
+		String location = File.separator + "drivers" + File.separator + "chromedriver.exe";  
+		System.setProperty("webdriver.chrome.driver", projectPath + location);
+		driver = new ChromeDriver();
 		driver.get("http://localhost:4200/login");
 		driver.findElement(By.id("loginEmail")).sendKeys("scalaemanuele92@gmail.com");
 		Thread.sleep(1000);
