@@ -13,10 +13,10 @@
         <div class=" dropdown dropdown-toggle grassetto" id="menu" style="height: 18%;margin-left:1%">
             <a class="btn btn-default " role="button" id="dropdownMenuLink" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <h4><b>{{repoInfo?.repositoryName}}</b></h4>
+                <h4>{{repoInfo?.repositoryName}}</h4>
             </a>
 
-            <div class="dropdown-menu " id="menu2" aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-menu " *ngIf="isLogged" id="menu2" aria-labelledby="dropdownMenuLink">
 
                 <div *ngIf="isLogged">
 
@@ -220,7 +220,7 @@
     <br>
 
 
-    <div *ngIf="folderExist==false && filesExist==false">
+    <div *ngIf="folderExist==false && filesExist==false && isLogged">
         <div class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
             <strong>
                <h4> Your repository is empty. <br>
@@ -228,6 +228,13 @@
                 <b>"{{repoInfo?.repositoryName}}"</b> button.</h4>
             </strong>
         </div>
+    </div>
+
+    <div *ngIf="folderExist==false && filesExist==false && !isLogged" class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
+        <strong>
+           <h4>This repository is empty. <br>
+            You can login or register to do amazing things together :)!</h4>
+        </strong>
     </div>
 
 

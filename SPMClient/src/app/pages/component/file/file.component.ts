@@ -410,6 +410,15 @@ error => {
     }
   }
 
+  exportModel() {
+          window.open("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers)
+      /*  this.downloadFile() */
+    this.toastr.success('File downloaded with success', 'Download File')
+
+  }
+
+
+
   //premdo i dati specifici di quel file che ho selezionato in precedenza
 
 

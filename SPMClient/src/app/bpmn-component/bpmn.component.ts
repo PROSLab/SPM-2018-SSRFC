@@ -7,32 +7,7 @@ import { Service } from '../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
-/* const customModdle = {
-  name: "customModdle",
-  uri: "http://example.com/custom-moddle",
-  prefix: "custom",
-  xml: {
-    tagAlias: "lowerCase"
-  },
-  associations: [],
-  types: [
-    {
-      "name": "ExtUserTask",
-      "extends": [
-        "bpmn:UserTask"
-      ],
-      "properties": [
-        {
-          "name": "worklist",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-  ]
-}; */
 
 @Component({
   selector: 'app-root',
@@ -207,11 +182,12 @@ export class BpmnComponent implements OnInit {
   }
 
   sendTofile(fileSelected) {
+    console.log('repositoryID', this.idRepoSelected, 'folderID', this.folderSelected, 'fileID', this.idFile)
     if (this.folderSelected == undefined) {
-      this.router.navigate(['repositoryID', this.idRepoSelected, 'fileID', fileSelected]);
+      this.router.navigate(['repositoryID', this.idRepoSelected, 'fileID', this.idFile]);
     }
     else {
-      this.router.navigate(['repositoryID', this.idRepoSelected, 'folderID', this.folderSelected, 'fileID', fileSelected]);
+      this.router.navigate(['repositoryID', this.idRepoSelected, 'folderID', this.folderSelected, 'fileID', this.idFile]);
     }
   }
 
@@ -365,12 +341,14 @@ if(this.folderSelected==undefined){
   }
 
   addValidity(idfile) {
+    if(this.isLogged==true){
     this.service.addValidity(idfile, this.soundness, this.safeness,this.validity).subscribe(
       data => { console.log("validity:",data) },
       error => { 
         console.log(error) 
       }
-    )
+      )
+    }
   };
 
   setImage(soundness,safeness){
@@ -410,5 +388,10 @@ if(this.folderSelected==undefined){
     }
         
   }
+
+
+
+
+  
 
 }
