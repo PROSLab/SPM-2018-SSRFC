@@ -81,10 +81,10 @@ public class WebClientTests {
 			location = File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
 		} else if (os.indexOf("mac") >= 0) {
 			System.out.println("This is Mac");
-			location = File.separator + "drivers" + File.separator + "macos" + File.separator + "chromedriver.exe";  
+			location = File.separator + "drivers" + File.separator + "macos" + File.separator + "chromedriver";  
 		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 ) {
 			System.out.println("This is Unix or Linux");
-			location = File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver.exe";  
+			location = File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver";  
 		} else {
 			System.out.println("Your OS is not support!!");
 		}
