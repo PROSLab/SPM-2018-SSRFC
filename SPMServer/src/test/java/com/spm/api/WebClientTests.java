@@ -73,7 +73,10 @@ public class WebClientTests {
 	@Test
     public void seleniumLoginTest() throws Exception {
 		browser = "Chrome";
-		String location = File.separator + "drivers" + File.separator + "chromedriver.exe";  
+		String os = System.getProperty("os.name").toLowerCase();
+		System.out.println(os);
+		
+		String location = File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
 		System.setProperty("webdriver.chrome.driver", projectPath + location);
 		driver = new ChromeDriver();
 		driver.get("http://localhost:4200/login");
