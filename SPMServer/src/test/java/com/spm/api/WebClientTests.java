@@ -37,6 +37,11 @@ public class WebClientTests {
             .bindToApplicationContext(this.context)
             .configureClient()
             .build();        
+        
+        String os = System.getProperty("os.name").toLowerCase();
+        System.out.println("---------------------------Current Operative System:");
+		System.out.println(os);
+		System.out.println("----------------------------------------------------");
     }
       
 	@Test
@@ -73,9 +78,6 @@ public class WebClientTests {
 	@Test
     public void seleniumLoginTest() throws Exception {
 		browser = "Chrome";
-		String os = System.getProperty("os.name").toLowerCase();
-		System.out.println(os);
-		
 		String location = File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
 		System.setProperty("webdriver.chrome.driver", projectPath + location);
 		driver = new ChromeDriver();
