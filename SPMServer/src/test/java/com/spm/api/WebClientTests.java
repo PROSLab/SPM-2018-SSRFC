@@ -1,5 +1,7 @@
 package com.spm.api;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 
 import org.junit.Before;
@@ -79,7 +81,8 @@ public class WebClientTests {
 		Thread.sleep(1000);
 		driver.findElement(By.id("loginPassword")).sendKeys("fabiobello92");
 		driver.findElement(By.id("loginButton")).click();
-		Thread.sleep(2000);
+		Thread.sleep(5000);
+		assertTrue(driver.findElement(By.id("welcomeCard")).isDisplayed());
 	}
 	
 	
