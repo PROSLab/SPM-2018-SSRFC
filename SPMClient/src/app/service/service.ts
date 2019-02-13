@@ -454,11 +454,12 @@ shareFile(repoName,idUser,idFile,email){
       );
   }
 
-  addValidity(idFile,soundness,safeness): Observable<any> {
+  addValidity(idFile,soundness,safeness,validity): Observable<any> {
     let params = new HttpParams();
     params = params.append('idFile', idFile); //id del file
     params = params.append('soundness', soundness); //numero del soundness
     params = params.append('safeness', safeness); //safeness
+    params = params.append('validity', validity); //validity if true is ok, false is not okay
     return this.http.get(this.baseUrl + 'api/file/addValidity', { params: params  , responseType: 'text'})
       .pipe(
         tap(success => this.user = success), //mi salvo tutti i dati di ritorno dal server

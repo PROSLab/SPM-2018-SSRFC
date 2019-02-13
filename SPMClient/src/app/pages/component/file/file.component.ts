@@ -328,7 +328,7 @@ error => {
 
           // mi salvo il valore dell'ultima versione corrente per stamparla poi  nel dropdown
           this.vers=this.finalVersion[length-1]
-          console.log(this.vers)
+          console.log(this.finalVersion)
           if (this.finalVersion.length > 0) {
             this.versionExist = true;
           }

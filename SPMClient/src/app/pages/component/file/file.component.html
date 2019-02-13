@@ -81,13 +81,14 @@
     <hr>
     <br>
 
+    
     <div class="row " *ngIf="fileExist">
         <div class="card col-11" *ngIf="versionExist">
             <div class="card-body">
 
                 <div class="row" style="height:20%;">
                     <h5>Version n. </h5>
-                    <select [(ngModel)]="vers" (change)="selected()" style="margin-left:1%;height:20%;">
+                    <select [(ngModel)]="vers" (change)="selected()" style="margin-left:1%">
                         <option [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
                     </select>
 

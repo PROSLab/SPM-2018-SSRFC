@@ -7,6 +7,7 @@ import { Service } from '../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 /* const customModdle = {
   name: "customModdle",
@@ -245,7 +246,7 @@ export class BpmnComponent implements OnInit {
     document.getElementById("validation").setAttribute("data-target","#validityModal")
        document.getElementById("validityModal").setAttribute("class", "modal fade show")
       document.getElementById("validityModal").setAttribute("style", "padding-right:16px;display:block")
-
+          this.validity=true
           this.errorProblem=false
           this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
@@ -273,6 +274,7 @@ export class BpmnComponent implements OnInit {
           this.toastr.error('Invalid bpmn file', 'Errore editor')
           this.safeness=null
           this.soundness=null
+          this.validity=false
           if( this.idFile!= undefined){
             this.addValidity( this.idFile)
            }   
@@ -307,19 +309,29 @@ export class BpmnComponent implements OnInit {
 
         async (data: string) => {
           this.errorProblem=false
-          this.soundness = data.substr(0, 1).trim()
+         /*  this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
           this.safeness = data.substr(pSafeness, 1).trim()
-          var subData = data.substr(pSafeness + 1)
-
-          console.log('soundness:', this.soundness, 'safeness:', this.safeness) 
-          
+          var subData = data.substr(pSafeness + 1) */
+          this.safeness=null
+          this.soundness=null
+          this.validity=true
+          if( this.idFile!= undefined){
+            this.addValidity( this.idFile)
+           }  
           this.toastr.success('This model is valid','Validity of Model')
       
         },
 
         error => {
-        
+          this.safeness=null
+          this.soundness=null
+          this.validity=false
+
+          if( this.idFile!= undefined){
+            this.addValidity( this.idFile)
+           }   
+
         this.toastr.error('This model is invalid','Validity Model')
           console.log(error);
         }
@@ -350,16 +362,13 @@ if(this.folderSelected==undefined){
 }
 
       }, error => {
-       
-        this.soundness=null
-        this.safeness=null
         console.log(error);
       });
 
   }
 
   addValidity(idfile) {
-    this.service.addValidity(idfile, this.soundness, this.safeness).subscribe(
+    this.service.addValidity(idfile, this.soundness, this.safeness,this.validity).subscribe(
       data => { console.log("validity:",data) },
       error => { 
         console.log(error) 
