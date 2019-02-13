@@ -148,8 +148,9 @@ export class BpmnComponent implements OnInit {
     );
 
     this.service.SaveModificatedFile(this.idUser, this.idRepoSelected, this.idFile, this.version, this.filetoUpload, this.folderSelected)
-      .subscribe(data => {
-       
+      .subscribe(async data => {
+        await this.callToSecondServer(this.idFile,this.bodyFile)
+
       }, error => {
         this.error = error
       });
@@ -267,12 +268,12 @@ export class BpmnComponent implements OnInit {
         });
     }
 
-  callToSecondServer(idfile) {
+  callToSecondServer(idfile,newXml) {
 
     var headers: { "Content-Type": "application/xml" }
     const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
 
-    this.http.post(url2, this.bodyFile,
+    this.http.post(url2, newXml,
       { headers: headers, responseType: "text" })
       .subscribe(
 
@@ -286,12 +287,12 @@ export class BpmnComponent implements OnInit {
           this.TerzoValore = subData.substr(p3Valore).trim()
 
           console.log('soundness:', this.soundness, 'safeness:', this.safeness)
-          await this.setImage(this.soundness,this.safeness);
+          this.toastr.success('Questo modello è valido','Validity of Model')
         this.addValidity(idfile);
         },
 
         error => {
-        
+        this.toastr.error('Questo model è invalido','Validity Model')
           console.log(error);
         }
       );
@@ -311,7 +312,7 @@ export class BpmnComponent implements OnInit {
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
       .subscribe(data => {
         this.idFileCreato = data.id
-        this.addValidity(this.idFileCreato)
+        this.callToSecondServer(this.idFileCreato, this.bodyFile)
         //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio
         this.toastr.success('File creato Correttamente', 'Creazione file')
 if(this.folderSelected==undefined){
