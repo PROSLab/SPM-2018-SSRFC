@@ -259,12 +259,12 @@ error => {
     this.getAllFolders()
    
 
-    this.modeler = new Modeler({
+   /*  this.modeler = new Modeler({
       container: '#canvas',
       width: '100%',
       height: '300px',
     
-    });
+    }); */
 
 
   
