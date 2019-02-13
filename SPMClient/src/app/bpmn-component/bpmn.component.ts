@@ -61,6 +61,8 @@ export class BpmnComponent implements OnInit {
   validity: boolean=false;
   appVal: boolean =false;
   title: string;
+  messageSoundness: any;
+  messageSafeness: string;
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -102,9 +104,6 @@ export class BpmnComponent implements OnInit {
       propertiesPanel: {
         parent: '#properties'
       },
-     /*  moddleExtension: {
-        custom: customModdle
-      } */
     });
   }
 
@@ -224,11 +223,11 @@ export class BpmnComponent implements OnInit {
       window.open("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version)
       /*  this.downloadFile() */
     }
-    this.toastr.success('File scaricato Correttamente', 'Download File')
+    this.toastr.success('File downloaded with success', 'Download File')
 
   }
 
-  CheckValidity() {
+  CheckSoundnessAndSafeness() {
     this.modeler.saveXML(
       (err: any, xml: any) => {
         var f = new File([xml], 'diagram');
@@ -254,13 +253,17 @@ export class BpmnComponent implements OnInit {
           var subData = data.substr(pSafeness + 1)
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
-          this.toastr.success('Validity and Soundness Verificata', 'Verifica Validity')
+          this.toastr.success('Validity and Soundness verificated', 'Verifica Validity')
 
           console.log('soundness:', this.soundness, 'safeness:', this.safeness)
            this.setImage(this.soundness,this.safeness)
-           
+
+           if( this.idFile!= undefined){
+            this.addValidity( this.idFile)
+           }
           },
-        error => {
+        error => {         
+
           this.errorProblem=true
           document.getElementById("imageSoundness").setAttribute("src","")
         document.getElementById("imageSafeness").setAttribute("src", "")
@@ -268,6 +271,11 @@ export class BpmnComponent implements OnInit {
         document.getElementById("imageSafeness").setAttribute("alt", "")
           this.handleError
           this.toastr.error('Invalid bpmn file', 'Errore editor')
+          this.safeness=null
+          this.soundness=null
+          if( this.idFile!= undefined){
+            this.addValidity( this.idFile)
+           }   
           console.log(error);
         });
     }
@@ -279,7 +287,16 @@ export class BpmnComponent implements OnInit {
      document.getElementById("validityModal").setAttribute("style", "display:none")
     }
 
-    callToSecondServer(idfile,newXml) {
+
+
+    callToSecondServer(idfile?,newXml?) {
+
+      this.modeler.saveXML(
+        (err: any, xml: any) => {
+          var f = new File([xml], 'diagram');
+          newXml = xml
+          console.log(this.bodyFile)
+        });
 
     var headers: { "Content-Type": "application/xml" }
     const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
@@ -294,16 +311,16 @@ export class BpmnComponent implements OnInit {
           var pSafeness = data.indexOf('&&') + 4
           this.safeness = data.substr(pSafeness, 1).trim()
           var subData = data.substr(pSafeness + 1)
-          var p3Valore = subData.indexOf('&&') + 3
-          this.TerzoValore = subData.substr(p3Valore).trim()
 
-          console.log('soundness:', this.soundness, 'safeness:', this.safeness)
-          this.toastr.success('Questo modello è valido','Validity of Model')
-        this.addValidity(idfile);
+          console.log('soundness:', this.soundness, 'safeness:', this.safeness) 
+          
+          this.toastr.success('This model is valid','Validity of Model')
+      
         },
 
         error => {
-        this.toastr.error('Questo model è invalido','Validity Model')
+        
+        this.toastr.error('This model is invalid','Validity Model')
           console.log(error);
         }
       );
@@ -323,9 +340,8 @@ export class BpmnComponent implements OnInit {
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
       .subscribe(data => {
         this.idFileCreato = data.id
-        this.callToSecondServer(this.idFileCreato, this.bodyFile)
         //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio
-        this.toastr.success('File creato Correttamente', 'Creazione file')
+        this.toastr.success('File created', 'Creazione file')
 if(this.folderSelected==undefined){
   this.router.navigate(['repositoryID',this.idRepoSelected])
 
@@ -335,7 +351,8 @@ if(this.folderSelected==undefined){
 
       }, error => {
        
-		
+        this.soundness=null
+        this.safeness=null
         console.log(error);
       });
 
@@ -355,29 +372,35 @@ if(this.folderSelected==undefined){
     if(parseInt(soundness)==0) { //0 Unsound for dead token
         document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
         document.getElementById("imageSoundness").setAttribute("alt", "Unsound for dead token")
-    }
+        this.messageSoundness = " Unsound for dead token "
+      }
     if(parseInt(soundness)==1){  // 1 Unsound for proper completion violation
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
       document.getElementById("imageSoundness").setAttribute("alt", "Unsound for proper completion violation")
+      this.messageSoundness = " Unsound for proper completion violation "
     }
     if(parseInt(soundness)==2){ //2 Message disregarding sound
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
       document.getElementById("imageSoundness").setAttribute("alt", "Message disregarding sound")
+      this.messageSoundness = " Message disregarding sound "
     }
 
     if(parseInt(soundness)==3){ //3 Sound
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
        document.getElementById("imageSoundness").setAttribute("alt", "Sound")
-    }
+       this.messageSoundness = " Sound "
+      }
 
 //PARAMETRI PER IL SAFENESS
     if(parseInt(safeness)==4){ //4 Safe
       document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
       document.getElementById("imageSafeness").setAttribute("alt", "Safe")
+      this.messageSafeness = " Safe "
     }
     if(parseInt(safeness)==5){ // 5 Unsafe
       document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
       document.getElementById("imageSafeness").setAttribute("alt", "Unsafe")
+      this.messageSafeness = " Unsafe "
     }
         
   }
