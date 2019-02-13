@@ -35,16 +35,24 @@ public class WebClientTests {
 			.isEqualTo("HELLO WORLD");
 	}
 	
-	/*
 	@Test
-    public void helloWorldFailTest() throws Exception {
+	public void mockApi_addUser() throws Exception {
 		webClient
-			.get().uri("/api/user/")
-			.exchange()
-			.expectStatus().isOk()
-			.expectBody(String.class)
-			.isEqualTo("HELLO WAR");
+		.get().uri("/mockapi/addUser?name={name}&surname={surname}", "Jack", "Smith")
+		.exchange()
+        .expectStatus().isOk()
+        .expectBody(String.class)
+        .isEqualTo("User Successfully Added!");
 	}
-	*/
+	
+	@Test
+	public void mockApi_getUserSurname() throws Exception {
+		webClient
+		.get().uri("/mockapi/getUserSurname?name={name}", "Peter")
+		.exchange()
+        .expectStatus().isOk()
+        .expectBody(String.class)
+        .isEqualTo("Johnson");
+	}
 	
 }

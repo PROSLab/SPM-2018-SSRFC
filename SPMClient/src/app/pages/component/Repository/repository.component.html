@@ -72,8 +72,8 @@
                 <div class="modal-body">
 
                    
-                        <label for="reponame"><b>Repository name</b> </label><br>
-                        <input type="text" class="form-control"  [(ngModel)]="reset"
+                        <label for="reponame" style="color:black">Repository name </label><br>
+                        <input type="text" class="form-control" placeholder="Insert here the new name..." [(ngModel)]="reset"
                         maxlength="13" required id="nameFile" formControlName="reponame" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
                         #n name="nameFile" />                   
                     <br>
@@ -83,8 +83,7 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Save
-                        Repository </button>
+                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Save</button>
                     <button type="button" class="btn btn-danger" #closeModalModifyRepo data-dismiss="modal">Close</button>
                 </div>
                 </form>
@@ -121,8 +120,8 @@
                 <form [formGroup]="createFolderForm" (ngSubmit)="saveFolder(nameFolder.value)">
                 <div class="modal-body">
 
-                        <label for="reponame"><b>Folder name</b> </label><br>
-                        <input type="text" maxlength="13" class="form-control" formControlName="foldername" [ngClass]="{ 'is-invalid': submitted && g.foldername.errors }" required  [(ngModel)]="reset" #nameFolder  />
+                        <label for="reponame" style="color:black">Folder name </label><br>
+                        <input type="text" placeholder="Insert name here..." maxlength="13" class="form-control" formControlName="foldername" [ngClass]="{ 'is-invalid': submitted && g.foldername.errors }" required  [(ngModel)]="reset" #nameFolder  />
                     
                     <br>
                     <div *ngIf="submitted && g.foldername.errors" class="invalid-feedback">
@@ -133,8 +132,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Save
-                        Folder </button>
+                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Save </button>
                     <button type="button" class="btn btn-danger" #closeModalCreateFolder data-dismiss="modal">Close</button>
                 </div>
 </form>
@@ -200,24 +198,19 @@
 
                     
                         <label for="reponame"><b>Email:</b> </label><br>
-                        <input type="email" class="form-control" required id="namerepo" [(ngModel)]="reset" formControlName="shareRepo" [ngClass]="{ 'is-invalid': submitted && h.shareRepo.errors }" #emailShare name="namerepo" />
+                        <input type="email" class="form-control" required id="namerepo" placeholder="Insert email here..." [(ngModel)]="reset" formControlName="shareRepo" [ngClass]="{ 'is-invalid': submitted && h.shareRepo.errors }" #emailShare name="namerepo" />
                     
 
                     <br>
                     <div *ngIf="submitted && h.shareRepo.errors" class="invalid-feedback">
                         <div *ngIf="h.shareRepo.errors.email">Email errata, inserire email validata</div>
-                        <div *ngIf="h.shareRepo.errors.required">Email richiesta</div>
+                        <div *ngIf="h.shareRepo.errors.required">Email is required</div>
                     </div>
-
-                    <!--  <div *ngIf="ok" class="alert alert-success alert-dismissible" id="myAlert">
-                        <strong>{{message}}</strong> 
-                    </div> -->
                 </div>
 
                 <div class="modal-footer">
-                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Share
-                        Repo </button>
-                    <button type="button" class="btn btn-danger" #closeModalShareRepo data-dismiss="modal">Close</button>
+                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Share</button>
+                    <button type="button" class="btn btn-danger" #closeModalShareRepo data-dismiss="modal">Close </button>
                 </div>
                 </form>
             </div>
