@@ -1,5 +1,6 @@
 # SPM-2018-SSRFC 
-<i>University of Camerino, School of Science and Technology - Master Degree - Computer Science (LM-18) - Project repository for the Software Project Management course - a.y. 2018/2019</i>
+<i>University of Camerino, School of Science and Technology - Master Degree - Computer Science (LM-18) - Project repository for the Software Project Management course - a.y. 2018/2019</i><br><br><br>
+![](https://github.com/PROSLab/SPM-2018-SSRFC/blob/master/SPMClient/src/assets/images/logo-icon.png)
 # VuGit: your online repository for .bpmn models
 
 
