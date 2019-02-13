@@ -230,6 +230,7 @@ this.submitted=false;
 
   Search() {
     this.fileincartelle = true;
+    console.log(this.files)
     if (this.selezione == "name") {
       if (this.search != "") {
 
@@ -269,6 +270,8 @@ this.submitted=false;
 
       }
     }
+
+
   }
 
   uploadFileToActivity() {
