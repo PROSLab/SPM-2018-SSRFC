@@ -554,11 +554,12 @@ public Mono<Boolean> deleteFileSistem( String idUser,String idRepository,String 
 		
 }
 
-public Mono<FileEntity> updateValidity(String idFile, String soundness,String safeness) {
+public Mono<FileEntity> updateValidity(String idFile, String soundness,String safeness,Boolean validity) {
 	return fileRepository.findById(idFile)
 			.flatMap(r -> {
 				r.setSoundness(soundness);
 				r.setSafeness(safeness);
+				r.setValidity(validity);
 				return fileRepository.save(r);
 			})
 			.switchIfEmpty(Mono.defer(() -> Mono.error(new Exception("f not found"))));

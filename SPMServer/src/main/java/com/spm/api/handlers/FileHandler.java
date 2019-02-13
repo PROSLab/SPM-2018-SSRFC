@@ -81,6 +81,7 @@ public class FileHandler {
             				new Vector<Integer>(),
             				autore.value(),
             				null,
+            				null,
             				null
 
             				
@@ -228,6 +229,7 @@ public class FileHandler {
 				1,
 				new Vector<Integer>(),
 				autore,
+				null,
 				null,
 				null
 		);
@@ -490,8 +492,8 @@ public class FileHandler {
 		String idFile = request.queryParam("idFile").get();
 		String soundness = request.queryParam("soundness").get();;
 		String safeness = request.queryParam("safeness").get();
-		
-		return fileService.updateValidity(idFile, soundness,safeness)
+		Boolean validity = request.queryParam("validity").get().equals("true") ? true : false;
+		return fileService.updateValidity(idFile, soundness,safeness,validity)
 				.flatMap(repo -> Responses.ok(repo))
 				.onErrorResume(Exception.class, Responses::badRequest);
 	}

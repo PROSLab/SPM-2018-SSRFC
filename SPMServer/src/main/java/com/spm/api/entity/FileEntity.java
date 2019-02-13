@@ -30,9 +30,10 @@ public class FileEntity {
 	String autore;
 	String soundness;
 	String safeness;
+	Boolean validity;
 	
 	public FileEntity(ObjectId idUser, ObjectId idRepository, ObjectId idFolder, Date createdAt, String fileName, String originalName,
-			String mimetype, String path, int cVersion, Vector<Integer> deletedVersions,String autore,String soundness,String safeness) {
+			String mimetype, String path, int cVersion, Vector<Integer> deletedVersions,String autore,String soundness,String safeness,Boolean validity) {
 		this.idUser = idUser;
 		this.idRepository = idRepository;
 		this.idFolder = idFolder;
@@ -46,6 +47,17 @@ public class FileEntity {
 		this.autore=autore;
 		this.soundness=soundness;
 		this.safeness=safeness;
+		this.validity=validity;
+	}
+
+
+	public Boolean getValidity() {
+		return validity;
+	}
+
+
+	public void setValidity(Boolean validity) {
+		this.validity = validity;
 	}
 
 

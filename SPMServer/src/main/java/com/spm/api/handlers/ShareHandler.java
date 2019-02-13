@@ -87,7 +87,8 @@ public class ShareHandler {
 							f.getDeletedVersions(),
 							f.getAutore(),
 							f.getSoundness(),
-							f.getSafeness()
+							f.getSafeness(),
+							f.getValidity()
 					);
 					
 					return shareService.createFileSchema(file);
