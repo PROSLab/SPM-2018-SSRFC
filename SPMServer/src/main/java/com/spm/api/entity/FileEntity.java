@@ -31,9 +31,10 @@ public class FileEntity {
 	String soundness;
 	String safeness;
 	Boolean validity;
-	
+	Boolean collaboration;
+
 	public FileEntity(ObjectId idUser, ObjectId idRepository, ObjectId idFolder, Date createdAt, String fileName, String originalName,
-			String mimetype, String path, int cVersion, Vector<Integer> deletedVersions,String autore,String soundness,String safeness,Boolean validity) {
+			String mimetype, String path, int cVersion, Vector<Integer> deletedVersions,String autore,String soundness,String safeness,Boolean validity,Boolean collaboration) {
 		this.idUser = idUser;
 		this.idRepository = idRepository;
 		this.idFolder = idFolder;
@@ -48,6 +49,17 @@ public class FileEntity {
 		this.soundness=soundness;
 		this.safeness=safeness;
 		this.validity=validity;
+		this.collaboration=collaboration;
+	}
+
+
+	public Boolean getCollaboration() {
+		return collaboration;
+	}
+
+
+	public void setCollaboration(Boolean collaboration) {
+		this.collaboration = collaboration;
 	}
 
 
