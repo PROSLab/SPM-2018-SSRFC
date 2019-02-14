@@ -58,12 +58,8 @@ export class Service {
   }
 
   sendEmail(email: string): Observable<String> {
-
-    const formData: FormData = new FormData();
-
-    formData.append('email', email); 
-    
-    return this.http.post<any>(this.baseUrl + 'api/user/pswRecovery', formData)
+    return this.http.post<any>(this.baseUrl + 'api/user/pswRecovery', 
+    {"email": email})
       .pipe(
         catchError(this.handleError)
       );

@@ -12,9 +12,8 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { Service } from './service/service'; 
 import {ToastrModule} from 'ngx-toastr'
 import { LoginGuard } from './pages/starter/login.guard';
-import { ChoreographyModelComponent } from './choreography-model/choreography-model.component';
 @NgModule({
-  declarations: [AppComponent,SpinnerComponent, ChoreographyModelComponent ],
+  declarations: [AppComponent,SpinnerComponent ],
   imports: [
 
     ToastrModule.forRoot({
