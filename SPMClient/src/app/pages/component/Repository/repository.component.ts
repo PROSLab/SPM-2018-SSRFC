@@ -371,11 +371,13 @@ this.submitted=false;
 
         if (data.length == 0) { this.folderExist = false }
         else { this.folderExist = true
+          if(this.isLogged==true){
           document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
           document.getElementById("menu").setAttribute("aria-expanded", "false")
           document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
          }
 
+        }
         this.allFileFolder.length = 0;
         for (var i = 0; i < data.length; i++) {
 
@@ -419,10 +421,12 @@ this.submitted=false;
         }
         else { 
           this.filesExist = true
+          if(this.isLogged==true){
           document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
               document.getElementById("menu").setAttribute("aria-expanded", "false")
               document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
          }
+        }
          console.log(this.filesExist,this.folderExist)
 
          if(this.folderExist==false && this.filesExist==false){
@@ -448,7 +452,6 @@ this.submitted=false;
         });
   }
 
-
   refreshTable() {
     this.search = ""
     this.fileincartelle=false;
@@ -458,7 +461,6 @@ this.submitted=false;
 
   sendToRepo() {
     this.router.navigate(['']);
-
   }
 
   sendTofolder(folderSelected) {

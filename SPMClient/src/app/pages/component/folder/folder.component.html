@@ -19,10 +19,8 @@
                     <h4>{{folderInfo?.folderName}}</h4>
                   </a>
   
-                  <div class="dropdown-menu "  id="menu2"  aria-labelledby="dropdownMenuLink">
-  
-                      <div *ngIf="isLogged">
-                        
+                  <div class="dropdown-menu "  *ngIf="isLogged" id="menu2"  aria-labelledby="dropdownMenuLink">
+                      <div>
                           <div (click)="modifyName()"data-toggle="modal" data-target="#myModalFolder">
                               <a class="dropdown-item bianco menus">Modify Name Folder </a>
                           </div>
@@ -202,7 +200,7 @@
             </tbody>
         </table>
     </div>
-    <div *ngIf="!exist">
+    <div *ngIf="!exist && isLogged">
             <div class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
                     <strong>
                        <h4> Your folder is empty. <br>
@@ -210,6 +208,13 @@
                         <b>"{{folderInfo?.folderName}}"</b> button.</h4>
                     </strong>
                 </div>
+</div>
+
+<div *ngIf="!isLogged&&!exist" class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
+    <strong>
+       <h4>This Folder is empty. <br>
+        You can login or register to do amazing things together :)!</h4>
+    </strong>
 </div>
 
 <br>

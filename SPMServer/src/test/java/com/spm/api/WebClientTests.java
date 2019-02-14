@@ -1,5 +1,7 @@
 package com.spm.api;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 
 import org.junit.Before;
@@ -71,7 +73,23 @@ public class WebClientTests {
 	@Test
     public void seleniumLoginTest() throws Exception {
 		browser = "Chrome";
-		String location = File.separator + "drivers" + File.separator + "chromedriver.exe";  
+		String os = System.getProperty("os.name").toLowerCase();
+		String location = null;
+				
+		if (os.indexOf("win") >= 0) {
+			System.out.println("This is Windows");
+			location = File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
+		} else if (os.indexOf("mac") >= 0) {
+			System.out.println("This is Mac");
+			location = File.separator + "drivers" + File.separator + "macos" + File.separator + "chromedriver";  
+		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 ) {
+			System.out.println("This is Unix or Linux");
+			location = File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver";  
+		} else {
+			System.out.println("Your OS is not support!!");
+		}
+		
+		
 		System.setProperty("webdriver.chrome.driver", projectPath + location);
 		driver = new ChromeDriver();
 		driver.get("http://localhost:4200/login");
@@ -79,7 +97,8 @@ public class WebClientTests {
 		Thread.sleep(1000);
 		driver.findElement(By.id("loginPassword")).sendKeys("fabiobello92");
 		driver.findElement(By.id("loginButton")).click();
-		Thread.sleep(2000);
+		Thread.sleep(5000);
+		assertTrue(driver.findElement(By.id("welcomeCard")).isDisplayed());
 	}
 	
 	

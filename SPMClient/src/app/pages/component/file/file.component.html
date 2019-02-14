@@ -36,13 +36,13 @@
 
             <div class="dropdown-menu " aria-labelledby="dropdownMenuLink">
 
-                <div *ngIf="isLogged">
+                <div >
 
-                    <div data-toggle="modal" (click)="modifyFile()" data-target="#myModalModifyFile">
+                    <div data-toggle="modal" *ngIf="isLogged" (click)="modifyFile()" data-target="#myModalModifyFile">
                         <a class="dropdown-item bianco menus">Modify File Name</a>
                     </div>
 
-                    <div data-toggle="modal" data-target="#myModalModifyPath">
+                    <div data-toggle="modal" *ngIf="isLogged" data-target="#myModalModifyPath">
                         <a class="dropdown-item bianco menus">Modify Path</a>
                     </div>
 
@@ -51,15 +51,15 @@
                             + Create new Version</a>
                     </div> -->
 
-                    <div data-toggle="modal" data-target="#myModalShareFile" (click)="modifyFile()">
+                    <div data-toggle="modal"  *ngIf="isLogged" data-target="#myModalShareFile" (click)="modifyFile()">
                         <a class="dropdown-item bianco menus">Share File</a>
                     </div>
 
-                    <div *ngIf="versionExist" (click)="downloadAllVersion()">
+                    <div  (click)="downloadAllVersion()">
                         <a class="dropdown-item bianco menus">Download ZIP Models</a>
                     </div>
 
-                    <div *ngIf="isLogged" data-toggle="modal" data-target="#myModalDeleteFileTotal">
+                    <div *ngIf="isLogged " data-toggle="modal" data-target="#myModalDeleteFileTotal">
                         <a class="dropdown-item bianco menus">Delete File</a>
                     </div>
                     <div>
@@ -94,10 +94,11 @@
 
                     <div style="margin-left:38%;margin-top:-1%" class="col-6">
                         <div>
-                            <button class="btn btn-warning" (click)="newVersion()"><i class="icon-plus"></i> Create
+                            <button *ngIf="isLogged" class="btn btn-warning" (click)="newVersion()"><i class="icon-plus"></i> Create
                                 Version</button>
-                            <button id="buttonDelete" class="btn btn-danger" data-toggle="modal" data-target="" style="margin-left:1%"
+                            <button  *ngIf="isLogged" id="buttonDelete" class="btn btn-danger" data-toggle="modal" data-target="" style="margin-left:1%"
                                 (click)="deleteVersion(vers)"><i class="icon-trash"></i> Delete Version {{vers}}</button>
+                                <button (click)="exportModel()" style="margin-left:1%" data-dismiss="modal" class="btn btn-success"><i class="fa">&#xf019;</i> Download version {{vers}}  </button>
                         </div>
                     </div>
                 </div>
