@@ -89,7 +89,7 @@ public class ShareHandler {
 							f.getSoundness(),
 							f.getSafeness(),
 							f.getValidity(),
-							f.getCollaboration()
+							f.getFileType()
 					);
 					
 					return shareService.createFileSchema(file);
