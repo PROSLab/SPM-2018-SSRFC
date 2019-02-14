@@ -54,7 +54,7 @@ public class FileHandler {
                     FormFieldPart idRepository = (FormFieldPart)map.get("idRepository");
                     FormFieldPart autore = (FormFieldPart)map.get("autore");
 
-                    FormFieldPart collaboration = (FormFieldPart)map.get("collaboration");
+                    FormFieldPart fileType = (FormFieldPart)map.get("fileType");
                     FilePart filePart = (FilePart) map.get("files");
 
                     String idFolder = null;
@@ -84,7 +84,7 @@ public class FileHandler {
             				null,
             				null,
             				null,
-            				collaboration.equals("true") ? true : false
+            				fileType.value()
  
             				
             		);
@@ -217,7 +217,7 @@ public class FileHandler {
 		String originalName = request.queryParam("originalName").get();
 		String mimetype = "bpmn";
 		String autore = request.queryParam("autore").get();
-		Boolean collaboration = request.queryParam("collaboration").get().equals("true") ? true : false;
+		String fileType = request.queryParam("fileType").get();
 
 		
 		FileEntity file = new FileEntity (
@@ -235,7 +235,7 @@ public class FileHandler {
 				null,
 				null,
 				null,
-				collaboration
+				fileType
 		);
 		
 		return fileService.createFileSchema(file)
