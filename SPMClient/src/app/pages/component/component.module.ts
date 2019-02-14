@@ -11,6 +11,7 @@ import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { FolderComponent } from './folder/folder.component';
 import { BpmnComponent } from '../../bpmn-component/bpmn.component';
 import {DiagramComponent} from './diagram/diagram';
+import { ChoreographyModelComponent } from '../../choreography-model/choreography-model.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -25,7 +26,8 @@ import {DiagramComponent} from './diagram/diagram';
     FolderComponent,
     FileComponent,
     RepoPublicComponent,
-    BpmnComponent
+    BpmnComponent,
+    ChoreographyModelComponent
   ]
 })
 

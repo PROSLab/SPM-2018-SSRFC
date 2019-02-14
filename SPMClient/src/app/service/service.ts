@@ -58,9 +58,8 @@ export class Service {
   }
 
   sendEmail(email: string): Observable<String> {
-    let body = { email: email }
-
-    return this.http.post<String>(this.baseUrl + 'api/user/pswRecovery', body, httpOptions)
+    return this.http.post<any>(this.baseUrl + 'api/user/pswRecovery', 
+    {"email": email})
       .pipe(
         catchError(this.handleError)
       );

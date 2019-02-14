@@ -5,6 +5,7 @@ import { RepositoryComponent } from './Repository/repository.component';
 import { FolderComponent } from './folder/folder.component';
 import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { BpmnComponent } from '../../bpmn-component/bpmn.component';
+import { ChoreographyModelComponent } from '../../choreography-model/choreography-model.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -25,7 +26,7 @@ export const ComponentsRoutes: Routes = [
         path: 'repositoryID/:idRepo/folderID/:idFolder/fileID/:idFile',
         component: FileComponent
       },
-      {
+      {    
         path: 'repositoryID/:idRepo/editorBPMN',
         component: BpmnComponent
       }, 
@@ -40,6 +41,10 @@ export const ComponentsRoutes: Routes = [
         path: 'repositoryID/:idRepo/fileID/:idFile/editorBPMN/:version',
         component:BpmnComponent
       },
+      {
+        path: 'prova',
+        component: ChoreographyModelComponent
+      }, 
       {
         path: 'repo-public',
         component: RepoPublicComponent,
