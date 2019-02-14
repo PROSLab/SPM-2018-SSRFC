@@ -27,24 +27,38 @@ export const ComponentsRoutes: Routes = [
         component: FileComponent
       },
       {    
-        path: 'repositoryID/:idRepo/editorBPMN',
+        path: 'repositoryID/:idRepo/editorBPMNCollaboration',
         component: BpmnComponent
       }, 
+      {    
+        path: 'repositoryID/:idRepo/editorBPMNChoreography',
+        component: ChoreographyModelComponent
+      },
       {
-        path: 'repositoryID/:idRepo/folderID/:idFolder/editorBPMN',
+        path: 'repositoryID/:idRepo/folderID/:idFolder/editorBPMNCollaboration',
         component: BpmnComponent
+      },
+      {
+        path: 'repositoryID/:idRepo/folderID/:idFolder/editorBPMNChoreography',
+        component: ChoreographyModelComponent
       }, 
       {
-        path: 'repositoryID/:idRepo/folderID/:idFolder/fileID/:idFile/editorBPMN/:version',
-        component:BpmnComponent
-      }, {
-        path: 'repositoryID/:idRepo/fileID/:idFile/editorBPMN/:version',
+        path: 'repositoryID/:idRepo/folderID/:idFolder/fileID/:idFile/editorBPMNCollaboration/:version',
         component:BpmnComponent
       },
       {
-        path: 'prova',
-        component: ChoreographyModelComponent
-      }, 
+        path: 'repositoryID/:idRepo/folderID/:idFolder/fileID/:idFile/editorBPMNChoreography/:version',
+        component:ChoreographyModelComponent
+      },
+       {
+        path: 'repositoryID/:idRepo/fileID/:idFile/editorBPMNCollaboration/:version',
+        component:BpmnComponent
+      },
+      {
+        path: 'repositoryID/:idRepo/fileID/:idFile/editorBPMNChoreography/:version',
+        component:ChoreographyModelComponent
+      },
+ 
       {
         path: 'repo-public',
         component: RepoPublicComponent,

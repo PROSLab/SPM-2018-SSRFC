@@ -3,8 +3,6 @@ import { Folder } from '../../../service/model/folder'
 import { Service } from '../../../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Repo } from '../../../service/model/repo';
-import { File } from '../../../service/model/file'
-import { exportIsLogged } from '../../starter/starter.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -21,6 +19,7 @@ export class RepositoryComponent implements OnInit {
   @ViewChild("closeModalCreateFile") closeModal3: ElementRef
   @ViewChild("closeModalShareRepo") closeModal4: ElementRef
   @ViewChild("closeModalImport") closeModal5: ElementRef
+  @ViewChild("closeModalChooseFile") closeModal6: ElementRef
   isLogged: boolean
   selectedfolder: any
   createFold: boolean
@@ -60,6 +59,9 @@ export class RepositoryComponent implements OnInit {
   createFolderForm:FormGroup
   modifyNameRepo:FormGroup
   submitted= false;
+
+
+  collaboration=null;
 
   constructor(private toastr:ToastrService,private formBuilder:FormBuilder,private service: Service, public router: Router, private route: ActivatedRoute, private modal: NgbModal) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -128,6 +130,7 @@ get h(){
   clearModal(modal): any {
     modal.nativeElement.click()
   }
+  
 reset1(){
 this.reset=""
 this.submitted=false;
@@ -196,9 +199,16 @@ this.submitted=false;
     }
   }
 
-  saveFile() {
-    this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMN']);
+  goToCollaboration() {
+    this.clearModal(this.closeModal6)
+    this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMNCollaboration']);
   }
+
+  goToChoreography() {
+    this.clearModal(this.closeModal6)
+    this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMNChoreography']);
+  }
+
 
   controlFormatFile(f) {
     document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
@@ -309,8 +319,8 @@ this.submitted=false;
   uploadFileToActivity() {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
     
-    this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload,autore).subscribe(data => {
-
+    this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload,autore,this.collaboration).subscribe(data => {
+//MANCA METODO PER VEDERE SE è COLLABORATIONO IL FILE O NO :)
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length

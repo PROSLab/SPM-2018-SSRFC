@@ -139,12 +139,12 @@ export class BpmnComponent implements OnInit {
       headers: {}, responseType: 'text'
     }).subscribe(
       (x: any) => {
+        console.log(x)
         this.bodyFile = x
         this.modeler.importXML(x, this.handleError)
       },
     );
   }
-
 
   load(): void {
    
@@ -161,9 +161,8 @@ export class BpmnComponent implements OnInit {
       );
   }
 
-  headers(url2: string, headers: any, x: string): any {
-    throw new Error("Method not implemented.");
-  }
+ 
+  
 
 
   back() {
@@ -322,7 +321,7 @@ export class BpmnComponent implements OnInit {
       });
 
     var autore = localStorage.getItem('name') + ' ' + localStorage.getItem('surname');
-    this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, this.folderSelected)
+    this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, 'collaboration', this.folderSelected)
       .subscribe(data => {
         this.idFileCreato = data.id
         //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio

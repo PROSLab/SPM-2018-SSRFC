@@ -29,7 +29,7 @@
                     </div>
 
                     <!--  <div data-toggle="modal" data-target="#myModalFile"> -->
-                    <div (click)="saveFile()">
+                    <div data-target="#myModalChooseFile" data-toggle="modal">
                         <a class="dropdown-item bianco menus">Create File </a>
                     </div>
 
@@ -161,30 +161,30 @@
         </div>
     </div>
 
-
-    <!-- Modal crea file -->
-    <!-- <div class="modal fade" id="myModalFile" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Create a new File</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <label for="reponame"><b>File name</b> </label><br>
-                        <input type="text" maxlength="13" required id="namerepo" #nameFile name="namerepo" />
+    <!-- modal choose file-->
+    <div class="modal fade" id="myModalChooseFile" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Choose the model's editor</h4>
                     </div>
-                    <br>
-                    
-                </div>
-                <div class="modal-footer">
-                    <button (click)="saveFile(nameFile.value)" style="margin-right:10px;" class="btn btn-primary col-4">Save
-                        File </button>
-                    <button type="button" class="btn btn-danger" #closeModalCreateFile data-dismiss="modal">Close</button>
+                    <form [formGroup]="shareFileForm">
+    
+                        <div class="modal-body">
+                                <button style="margin-right:10px;" class="btn btn-success col-4" (click)="goToCollaboration()">
+                                        Collaboration </button>
+                                <button style="margin-right:10px;" class="btn btn-warning col-4" (click)="goToChoreography()">
+                                        Choreography </button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" #closeModalChooseFile data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div> -->
+
+
 
     <!-- Modal share repository -->
     <div class="modal fade col-12" id="myModalShareRepo" role="dialog">

@@ -388,8 +388,8 @@ error => {
     this.appear = true;
   }
 
-  saveFile(originalName) {
-    this.service.createFile(this.idRepoSelected, this.idFolder, this.idUser, originalName)
+/*   saveFile(originalName) {
+    this.service.createFile(this.idRepoSelected,  this.idUser, this.idFolder, originalName)
       .subscribe(data => {
         this.fileAppear = false;
         this.fileExist = true;
@@ -399,7 +399,7 @@ error => {
       }, error => {
         this.errorMessage = <any>error
       });
-  }
+  } */
 
 
   back() {
@@ -511,9 +511,9 @@ error => {
 
   sendToEditor(v) {
     if(this.idFolder==undefined){
-      this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',this.idFile,'editorBPMN',v]);
+      this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',this.idFile,'editorBPMNCollaboration',v]);
     }else{
-      this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.idFolder,'fileID',this.idFile,'editorBPMN',v]);
+      this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.idFolder,'fileID',this.idFile,'editorBPMNCollaboration',v]);
 
     }
    

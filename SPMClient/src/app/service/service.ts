@@ -110,7 +110,7 @@ export class Service {
   }
 
   // @@@@ Service per la gestione dei file @@@@ ///
-  postFile(idRepo, idUser, fileToUpload,autore,idFolder?): Observable<any> {
+  postFile(idRepo, idUser, fileToUpload,autore,collaboration,idFolder?): Observable<any> {
     
      const formData: FormData = new FormData();
      if(idFolder!=null){
@@ -120,6 +120,7 @@ export class Service {
      formData.append('idUser', idUser);
      formData.append('files', fileToUpload)
      formData.append('autore', autore)
+     formData.append('fileType', collaboration)
 
      return this.http.post(this.baseUrl + "api/file/uploadFile",formData )
       .pipe(
@@ -339,7 +340,7 @@ shareFile(repoName,idUser,idFile,email){
       );
   }
 
-  createFile(idRepository,idUser,originalName,autore,idFolder?): Observable<any> {
+  createFile(idRepository,idUser,originalName,autore,collaboration,idFolder?): Observable<any> {
     let params = new HttpParams();
       params = params.append('idUser', idUser); //nome id utente
       params = params.append('idRepository', idRepository); //id repo
@@ -348,6 +349,7 @@ shareFile(repoName,idUser,idFile,email){
       }
       params = params.append('originalName', originalName); //nome del file scelto
       params = params.append('autore',autore)
+      params = params.append('collaboration',collaboration)
     return this.http.get(this.baseUrl + 'api/file/createFile', { params: params, responseType: 'text' })
       .pipe(
         tap(success => this.repos = success), //mi salvo tutti i dati di ritorno dal server

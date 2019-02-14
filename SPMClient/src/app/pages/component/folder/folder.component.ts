@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 export class FolderComponent implements OnInit {
   @ViewChild("closeModifyName") closeModal1: ElementRef
   @ViewChild("closeNewFile") closeModal2: ElementRef
-  
+  @ViewChild("closeModalChooseFile") closeModal6: ElementRef
   selectedfolder: any
   createFold: boolean
   idRepoSelected: string
@@ -44,6 +44,7 @@ export class FolderComponent implements OnInit {
   reset: string='';
   modifyNameFolder: FormGroup;
   submitted=false;
+  collaboration: any;
 
   constructor(private toastr:ToastrService,private formBuilder:FormBuilder,private service: Service, public router: Router,route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -82,7 +83,8 @@ export class FolderComponent implements OnInit {
   uploadFileToActivity() {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
 
-    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,autore,this.folderSelected).subscribe(data => {
+    this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,autore,this.collaboration,this.folderSelected).subscribe(data => {
+    //MANCA METODO PER VEDERE SE IL FILE è COLLABORATION O NO :)
       this.exist=true
       this.toastr.success('Hai Caricato il file correttamente', 'Load File')
       var newFile = data
@@ -165,9 +167,14 @@ modifyName(){
   }
 
   
-    saveFile() {
-      this.router.navigate(['repositoryID', this.idRepoSelected,'folderID',this.folderSelected, 'editorBPMN']);
+  goToCollaboration() {
+    this.clearModal(this.closeModal6)
+    this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMNCollaboration']);
+  }
 
+  goToChoreography() {
+    this.clearModal(this.closeModal6)
+    this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMNChoreography']);
   }
 
 
