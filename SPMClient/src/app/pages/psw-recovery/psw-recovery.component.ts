@@ -49,10 +49,10 @@ export class PswRecoveryComponent implements OnInit {
     this.service.sendEmail(email)
     //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione
     .subscribe(_=>{
-      this.toastr.success('Email sent')
+      this.toastr.success('Email sent', 'Success')
       this.loading = false;},
       error =>{
-        this.toastr.error('Email error')
+        this.toastr.error('Email error', 'Error')
       });
     return;
 }
