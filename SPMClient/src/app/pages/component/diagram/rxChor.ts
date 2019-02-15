@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
  * An operator that imports the first XML piped via the piped diagram XML
  * into the passed BpmnJS instance.
  */
-export const importDiagram = (bpmnJS) => <Object>(source: Observable<string>) =>
+export const importDiagramChor = (bpmnJS) => <Object>(source: Observable<string>) =>
   new Observable<string>(observer => {
 
     const subscription = source.subscribe({
@@ -15,7 +15,6 @@ export const importDiagram = (bpmnJS) => <Object>(source: Observable<string>) =>
         subscription.unsubscribe();
 
         bpmnJS.importXML(xml, function(err, warnings) {
-          console.log(xml)
 
           if (err) {
             observer.error(err);

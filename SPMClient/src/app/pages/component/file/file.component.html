@@ -267,12 +267,16 @@
         <button (click)="sendToEditor(vers)" style="margin-left:82%" class="btn btn-primary">Open Model</button>
     </div>
     <br>
-    <div class="diagram">
+    
+    <div *ngIf="collaborator" class="diagram">
         <app-diagram  [url]="diagramUrl"></app-diagram>
-      
+      <!-- per collaborator -->
         
       </div>
-    
+   
+    <div class="diagram-container">
+      <app-diagram-chor [url]="diagramUrl" ></app-diagram-chor> <!-- per coreography -->
+    </div>
    <!--  <div style="border:1px solid grey;zoom:60%;">
         <div #canvas style="background-color:white" id="canvas"></div>
     </div> -->

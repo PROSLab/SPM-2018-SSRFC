@@ -7,7 +7,8 @@ import {ToastrService} from 'ngx-toastr'
 import {HttpClient} from '@angular/common/http';
 import { Modeler } from "../../../bpmn-js/bpmn-js";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import {Viewer} from "bpmn-js/lib/Viewer.js"
+declare var require: any
 
 @Component({
   selector: 'app-file',
@@ -16,6 +17,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 
 export class FileComponent implements OnInit {
+
   @ViewChild('ref') private el: ElementRef;
   @ViewChild("closeModal1") closeModal1 : ElementRef 
   @ViewChild("closeModal2") closeModal2 : ElementRef
@@ -79,7 +81,19 @@ export class FileComponent implements OnInit {
   }
 
  async selected() {
+   console.log('sono dentro')
+
+   ; // my BPMN 2.0 xml
+  /* var viewer = new Viewer({ container: 'body' });
   
+  viewer.importXML(this.diagramUrl, function(err) {
+  
+    if (err) {
+      console.log('error rendering', err);
+    } else {
+      console.log('rendered');
+    }
+  }); */
     this.cambia=true  
     this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
    /*  await this.modelerOpen() */
@@ -240,6 +254,7 @@ error => {
 
 
   ngOnInit() {
+  
    
     this.modifyNameForm=this.formBuilder.group({
       reponame:['',Validators.required]

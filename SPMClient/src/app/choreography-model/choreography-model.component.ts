@@ -74,7 +74,7 @@ export class ChoreographyModelComponent implements OnInit {
    this.modeler = new ChoreoModeler({
       container: '#canvas',
       width: '100%',
-      height: '1500px',
+      height: '500px',
       keyboard: {
         bindTo: document
       }
