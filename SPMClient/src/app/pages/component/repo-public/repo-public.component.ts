@@ -20,22 +20,6 @@ export class RepoPublicComponent implements OnInit {
     this.getAllPublicRepo();
   }
 
- /*  takeAll() {
-    return new Promise((resolve, reject) => {
-      this.service.getAllRepoPublic().subscribe(data => {
-        this.reposPublic = data
-        console
-        resolve(true)
-      }, error => {
-        this.errorMessage = <any>error
-        return false
-      });
-    }).then(res)=>{
-
-    }
-  } */
-
-
   getAllPublicRepo() {
     this.service.getAllRepoPublic().subscribe(data => {
       this.reposPublic = data

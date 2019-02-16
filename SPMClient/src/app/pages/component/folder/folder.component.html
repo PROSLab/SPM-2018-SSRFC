@@ -52,31 +52,8 @@
           </div>
           
       </div>
-
-  <!--   <div class="card">
-        <div class="card-body">
-            <h3>Folder Details</h3>
-            Folder name : {{folderInfo?.folderName}} <br>
-            Created At : {{folderInfo?.createdAt}}
-            <br>
-            <button *ngIf="isLogged" type="button" data-toggle="modal" data-target="#myModalFolder" class="btn btn-primary">Modify
-                Folder</button>
-
-        </div>
-
-    </div> -->
-
     <br>
 
-  <!--   <div *ngIf="ok" class="alert alert-success   alert-dismissible" id="top" #myAlertImport>
-            <strong>{{message}}</strong> 
-    </div>
-    
-    <div *ngIf="ok2" class="alert alert-danger alert-dismissible" id="top" #myAlertImport>
-            <strong>{{message}}</strong> 
-    </div>
- -->
- 
     <div class="modal fade" id="myModalFolder" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -92,7 +69,7 @@
                 <br>
                 <div *ngIf="submitted && f.foldername.errors" class="invalid-feedback">
 
-                    <div *ngIf="f.foldername.errors.required">FolderName is Required</div>
+                    <div *ngIf="f.foldername.errors.required">Folder name is Required</div>
                 </div>
 
                 </div>
@@ -131,7 +108,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Choose the model's editor</h4>
+                    <h4 class="modal-title">Choose the editor for the new model </h4>
                 </div>
                
 
@@ -149,54 +126,7 @@
         </div>
     </div>
 
-
-   <!--  <div class="row">
-        <div class="col-2">
-
-            <button type="button" data-toggle="modal" data-target="#myModalFile" *ngIf="isLogged || isLogged==undefined"
-                class="btn btn-primary">+ Create File</button>
-        </div>
-
-        <div class="col-2" *ngIf="isLogged || isLogged==undefined">
-
-            <label for="file" class="btn btn-success">
-                Import File
-                <input type="file" id="file" #f (change)="handleFileInput($event.target.files)">
-            </label>
-        </div>
-
-    </div> -->
-    
-
-
-    <!-- <div class="modal fade" id="myModalFile" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Create a new File</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <label for="reponame"><b>File name</b> </label><br>
-                        <input type="text" maxlength="13" [(ngModel)]="reset" required id="nameFile" #nameFile name="nameFile" />
-                    </div>
-
-                    <br>
-                   
-                </div>
-
-                <div class="modal-footer">
-                    <button (click)="saveFile(nameFile.value)" style="margin-right:10px;"  class="btn btn-primary">Save
-                        File </button>
-                    <button type="button" class="btn btn-danger" #closeNewFile  data-dismiss="modal">Close</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
- -->
-
-    <div *ngIf="exist==true" style="margin:5px">Lista dei tuoi folder e files
+    <div *ngIf="exist==true" style="margin:5px">List of your folder e files
         <table>
             <thead>
                 <tr>
