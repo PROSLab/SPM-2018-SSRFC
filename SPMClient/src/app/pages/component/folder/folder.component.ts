@@ -45,6 +45,7 @@ export class FolderComponent implements OnInit {
   modifyNameFolder: FormGroup;
   submitted=false;
   collaboration: any;
+  b: string;
 
   constructor(private toastr:ToastrService,private formBuilder:FormBuilder,private service: Service, public router: Router,route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -72,19 +73,49 @@ export class FolderComponent implements OnInit {
 		}
 	}
 
-  handleFileInput(files: FileList) {
-    this.fileToUpload = files.item(0);
-  var a =   this.controlFormatFile(this.fileToUpload)
-  if(a==true){
-    this.uploadFileToActivity()
-  }
-  }
+  handleFileInput(files) {
+    document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+   document.getElementById("menu").setAttribute("aria-expanded", "false")
+   document.getElementById("menu2").setAttribute("class", "dropdown-menu") 
 
+   if (files && files[0]) {
+     var myFile = files[0];
+     var reader = new FileReader();
+ 
+ reader.onload = (event: Event) => {
+ this.b= reader.result.slice(0,100).toString()
+ if(this.b.indexOf("<bpmn2")>-1){
+   console.log("coreogr")
+   this.collaboration="choreography"
+ }
+ else{
+   console.log("collab")
+   this.collaboration="collaboration"
+   }
+   var a = this.controlFormatFile(this.fileToUpload)
+   if (a == true) {
+    
+     this.uploadFileToActivity()
+   }
+ } 
+
+ 
+ this.fileToUpload = files.item(0);
+ reader.readAsText(myFile);
+
+
+}
+
+
+ }
   uploadFileToActivity() {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
+    console.log("eiiiii",this.collaboration)
 
     this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,autore,this.collaboration,this.folderSelected).subscribe(data => {
     //MANCA METODO PER VEDERE SE IL FILE è COLLABORATION O NO :)
+
+
       this.exist=true
       this.toastr.success('Hai Caricato il file correttamente', 'Load File')
       var newFile = data

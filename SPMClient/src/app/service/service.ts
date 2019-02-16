@@ -121,7 +121,7 @@ export class Service {
      formData.append('files', fileToUpload)
      formData.append('autore', autore)
      formData.append('fileType', collaboration)
-
+console.log(collaboration)
      return this.http.post(this.baseUrl + "api/file/uploadFile",formData )
       .pipe(
         catchError(this.handleError)

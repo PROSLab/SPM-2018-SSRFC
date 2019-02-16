@@ -60,8 +60,10 @@ export class RepositoryComponent implements OnInit {
   modifyNameRepo:FormGroup
   submitted= false;
 
-
-  collaboration=null;
+  collaboration;
+  modeler: any;
+  bodyResult: string | ArrayBuffer;
+  b: string;
 
   constructor(private toastr:ToastrService,private formBuilder:FormBuilder,private service: Service, public router: Router, private route: ActivatedRoute, private modal: NgbModal) {
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -210,6 +212,7 @@ this.submitted=false;
   }
 
 
+
   controlFormatFile(f) {
     document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
     document.getElementById("menu").setAttribute("aria-expanded", "false")
@@ -225,41 +228,67 @@ this.submitted=false;
   }
 
 
-  handleFileInput(files: FileList) {
-    document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
+   handleFileInput(files) {
+     document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
     document.getElementById("menu").setAttribute("aria-expanded", "false")
-    document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
-   
-    this.fileToUpload = files.item(0);
+    document.getElementById("menu2").setAttribute("class", "dropdown-menu") 
+
+    if (files && files[0]) {
+      var myFile = files[0];
+      var reader = new FileReader();
+  
+  reader.onload = (event: Event) => {
+  this.b= reader.result.slice(0,100).toString()
+  if(this.b.indexOf("<bpmn2")>-1){
+    console.log("coreogr")
+    this.collaboration="choreography"
+  }
+  else{
+    console.log("collab")
+    this.collaboration="collaboration"
+    }
     var a = this.controlFormatFile(this.fileToUpload)
     if (a == true) {
+     
       this.uploadFileToActivity()
     }
+  } 
+  reader.readAsText(myFile);
+  
+  this.fileToUpload = files.item(0);
+  
+
+
+}
+
 
   }
 
   Search() {
     this.fileincartelle = true;
-    console.log(this.originalAllFileFolder)
-    console.log(this.files)
+  
     if (this.selezione == "name") {
       if (this.search != "") {
+
         if(this.originalfiles.length>0){
         this.files = this.originalfiles.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
       }
+
       if(this.originalfolder.length>0){
         this.folder = this.originalfolder.filter(res => {
           return res.folderName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
       }
+
       if(this.originalAllFileFolder!=null){
         this.allFileFolder = this.originalAllFileFolder.filter(res => {
           return res.originalName.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
         })
       }
-      } else if (this.search == "") {
+    }
+      else if (this.search == "") {
         this.fileincartelle = false;
         this.ngOnInit()
       }
@@ -289,6 +318,7 @@ this.submitted=false;
 
       }
     }
+
     if (this.selezione == "author") {
       if (this.search != "") {
 
@@ -318,9 +348,9 @@ this.submitted=false;
 
   uploadFileToActivity() {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
-    
+  console.log(this.collaboration)
     this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload,autore,this.collaboration).subscribe(data => {
-//MANCA METODO PER VEDERE SE è COLLABORATIONO IL FILE O NO :)
+//MANCA METODO PER VEDERE SE è COLLABORATIONO IL FILE O NO :
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
