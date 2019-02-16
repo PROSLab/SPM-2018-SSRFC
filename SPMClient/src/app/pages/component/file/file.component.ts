@@ -293,7 +293,7 @@ error => {
       .subscribe(async data => {
 
         if (data != null) {
-
+          this.autore=data.autore
           data.createdAt = this.troncaData(data.createdAt)
           this.fileExist = true;
           this.file = (data)
@@ -480,7 +480,7 @@ console.log(data)
 
   
 
-    this.service.shareFile( this.repo.repositoryName, this.idUser,this.idFile,email)
+    this.service.shareFile( this.repo.repositoryName, this.idUser,this.idFile,email,this.autore)
       .subscribe(data => {
         this.ok=true
         this.toastr.success('File condiviso con successo', 'Share File')
