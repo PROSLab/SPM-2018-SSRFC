@@ -1,5 +1,5 @@
 <div class="row">
-    <button class="btn btn-default numero2" (click)="sendTofile()">
+    <button style="margin-top:-0.6%" class="btn btn-default numero2" (click)="sendTofile()">
         <h3>{{title}}</h3>
     </button>
     <div>
@@ -11,8 +11,9 @@
         <button (click)="exportModel()"  data-dismiss="modal" class="btn btn-success">Export Model <i class="fa">&#xf019;</i> </button>
         <button (click)="openModal()" *ngIf="isLogged"  style="margin-left: 1%"  data-toggle="modal" id="saveModal" data-target="" class="btn btn-primary">Save <i class="fa fa-save"></i></button>
          </div>
-</div>
 
+</div>
+<br>
 
   <div class="content with-diagram" id="js-drop-zone">
     <div id="canvas" style="background-color: white"></div>

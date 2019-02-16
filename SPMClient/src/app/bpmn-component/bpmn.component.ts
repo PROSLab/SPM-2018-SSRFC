@@ -321,6 +321,7 @@ export class BpmnComponent implements OnInit {
       });
 
     var autore = localStorage.getItem('name') + ' ' + localStorage.getItem('surname');
+    console.log(this.folderSelected)
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, 'collaboration', this.folderSelected)
       .subscribe(data => {
         this.idFileCreato = data.id

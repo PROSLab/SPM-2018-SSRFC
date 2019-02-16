@@ -353,6 +353,7 @@ this.submitted=false;
 //MANCA METODO PER VEDERE SE è COLLABORATIONO IL FILE O NO :
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
+      console.log(newFile)
       var count = this.files.length
       this.files[count] = newFile
       

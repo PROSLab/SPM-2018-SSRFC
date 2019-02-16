@@ -199,58 +199,23 @@ modifyName(){
 
   
   goToCollaboration() {
+
     this.clearModal(this.closeModal6)
-    this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMNCollaboration']);
-  }
+    if(this.folderSelected==undefined || this.folderSelected==null){
+      this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMNCollaboration']);
+    } else{
+      this.router.navigate(['repositoryID', this.idRepoSelected,'folderID',this.folderSelected, 'editorBPMNCollaboration']);
+      }
+    }
 
   goToChoreography() {
     this.clearModal(this.closeModal6)
-    this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMNChoreography']);
+    if(this.folderSelected==undefined || this.folderSelected==null){
+      this.router.navigate(['repositoryID', this.idRepoSelected, 'editorBPMNChoreography']);
+    } else{
+      this.router.navigate(['repositoryID', this.idRepoSelected,'folderID',this.folderSelected, 'editorBPMNChoreography']);
+      }
   }
-
-
-
- /*  saveFolder(folderName) {
-    var nameFolder = folderName;
-    this.service.createFolder(this.idRepoSelected, this.idUser, nameFolder)
-      .subscribe(data => {
-        var folder = JSON.parse(data)
-        this.service.getFolderSpec(folder.id)
-          .subscribe(data => {
-            var newFolder: Folder = data
-            newFolder.createdAt = this.troncaData(newFolder.createdAt)
-            var count = this.folder.length
-            this.folder[count] = newFolder
-          }, error => {
-            this.errorMessage = <any>error
-          });
-        this.createfold = false
-         this.router.navigate(['/folder']);
-       }, error => {
-        this.errorMessage = <any>error
-        alert("Cartella non creata")
-      })
-    this.createfold = false
-  } */
-
-
-/* 
-  getAllfolder() {
-    //devo richiamare la funzione del server per inviargli il file
-    this.service.getAllFolder(this.idRepoSelected)
-      .subscribe(data => {
-        data = JSON.parse(data)
-        for (var i = 0; i < data.length; i++) {
-          data[i].createdAt = this.troncaData(data[i].createdAt)
-        }
-        this.folder = (data)
-        if (this.folder.length > 0) {
-          this.exist = true;
-        }
-      }, error => {
-        this.errorMessage = <any>error
-      });
-  } */
 
   //tutti i file
   getAllFile() {

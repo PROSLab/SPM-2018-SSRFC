@@ -11,8 +11,8 @@
             <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
         </div>
         <div class=" dropdown dropdown-toggle grassetto" id="menu" style="height: 18%;margin-left:1%">
-            <a class="btn btn-default " role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+            <a class="btn btn-default " role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
                 <h4>{{repoInfo?.repositoryName}}</h4>
             </a>
 
@@ -37,13 +37,13 @@
                         <a class="dropdown-item bianco menus">Share Repo</a>
                     </div>
 
-                    
+
                     <div>
 
                         <a class="dropdown-item bianco menus">
                             <label for="file">Import File
-                                    <input type="file" id="file" #f (change)="handleFileInput($event.target.files)">
-                                </label>
+                                <input type="file" id="file" #f (change)="handleFileInput($event.target.files)">
+                            </label>
                         </a>
                     </div>
                 </div>
@@ -71,23 +71,24 @@
                     <h4 class="modal-title">Modify repository</h4>
                 </div>
                 <form [formGroup]="modifyNameRepo" (ngSubmit)="sendNewName(n.value)">
-                <div class="modal-body">
+                    <div class="modal-body">
 
-                   
+
                         <label for="reponame" style="color:black">Repository name </label><br>
-                        <input type="text" class="form-control" placeholder="Insert here the new name..." [(ngModel)]="reset"
-                        maxlength="13" required id="nameFile" formControlName="reponame" [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }"
-                        #n name="nameFile" />                   
-                    <br>
-                    <div *ngIf="submitted && f.reponame.errors" class="invalid-feedback">
-                        <div *ngIf="f.reponame.errors.required">Name is Required</div>
+                        <input type="text" class="form-control" placeholder="Insert here the new name..."
+                            [(ngModel)]="reset" maxlength="13" required id="nameFile" formControlName="reponame"
+                            [ngClass]="{ 'is-invalid': submitted && f.reponame.errors }" #n name="nameFile" />
+                        <br>
+                        <div *ngIf="submitted && f.reponame.errors" class="invalid-feedback">
+                            <div *ngIf="f.reponame.errors.required">Name is Required</div>
+                        </div>
+
                     </div>
-                    
-                </div>
-                <div class="modal-footer">
-                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Save</button>
-                    <button type="button" class="btn btn-danger" #closeModalModifyRepo data-dismiss="modal">Close</button>
-                </div>
+                    <div class="modal-footer">
+                        <button style="margin-right:10px;" class="btn btn-primary col-4">Save</button>
+                        <button type="button" class="btn btn-danger" #closeModalModifyRepo
+                            data-dismiss="modal">Close</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -96,9 +97,11 @@
     <br>
     <!--  SEARCH  -->
     <div class="row" *ngIf="folderExist==true || filesExist==true">
-        <button (click)="refreshTable()" style="border-radius:0%;background-color: white;border:1px solid rgba(128, 128, 128, 0.466);height: 35px;"
+        <button (click)="refreshTable()"
+            style="border-radius:0%;background-color: white;border:1px solid rgba(128, 128, 128, 0.466);height: 35px;"
             class="btn btn-default"><i style="font-size:15px" class="fa">&#xf021;</i></button>
-        <select id="select" style="width: 10%;border:1px solid rgba(128, 128, 128, 0.5) " class=" select1" (click)="selected()">
+        <select id="select" style="width: 10%;border:1px solid rgba(128, 128, 128, 0.5) " class=" select1"
+            (click)="selected()">
             <option selected style="margin-left: 5px;" value="name">Name</option>
             <option style="margin-left: 5px;" value="date">Date</option>
             <option style="margin-left: 5px;" value="author">Author</option>
@@ -107,8 +110,8 @@
     </div>
     <br>
     <div>
-        
-       
+
+
 
     </div>
 
@@ -121,24 +124,27 @@
                     <h4 class="modal-title">Create a new Folder</h4>
                 </div>
                 <form [formGroup]="createFolderForm" (ngSubmit)="saveFolder(nameFolder.value)">
-                <div class="modal-body">
+                    <div class="modal-body">
 
                         <label for="reponame" style="color:black">Folder name </label><br>
-                        <input type="text" placeholder="Insert name here..." maxlength="13" class="form-control" formControlName="foldername" [ngClass]="{ 'is-invalid': submitted && g.foldername.errors }" required  [(ngModel)]="reset" #nameFolder  />
-                    
-                    <br>
-                    <div *ngIf="submitted && g.foldername.errors" class="invalid-feedback">
+                        <input type="text" placeholder="Insert name here..." maxlength="13" class="form-control"
+                            formControlName="foldername" [ngClass]="{ 'is-invalid': submitted && g.foldername.errors }"
+                            required [(ngModel)]="reset" #nameFolder />
 
-                        <div *ngIf="g.foldername.errors.required">FolderName is Required</div>
+                        <br>
+                        <div *ngIf="submitted && g.foldername.errors" class="invalid-feedback">
+
+                            <div *ngIf="g.foldername.errors.required">FolderName is Required</div>
+                        </div>
+
                     </div>
-                    
-                </div>
 
-                <div class="modal-footer">
-                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Save </button>
-                    <button type="button" class="btn btn-danger" #closeModalCreateFolder data-dismiss="modal">Close</button>
-                </div>
-</form>
+                    <div class="modal-footer">
+                        <button style="margin-right:10px;" class="btn btn-primary col-4">Save </button>
+                        <button type="button" class="btn btn-danger" #closeModalCreateFolder
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -153,6 +159,7 @@
                 <div class="modal-body">
                     Repository: {{repoInfo?.repositoryName}} <br>
                     Created At: {{repoInfo?.createdAt}} <br>
+                    Author: {{repoInfo?.autore}} <br>
                     <div style="margin-bottom:5px;"> State: {{repoInfo?.publicR}} <br> </div>
                 </div>
                 <div class="modal-footer">
@@ -165,26 +172,27 @@
 
     <!-- modal choose file-->
     <div class="modal fade" id="myModalChooseFile" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Choose the model's editor</h4>
-                    </div>
-                  
-    
-                        <div class="modal-body">
-                                <button style="margin-right:10px;" class="btn btn-success col-4" (click)="goToCollaboration()">
-                                        Collaboration </button>
-                                <button style="margin-right:10px;" class="btn btn-warning col-4" (click)="goToChoreography()">
-                                        Choreography </button>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" #closeModalChooseFile data-dismiss="modal">Close</button>
-                        </div>
-                    
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choose the model's editor</h4>
                 </div>
+
+
+                <div class="modal-body">
+                    <button style="margin-right:10px;" class="btn btn-success col-4" (click)="goToCollaboration()">
+                        Collaboration </button>
+                    <button style="margin-right:10px;" class="btn btn-warning col-4" (click)="goToChoreography()">
+                        Choreography </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" #closeModalChooseFile
+                        data-dismiss="modal">Close</button>
+                </div>
+
             </div>
         </div>
+    </div>
 
 
 
@@ -197,24 +205,27 @@
                 </div>
                 <form [formGroup]="shareRepoForm" (ngSubmit)=shareRepo(emailShare.value)>
 
-                <div class="modal-body">
+                    <div class="modal-body">
 
-                    
+
                         <label for="reponame"><b>Email:</b> </label><br>
-                        <input type="email" class="form-control" required id="namerepo" placeholder="Insert email here..." [(ngModel)]="reset" formControlName="shareRepo" [ngClass]="{ 'is-invalid': submitted && h.shareRepo.errors }" #emailShare name="namerepo" />
-                    
+                        <input type="email" class="form-control" required id="namerepo"
+                            placeholder="Insert email here..." [(ngModel)]="reset" formControlName="shareRepo"
+                            [ngClass]="{ 'is-invalid': submitted && h.shareRepo.errors }" #emailShare name="namerepo" />
 
-                    <br>
-                    <div *ngIf="submitted && h.shareRepo.errors" class="invalid-feedback">
-                        <div *ngIf="h.shareRepo.errors.email">Email is wrong</div>
-                        <div *ngIf="h.shareRepo.errors.required">Email is required</div>
+
+                        <br>
+                        <div *ngIf="submitted && h.shareRepo.errors" class="invalid-feedback">
+                            <div *ngIf="h.shareRepo.errors.email">Email is wrong</div>
+                            <div *ngIf="h.shareRepo.errors.required">Email is required</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button  style="margin-right:10px;" class="btn btn-primary col-4">Share</button>
-                    <button type="button" class="btn btn-danger" #closeModalShareRepo data-dismiss="modal">Close </button>
-                </div>
+                    <div class="modal-footer">
+                        <button style="margin-right:10px;" class="btn btn-primary col-4">Share</button>
+                        <button type="button" class="btn btn-danger" #closeModalShareRepo data-dismiss="modal">Close
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -223,19 +234,21 @@
 
 
     <div *ngIf="folderExist==false && filesExist==false && isLogged">
-        <div class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
+        <div class="alert alert-danger  col-10 alert-dismissible"
+            style="position: center;margin-top:15%;margin-left:3%">
             <strong>
-               <h4> Your repository is empty. <br>
-                You can create a folder, file or import a file from your system clicking on
-                <b>"{{repoInfo?.repositoryName}}"</b> button.</h4>
+                <h4> Your repository is empty. <br>
+                    You can create a folder, file or import a file from your system clicking on
+                    <b>"{{repoInfo?.repositoryName}}"</b> button.</h4>
             </strong>
         </div>
     </div>
 
-    <div *ngIf="folderExist==false && filesExist==false && !isLogged" class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
+    <div *ngIf="folderExist==false && filesExist==false && !isLogged"
+        class="alert alert-danger  col-10 alert-dismissible" style="position: center;margin-top:15%;margin-left:3%">
         <strong>
-           <h4>This repository is empty. <br>
-            You can login or register to do amazing things together :)!</h4>
+            <h4>This repository is empty. <br>
+                You can login or register to do amazing things together :)!</h4>
         </strong>
     </div>
 
@@ -246,33 +259,44 @@
         <table>
             <thead>
                 <tr>
+                    <th width="5%"></th>
                     <th width="20%">Name</th>
-                    <th width="30%">Created At</th>
-                    <th width="30%">Author</th>
+                    <th width="20%">Created At</th>
+                    <th width="20%">Author</th>
+                    <th width="20%">Type</th>
                 </tr>
             </thead>
 
             <tbody>
 
+
                 <tr *ngFor="let fold of folder;" (click)="sendTofolder(fold.id)">
 
                     <th scope="row">
-                        <i class="material-icons">&#xe2c8; </i>
+                        <i class="fa" style="margin-left:20%;zoom:140%">	&#xf07b;</i>
+                    </th>
+
+                    <th scope="row">
                         {{fold?.folderName}}
                     </th>
+
                     <th scope="row">{{fold?.createdAt}}</th>
                     <th scope="row">{{fold?.autore}}</th>
                 </tr>
 
                 <tr *ngFor="let fil of files;" (click)="sendTofile(fil.id)">
+                        <th scope="row">
+                                <i class="fa" style="margin-left:20%;zoom:140%">	&#xf15b;</i>
+                            </th>
                     <th scope="row">
-                        <i class="fa">&#xf016; </i>
                         {{fil?.originalName}}
                     </th>
+
                     <th scope="row">{{fil?.createdAt}}</th>
                     <th scope="row">{{fil?.autore}}</th>
+                    <th scope="row">{{fil?.fileType}}</th>
                 </tr>
-                
+
             </tbody>
 
 
@@ -281,8 +305,10 @@
             <tbody *ngIf="fileincartelle">
 
                 <tr *ngFor="let fil of allFileFolder;" (click)="sendTofile(fil.id)">
+                        <th scope="row">
+                                <i class="fa">&#xf016;</i>
+                            </th>
                     <th scope="row">
-                        <i class="fa">&#xf016; </i>
                         {{fil?.originalName}}
                     </th>
                     <th scope="row">{{fil?.createdAt}}</th>

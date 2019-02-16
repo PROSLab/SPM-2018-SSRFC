@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4" style="margin-left:13%"></div>
+        <div class="col-3" style="margin-left:3%"></div>
         <div>
 
             <div data-toggle="modal" data-target="#info">
@@ -85,7 +85,12 @@
     <div class="row " *ngIf="fileExist">
         <div class="card col-11" *ngIf="versionExist">
             <div class="card-body">
-
+                    <div class="row"style="height:40%" >
+                   
+                            <h5>Type of model:<b> {{file.fileType}}</b> </h5>
+                 
+                       </div>
+                       <br>
                 <div class="row" style="height:20%;">
                     <h5>Version n. </h5>
                     <select [(ngModel)]="vers" (change)="selected()" style="margin-left:1%">
@@ -102,10 +107,11 @@
                                 <button (click)="exportModel()" style="margin-left:1%" data-dismiss="modal" class="btn btn-success"><i class="fa">&#xf019;</i> Download version {{vers}}  </button>
                         </div>
                     </div>
-                    <br>
-                    <b>Type of model:</b> {{file.fileType}}
+                  
                 </div>
-            </div>
+               
+                              
+             </div>
         </div>
     </div>
 
@@ -265,12 +271,18 @@
 <hr>
 <br>
     <div class=" row">
-        <label>
-            <h2>Preview of {{collaboration}} model </h2>
-        </label>
-        <button (click)="sendToEditor(vers)" style="margin-left:82%" class="btn btn-primary">Open Model</button>
-    </div>
-    <br>
+        <div class="col-5">
+                <label>
+                        <h2>Preview of {{file.fileType}} model </h2>
+                        <h5>Version n. {{vers}}</h5>
+                      
+                    </label>
+        </div>
+        <div class="col-6">
+                <button (click)="sendToEditor(vers)" style="margin-left:82%" class="btn btn-primary">Open Model</button>
+                
+        </div>
+        </div>
     
     <div *ngIf="file.fileType=='collaboration'" class="diagram">
         <app-diagram  [url]="diagramUrl"></app-diagram>
