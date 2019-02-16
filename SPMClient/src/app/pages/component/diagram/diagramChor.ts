@@ -21,14 +21,14 @@ import {
    *           to navigate them
    * Modeler - bootstraps a full-fledged BPMN editor
    */
-  import BpmnJS from 'bpmn-js/lib/NavigatedViewer';
+  import BpmnJS from 'chor-js/lib/NavigatedViewer';
   
-  import { importDiagram } from './rx';
+  import { importDiagramChor } from './rxChor';
   
   import { throwError } from 'rxjs';
   
   @Component({
-    selector: 'app-diagram',
+    selector: 'app-diagram-chor',
     template: `
       <div #ref class="diagram-container"></div>
     `,
@@ -36,13 +36,13 @@ import {
       `
         .diagram-container {
           background-color:white;
-          height: 150%;
+          height: 300px;
           width: 80%;
         }
       `
     ]
   })
-  export class DiagramComponent implements AfterContentInit, OnChanges, OnDestroy {
+  export class DiagramComponentChor  implements AfterContentInit, OnChanges, OnDestroy {
     private bpmnJS: BpmnJS;
   
     @ViewChild('ref') private el: ElementRef;
@@ -84,7 +84,7 @@ import {
       return (
         this.http.get(url, { responseType: 'text' }).pipe(
           catchError(err => throwError(err)),
-          importDiagram(this.bpmnJS)
+          importDiagramChor(this.bpmnJS)
         ).subscribe(
           (warnings) => {
             this.importDone.emit({
