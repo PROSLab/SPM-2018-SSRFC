@@ -225,12 +225,13 @@ safenessAndSoundness(xml){
   );
 }
 
-shareFile(repoName,idUser,idFile,email){
+shareFile(repoName,idUser,idFile,email,autore){
   let params = new HttpParams();
   params = params.append('repositoryName', repoName); //id repository
   params = params.append('emailTo', email); //email
   params = params.append('idUser', idUser); //id utente
   params = params.append('idFile', idFile); //id file
+  params =params.append('autore',autore);
   console.log(params)
   return this.http.get(this.baseUrl + 'api/share/file', {params:params, responseType: 'text'})
   .pipe(
