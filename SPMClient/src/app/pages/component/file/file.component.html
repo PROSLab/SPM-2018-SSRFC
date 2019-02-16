@@ -91,6 +91,7 @@
                     <select [(ngModel)]="vers" (change)="selected()" style="margin-left:1%">
                         <option [ngValue]="v" *ngFor="let v of finalVersion; index as i">{{v}}</option>
                     </select>
+                   
 
                     <div style="margin-left:38%;margin-top:-1%" class="col-6">
                         <div>
@@ -101,6 +102,8 @@
                                 <button (click)="exportModel()" style="margin-left:1%" data-dismiss="modal" class="btn btn-success"><i class="fa">&#xf019;</i> Download version {{vers}}  </button>
                         </div>
                     </div>
+                    <br>
+                    Type of model: {{file.fileType}}
                 </div>
             </div>
         </div>
@@ -116,6 +119,7 @@
                 <div class="modal-body" *ngIf="fileExist">
                     <b> File name:</b> {{file.originalName}} <br>
                     <b> Created At: </b> {{file.createdAt}} <br>
+                    <b> Author: </b> {{file.autore}} <br>
 
                 </div>
                 <div *ngIf="!fileExist">
@@ -268,13 +272,13 @@
     </div>
     <br>
     
-    <div *ngIf="collaborator" class="diagram">
+    <div *ngIf="file.fileType=='collaboration'" class="diagram">
         <app-diagram  [url]="diagramUrl"></app-diagram>
       <!-- per collaborator -->
         
       </div>
    
-    <div class="diagram-container">
+    <div class="diagram-container" *ngIf="file.fileType=='choreography'">
       <app-diagram-chor [url]="diagramUrl" ></app-diagram-chor> <!-- per coreography -->
     </div>
    <!--  <div style="border:1px solid grey;zoom:60%;">

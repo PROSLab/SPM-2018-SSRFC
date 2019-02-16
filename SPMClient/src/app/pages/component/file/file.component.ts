@@ -70,6 +70,8 @@ export class FileComponent implements OnInit {
   url: string;
   diagramUrl;
   importError?: Error;
+  collaboration: any;
+  autore: any;
   constructor(private toastr:ToastrService,public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
@@ -81,7 +83,6 @@ export class FileComponent implements OnInit {
   }
 
  async selected() {
-   console.log('sono dentro')
 
    ; // my BPMN 2.0 xml
   /* var viewer = new Viewer({ container: 'body' });
@@ -153,7 +154,6 @@ go(){
 
 
 deleteFile(){
-  console.log(this.idFolder)
  this.service.deleteFile(this.idFile,this.idRepoSelected,this.idUser,this.idFolder)
  .subscribe(data=>{
    //this.ok=true
@@ -223,29 +223,7 @@ error => {
     }
   }
 
-/* modelerOpen(){
-  console.log(this.vers)
-  
-  if (this.vers==undefined)
-  {
-    this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" +this.finalVersion
-   
-  }else{
- console.log("non lo è")
-    this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
 
-  }
-  this.http.get(this.url, {
-    headers: {}, responseType: 'text'
-  })
-    .subscribe(
-      (x: any) => {
-        this.modeler.importXML(x, this.handleError);
-      console.log("importato")
-      },
-      this.handleError
-    );
-} */
  handleError(err: any) {
     if (err) {
       console.warn('Ups, error: ', err);
@@ -307,7 +285,6 @@ error => {
 
   getFileSpec() {
     
-    
     this.cambia=false
     for (var i = 0; i < this.versionArray.length; i++) {
       this.versionArray[i] = null
@@ -323,7 +300,7 @@ error => {
           for (var i = 0; i < this.file.cVersion; i++) {
             this.versionArray[i] = this.file.cVersion - (this.file.cVersion - i) + 1
           }
-
+          
           this.versionExist=true
           //mi salvo le versioni deprecate
           for (var i = 0; i < this.file.deletedVersions.length; i++) {
@@ -343,7 +320,6 @@ error => {
 
           // mi salvo il valore dell'ultima versione corrente per stamparla poi  nel dropdown
           this.vers=this.finalVersion[length-1]
-          console.log(this.finalVersion)
           if (this.finalVersion.length > 0) {
             this.versionExist = true;
           }
@@ -357,16 +333,11 @@ error => {
         if (this.vers==undefined)
         {
           this.diagramUrl= this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" +this.finalVersion
-          console.log("è undefined")
-         /*  Vedere un modo per metter l utlima versione */
       
         }else{
-       console.log("non lo è")
-          /*  this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers *//*  + this.version */
           this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
       
         }
-      /* await  this.modelerOpen() */
 
       }, error => {
         this.errorMessage = <any>error
@@ -375,10 +346,12 @@ error => {
 
 
   newVersion() {
-    this.service.createNewVersion(this.idFile, this.file.cVersion)
+//this.getFileSpec()
+
+this.service.createNewVersion(this.idFile, this.vers)
       .subscribe(data => {
        data = JSON.parse(data)
-
+console.log(data)
         for (var i = 1; i <= data.cVersion; i++) {
           this.versionArray[i - 1] = i
         }
@@ -463,7 +436,6 @@ error => {
       .subscribe(data => {
         data.createdAt = this.troncaData(data.createdAt)
         this.repo = data
-        console.log(this.repo)
       }, error => {
         this.errorMessage = <any>error
       });
@@ -503,7 +475,6 @@ error => {
 
     this.submitted = true;
     if (this.shareFileForm.invalid) {
-      console.log("invalid")
       return;
   }
 
@@ -526,19 +497,27 @@ error => {
 
   sendToEditor(v) {
     if(this.idFolder==undefined){
+      if(this.file.fileType == "collaboration"){
       this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',this.idFile,'editorBPMNCollaboration',v]);
-    }else{
-      this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.idFolder,'fileID',this.idFile,'editorBPMNCollaboration',v]);
-
     }
-   
-   
-
+      else{
+      this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',this.idFile,'editorBPMNChoreography',v]);
+      }
+    }
+    else{
+      if(this.file.fileType == "collaboration"){
+        this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.idFolder,'fileID',this.idFile,'editorBPMNCollaboration',v]);
+    }
+    else{
+        this.router.navigate(['repositoryID',this.idRepoSelected,'folderID',this.idFolder,'fileID',this.idFile,'editorBPMNChoreography',v]);
+    }
   }
+}
+
   sendToRepoFold() {
     this.router.navigate(['']);
-
   }
+
   sendToRepo() {
     this.router.navigate(['repositoryID', this.idRepoSelected]);
 
