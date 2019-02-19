@@ -31,6 +31,21 @@ public class WebClientTests {
 	static WebDriver driver;
 	static String projectPath = System.getProperty("user.dir"); 
     
+	private String getDriverOsLocation () {
+		String os = System.getProperty("os.name").toLowerCase();
+		
+		if (os.indexOf("win") >= 0) {
+			return File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
+		} else if (os.indexOf("mac") >= 0) {
+			return File.separator + "drivers" + File.separator + "macos" + File.separator + "chromedriver";  
+		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 ) {
+			return File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver";  
+		} 
+			
+		System.out.println("Your OS is not support!!");
+		return null;
+		
+	}
     
     @Before
     public void setup() {
@@ -73,15 +88,15 @@ public class WebClientTests {
 	@Test
     public void goToGoogleTest() throws Exception {
 		browser = "Chrome";
-		String os = System.getProperty("os.name").toLowerCase();
-		String location = null;
+		//String os = System.getProperty("os.name").toLowerCase();
+		//String location = null;
 		
 		System.out.println();
 		System.out.println();
 		System.out.println("-------------------------------------------------------------------------");
 		System.out.println("GO TO GOOGLE TEST");
 				
-		if (os.indexOf("win") >= 0) {
+		/*if (os.indexOf("win") >= 0) {
 			System.out.println("This is Windows");
 			location = File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
 		} else if (os.indexOf("mac") >= 0) {
@@ -92,7 +107,8 @@ public class WebClientTests {
 			location = File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver";  
 		} else {
 			System.out.println("Your OS is not support!!");
-		}
+		}*/
+		String location = getDriverOsLocation();
 		
 		System.setProperty("webdriver.chrome.driver", projectPath + location);
 		
