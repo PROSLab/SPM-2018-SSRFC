@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -89,9 +90,20 @@ public class WebClientTests {
 			System.out.println("Your OS is not support!!");
 		}
 		
-		
+		System.out.println(projectPath + location);
 		System.setProperty("webdriver.chrome.driver", projectPath + location);
-		driver = new ChromeDriver();
+		
+		ChromeOptions options = new ChromeOptions();
+		options.setExperimentalOption("useAutomationExtension", false);
+		/*options.addArguments("start-maximized"); // open Browser in maximized mode
+		options.addArguments("disable-infobars"); // disabling infobars
+		options.addArguments("--disable-extensions"); // disabling extensions
+		options.addArguments("--disable-gpu"); // applicable to windows os only
+		options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+		options.addArguments("--no-sandbox"); // Bypass OS security model
+		options.addArguments("--headless");*/
+		
+		driver = new ChromeDriver(options);
 		driver.get("http://localhost:4200/login");
 		driver.findElement(By.id("loginEmail")).sendKeys("scalaemanuele92@gmail.com");
 		Thread.sleep(1000);
