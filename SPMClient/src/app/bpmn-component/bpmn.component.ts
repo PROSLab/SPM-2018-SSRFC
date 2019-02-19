@@ -34,11 +34,17 @@ export class BpmnComponent implements OnInit {
   error: any = null;
   TerzoValore: any;
   errorProblem: boolean=null;
-  validity: boolean=false;
+  validity: boolean;
   appVal: boolean =false;
   title: string;
   messageSoundness: any;
   messageSafeness: string;
+  infoValidity: any;
+  infoSoundness: any;
+  infoSafeness: any;
+  infomessageSafeness: string;
+  infoMsgS: string;
+  info: boolean = false;
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -105,13 +111,46 @@ export class BpmnComponent implements OnInit {
   getFileSpec() {
 
     this.service.getFileSpec(this.idFile)
-      .subscribe(data => {
+      .subscribe(async data => {
+
         this.file = data
         this.title=this.file.originalName
+        this.validity = this.file.validity
+        console.log(this.validity)
+        this.infoSoundness =  this.file.soundness
+        this.infoSafeness = this.file.safeness
+    
+      
+        
+       
 
       }, error => {
       });
   }
+
+
+   infoS(){
+    this.service.getFileSpec(this.idFile)
+      .subscribe(async data => {
+
+        this.file = data
+        this.title=this.file.originalName
+        this.validity = this.file.validity
+        console.log(this.validity)
+        this.infomessageSafeness=''
+        this.infoMsgS=''
+        this.infoSoundness =''
+        this.infoSafeness=''
+
+
+        this.infoSoundness =  this.file.soundness
+        this.infoSafeness = this.file.safeness
+       await  this.setImageInfo(this.infoSoundness,this.infoSafeness)
+  
+      }, error => {
+      });
+  }
+
 
   modify(): any {
     
@@ -218,10 +257,11 @@ export class BpmnComponent implements OnInit {
       { headers: headers, responseType: "text" })
       .subscribe(
          async (data: string) => {
+       
     document.getElementById("validation").setAttribute("data-target","#validityModal")
        document.getElementById("validityModal").setAttribute("class", "modal fade show")
       document.getElementById("validityModal").setAttribute("style", "padding-right:16px;display:block")
-          this.validity=true
+         
           this.errorProblem=false
           this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
@@ -234,9 +274,7 @@ export class BpmnComponent implements OnInit {
           console.log('soundness:', this.soundness, 'safeness:', this.safeness)
            this.setImage(this.soundness,this.safeness)
 
-           if( this.idFile!= undefined){
-            this.addValidity( this.idFile)
-           }
+          
           },
         error => {         
 
@@ -247,12 +285,9 @@ export class BpmnComponent implements OnInit {
         document.getElementById("imageSafeness").setAttribute("alt", "")
           this.handleError
           this.toastr.error('Invalid bpmn file', 'Errore editor')
-          this.safeness=null
-          this.soundness=null
-          this.validity=false
-          if( this.idFile!= undefined){
-            this.addValidity( this.idFile)
-           }   
+       
+        
+            
           console.log(error);
         });
     }
@@ -284,25 +319,30 @@ export class BpmnComponent implements OnInit {
 
         async (data: string) => {
           this.errorProblem=false
-         /*  this.soundness = data.substr(0, 1).trim()
+          this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
           this.safeness = data.substr(pSafeness, 1).trim()
-          var subData = data.substr(pSafeness + 1) */
-          this.safeness=null
-          this.soundness=null
+          var subData = data.substr(pSafeness + 1)
+
+          
           this.validity=true
+
           if( this.idFile!= undefined){
             this.addValidity(this.idFile)
            }  
           this.toastr.success('This model is valid','Validity of Model')
+          
         },
         error => {
           this.safeness=null
           this.soundness=null
           this.validity=false
-
+          document.getElementById("imageSoundness").setAttribute("src","")
+          document.getElementById("imageSafeness").setAttribute("src", "")
+          document.getElementById("imageSoundness").setAttribute("alt","")
+          document.getElementById("imageSafeness").setAttribute("alt", "")
           if( this.idFile!= undefined){
-            this.addValidity( this.idFile)
+            this.addValidity(this.idFile)
            }   
 
         this.toastr.error('This model is invalid','Validity Model')
@@ -350,28 +390,94 @@ if(this.folderSelected==undefined){
       )
     }
   };
+  setImageInfo(soundness,safeness){
+    
+    //PARAMETRI PER IL SOUNDNESS
+    if(parseInt(soundness)==0) { //0 Unsound for dead token
+        document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+        document.getElementById("infoimageSoundness").setAttribute("alt", "Unsound for dead token")
+       /*  document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Unsound for dead token") */
+      this.infoMsgS = " Unsound for dead token "
 
+      }
+
+      
+    if(parseInt(soundness)==1){  // 1 Unsound for proper completion violation
+      document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoimageSoundness").setAttribute("alt", "Unsound for proper completion violation")
+   /*    document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Unsound for proper completion violation") */
+      this.infoMsgS = " Unsound for proper completion violation "
+
+      
+    }
+    if(parseInt(soundness)==2){ //2 Message disregarding sound
+      document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
+      document.getElementById("infoimageSoundness").setAttribute("alt", "Message disregarding sound")
+      /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Message disregarding sound") */
+      this.infoMsgS = " Message disregarding sound "
+
+     
+    }
+
+    if(parseInt(soundness)==3){ //3 Sound
+      document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoimageSoundness").setAttribute("alt", "Sound")
+       /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoSound").setAttribute("alt", "Sound") */
+      this.infoMsgS = " Sound "
+
+    
+      }
+
+//PARAMETRI PER IL SAFENESS
+    if(parseInt(safeness)==4){ //4 Safe
+      document.getElementById("infoimageSafeness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+      document.getElementById("infoimageSafeness").setAttribute("alt", "Safe")
+  /*     document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoSafe").setAttribute("alt", "Safe") */
+      this.infomessageSafeness = " Safe "
+    }
+    if(parseInt(safeness)==5){ // 5 Unsafe
+      document.getElementById("infoimageSafeness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoimageSafeness").setAttribute("alt", "Unsafe")
+      /* document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSafe").setAttribute("alt", "Unsafe") */
+      this.infomessageSafeness = " Unsafe "
+    }
+        
+  }
   setImage(soundness,safeness){
     //PARAMETRI PER IL SOUNDNESS
     if(parseInt(soundness)==0) { //0 Unsound for dead token
         document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
         document.getElementById("imageSoundness").setAttribute("alt", "Unsound for dead token")
+       /*  document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Unsound for dead token") */
         this.messageSoundness = " Unsound for dead token "
       }
     if(parseInt(soundness)==1){  // 1 Unsound for proper completion violation
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
       document.getElementById("imageSoundness").setAttribute("alt", "Unsound for proper completion violation")
+   /*    document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Unsound for proper completion violation") */
       this.messageSoundness = " Unsound for proper completion violation "
     }
     if(parseInt(soundness)==2){ //2 Message disregarding sound
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
       document.getElementById("imageSoundness").setAttribute("alt", "Message disregarding sound")
+      /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Message disregarding sound") */
       this.messageSoundness = " Message disregarding sound "
     }
 
     if(parseInt(soundness)==3){ //3 Sound
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
        document.getElementById("imageSoundness").setAttribute("alt", "Sound")
+       /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoSound").setAttribute("alt", "Sound") */
        this.messageSoundness = " Sound "
       }
 
@@ -379,11 +485,15 @@ if(this.folderSelected==undefined){
     if(parseInt(safeness)==4){ //4 Safe
       document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
       document.getElementById("imageSafeness").setAttribute("alt", "Safe")
+  /*     document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoSafe").setAttribute("alt", "Safe") */
       this.messageSafeness = " Safe "
     }
     if(parseInt(safeness)==5){ // 5 Unsafe
       document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
       document.getElementById("imageSafeness").setAttribute("alt", "Unsafe")
+      /* document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSafe").setAttribute("alt", "Unsafe") */
       this.messageSafeness = " Unsafe "
     }
         
