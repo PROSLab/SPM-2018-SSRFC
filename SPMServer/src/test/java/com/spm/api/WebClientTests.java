@@ -70,6 +70,34 @@ public class WebClientTests {
         .isEqualTo("Johnson");
 	}
 	
+	@Test
+    public void goToGoogleTest() throws Exception {
+		browser = "Chrome";
+		String os = System.getProperty("os.name").toLowerCase();
+		String location = null;
+				
+		if (os.indexOf("win") >= 0) {
+			System.out.println("This is Windows");
+			location = File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
+		} else if (os.indexOf("mac") >= 0) {
+			System.out.println("This is Mac");
+			location = File.separator + "drivers" + File.separator + "macos" + File.separator + "chromedriver";  
+		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 ) {
+			System.out.println("This is Unix or Linux");
+			location = File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver";  
+		} else {
+			System.out.println("Your OS is not support!!");
+		}
+		
+		System.setProperty("webdriver.chrome.driver", projectPath + location);
+		
+		ChromeOptions options = new ChromeOptions();
+		options.setExperimentalOption("useAutomationExtension", false);
+		
+		driver = new ChromeDriver(options);
+		driver.get("https://www.google.it/");
+	}
+	
 	/*Selenium Chrome test - Login*/
 	@Test
     public void seleniumLoginTest() throws Exception {
