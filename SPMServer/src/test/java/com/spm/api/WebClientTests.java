@@ -75,6 +75,11 @@ public class WebClientTests {
 		browser = "Chrome";
 		String os = System.getProperty("os.name").toLowerCase();
 		String location = null;
+		
+		System.out.println();
+		System.out.println();
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.println("GO TO GOOGLE TEST");
 				
 		if (os.indexOf("win") >= 0) {
 			System.out.println("This is Windows");
@@ -96,6 +101,10 @@ public class WebClientTests {
 		
 		driver = new ChromeDriver(options);
 		driver.get("https://www.google.it/");
+		
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.println();
+		System.out.println();
 	}
 	
 	/*Selenium Chrome test - Login*/
@@ -104,6 +113,11 @@ public class WebClientTests {
 		browser = "Chrome";
 		String os = System.getProperty("os.name").toLowerCase();
 		String location = null;
+		
+		System.out.println();
+		System.out.println();
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.println("SELENIUM LOGIN TEST");
 				
 		if (os.indexOf("win") >= 0) {
 			System.out.println("This is Windows");
@@ -123,13 +137,6 @@ public class WebClientTests {
 		
 		ChromeOptions options = new ChromeOptions();
 		options.setExperimentalOption("useAutomationExtension", false);
-		/*options.addArguments("start-maximized"); // open Browser in maximized mode
-		options.addArguments("disable-infobars"); // disabling infobars
-		options.addArguments("--disable-extensions"); // disabling extensions
-		options.addArguments("--disable-gpu"); // applicable to windows os only
-		options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-		options.addArguments("--no-sandbox"); // Bypass OS security model
-		options.addArguments("--headless");*/
 		
 		driver = new ChromeDriver(options);
 		driver.get("http://localhost:4200/login");
@@ -139,6 +146,10 @@ public class WebClientTests {
 		driver.findElement(By.id("loginButton")).click();
 		Thread.sleep(5000);
 		assertTrue(driver.findElement(By.id("welcomeCard")).isDisplayed());
+		
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.println();
+		System.out.println();
 	}
 	
 	
