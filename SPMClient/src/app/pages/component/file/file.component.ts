@@ -399,6 +399,7 @@ console.log(data)
   }
 
   exportModel() {
+    console.log(this.idFile,this.vers)
           window.open("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers)
       /*  this.downloadFile() */
     this.toastr.success('File downloaded with success', 'Download File')
@@ -477,8 +478,6 @@ console.log(data)
     if (this.shareFileForm.invalid) {
       return;
   }
-
-  
 
     this.service.shareFile( this.repo.repositoryName, this.idUser,this.idFile,email,this.autore)
       .subscribe(data => {
