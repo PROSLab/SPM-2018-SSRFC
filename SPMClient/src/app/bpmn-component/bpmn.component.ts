@@ -126,6 +126,7 @@ export class BpmnComponent implements OnInit {
 
 
    infoS(){
+     if(this.idFile!=undefined){
     this.service.getFileSpec(this.idFile)
       .subscribe(async data => {
 
@@ -144,8 +145,11 @@ export class BpmnComponent implements OnInit {
   
       }, error => {
       });
-  }
-
+    }
+    if(this.idFile == undefined){
+      this.infoMsgS = "Your file is in creation."
+    }
+   }
 
   modify(): any {
     
@@ -193,8 +197,6 @@ export class BpmnComponent implements OnInit {
       );
   }
 
- 
-  
 
 
   back() {
@@ -249,8 +251,8 @@ export class BpmnComponent implements OnInit {
       .subscribe(
          async (data: string) => {
        
-    document.getElementById("validation").setAttribute("data-target","#validityModal")
-       document.getElementById("validityModal").setAttribute("class", "modal fade show")
+      document.getElementById("validation").setAttribute("data-target","#validityModal")
+      document.getElementById("validityModal").setAttribute("class", "modal fade show")
       document.getElementById("validityModal").setAttribute("style", "padding-right:16px;display:block")
          
           this.errorProblem=false

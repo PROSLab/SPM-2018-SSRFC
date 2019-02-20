@@ -115,12 +115,12 @@
                 </div>
     
                 <div class="modal-body">
-                    <div *ngIf="validity==false">
+                    <div *ngIf="validity==false && idFile!=undefined">
                             <h5>Validity: </h5>
                             Your model is invalid
                             <br>
                     </div>
-                    <div *ngIf="validity==true">
+                    <div *ngIf="validity==true && idFile!=undefined">
                             <h5>Validity: </h5>
                             Your model is valid
                             <br>
@@ -139,7 +139,9 @@
                                     {{infomessageSafeness}}
                                 </div>
                         </div>
-                   
+                   <div *ngIf="idFile==undefined">
+                       {{infoMsgS}}
+                   </div>
                    
                     <br>
     
