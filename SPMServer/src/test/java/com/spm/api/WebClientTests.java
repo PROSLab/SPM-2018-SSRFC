@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -30,6 +31,21 @@ public class WebClientTests {
 	static WebDriver driver;
 	static String projectPath = System.getProperty("user.dir"); 
     
+	private String getDriverOsLocation () {
+		String os = System.getProperty("os.name").toLowerCase();
+		
+		if (os.indexOf("win") >= 0) {
+			return File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
+		} else if (os.indexOf("mac") >= 0) {
+			return File.separator + "drivers" + File.separator + "macos" + File.separator + "chromedriver";  
+		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 ) {
+			return File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver";  
+		} 
+			
+		System.out.println("Your OS is not support!!");
+		return null;
+		
+	}
     
     @Before
     public void setup() {
@@ -69,29 +85,46 @@ public class WebClientTests {
         .isEqualTo("Johnson");
 	}
 	
+	@Test
+    public void goToGoogleTest() throws Exception {
+		browser = "Chrome";
+		
+		System.out.println();
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.println("GO TO GOOGLE TEST");
+				
+
+		String location = getDriverOsLocation();
+		
+		System.setProperty("webdriver.chrome.driver", projectPath + location);
+		
+		ChromeOptions options = new ChromeOptions();
+		options.setExperimentalOption("useAutomationExtension", false);
+		
+		driver = new ChromeDriver(options);
+		driver.get("https://www.google.it/");
+		
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.println();
+	}
+	
 	/*Selenium Chrome test - Login*/
 	@Test
     public void seleniumLoginTest() throws Exception {
 		browser = "Chrome";
-		String os = System.getProperty("os.name").toLowerCase();
-		String location = null;
-				
-		if (os.indexOf("win") >= 0) {
-			System.out.println("This is Windows");
-			location = File.separator + "drivers" + File.separator + "win" + File.separator + "chromedriver.exe";  
-		} else if (os.indexOf("mac") >= 0) {
-			System.out.println("This is Mac");
-			location = File.separator + "drivers" + File.separator + "macos" + File.separator + "chromedriver";  
-		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 ) {
-			System.out.println("This is Unix or Linux");
-			location = File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver";  
-		} else {
-			System.out.println("Your OS is not support!!");
-		}
 		
+		System.out.println();
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.println("SELENIUM LOGIN TEST");
+				
+		String location = getDriverOsLocation();
 		
 		System.setProperty("webdriver.chrome.driver", projectPath + location);
-		driver = new ChromeDriver();
+		
+		ChromeOptions options = new ChromeOptions();
+		options.setExperimentalOption("useAutomationExtension", false);
+		
+		driver = new ChromeDriver(options);
 		driver.get("http://localhost:4200/login");
 		driver.findElement(By.id("loginEmail")).sendKeys("scalaemanuele92@gmail.com");
 		Thread.sleep(1000);
@@ -99,6 +132,9 @@ public class WebClientTests {
 		driver.findElement(By.id("loginButton")).click();
 		Thread.sleep(5000);
 		assertTrue(driver.findElement(By.id("welcomeCard")).isDisplayed());
+		
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.println();
 	}
 	
 	
