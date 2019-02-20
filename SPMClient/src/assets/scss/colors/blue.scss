@@ -10,11 +10,11 @@ $topbar: #009efb;
 .topbar {
     background: $topbar;
     /* Old browsers */
-    background: -moz-linear-gradient(left, #0178bc 0%, #00bdda 100%);
+    background: -moz-linear-gradient(left,#70ba3d 0%, #1aa48a 100%);
     /* FF3.6-15 */
-    background: -webkit-linear-gradient(left, #0178bc 0%, #00bdda 100%);
+    background: -webkit-linear-gradient(left, #70ba3d 0%, #1aa48a 100%);
     /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to right, #0178bc 0%, #00bdda 100%);
+    background: linear-gradient(to right, #70ba3d 0%, #1aa48a 100%);
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     .navbar-header {
         background: $white;
