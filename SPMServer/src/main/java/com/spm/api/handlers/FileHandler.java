@@ -63,8 +63,8 @@ public class FileHandler {
                     	FormFieldPart idFolderPart = (FormFieldPart)map.get("idFolder");
                     	idFolder = idFolderPart.value();
                     }                   
-                    
-                    String originalName = filePart.filename();
+                    String [] splitarray=  filePart.filename().split(".bpmn");
+                    String originalName = splitarray[0];
                     String mimetype = "bpmn";
                     
                     
