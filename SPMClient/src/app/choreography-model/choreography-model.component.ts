@@ -60,7 +60,7 @@ export class ChoreographyModelComponent implements OnInit {
   ngOnInit() {
 
     if (this.idFile == undefined) {
-      this.title="FileInCreazione"
+      this.title="Creation File"
       console.log("lo sto creando")
       this.createFile()
     }
@@ -126,7 +126,7 @@ export class ChoreographyModelComponent implements OnInit {
       }, error => {
         this.error = error
       });
-    this.toastr.success('File modificato Correttamente', 'Modifiche file')
+    this.toastr.success('This file has been succesfully modified', 'Modify File')
   }
 
   createFile() {
@@ -313,7 +313,7 @@ export class ChoreographyModelComponent implements OnInit {
       .subscribe(data => {
         this.idFileCreato = data.id
         //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio
-        this.toastr.success('File created', 'Creazione file')
+        this.toastr.success('File created', 'Creation File')
 if(this.folderSelected==undefined){
   this.router.navigate(['repositoryID',this.idRepoSelected])
 

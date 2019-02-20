@@ -26,7 +26,6 @@ export const importDiagramChor = (bpmnJS) => <Object>(source: Observable<string>
         });
       },
       error(e) {
-        console.log('ERROR');
         observer.error(e);
       },
       complete() {

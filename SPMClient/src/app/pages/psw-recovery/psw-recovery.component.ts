@@ -44,7 +44,6 @@ export class PswRecoveryComponent implements OnInit {
     //rimuove gli spazi all'inizio ed alla fine della stringa
     email = this.f.email.value.trim();
     // verifica se è diversa da null
-    console.log(email)
     if (!email)  return; 
     this.service.sendEmail(email)
     //TESTING rimuovere il contenuto della parentesi quando si è verificata la funzione

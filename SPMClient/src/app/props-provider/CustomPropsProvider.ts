@@ -9,7 +9,6 @@ export class CustomPropsProvider implements IPropertiesProvider {
   }
 
   getTabs(element) {
-    console.log(this.constructor.name, 'Creating property tabs');
     return this.bpmnPropertiesProvider.getTabs(element)
       /* .concat({
         id: 'custom',
