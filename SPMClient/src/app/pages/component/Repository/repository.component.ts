@@ -346,13 +346,15 @@ this.submitted=false;
   uploadFileToActivity() {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
     this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload,autore,this.collaboration).subscribe(data => {
-//MANCA METODO PER VEDERE SE è COLLABORATIONO IL FILE O NO :
+
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
       this.files[count] = newFile
       
+      console.log( )
       this.toastr.success('This file has been succesfully imported', 'Import File')
+      this.filesExist=true
     }, error => {
       console.log(error);
     });
@@ -385,8 +387,6 @@ this.submitted=false;
             document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto ")
             document.getElementById("menu").setAttribute("aria-expanded", "false")
             document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
-           
-
           }, error => {
            
             this.errorMessage = <any>error
