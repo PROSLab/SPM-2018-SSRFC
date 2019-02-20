@@ -58,13 +58,11 @@ export class BpmnComponent implements OnInit {
   ngOnInit(): void {
     
     if (this.idFile == undefined) {
-      this.title="FileInCreazione"
-      console.log("lo sto creando")
+      this.title="Creation File"
       this.createFile()
     }
     else {
       this.getFileSpec()
-      console.log("lo sto modificando")
       this.load()
     }
 
@@ -91,7 +89,6 @@ export class BpmnComponent implements OnInit {
 
   handleError(err: any) {
     if (err) {
-      console.log("errroreee")
       console.warn('Ups, error: ', err);
     }
   }
@@ -116,7 +113,6 @@ export class BpmnComponent implements OnInit {
         this.file = data
         this.title=this.file.originalName
         this.validity = this.file.validity
-        console.log(this.validity)
         this.infoSoundness =  this.file.soundness
         this.infoSafeness = this.file.safeness
     
@@ -137,7 +133,6 @@ export class BpmnComponent implements OnInit {
         this.file = data
         this.title=this.file.originalName
         this.validity = this.file.validity
-        console.log(this.validity)
         this.infomessageSafeness=''
         this.infoMsgS=''
         this.infoSoundness =''
@@ -172,7 +167,7 @@ export class BpmnComponent implements OnInit {
       }, error => {
         this.error = error
       });
-    this.toastr.success('File modificato Correttamente', 'Modifiche file')
+    this.toastr.success('The File has been succesfully modified', 'Modify File')
   }
 
   createFile() {
@@ -182,7 +177,6 @@ export class BpmnComponent implements OnInit {
       headers: {}, responseType: 'text'
     }).subscribe(
       (x: any) => {
-        console.log(x)
         this.bodyFile = x
         this.modeler.importXML(x, this.handleError)
       },
@@ -197,7 +191,6 @@ export class BpmnComponent implements OnInit {
     })
       .subscribe(
         async (x: any) => {
-          console.log(x)
           this.modeler.importXML(x, this.handleError);
         },
         this.handleError
@@ -222,7 +215,6 @@ export class BpmnComponent implements OnInit {
   }
 
   sendTofile(fileSelected) {
-    console.log('repositoryID', this.idRepoSelected, 'folderID', this.folderSelected, 'fileID', this.idFile)
     if (this.folderSelected == undefined) {
       this.router.navigate(['repositoryID', this.idRepoSelected, 'fileID', this.idFile]);
     }
@@ -249,7 +241,6 @@ export class BpmnComponent implements OnInit {
       (err: any, xml: any) => {
         var f = new File([xml], 'diagram');
         this.bodyFile = xml
-        console.log(this.bodyFile)
       });
 
     var headers: { "Content-Type": "application/xml" }
@@ -271,9 +262,8 @@ export class BpmnComponent implements OnInit {
           var subData = data.substr(pSafeness + 1)
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
-          this.toastr.success('Validity and Soundness verificated', 'Verifica Validity')
+          this.toastr.success('Validity and Soundness verificated', 'Validation')
 
-          console.log('soundness:', this.soundness, 'safeness:', this.safeness)
            this.setImage(this.soundness,this.safeness)
 
           
@@ -309,7 +299,6 @@ export class BpmnComponent implements OnInit {
         (err: any, xml: any) => {
           var f = new File([xml], 'diagram');
           newXml = xml
-          console.log(this.bodyFile)
         });
 
     var headers: { "Content-Type": "application/xml" }
@@ -357,18 +346,16 @@ export class BpmnComponent implements OnInit {
     //creazione di un nuovo file salvandolo dall'editor
     this.modeler.saveXML(
       (err: any, xml: any) => {
-        console.log(xml)
         this.file = new File([xml], nameFile),
           this.bodyFile = xml
       });
 
     var autore = localStorage.getItem('name') + ' ' + localStorage.getItem('surname');
-    console.log(this.folderSelected)
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, 'collaboration', this.folderSelected)
       .subscribe(data => {
         this.idFileCreato = data.id
         //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio
-        this.toastr.success('File created', 'Creazione file')
+        this.toastr.success('File created', 'Creation File')
 if(this.folderSelected==undefined){
   this.router.navigate(['repositoryID',this.idRepoSelected])
 
@@ -385,7 +372,7 @@ if(this.folderSelected==undefined){
   addValidity(idfile) {
     if(this.isLogged==true){
     this.service.addValidity(idfile, this.soundness, this.safeness,this.validity).subscribe(
-      data => { console.log("validity:",data) },
+      data => {  },
       error => { 
         console.log(error) 
       }

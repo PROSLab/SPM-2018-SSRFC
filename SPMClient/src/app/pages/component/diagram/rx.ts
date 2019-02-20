@@ -15,7 +15,6 @@ export const importDiagram = (bpmnJS) => <Object>(source: Observable<string>) =>
         subscription.unsubscribe();
 
         bpmnJS.importXML(xml, function(err, warnings) {
-          console.log(xml)
 
           if (err) {
             observer.error(err);
@@ -27,7 +26,6 @@ export const importDiagram = (bpmnJS) => <Object>(source: Observable<string>) =>
         });
       },
       error(e) {
-        console.log('ERROR');
         observer.error(e);
       },
       complete() {

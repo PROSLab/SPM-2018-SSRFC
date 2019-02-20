@@ -140,7 +140,7 @@ verification(){
 			.subscribe(data => {
 				this.repoExist=true
 
-				this.toastr.success('Repository creata con successo', 'Repository Creato')
+				this.toastr.success('Your repository has been successfully created', 'Create Repository')
 
 
 				var newRepos = JSON.parse(data)
@@ -159,7 +159,7 @@ verification(){
 
 				this.router.navigate(['/']);
 			}, error => {
-				        this.toastr.error('Errore nella creazione del database', 'Errore')
+				        this.toastr.error('Error creating Repository', 'Errore')
 
 				this.errorMessage = <any>error
 				
@@ -176,7 +176,7 @@ verification(){
 			return true;
 		}
 		else {
-			this.toastr.error('Formato file non corretto', 'FormatoFile')
+			this.toastr.error('The format of the file is not correct', 'File Format')
 
 			return false;
 		}

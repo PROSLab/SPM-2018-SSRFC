@@ -69,7 +69,7 @@ export class RegistrazioneComponent implements OnInit {
         const newUser: User = { name, surname, email, password } as User;
         this.service.addUser(newUser)
         .subscribe( data => {
-            this.toastr.success('Ti sei registrato con successo,ora puoi effettuare il login', 'Registrazione')
+            this.toastr.success('You have successfully registered, now you can login', 'Sign up')
 
             setTimeout(()=>{
                 this.router.navigate(['/login']);}, 2000); 

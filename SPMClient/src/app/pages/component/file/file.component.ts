@@ -112,7 +112,7 @@ moveTo(id){
     if(id==this.idRepoSelected){
       this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,this.idFolder)
       .subscribe(data => {
-        this.toastr.success('File spostato nella cartella di destinazione', 'Move File')
+        this.toastr.success('This File has moved in the destination folder', 'Move File')
 
       }, error => {
         this.errorMessage = <any>error
@@ -121,7 +121,7 @@ moveTo(id){
     }else{
       if(id == this.idFolder){
         this.ok2=true
-        this.toastr.warning('Selezionare una cartella diversa dall origine', 'Folder')
+        this.toastr.warning('Choose a different Folder, this is the root Folder', 'Folder')
 
       }else{
         this.service.moveToFolder(this.idFile,this.idRepoSelected,this.idUser,this.file.path,id)
@@ -157,7 +157,7 @@ deleteFile(){
  this.service.deleteFile(this.idFile,this.idRepoSelected,this.idUser,this.idFolder)
  .subscribe(data=>{
    //this.ok=true
-   this.toastr.success('File eliminato con successo', 'File Eliminato')
+   this.toastr.success('This File has been succesfully eliminated', 'Elimination File')
 
   
   
@@ -196,7 +196,7 @@ error => {
    
     this.vers = v
     if (this.vers == null) {
-      this.toastr.warning('Devi selezionare una versione per eliminarla', 'Versione File')
+      this.toastr.warning('You must choose a version of file for deleting it', 'Version File')
 
     }
     else if (this.finalVersion.length !=1) {
@@ -211,7 +211,7 @@ error => {
           }
         this.vers =null
         
-        this.toastr.success('Versione Eliminata con successo', 'Versione Eliminata')
+        this.toastr.success('This File version has been succesfully deleted', 'Delete File Version')
         
          
           this.getFileSpec()
@@ -351,13 +351,13 @@ error => {
 this.service.createNewVersion(this.idFile, this.vers)
       .subscribe(data => {
        data = JSON.parse(data)
-console.log(data)
+
         for (var i = 1; i <= data.cVersion; i++) {
           this.versionArray[i - 1] = i
         }
         this.cambia=false
         this.vers=data.cVersion;
-        this.toastr.success('Nuova versione del file creata con successo', 'Versione File')
+        this.toastr.success('A new File version has been succesfully created', ' File Version')
         this.getFileSpec()
       }, error => {
         this.errorMessage = <any>error
@@ -399,7 +399,6 @@ console.log(data)
   }
 
   exportModel() {
-    console.log(this.idFile,this.vers)
           window.open("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers)
       /*  this.downloadFile() */
     this.toastr.success('File downloaded with success', 'Download File')
@@ -459,7 +458,7 @@ console.log(data)
       .subscribe(data => {
         this.file = data
         this.getFileSpec()
-        this.toastr.success('Nome  del file modificato con successo', 'Name File')
+        this.toastr.success('The name of this file has been succesfully modified', 'Name File')
 
         this.submitted=false
         this.clearModal(this.closeModal3)
@@ -482,7 +481,7 @@ console.log(data)
     this.service.shareFile( this.repo.repositoryName, this.idUser,this.idFile,email,this.autore)
       .subscribe(data => {
         this.ok=true
-        this.toastr.success('File condiviso con successo', 'Share File')
+        this.toastr.success('This file has been succesfully shared', 'Share File')
 
          this.clearModal(this.closeModal2)
         
