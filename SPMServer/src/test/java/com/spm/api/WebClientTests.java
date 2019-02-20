@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -111,6 +112,10 @@ public class WebClientTests {
 	/*Selenium Chrome test - Login*/
 	@Test
     public void seleniumLoginTest() throws Exception {
+		Assume.assumeFalse(System.getProperty("os.name").toLowerCase().contains("nix"));
+		Assume.assumeFalse(System.getProperty("os.name").toLowerCase().contains("nux"));
+		Assume.assumeFalse(System.getProperty("os.name").toLowerCase().contains("aix"));
+		
 		browser = "Chrome";
 		
 		System.out.println();
