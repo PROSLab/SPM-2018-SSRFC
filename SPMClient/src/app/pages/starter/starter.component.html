@@ -6,9 +6,8 @@
             <div class="col-12">
                 <div class="card">
                     <div id = "welcomeCard" class="card-body">
-                        Benvenuto {{localUser?.name}} {{localUser?.surname}}! <br><br>
-                        Questa è la lista di tutti i tuoi repository. Puoi cliccare su di essi per visualizzare cosa
-                        c'è all'interno!
+                       Welcome {{localUser?.name}} {{localUser?.surname}}! <br><br>
+                        This is the list of all your repository . You can click on them to see what's inside!
                     </div>
                 </div>
             </div>
@@ -103,7 +102,7 @@
 
     <div class="row" *ngIf="repoExist==false">
         <div  class="alert alert-danger alert-dismissible" style="margin-top:10%;margin-left:10%">
-            <h3>Non ci sono repository presenti.<br> Clicca su Create Repository per crearne uno!</h3>
+            <h3>There aren't repositories<br> Create one Repository clicking on Create new Repository Button!</h3>
         </div>
     </div>
 

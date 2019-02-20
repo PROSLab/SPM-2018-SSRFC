@@ -68,7 +68,7 @@ export class FolderComponent implements OnInit {
 			return true;
 		}
 		else {
-      this.toastr.error('Errore puoi caricare esclusivamente file .bpmn', 'Formato File')
+      this.toastr.error('Error , you can choose file only with .bpmn format', 'File Format')
 			return false;
 		}
 	}
@@ -85,11 +85,9 @@ export class FolderComponent implements OnInit {
  reader.onload = (event: Event) => {
  this.b= reader.result.slice(0,100).toString()
  if(this.b.indexOf("<bpmn2")>-1){
-   console.log("coreogr")
    this.collaboration="choreography"
  }
  else{
-   console.log("collab")
    this.collaboration="collaboration"
    }
    var a = this.controlFormatFile(this.fileToUpload)
@@ -110,14 +108,13 @@ export class FolderComponent implements OnInit {
  }
   uploadFileToActivity() {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
-    console.log("eiiiii",this.collaboration)
 
     this.service.postFile(this.idRepoSelected,this.idUser,this.fileToUpload,autore,this.collaboration,this.folderSelected).subscribe(data => {
     //MANCA METODO PER VEDERE SE IL FILE è COLLABORATION O NO :)
 
 
       this.exist=true
-      this.toastr.success('Hai Caricato il file correttamente', 'Load File')
+      this.toastr.success('This File has been succesfully loaded', 'Load File')
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
       var count = this.files.length
@@ -168,13 +165,13 @@ modifyName(){
         this.exist=true
         this.folderInfo = data
         this.ok=true
-        this.toastr.success('Nome della cartella modificato correttamente', 'Folder Name')
+        this.toastr.success('This Folder Name has been successfully modified', 'Folder Name')
        
        this.clearModal(this.closeModal1)
 
       this.getFolderInfo()
       }, error => {
-        this.toastr.error('Errore cambio nome della cartella', 'Cartella')
+        this.toastr.error('Error in modifying the name of the folder', 'Folder')
         this.errorMessage = <any>error
       });
   }

@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem("email", data.email)
                 localStorage.setItem("password", data.password)
                 // redirect to home
-                this.toastr.success('Login effettuato con successo', 'Login')
+                this.toastr.success('HI you are welcome!!', 'Login')
 
              
              

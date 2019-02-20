@@ -101,7 +101,7 @@ export class Service {
   logout() {
     localStorage.clear();
     this.isLogged=false;
-    this.toastr.success('LogOut effettuato', 'Logout')
+    this.toastr.success('Logout Done!', 'Logout')
     setTimeout(()=>{
       location.reload();
     this.router.navigate(['/']);
@@ -121,7 +121,6 @@ export class Service {
      formData.append('files', fileToUpload)
      formData.append('autore', autore)
      formData.append('fileType', collaboration)
-console.log(collaboration)
      return this.http.post(this.baseUrl + "api/file/uploadFile",formData )
       .pipe(
         catchError(this.handleError)
@@ -232,7 +231,6 @@ shareFile(repoName,idUser,idFile,email,autore){
   params = params.append('idUser', idUser); //id utente
   params = params.append('idFile', idFile); //id file
   params =params.append('autore',autore);
-  console.log(params)
   return this.http.get(this.baseUrl + 'api/share/file', {params:params, responseType: 'text'})
   .pipe(
       tap(success =>console.log(success)), //mi salvo tutti i dati di ritorno dal server

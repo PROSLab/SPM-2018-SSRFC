@@ -118,12 +118,12 @@ get h(){
     this.service.shareRepository(this.idRepoSelected, email)
       .subscribe(data => {
         this.clearModal(this.closeModal4)
-      	this.toastr.success('Repository condivisa con successo', 'Share Repository')
+      	this.toastr.success('This repository has been succesfully shared', 'Share Repository')
 
         this.share = false
       },
         error => {
-          this.toastr.error('Errore nell invio del Repository', 'Share Repository')
+          this.toastr.error('Error sending email', 'Share Repository')
           this.errorMessage = <any>error
         })
   }
@@ -144,7 +144,6 @@ this.submitted=false;
    
     this.submitted = true;
     if (this.modifyNameRepo.invalid) {
-      console.log(this.modifyNameRepo.invalid, this.submitted, this.f.reponame.errors)
       return;
   }
     this.service.changeNameRepo(this.idRepoSelected, name)
@@ -152,12 +151,12 @@ this.submitted=false;
         this.clearModal(this.closeModal1)
         this.repoInfo = data
         this.ok = true
-        this.toastr.success('Nome del Repository modificata correttamente', 'Repository Name')
+        this.toastr.success('This repository has been succesfully modified', 'Repository Name')
 
         this.getRepo()
 
       }, error => {
-        this.toastr.error('Errore nella modifica del nome della cartella', 'Repository name')
+        this.toastr.error('Error modifying the name of the repository', 'Repository name')
         this.errorMessage = <any>error
       });
   }
@@ -222,7 +221,7 @@ this.submitted=false;
       return true;
     }
     else if (f.name.split('.').pop() != "bpmn") {
-      this.toastr.error('Formato file non corretto', 'Formato File')
+      this.toastr.error('The format of the file is not Correct', 'File Format')
       return false;
     }
   }
@@ -240,11 +239,9 @@ this.submitted=false;
   reader.onload = (event: Event) => {
   this.b= reader.result.slice(0,100).toString()
   if(this.b.indexOf("<bpmn2")>-1){
-    console.log("coreogr")
     this.collaboration="choreography"
   }
   else{
-    console.log("collab")
     this.collaboration="collaboration"
     }
     var a = this.controlFormatFile(this.fileToUpload)
@@ -348,16 +345,14 @@ this.submitted=false;
 
   uploadFileToActivity() {
     var autore = localStorage.getItem('name')+' '+localStorage.getItem('surname'); 
-  console.log(this.collaboration)
     this.service.postFile(this.idRepoSelected, this.idUser, this.fileToUpload,autore,this.collaboration).subscribe(data => {
 //MANCA METODO PER VEDERE SE è COLLABORATIONO IL FILE O NO :
       var newFile = data
       newFile.createdAt = this.troncaData(newFile.createdAt)
-      console.log(newFile)
       var count = this.files.length
       this.files[count] = newFile
       
-      this.toastr.success('File Importato con successo', 'Import File')
+      this.toastr.success('This file has been succesfully imported', 'Import File')
     }, error => {
       console.log(error);
     });
@@ -378,7 +373,7 @@ this.submitted=false;
       .subscribe(data => {
         this.clearModal(this.closeModal2)
         this.ok = true
-      	this.toastr.success('Cartella creata con successo', 'Folder')
+      	this.toastr.success('The folder has been successfully created', 'Creation Folder')
         var folder = JSON.parse(data)
         this.service.getFolderSpec(folder.id)
           .subscribe(data => {
@@ -398,7 +393,7 @@ this.submitted=false;
           });
       }, error => {
         this.errorMessage = <any>error
-        this.toastr.error('Cartella non creata', 'Cartella')
+        this.toastr.error('Error creating the Folder', 'Folder')
       })
     this.createfold = false
   }
@@ -468,7 +463,6 @@ this.submitted=false;
               document.getElementById("menu2").setAttribute("class", "dropdown-menu ")
          }
         }
-         console.log(this.filesExist,this.folderExist)
 
          if(this.folderExist==false && this.filesExist==false){
               document.getElementById("menu").setAttribute("class", "dropdown dropdown-toggle grassetto show")

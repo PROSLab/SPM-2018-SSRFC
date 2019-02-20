@@ -34,11 +34,17 @@ export class BpmnComponent implements OnInit {
   error: any = null;
   TerzoValore: any;
   errorProblem: boolean=null;
-  validity: boolean=false;
+  validity: boolean;
   appVal: boolean =false;
   title: string;
   messageSoundness: any;
   messageSafeness: string;
+  infoValidity: any;
+  infoSoundness: any;
+  infoSafeness: any;
+  infomessageSafeness: string;
+  infoMsgS: string;
+  info: boolean = false;
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -52,14 +58,13 @@ export class BpmnComponent implements OnInit {
   ngOnInit(): void {
     
     if (this.idFile == undefined) {
-      this.title="FileInCreazione"
-      console.log("lo sto creando")
+      this.title="Creation File"
       this.createFile()
     }
     else {
       this.getFileSpec()
-      console.log("lo sto modificando")
       this.load()
+     
     }
 
     this.modeler = new Modeler({
@@ -85,7 +90,6 @@ export class BpmnComponent implements OnInit {
 
   handleError(err: any) {
     if (err) {
-      console.log("errroreee")
       console.warn('Ups, error: ', err);
     }
   }
@@ -105,13 +109,92 @@ export class BpmnComponent implements OnInit {
   getFileSpec() {
 
     this.service.getFileSpec(this.idFile)
-      .subscribe(data => {
+      .subscribe(async data => {
+
         this.file = data
         this.title=this.file.originalName
-
+        this.validity = this.file.validity
+        this.infoSoundness =  this.file.soundness
+        this.infoSafeness = this.file.safeness
+       
       }, error => {
       });
   }
+infoFunction(){
+  
+
+  document.getElementById("infoButton").setAttribute("data-target","#info")
+  document.getElementById("info").setAttribute("class", "modal fade show")
+  document.getElementById("info").setAttribute("style", "padding-right:16px;display:block")
+  this.setImageInfo(this.soundness,this.safeness)
+  
+}
+infos(){
+  this.modeler.saveXML(
+    (err: any, xml: any) => {
+      var f = new File([xml], 'diagram');
+      this.bodyFile = xml
+      
+    });
+
+  var headers: { "Content-Type": "application/xml" }
+  const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
+  
+
+  this.http.post(url2, this.bodyFile,
+    { headers: headers, responseType: "text" })
+    .subscribe(
+       async (data: string) => {
+    
+        this.errorProblem=false
+        this.soundness = data.substr(0, 1).trim()
+        var pSafeness = data.indexOf('&&') + 4
+        this.safeness = data.substr(pSafeness, 1).trim()
+        var subData = data.substr(pSafeness + 1)
+        var p3Valore = subData.indexOf('&&') + 3
+        this.TerzoValore = subData.substr(p3Valore).trim()
+this.validity=true;
+        },
+      error => {     
+
+this.validity=false;
+        this.errorProblem=true
+        /* document.getElementById("imageSoundness").setAttribute("src","")
+      document.getElementById("imageSafeness").setAttribute("src", "")
+      document.getElementById("imageSoundness").setAttribute("alt","")
+      document.getElementById("imageSafeness").setAttribute("alt", "") */
+        this.handleError
+     
+      
+          
+        console.log(error);
+      });
+}
+   /* infoS(){
+     if(this.idFile!=undefined){
+    this.service.getFileSpec(this.idFile)
+      .subscribe(async data => {
+
+        this.file = data
+        this.title=this.file.originalName
+        this.validity = this.file.validity
+        this.infomessageSafeness=''
+        this.infoMsgS=''
+        this.infoSoundness =''
+        this.infoSafeness=''
+
+
+        this.infoSoundness =  this.file.soundness
+        this.infoSafeness = this.file.safeness
+       await  this.setImageInfo(this.infoSoundness,this.infoSafeness)
+  
+      }, error => {
+      });
+    }
+    if(this.idFile == undefined){
+      this.infoMsgS = "Your file is in creation."
+    }
+   } */
 
   modify(): any {
     
@@ -129,7 +212,7 @@ export class BpmnComponent implements OnInit {
       }, error => {
         this.error = error
       });
-    this.toastr.success('File modificato Correttamente', 'Modifiche file')
+    this.toastr.success('The File has been succesfully modified', 'Modify File')
   }
 
   createFile() {
@@ -139,7 +222,6 @@ export class BpmnComponent implements OnInit {
       headers: {}, responseType: 'text'
     }).subscribe(
       (x: any) => {
-        console.log(x)
         this.bodyFile = x
         this.modeler.importXML(x, this.handleError)
       },
@@ -154,15 +236,13 @@ export class BpmnComponent implements OnInit {
     })
       .subscribe(
         async (x: any) => {
-          console.log(x)
           this.modeler.importXML(x, this.handleError);
+         setTimeout(()=>{this.infos()} ,100);
         },
         this.handleError
       );
   }
 
- 
-  
 
 
   back() {
@@ -181,7 +261,6 @@ export class BpmnComponent implements OnInit {
   }
 
   sendTofile(fileSelected) {
-    console.log('repositoryID', this.idRepoSelected, 'folderID', this.folderSelected, 'fileID', this.idFile)
     if (this.folderSelected == undefined) {
       this.router.navigate(['repositoryID', this.idRepoSelected, 'fileID', this.idFile]);
     }
@@ -208,7 +287,6 @@ export class BpmnComponent implements OnInit {
       (err: any, xml: any) => {
         var f = new File([xml], 'diagram');
         this.bodyFile = xml
-        console.log(this.bodyFile)
       });
 
     var headers: { "Content-Type": "application/xml" }
@@ -218,10 +296,11 @@ export class BpmnComponent implements OnInit {
       { headers: headers, responseType: "text" })
       .subscribe(
          async (data: string) => {
-    document.getElementById("validation").setAttribute("data-target","#validityModal")
-       document.getElementById("validityModal").setAttribute("class", "modal fade show")
+       
+      document.getElementById("validation").setAttribute("data-target","#validityModal")
+      document.getElementById("validityModal").setAttribute("class", "modal fade show")
       document.getElementById("validityModal").setAttribute("style", "padding-right:16px;display:block")
-          this.validity=true
+         
           this.errorProblem=false
           this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
@@ -229,14 +308,11 @@ export class BpmnComponent implements OnInit {
           var subData = data.substr(pSafeness + 1)
           var p3Valore = subData.indexOf('&&') + 3
           this.TerzoValore = subData.substr(p3Valore).trim()
-          this.toastr.success('Validity and Soundness verificated', 'Verifica Validity')
+          this.toastr.success('Validity and Soundness verificated', 'Validation')
 
-          console.log('soundness:', this.soundness, 'safeness:', this.safeness)
            this.setImage(this.soundness,this.safeness)
 
-           if( this.idFile!= undefined){
-            this.addValidity( this.idFile)
-           }
+          
           },
         error => {         
 
@@ -247,12 +323,9 @@ export class BpmnComponent implements OnInit {
         document.getElementById("imageSafeness").setAttribute("alt", "")
           this.handleError
           this.toastr.error('Invalid bpmn file', 'Errore editor')
-          this.safeness=null
-          this.soundness=null
-          this.validity=false
-          if( this.idFile!= undefined){
-            this.addValidity( this.idFile)
-           }   
+       
+        
+            
           console.log(error);
         });
     }
@@ -272,7 +345,6 @@ export class BpmnComponent implements OnInit {
         (err: any, xml: any) => {
           var f = new File([xml], 'diagram');
           newXml = xml
-          console.log(this.bodyFile)
         });
 
     var headers: { "Content-Type": "application/xml" }
@@ -284,25 +356,30 @@ export class BpmnComponent implements OnInit {
 
         async (data: string) => {
           this.errorProblem=false
-         /*  this.soundness = data.substr(0, 1).trim()
+          this.soundness = data.substr(0, 1).trim()
           var pSafeness = data.indexOf('&&') + 4
           this.safeness = data.substr(pSafeness, 1).trim()
-          var subData = data.substr(pSafeness + 1) */
-          this.safeness=null
-          this.soundness=null
+          var subData = data.substr(pSafeness + 1)
+
+          
           this.validity=true
+
           if( this.idFile!= undefined){
             this.addValidity(this.idFile)
            }  
           this.toastr.success('This model is valid','Validity of Model')
+          
         },
         error => {
           this.safeness=null
           this.soundness=null
           this.validity=false
-
+          document.getElementById("imageSoundness").setAttribute("src","")
+          document.getElementById("imageSafeness").setAttribute("src", "")
+          document.getElementById("imageSoundness").setAttribute("alt","")
+          document.getElementById("imageSafeness").setAttribute("alt", "")
           if( this.idFile!= undefined){
-            this.addValidity( this.idFile)
+            this.addValidity(this.idFile)
            }   
 
         this.toastr.error('This model is invalid','Validity Model')
@@ -315,18 +392,16 @@ export class BpmnComponent implements OnInit {
     //creazione di un nuovo file salvandolo dall'editor
     this.modeler.saveXML(
       (err: any, xml: any) => {
-        console.log(xml)
         this.file = new File([xml], nameFile),
           this.bodyFile = xml
       });
 
     var autore = localStorage.getItem('name') + ' ' + localStorage.getItem('surname');
-    console.log(this.folderSelected)
     this.service.postFile(this.idRepoSelected, this.idUser, this.file, autore, 'collaboration', this.folderSelected)
       .subscribe(data => {
         this.idFileCreato = data.id
         //todo:qui si deve fare qualcosa che ti toglie il programma salvataggio
-        this.toastr.success('File created', 'Creazione file')
+        this.toastr.success('File created', 'Creation File')
 if(this.folderSelected==undefined){
   this.router.navigate(['repositoryID',this.idRepoSelected])
 
@@ -343,35 +418,103 @@ if(this.folderSelected==undefined){
   addValidity(idfile) {
     if(this.isLogged==true){
     this.service.addValidity(idfile, this.soundness, this.safeness,this.validity).subscribe(
-      data => { console.log("validity:",data) },
+      data => {  },
       error => { 
         console.log(error) 
       }
       )
     }
   };
+  setImageInfo(soundness,safeness){
+    console.log(soundness,safeness)
+    //PARAMETRI PER IL SOUNDNESS
+    if(parseInt(soundness)==0) { //0 Unsound for dead token
+        document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+        document.getElementById("infoimageSoundness").setAttribute("alt", "Unsound for dead token")
+       /*  document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Unsound for dead token") */
+      this.infoMsgS = " Unsound for dead token "
 
+      }
+
+      
+    if(parseInt(soundness)==1){  // 1 Unsound for proper completion violation
+      document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoimageSoundness").setAttribute("alt", "Unsound for proper completion violation")
+   /*    document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Unsound for proper completion violation") */
+      this.infoMsgS = " Unsound for proper completion violation "
+
+      
+    }
+    if(parseInt(soundness)==2){ //2 Message disregarding sound
+      document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
+      document.getElementById("infoimageSoundness").setAttribute("alt", "Message disregarding sound")
+      /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Message disregarding sound") */
+      this.infoMsgS = " Message disregarding sound "
+
+     
+    }
+
+    if(parseInt(soundness)==3){ //3 Sound
+      console.log("sono dentro")
+      document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoimageSoundness").setAttribute("alt", "Sound")
+       /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoSound").setAttribute("alt", "Sound") */
+      this.infoMsgS = " Sound "
+
+    
+      }
+
+//PARAMETRI PER IL SAFENESS
+    if(parseInt(safeness)==4){ //4 Safe
+      console.log("sono dentro")
+      document.getElementById("infoimageSafeness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+      document.getElementById("infoimageSafeness").setAttribute("alt", "Safe")
+  /*     document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoSafe").setAttribute("alt", "Safe") */
+      this.infomessageSafeness = " Safe "
+    }
+    if(parseInt(safeness)==5){ // 5 Unsafe
+      document.getElementById("infoimageSafeness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoimageSafeness").setAttribute("alt", "Unsafe")
+      /* document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSafe").setAttribute("alt", "Unsafe") */
+      this.infomessageSafeness = " Unsafe "
+    }
+        
+  }
   setImage(soundness,safeness){
     //PARAMETRI PER IL SOUNDNESS
     if(parseInt(soundness)==0) { //0 Unsound for dead token
         document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
         document.getElementById("imageSoundness").setAttribute("alt", "Unsound for dead token")
+       /*  document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Unsound for dead token") */
         this.messageSoundness = " Unsound for dead token "
       }
     if(parseInt(soundness)==1){  // 1 Unsound for proper completion violation
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
       document.getElementById("imageSoundness").setAttribute("alt", "Unsound for proper completion violation")
+   /*    document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Unsound for proper completion violation") */
       this.messageSoundness = " Unsound for proper completion violation "
     }
     if(parseInt(soundness)==2){ //2 Message disregarding sound
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
       document.getElementById("imageSoundness").setAttribute("alt", "Message disregarding sound")
+      /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/4ys3vj4v/13878145.jpg")
+      document.getElementById("infoSound").setAttribute("alt", "Message disregarding sound") */
       this.messageSoundness = " Message disregarding sound "
     }
 
     if(parseInt(soundness)==3){ //3 Sound
       document.getElementById("imageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
        document.getElementById("imageSoundness").setAttribute("alt", "Sound")
+       /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoSound").setAttribute("alt", "Sound") */
        this.messageSoundness = " Sound "
       }
 
@@ -379,11 +522,15 @@ if(this.folderSelected==undefined){
     if(parseInt(safeness)==4){ //4 Safe
       document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
       document.getElementById("imageSafeness").setAttribute("alt", "Safe")
+  /*     document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
+       document.getElementById("infoSafe").setAttribute("alt", "Safe") */
       this.messageSafeness = " Safe "
     }
     if(parseInt(safeness)==5){ // 5 Unsafe
       document.getElementById("imageSafeness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
       document.getElementById("imageSafeness").setAttribute("alt", "Unsafe")
+      /* document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
+      document.getElementById("infoSafe").setAttribute("alt", "Unsafe") */
       this.messageSafeness = " Unsafe "
     }
         
