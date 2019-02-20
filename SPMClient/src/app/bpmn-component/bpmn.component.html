@@ -6,8 +6,8 @@
         <i class='fas fa-greater-than' style="margin-top:100%;margin-left: 30%;margin-top:9px;"></i>
     </div>
     <h3 style="margin-left: 1%">Collaboration Editor </h3>
-    <div data-toggle="modal" data-target="#info">
-        <button style="background-color: transparent;border:transparent" (click)="infoS()">
+    <div data-toggle="modal" id="infoButton" data-target="">
+        <button style="background-color: transparent;border:transparent" (click)="infoFunction()">
             <i style="font-size:24px;" class="fa">&#xf05a;</i>
         </button>
     </div>
@@ -19,10 +19,10 @@
             data-target="" class="btn btn-primary">Save <i class="fa fa-save"></i></button>
         <button (click)="CheckSoundnessAndSafeness()" style="margin-left: 1%" data-toggle="modal" id="validation"
             #validation data-target="" class="col-1 btn btn-danger">Validation </button>
-      <!--   <button (click)="callToSecondServer()" style="margin-left: 1%" data-toggle="modal" id="valModal" data-target=""
+        <!--   <button (click)="callToSecondServer()" style="margin-left: 1%" data-toggle="modal" id="valModal" data-target=""
             class="col-1 btn btn-danger">Validity </button>
 -->
-    </div> 
+    </div>
 
 </div>
 <br>
@@ -98,67 +98,72 @@
               </div> -->
 
             </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" (click)="close()" #closeModalCreateFile
-                        data-dismiss="modal">Close</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="close()" #closeModalCreateFile
+                    data-dismiss="modal">Close</button>
+            </div>
 
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="info" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Information of your modal</h4>
-                </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Information of your modal</h4> 
     
-                <div class="modal-body">
-                    <div *ngIf="validity==false && idFile!=undefined">
-                            <h5>Validity: </h5>
-                            Your model is invalid
-                            <br>
-                    </div>
-                    <div *ngIf="validity==true && idFile!=undefined">
-                            <h5>Validity: </h5>
-                            Your model is valid
-                            <br>
-                          
-                            <div style="height:20%">
-                                    <br>
-                                    <h5>Soundness: </h5>
-                
-                                    <img style="zoom:9%;margin-right:1%" id="infoimageSoundness" src="" alt="">
-                                    {{infoMsgS}}
-                                    <hr>
-                                    <br>
-                
-                                    <h5>Safeness: </h5>
-                                    <img style="zoom:9%" id="infoimageSafeness" src="" alt="">
-                                    {{infomessageSafeness}}
-                                </div>
-                        </div>
-                   <div *ngIf="idFile==undefined">
-                       {{infoMsgS}}
-                   </div>
-                   
-                    <br>
-    
-                   
-    
-                    <!-- 
-                    <div *ngIf="error!=null">Error 500</div>
-                        <label>Soundness:</label> {{soundness}}
-                        <label>Safeness:</label> {{safeness}}
-                  </div> -->
-                </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" (click)="close()" #closeModalCreateFile
-                            data-dismiss="modal">Close</button>
-                    </div>
-    
-               
             </div>
+              
+            <div class="modal-body">
+
+                
+                
+                <div *ngIf="validity==false && idFile!=undefined">
+                        <h5>Validity: </h5>
+                        Your model is invalid
+                        <br>
+                </div>
+                <div *ngIf="validity==true && idFile!=undefined">
+                        <h5>Validity: </h5>
+                        Your model is valid
+                        <br>
+                      
+                        <div style="height:20%">
+                                <br>
+                                <h5>Soundness: </h5>
+            
+                                <img style="zoom:9%;margin-right:1%" id="infoimageSoundness" src="" alt="">
+                                {{infoMsgS}}
+                                <hr>
+                                <br>
+            
+                                <h5>Safeness: </h5>
+                                <img style="zoom:9%" id="infoimageSafeness" src="" alt="">
+                                {{infomessageSafeness}}
+                            </div>
+                    </div>
+               <div *ngIf="idFile==undefined">
+                   {{infoMsgS}}
+               </div>
+               
+                <br>
+
+               
+
+                <!-- 
+                <div *ngIf="error!=null">Error 500</div>
+                    <label>Soundness:</label> {{soundness}}
+                    <label>Safeness:</label> {{safeness}}
+              </div> -->
+            </div>
+            <div class="modal-footer">
+                <h6><strong>Info:</strong> these are information regarding saved file</h6>
+                <button type="button" class="btn btn-danger" (click)="close()" #closeModalCreateFile
+                    data-dismiss="modal">Close</button>
+            </div>
+
+
         </div>
     </div>
+</div>

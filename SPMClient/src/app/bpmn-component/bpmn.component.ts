@@ -64,6 +64,7 @@ export class BpmnComponent implements OnInit {
     else {
       this.getFileSpec()
       this.load()
+     
     }
 
     this.modeler = new Modeler({
@@ -115,17 +116,61 @@ export class BpmnComponent implements OnInit {
         this.validity = this.file.validity
         this.infoSoundness =  this.file.soundness
         this.infoSafeness = this.file.safeness
-    
-      
-        
        
-
       }, error => {
       });
   }
+infoFunction(){
+  
 
+  document.getElementById("infoButton").setAttribute("data-target","#info")
+  document.getElementById("info").setAttribute("class", "modal fade show")
+  document.getElementById("info").setAttribute("style", "padding-right:16px;display:block")
+  this.setImageInfo(this.soundness,this.safeness)
+  
+}
+infos(){
+  this.modeler.saveXML(
+    (err: any, xml: any) => {
+      var f = new File([xml], 'diagram');
+      this.bodyFile = xml
+      
+    });
 
-   infoS(){
+  var headers: { "Content-Type": "application/xml" }
+  const url2 = "http://pros.unicam.it:8080/S3/rest/BPMN/Verifier"
+  
+
+  this.http.post(url2, this.bodyFile,
+    { headers: headers, responseType: "text" })
+    .subscribe(
+       async (data: string) => {
+    
+        this.errorProblem=false
+        this.soundness = data.substr(0, 1).trim()
+        var pSafeness = data.indexOf('&&') + 4
+        this.safeness = data.substr(pSafeness, 1).trim()
+        var subData = data.substr(pSafeness + 1)
+        var p3Valore = subData.indexOf('&&') + 3
+        this.TerzoValore = subData.substr(p3Valore).trim()
+this.validity=true;
+        },
+      error => {     
+
+this.validity=false;
+        this.errorProblem=true
+        /* document.getElementById("imageSoundness").setAttribute("src","")
+      document.getElementById("imageSafeness").setAttribute("src", "")
+      document.getElementById("imageSoundness").setAttribute("alt","")
+      document.getElementById("imageSafeness").setAttribute("alt", "") */
+        this.handleError
+     
+      
+          
+        console.log(error);
+      });
+}
+   /* infoS(){
      if(this.idFile!=undefined){
     this.service.getFileSpec(this.idFile)
       .subscribe(async data => {
@@ -149,7 +194,7 @@ export class BpmnComponent implements OnInit {
     if(this.idFile == undefined){
       this.infoMsgS = "Your file is in creation."
     }
-   }
+   } */
 
   modify(): any {
     
@@ -192,6 +237,7 @@ export class BpmnComponent implements OnInit {
       .subscribe(
         async (x: any) => {
           this.modeler.importXML(x, this.handleError);
+         setTimeout(()=>{this.infos()} ,100);
         },
         this.handleError
       );
@@ -380,7 +426,7 @@ if(this.folderSelected==undefined){
     }
   };
   setImageInfo(soundness,safeness){
-    
+    console.log(soundness,safeness)
     //PARAMETRI PER IL SOUNDNESS
     if(parseInt(soundness)==0) { //0 Unsound for dead token
         document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/RCLhCCGg/unsafe.jpg")
@@ -412,6 +458,7 @@ if(this.folderSelected==undefined){
     }
 
     if(parseInt(soundness)==3){ //3 Sound
+      console.log("sono dentro")
       document.getElementById("infoimageSoundness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
        document.getElementById("infoimageSoundness").setAttribute("alt", "Sound")
        /* document.getElementById("infoSound").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
@@ -423,6 +470,7 @@ if(this.folderSelected==undefined){
 
 //PARAMETRI PER IL SAFENESS
     if(parseInt(safeness)==4){ //4 Safe
+      console.log("sono dentro")
       document.getElementById("infoimageSafeness").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
       document.getElementById("infoimageSafeness").setAttribute("alt", "Safe")
   /*     document.getElementById("infoSafe").setAttribute("src","https://i.postimg.cc/gJdp189m/safe.jpg")
