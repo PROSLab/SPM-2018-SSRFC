@@ -3,6 +3,7 @@ import { Service } from '../../service/service'
 import { User } from '../../service/model/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-new-password',
@@ -18,7 +19,7 @@ export class NewPasswordComponent implements OnInit {
   uuid: string;
   pgid: string;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,private service: Service,private router:Router) {
+  constructor(public toastr:ToastrService,private formBuilder: FormBuilder, private route: ActivatedRoute,private service: Service,private router:Router) {
     //QUERY PER OTTENERE I VALORI DALL'URL
     this.route.queryParams.subscribe(params => {
       this.uuid = params['uuid'];
@@ -49,7 +50,7 @@ export class NewPasswordComponent implements OnInit {
     password = this.f.password.value.trim();    
     this.service.changePassword(this.uuid,this.pgid,password)
     .subscribe(data =>{
-      alert('password cambiata'), 
+      this.toastr.success('Password changed','Change Password')
       this.router.navigate(['/login']);
       },error => {
         this.errorMessage=<any>error
