@@ -162,11 +162,9 @@ modifyName(){
   }
     this.service.changeNameFolder(this.folderSelected, name)
       .subscribe(data => {
-        this.exist=true
         this.folderInfo = data
         this.ok=true
         this.toastr.success('This Folder Name has been successfully modified', 'Folder Name')
-       
        this.clearModal(this.closeModal1)
 
       this.getFolderInfo()
