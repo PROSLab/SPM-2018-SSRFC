@@ -237,7 +237,10 @@ this.validity=false;
       .subscribe(
         async (x: any) => {
           this.modeler.importXML(x, this.handleError);
-         setTimeout(()=>{this.infos()} ,100);
+          
+         setTimeout(()=>{this.infos();
+
+        } ,100);
         },
         this.handleError
       );
@@ -311,7 +314,7 @@ this.validity=false;
           this.toastr.success('Validity and Soundness verificated', 'Validation')
 
            this.setImage(this.soundness,this.safeness)
-
+          this.addMarkerToModel(data)
           
           },
         error => {         
@@ -337,7 +340,19 @@ this.validity=false;
      document.getElementById("validityModal").setAttribute("style", "display:none")
     }
 
+   addMarkerToModel(item) {
+var canvas= this.modeler.get('canvas')
+			item.split("\n").forEach(function (element) {
+				if (element.includes("--")) {
+      canvas.addMarker(element.slice(2,100) ,'highlight-connection');
+      console.log(element.slice(2,100))
+				}
+				if (element.includes("++")) {
+				canvas.addMarker(element.slice(2,100), 'highlight-connection');
+				}
 
+			});
+		}
 
     callToSecondServer(idfile?,newXml?) {
 

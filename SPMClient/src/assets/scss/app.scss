@@ -16,7 +16,9 @@ body {
     color: $bodytext;
     font-weight: 300;
 }
-
+.highlight-connection.djs-connection .djs-visual >:nth-child(1) {
+    stroke: red !important; /* color elements as green */
+  }
 html {
     position: relative;
     min-height: 100%;
