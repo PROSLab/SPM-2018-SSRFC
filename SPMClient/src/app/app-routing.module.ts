@@ -8,15 +8,13 @@ const routes: Routes = [
         path: '',
         loadChildren: './pages/pages.module#PagesModule'
     },
-   
-    { path: '**', redirectTo: 'PageNotFound' },
-   
-    
+    { path: '**', redirectTo: 'PageNotFound' }, 
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes),  NgbModule.forRoot() ],
     exports: [RouterModule]
 })
+
 export class AppRoutingModule { }
 

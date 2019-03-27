@@ -1,0 +1,23 @@
+<div class="row">
+  Select a Collaboration Model
+  <a class="">
+    <label for="file">
+        <input type="file" id="file" #f (change)="handleFileInput1($event.target.files)">
+    </label>
+</a>
+</div>
+  <button (click)="CheckEquivalence()">Check</button>
+<div class="row">
+    Select a Choreography Model
+  <a class="">
+    <label for="file">
+        <input type="file" id="file" #f (change)="handleFileInput2($event.target.files)">
+    </label>
+</a>
+</div>
+
+
+<div class="row">
+    <button id = "check" (click)="CheckEquivalence()" class="btn btn-primary">Submit</button>
+                   
+</div>

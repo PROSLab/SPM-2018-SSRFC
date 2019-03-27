@@ -13,6 +13,7 @@ import { BpmnComponent } from '../../bpmn-component/bpmn.component';
 import {DiagramComponent} from './diagram/diagram';
 import {DiagramComponentChor} from './diagram/diagramChor'
 import { ChoreographyModelComponent } from '../../choreography-model/choreography-model.component';
+import { C4Component } from './c4/c4.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -28,7 +29,8 @@ DiagramComponentChor,
     FileComponent,
     RepoPublicComponent,
     BpmnComponent,
-    ChoreographyModelComponent
+    ChoreographyModelComponent,
+    C4Component
   ]
 })
 

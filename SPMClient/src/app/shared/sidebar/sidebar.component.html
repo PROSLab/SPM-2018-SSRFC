@@ -44,6 +44,10 @@
                     <a routerLink="/repo-public" (click)="addExpandClass('repo-public')"><i class="mdi mdi-file"></i><span
                             class="hide-menu">Public Repositories</span></a>
                 </li>
+                <li [class.active]="showMenu === 'c4'">
+                    <a routerLink="/c4" (click)="addExpandClass('c4')"><i class="mdi mdi-file"></i><span
+                            class="hide-menu">Matching Models</span></a>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

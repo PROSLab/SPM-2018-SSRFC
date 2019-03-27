@@ -6,6 +6,7 @@ import { FolderComponent } from './folder/folder.component';
 import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { BpmnComponent } from '../../bpmn-component/bpmn.component';
 import { ChoreographyModelComponent } from '../../choreography-model/choreography-model.component';
+import { C4Component } from './c4/c4.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -65,6 +66,15 @@ export const ComponentsRoutes: Routes = [
         data: {
           title: 'repo-public',
           urls: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'ngComponent' }, { title: 'repo-public' }]
+        }
+      },
+      
+      {
+        path: 'c4',
+        component: C4Component,
+        data: { 
+          title: 'c4',
+          urls: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'ngComponent' }, { title: 'c4' }]
         }
       }
     ]

@@ -9,10 +9,10 @@ import { Repo } from './model/repo';
 import { Options } from 'selenium-webdriver/chrome';
 import { headersToString } from 'selenium-webdriver/http';
 import { ToastrService } from 'ngx-toastr';
-
+import { RequestOptions } from '@angular/http';
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
 const httpOptions = {
-  headers: new HttpHeaders({"Content-Type":"multipart/form-data"})
+  
 };
 
 
@@ -127,6 +127,20 @@ export class Service {
       );
   }
  
+
+  submitC4(fileToUpload,fileToUpload2): Observable<any> {
+   
+/*     headers: new HttpHeaders({"Content-Type": "text/plain"})
+ */    const formData: FormData = new FormData();
+    formData.append('collaboration', fileToUpload)
+    formData.append('choreography', fileToUpload2)
+
+    return this.http.post("http://pros.unicam.it:8080/C4/rest/files/upload",formData)
+     .pipe(
+      tap(success => console.log(success)),
+       catchError(this.handleError)
+     );
+ }
 
   changeNameRepo(id, newRepoName): Observable<any> {
     let params = new HttpParams();
