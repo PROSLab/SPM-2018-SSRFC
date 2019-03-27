@@ -1,17 +1,3 @@
-<br><br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 
 <div class="row">
   Select a Collaboration Model
@@ -21,7 +7,6 @@
     </label>
 </a>
 </div>
-  <button (click)="CheckEquivalence()">Check</button>
 <div class="row">
     Select a Choreography Model
   <a class="">
@@ -38,7 +23,7 @@
 </div>
 
 <br>
-<div *ngIf="checked==true">
+<!-- <div *ngIf="checked==true"> -->
   Checking
 <br>
 <br>
@@ -62,16 +47,15 @@
     <br>
   </div>
 
-  <div>
-      <div class="dropdown">
-          <button  class="dropbtn">Dropdown</button>
-          <div id="myDropdown" class="dropdown-content">
-            <a  value="trace" >Trace</a>
-            <a  value="branching">Branching</a>
-            <a  value="bisimulation">Bisimulation</a>
-          </div>
-        </div> 
-      <button id = "check"  class="btn btn-primary">Check</button>
+  <input type="checkbox" [(ngModel)]="theCheckbox" >Weak<br>
+{{theCheckbox}}
      
-  </div>
-</div>
+    <select #opt (change)="($event)" >
+      <option value="Trace" selected>Trace</option>
+      <option value="Branching">Branching</option>
+      <option value="Bisimulation" >Bisimulation</option>
+   </select> 
+      <button id = "check" (click)="checkAut(opt.value,theCheckbox)" class="btn btn-primary">Check</button>
+    
+
+<!-- </div> -->

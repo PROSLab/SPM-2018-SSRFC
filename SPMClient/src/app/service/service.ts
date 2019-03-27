@@ -142,12 +142,15 @@ export class Service {
      );
  }
 
-checkEquivalence(collaborationCode, choreographyCode){
-const formData: FormData = new FormData();
- formData.append('collaboration', collaborationCode)
- formData.append('choreography', choreographyCode)
-
- return this.http.post("http://pros.unicam.it:8080/C4/rest/files/check_equivalence ",formData,{responseType:'text'})
+checkEquivalence(weak,equivalence,collaborationCode,choreographyCode){
+let formData: FormData = new FormData();
+formData.append('weak', weak)
+formData.append('equivalence', equivalence)
+ formData.append('collaborationPath', collaborationCode)
+ formData.append('choreographyPath', choreographyCode)
+ 
+ 
+ return this.http.post("http://pros.unicam.it:8080/C4/rest/files/check_equivalence",formData,)
   .pipe(
            catchError(this.handleError)
   );

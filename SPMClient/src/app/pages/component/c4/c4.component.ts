@@ -17,6 +17,10 @@ export class C4Component implements OnInit {
   checked: boolean = false;
   choreography: any;
   collaboration: any;
+  marked=false;
+  equivalence: any;
+  weak=false;
+  
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) { }
 
@@ -33,7 +37,7 @@ export class C4Component implements OnInit {
       return false;
     }
   }
-
+  
 //funzione che prende il primo file (collaboration)
   handleFileInput1(files) {
     if (files && files[0]) {
@@ -60,7 +64,21 @@ export class C4Component implements OnInit {
       //reader.readAsText(myFile);
     }
   } 
-
+checkAut(equivalence,weak){
+this.equivalence=equivalence
+this.weak=weak
+ if (this.weak==undefined){
+  this.weak=false
+} 
+console.log(this.weak)
+this.service.checkEquivalence(this.weak,this.equivalence,this.collaboration,this.choreography)
+.subscribe(data =>{
+  console.log(data)
+},
+error=>{
+  console.log(error)
+})
+}
   //funzione che richiama la post al server e gli passa i 2 files
   CheckEquivalence() {
    
