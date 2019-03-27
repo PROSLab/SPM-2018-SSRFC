@@ -1,3 +1,18 @@
+<br><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 <div class="row">
   Select a Collaboration Model
   <a class="">
@@ -20,4 +35,43 @@
 <div class="row">
     <button id = "check" (click)="CheckEquivalence()" class="btn btn-primary">Submit</button>
                    
+</div>
+
+<br>
+<div *ngIf="checked==true">
+  Checking
+<br>
+<br>
+<br>
+  <div class="row">
+    Collaboration:  {{collaboration}} 
+    <button id = "check"  class="btn btn-primary">Download</button>
+    <button id = "check"  class="btn btn-primary">Search</button>
+     
+    <br>
+  </div>
+<br>
+<br>
+<br>
+  <div class="row">
+    Choreography:  {{choreography}}
+    <button id = "check"  class="btn btn-primary">Download</button>
+    <button id = "check"  class="btn btn-primary">Search</button>
+     
+    
+    <br>
+  </div>
+
+  <div>
+      <div class="dropdown">
+          <button  class="dropbtn">Dropdown</button>
+          <div id="myDropdown" class="dropdown-content">
+            <a  value="trace" >Trace</a>
+            <a  value="branching">Branching</a>
+            <a  value="bisimulation">Bisimulation</a>
+          </div>
+        </div> 
+      <button id = "check"  class="btn btn-primary">Check</button>
+     
+  </div>
 </div>

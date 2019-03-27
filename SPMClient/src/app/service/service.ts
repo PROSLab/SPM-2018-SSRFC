@@ -128,6 +128,7 @@ export class Service {
   }
  
 
+  
   submitC4(fileToUpload,fileToUpload2): Observable<any> {
    
 /*     headers: new HttpHeaders({"Content-Type": "text/plain"})
@@ -135,12 +136,24 @@ export class Service {
     formData.append('collaboration', fileToUpload)
     formData.append('choreography', fileToUpload2)
 
-    return this.http.post("http://pros.unicam.it:8080/C4/rest/files/upload",formData)
+    return this.http.post("http://pros.unicam.it:8080/C4/rest/files/upload",formData,{responseType:'text'})
      .pipe(
-      tap(success => console.log(success)),
-       catchError(this.handleError)
+              catchError(this.handleError)
      );
  }
+
+checkEquivalence(collaborationCode, choreographyCode){
+const formData: FormData = new FormData();
+ formData.append('collaboration', collaborationCode)
+ formData.append('choreography', choreographyCode)
+
+ return this.http.post("http://pros.unicam.it:8080/C4/rest/files/check_equivalence ",formData,{responseType:'text'})
+  .pipe(
+           catchError(this.handleError)
+  );
+  
+}
+
 
   changeNameRepo(id, newRepoName): Observable<any> {
     let params = new HttpParams();
