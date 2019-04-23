@@ -1,61 +1,108 @@
+<div *ngIf="checked==false">
+  <div class="row">
+   <h3>Upload Files</h3> 
+  </div>
+<div class= "row">
+<div class="col-6" style="height: 400px;border:1px solid rgb(172, 170, 170)">
+<h2>
+  <b>Select a Collaboration Model</b>
+  <br><br>
+</h2>
 
-<div class="row">
-  Select a Collaboration Model
+      <a>
+          <img style="border-radius:600px;zoom:25%;border:3px solid red" src="https://i.ibb.co/dWFDmMc/Booking-System-Collaborationsimplified-XE.png"></a>
+          <br><br><br>
+         <label for="file">
+          <input type="file" id="file" placeholder="" #f (change)="handleFileInput1($event.target.files)">
+        </label>
+</div>
+
+  <div class="col-6" style="height: 400px;border:1px solid rgb(172, 170, 170)">
+    <h2>
+        <b>Select a Choreography Model</b>
+        <br><br>
+        </h2>
+        <a>
+          <img style="border-radius:600px;zoom:40%;position:center;right:40%;border:3px solid black;background-color:rgb(70, 70, 167)" src="https://i.ibb.co/LSN8dTp/Booking-system-simplified-OR.png"></a>
+      <br>
+      <br>
+      <br>
   <a class="">
     <label for="file">
-        <input type="file" id="file" #f (change)="handleFileInput1($event.target.files)">
+      <input type="file" id="file" #f (change)="handleFileInput2($event.target.files)">
     </label>
-</a>
+  </a>
+  </div>
 </div>
-<div class="row">
-    Select a Choreography Model
-  <a class="">
-    <label for="file">
-        <input type="file" id="file" #f (change)="handleFileInput2($event.target.files)">
-    </label>
-</a>
-</div>
-
-
-<div class="row">
-    <button id = "check" (click)="CheckEquivalence()" class="btn btn-primary">Submit</button>
-                   
-</div>
-
 <br>
+
+<div class="row">
+  <div class="col-5"></div>
+<div class="col-3">
+    <button id ="check" (click)="CheckEquivalence()" style="zoom:140%;background-color: brown;border:2px solid brown" class="btn btn-primary">Submit</button>      
+</div>
+</div>
+</div>
+<div *ngIf="checked==true" class="row">
+  <div  class="col-6" style="border:1px solid;height: 200px;">
+    mettere anteprima disegno 1
+  </div>
+  <div  class="col-6" style="border:1px solid;height: 200px;">
+    mettere  anteprima disegno 2
+        </div>
+</div>
+<br>
+<div>
 <!-- <div *ngIf="checked==true"> -->
-  Checking
-<br>
+    <div class="row">
+        <h3>Checking Files</h3> 
+    </div>
+
 <br>
 <br>
   <div class="row">
-    Collaboration:  {{collaboration}} 
-    <button id = "check"  class="btn btn-primary">Download</button>
-    <button id = "check"  class="btn btn-primary">Search</button>
-     
+    <div class="col-5">  
+    Collaboration: 
+    <input class="form-control"  type="text" placeholder={{collaboration}} readonly>
+  </div>
+  <div  class="col-5">
+  <br>
+    <button id = "check" (click)="downloadColl()" class="btn btn-primary">Download</button>
+    <button id = "check" (click)="searchColl()"  class="btn btn-success">Search</button>
+  </div>
     <br>
   </div>
 <br>
 <br>
 <br>
+
   <div class="row">
-    Choreography:  {{choreography}}
-    <button id = "check"  class="btn btn-primary">Download</button>
-    <button id = "check"  class="btn btn-primary">Search</button>
-     
-    
+      <div class="col-5">  
+          Choreography: 
+      <input class="form-control"  type="text" placeholder={{choreography}} readonly>
+    </div>
+    <div  class="col-5">
     <br>
-  </div>
+      <button id = "check" (click)="downloadChor()" class="btn btn-primary">Download</button>
+      <button id = "check" (click)="searchChor()" class="btn btn-success">Search</button>
+    </div>
+      <br>
+    </div>
+<br>
+<br>
 
   <input type="checkbox" [(ngModel)]="theCheckbox" >Weak<br>
-{{theCheckbox}}
-     
+<!-- {{theCheckbox}} -->
+     <br>
+     <br>
     <select #opt (change)="($event)" >
       <option value="Trace" selected>Trace</option>
       <option value="Branching">Branching</option>
       <option value="Bisimulation" >Bisimulation</option>
    </select> 
+   <br>
+   <br>
       <button id = "check" (click)="checkAut(opt.value,theCheckbox)" class="btn btn-primary">Check</button>
     
-
+    </div>
 <!-- </div> -->

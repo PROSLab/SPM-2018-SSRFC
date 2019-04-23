@@ -11,10 +11,6 @@ import { headersToString } from 'selenium-webdriver/http';
 import { ToastrService } from 'ngx-toastr';
 import { RequestOptions } from '@angular/http';
 // ELEMENTI DA PASSARE NEL HEADER DELLE CHIAMATE
-const httpOptions = {
-  
-};
-
 
 const httpOptions2 = {
   headers: new HttpHeaders({"Content-Type":"appication/xml"})
@@ -142,22 +138,36 @@ export class Service {
      );
  }
 
-checkEquivalence(weak,equivalence,collaborationCode,choreographyCode){
+checkEquivalence(weak,equivalence,collaborationCode,choreographyCode):Observable<any>{
 let formData: FormData = new FormData();
 formData.append('weak', weak)
 formData.append('equivalence', equivalence)
- formData.append('collaborationPath', collaborationCode)
- formData.append('choreographyPath', choreographyCode)
+formData.append('collaborationPath', collaborationCode)
+formData.append('choreographyPath', choreographyCode)
  
- 
- return this.http.post("http://pros.unicam.it:8080/C4/rest/files/check_equivalence",formData,)
-  .pipe(
+ return this.http.post("http://pros.unicam.it:8080/C4/rest/files/check_equivalence",formData, {responseType:'text'})
+   .pipe(
+           catchError(this.handleError)
+  ); 
+}
+
+
+downloadColl(collaboration,filename){
+  let formData: FormData = new FormData();
+formData.append('collaboration', collaboration) //true o false
+formData.append('filename', filename) //file .Aut
+
+let params = new HttpParams();
+    params = params.append('collaboration', collaboration); //id repos
+    params = params.append('filename', filename); //name della repo nuovo
+
+
+return this.http.post("http://pros.unicam.it:8080/C4/rest/files/download?filename="+filename+"&collaboration=true",httpOptions2)
+   .pipe(
            catchError(this.handleError)
   );
   
 }
-
-
   changeNameRepo(id, newRepoName): Observable<any> {
     let params = new HttpParams();
     params = params.append('idRepository', id); //id repos

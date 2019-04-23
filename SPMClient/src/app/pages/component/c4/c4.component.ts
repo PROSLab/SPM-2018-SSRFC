@@ -17,17 +17,18 @@ export class C4Component implements OnInit {
   checked: boolean = false;
   choreography: any;
   collaboration: any;
-  marked=false;
+  marked = false;
   equivalence: any;
-  weak=false;
-  
+  weak = false;
+  file1
+  file2
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) { }
 
   ngOnInit() {
   }
 
-//funzione per il controllo del formato dei file (se è bpmn)
+  //funzione per il controllo del formato dei file (se è bpmn)
   controlFormatFile(f) {
     if (f.name.split('.').pop() == "bpmn") {
       return true;
@@ -37,68 +38,90 @@ export class C4Component implements OnInit {
       return false;
     }
   }
-  
-//funzione che prende il primo file (collaboration)
+
+  //funzione che prende il primo file (collaboration)
   handleFileInput1(files) {
     if (files && files[0]) {
-      var myFile = files[0];
-      var reader = new FileReader();
-
-     /*  reader.onload = (event: Event) => {
-        this.a = this.controlFormatFile(this.fileToUpload)
-      } */
-      this.fileToUpload = files.item(0);
-     // reader.readAsText(myFile);
+      if (this.controlFormatFile(files[0])) {
+        this.file1 = files[0];
+        var reader = new FileReader();
+        this.fileToUpload = files.item(0);
+      }
     }
-  } 
+  }
 
-//funzione che prende il secondof ile (choreography)
-   handleFileInput2(files) {
+  //funzione che prende il secondo file (choreography)
+  handleFileInput2(files) {
     if (files && files[0]) {
-      var myFile = files[0];
-      var reader = new FileReader();
-      /* reader.onload = (event: Event) => {
-        this.a2 = this.controlFormatFile(this.fileToUpload2)
-      } */
-      this.fileToUpload2 = files.item(0);
-      //reader.readAsText(myFile);
+      if (this.controlFormatFile(files[0])) {
+        this.file2 = files[0];
+        var reader = new FileReader();
+
+        this.fileToUpload2 = files.item(0);
+      }
     }
-  } 
-checkAut(equivalence,weak){
-this.equivalence=equivalence
-this.weak=weak
- if (this.weak==undefined){
-  this.weak=false
-} 
-console.log(this.weak)
-this.service.checkEquivalence(this.weak,this.equivalence,this.collaboration,this.choreography)
-.subscribe(data =>{
-  console.log(data)
-},
-error=>{
-  console.log(error)
-})
-}
+  }
+
+
+  checkAut(equivalence, weak) {
+    this.equivalence = equivalence
+    this.weak = weak
+    if (this.weak == undefined) {
+      this.weak = false
+    }
+    console.log(this.weak)
+    this.service.checkEquivalence(this.weak, this.equivalence, this.collaboration, this.choreography)
+      .subscribe(data => {
+        console.log(data)
+      },
+        error => {
+          console.log(error)
+        })
+  }
   //funzione che richiama la post al server e gli passa i 2 files
   CheckEquivalence() {
-   
-    /* if (this.a && this.a2) { */
-      console.log(this.fileToUpload,this.fileToUpload2)
-      this.service.submitC4(this.fileToUpload,this.fileToUpload2)
+    console.log(this.file1)
+    console.log(this.file2)
+
+    if (this.file1 != undefined && this.file2 != undefined) {
+      console.log(this.fileToUpload, this.fileToUpload2)
+      this.toastr.success('Wait a moment please', 'waiting')
+      this.service.submitC4(this.fileToUpload, this.fileToUpload2)
         .subscribe(data => {
-         
-        data=   JSON.parse(data)
-        this.collaboration = data.collaboration
-        this.choreography = data.choreography
-        console.log(data)
-          this.checked=true;
+
+          data = JSON.parse(data)
+          this.collaboration = data.collaboration
+          this.choreography = data.choreography
+          console.log(data)
+          this.checked = true;
+          
         },
           error => {
             console.log(error)
           })
-   /*  }
+    }
     else {
-      window.alert("non ok")
-    } */
+      this.toastr.error('Error , you must upload file', 'File upload')
+    }
   }
+
+
+
+  downloadColl(){
+      window.open("http://pros.unicam.it:8080/C4/rest/files/download?filename="+this.collaboration+"&collaboration=true")
+  }
+  downloadChor(){
+    window.open("http://pros.unicam.it:8080/C4/rest/files/download?filename="+this.choreography+"&collaboration=false")
+
+}
+
+searchColl(){
+  let url =("http://pros.unicam.it:8080/C4/rest/files/download?filename="+this.collaboration+"&collaboration=true")
+}
+
+searchChor(){
+let url= ("http://pros.unicam.it:8080/C4/rest/files/download?filename="+this.choreography+"&collaboration=false")
+
+}
+
 }
