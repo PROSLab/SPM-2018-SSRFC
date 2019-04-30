@@ -25,10 +25,10 @@
 
 
   <div class="col-12"  *ngIf="anteprima==true">
-    <div class="col-10" style="border:1px solid black">
-      MOSTRARE anteprima diagramma
-    <br><br><br><br><br><br><br><br><br>
-    </div>
+   
+      <div #canvas style="background-color:white" id="canvas"></div>
+      
+  
     <br>
 
     <div class="row" style="right:40%">
@@ -71,8 +71,9 @@
 
       <div class="col-12"  *ngIf="anteprima2==true">
           <div class="col-10" style="border:1px solid black">
-            MOSTRARE anteprima diagramma
-          <br><br><br><br><br><br><br><br><br>
+            <div class="diagram-container" >
+              <app-diagram-chor [url]="diagramUrlChor" ></app-diagram-chor> <!-- per coreography -->
+            </div>
           </div>
           <br>
       

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Service } from '../../../service/service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { Modeler } from '../../../bpmn-js/bpmn-js';
+import BpmnJS from 'bpmn-js/lib/NavigatedViewer';
 
 @Component({
   selector: 'app-c4',
@@ -30,10 +31,23 @@ export class C4Component implements OnInit {
   nomeFile2: string;
   file1Accepted: boolean =false;
   file2Accepted: boolean =false;
+  diagramUrl: any;
+  diagramUrlChor: any;
+  modeler: any;
+  bpmnJS: any;
 
-  constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) { }
+  constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) {
+    this.bpmnJS = new BpmnJS();
+  
+    this.bpmnJS.on('import.done', ({ error }) => {
+      if (!error) {
+        this.bpmnJS.get('canvas').zoom('fit-viewport');
+      }
+    });
+   }
 
   ngOnInit() {
+   
   }
 
   //funzione per il controllo del formato dei file (se è bpmn)
@@ -55,14 +69,40 @@ export class C4Component implements OnInit {
         var reader = new FileReader();
         this.fileToUpload = files.item(0);
         console.log(files)
-
+ this.ReadCollaboration(this.fileToUpload)
         this.anteprima=true
         this.anteprimabottoni = true
         this.nomeFile = this.fileToUpload.name
+       
       }
     }
   }
+ /*  ReadChoreography(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+   
 
+    this.diagramUrlChor=fileReader.result;
+    console.log(this.diagramUrlChor)
+    }
+    fileReader.readAsText(file);
+} */
+  ReadCollaboration(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+
+      this.modeler = new Modeler({
+        container: '#canvas',
+        width: '100%',
+      
+      });
+      
+    this.diagramUrl=fileReader.result;
+    this.modeler.importXML(this.diagramUrl )
+    console.log(this.diagramUrl)
+    }
+    fileReader.readAsText(file);
+} 
 
   choose(inform){
 if(inform=="refuse"){
@@ -100,9 +140,8 @@ this.file1Accepted=true
         var reader = new FileReader();
 
         this.fileToUpload2 = files.item(0);
-
-        console.log(files)
-
+/*         this.ReadChoreography(this.fileToUpload2)
+ */
         this.anteprima2=true
         this.anteprimabottoni2 = true
         this.nomeFile2 = this.fileToUpload2.name
