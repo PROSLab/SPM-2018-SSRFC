@@ -22,6 +22,14 @@ export class C4Component implements OnInit {
   weak = false;
   file1
   file2
+  anteprima: boolean =false;
+  anteprimabottoni: boolean =false;
+  nomeFile: string;
+  anteprima2: boolean =false;
+  anteprimabottoni2: boolean =false;
+  nomeFile2: string;
+  file1Accepted: boolean =false;
+  file2Accepted: boolean =false;
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) { }
 
@@ -46,9 +54,43 @@ export class C4Component implements OnInit {
         this.file1 = files[0];
         var reader = new FileReader();
         this.fileToUpload = files.item(0);
+        console.log(files)
+
+        this.anteprima=true
+        this.anteprimabottoni = true
+        this.nomeFile = this.fileToUpload.name
       }
     }
   }
+
+
+  choose(inform){
+if(inform=="refuse"){
+  //rifiuto il file che ho caricato quindi ripristino iniziale
+  this.anteprima=false
+}
+//accetto il file quindi lo rendo ufficiale
+
+if(inform=="accept"){
+this.anteprimabottoni = false
+this.file1Accepted=true
+}
+  }
+
+
+  choose2(inform){
+    if(inform=="refuse"){
+      //rifiuto il file che ho caricato quindi ripristino iniziale
+      this.anteprima2=false
+    }
+    //accetto il file quindi lo rendo ufficiale
+    
+    if(inform=="accept"){
+    this.anteprimabottoni2 = false
+    this.file2Accepted=true
+    }
+  }
+
 
   //funzione che prende il secondo file (choreography)
   handleFileInput2(files) {
@@ -58,6 +100,12 @@ export class C4Component implements OnInit {
         var reader = new FileReader();
 
         this.fileToUpload2 = files.item(0);
+
+        console.log(files)
+
+        this.anteprima2=true
+        this.anteprimabottoni2 = true
+        this.nomeFile2 = this.fileToUpload2.name
       }
     }
   }
@@ -78,12 +126,15 @@ export class C4Component implements OnInit {
           console.log(error)
         })
   }
+
+
   //funzione che richiama la post al server e gli passa i 2 files
   CheckEquivalence() {
     console.log(this.file1)
     console.log(this.file2)
 
-    if (this.file1 != undefined && this.file2 != undefined) {
+    if (this.file1Accepted && this.file2Accepted) {
+      
       console.log(this.fileToUpload, this.fileToUpload2)
       this.toastr.success('Wait a moment please', 'waiting')
       this.service.submitC4(this.fileToUpload, this.fileToUpload2)
