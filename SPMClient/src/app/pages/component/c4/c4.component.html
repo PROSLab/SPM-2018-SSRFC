@@ -1,7 +1,38 @@
-<div *ngIf="checked==false">
-  <div class="row" style="right:60%">
-    <h3>Upload Files</h3>
+<div class="modal fade" id="anteprimaColla" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Collaboration</h4>
+      </div>
+      <div class="modal-body">
+
+        <!-- <div #canvas style="background-color:white" id="canvas"></div> -->
+        <app-diagram  [xml]="diagramUrl"></app-diagram>
+
+
+        <br>
+        <div class="row" style="right:40%">
+          {{nomeFile}}
+        </div>
+      </div>
+      <div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger"  #btn2 value="accept" (click)="choose(btn2.value)"  style="left: 50%">ACCEPT</button>
+        &nbsp;
+        <button type="button" class="btn btn-danger" #btn1 data-dismiss="modal">Close</button>
+
+     <!--    <button class="btn btn-info" #closeModal1 value="refuse" (click)="choose(closeModal1.value)" data-dismiss="modal" >REFUSE</button>
+ -->
+      </div>
+
+    </div>
   </div>
+</div>
+
+
+<div *ngIf="checked==false">
   <div class="row">
 
     <div class="col-6" style="height: 400px;border:1px solid rgb(172, 170, 170)">
@@ -19,29 +50,15 @@
         <br><br><br>
 
         <label for="file">
-            <input type="file" id="file" #f (change)="handleFileInput1($event.target.files)">
+          <input type="file" id="file" data-toggle="modal" data-target=""
+            (change)="handleFileInput1($event.target.files)">
+
         </label>
       </div>
 
+      <div class="col-12" *ngIf="anteprima==true">
 
-  <div class="col-12"  *ngIf="anteprima==true">
-   
-      <div #canvas style="background-color:white" id="canvas"></div>
-      
-  
-    <br>
-
-    <div class="row" style="right:40%">
-        {{nomeFile}}
-    </div>
-<div class="row" *ngIf="anteprimabottoni==true">
-  <button class="btn btn-danger" #b1 value="accept" (click)="choose(b1.value)" style="left: 50%">ACCEPT</button>
-  &nbsp;
-  <button class="btn btn-info" #b2 value="refuse" (click)="choose(b2.value)">REFUSE</button>
-</div>
-
-    
-    </div>  
+      </div>
     </div>
 
     <div class="col-6" style="height: 400px;border:1px solid rgb(172, 170, 170)">
@@ -69,23 +86,24 @@
         </a>
       </div>
 
-      <div class="col-12"  *ngIf="anteprima2==true">
-          <div class="col-10" style="border:1px solid black">
-            <div class="diagram-container" >
-              <app-diagram-chor [url]="diagramUrlChor" ></app-diagram-chor> <!-- per coreography -->
-            </div>
+      <div class="col-12" *ngIf="anteprima2==true">
+        <div class="col-10" style="border:1px solid black">
+          <div class="diagram-container">
+            <app-diagram-chor [url]="diagramUrlChor"></app-diagram-chor> <!-- per coreography -->
           </div>
-          <br>
-      
-          <div class="row" style="right:40%">
-              {{nomeFile2}}
-          </div>
-      <div class="row" *ngIf="anteprimabottoni2==true">
-        <button class="btn btn-danger" #b1 value="accept" (click)="choose2(b1.value)" style="left: 50%">ACCEPT</button>
-        &nbsp;
-        <button class="btn btn-info" #b2 value="refuse" (click)="choose2(b2.value)">REFUSE</button>
+        </div>
+        <br>
+
+        <div class="row" style="right:40%">
+          {{nomeFile2}}
+        </div>
+        <div class="row" *ngIf="anteprimabottoni2==true">
+          <button class="btn btn-danger" #b1 value="accept" (click)="choose2(b1.value)"
+            style="left: 50%">ACCEPT</button>
+          &nbsp;
+          <button class="btn btn-info" #b2 value="refuse" (click)="choose2(b2.value)">REFUSE</button>
+        </div>
       </div>
-          </div> 
 
     </div>
   </div>

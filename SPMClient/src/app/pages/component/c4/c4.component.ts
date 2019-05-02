@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Service } from '../../../service/service';
 import { Modeler } from '../../../bpmn-js/bpmn-js';
 import BpmnJS from 'bpmn-js/lib/NavigatedViewer';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-c4',
@@ -11,6 +12,9 @@ import BpmnJS from 'bpmn-js/lib/NavigatedViewer';
   styleUrls: ['./c4.component.css']
 })
 export class C4Component implements OnInit {
+  @ViewChild("btn1") closeModal1 : ElementRef 
+ 
+
   fileToUpload: File;
   fileToUpload2: File;
   a: any;
@@ -25,7 +29,7 @@ export class C4Component implements OnInit {
   file2
   anteprima: boolean =false;
   anteprimabottoni: boolean =false;
-  nomeFile: string;
+  nomeFile: string =null;
   anteprima2: boolean =false;
   anteprimabottoni2: boolean =false;
   nomeFile2: string;
@@ -37,13 +41,8 @@ export class C4Component implements OnInit {
   bpmnJS: any;
 
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) {
-    this.bpmnJS = new BpmnJS();
-  
-    this.bpmnJS.on('import.done', ({ error }) => {
-      if (!error) {
-        this.bpmnJS.get('canvas').zoom('fit-viewport');
-      }
-    });
+   
+    
    }
 
   ngOnInit() {
@@ -73,6 +72,10 @@ export class C4Component implements OnInit {
         this.anteprima=true
         this.anteprimabottoni = true
         this.nomeFile = this.fileToUpload.name
+        
+        document.getElementById("file").setAttribute("data-target","#anteprimaColla")
+        document.getElementById("anteprimaColla").setAttribute("class", "modal fade show")
+        document.getElementById("anteprimaColla").setAttribute("style", "padding-right:16px;display:block")
        
       }
     }
@@ -91,34 +94,48 @@ export class C4Component implements OnInit {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
 
-      this.modeler = new Modeler({
+     /*  this.modeler = new Modeler({
         container: '#canvas',
         width: '100%',
       
-      });
+      }); */
       
     this.diagramUrl=fileReader.result;
-    this.modeler.importXML(this.diagramUrl )
+    /* this.modeler.importXML(this.diagramUrl ) */
     console.log(this.diagramUrl)
     }
     fileReader.readAsText(file);
 } 
 
   choose(inform){
+    console.log("voorei scegliere ma non posso")
+    document.getElementById("file").setAttribute("data-target","")
+  document.getElementById("anteprimaColla").setAttribute("class", "modal")
+        document.getElementById("anteprimaColla").setAttribute("style", "")
+/*   this.clearModal(this.closeModal1)
+ */
 if(inform=="refuse"){
   //rifiuto il file che ho caricato quindi ripristino iniziale
   this.anteprima=false
+
 }
 //accetto il file quindi lo rendo ufficiale
 
 if(inform=="accept"){
 this.anteprimabottoni = false
 this.file1Accepted=true
+/* this.clearModal(this.closeModal1)
+ */  }
 }
+
+
+//how to close a modal
+clearModal(modal):any{
+  modal.nativeElement.click()
   }
 
 
-  choose2(inform){
+  /* choose2(inform){
     if(inform=="refuse"){
       //rifiuto il file che ho caricato quindi ripristino iniziale
       this.anteprima2=false
@@ -130,7 +147,7 @@ this.file1Accepted=true
     this.file2Accepted=true
     }
   }
-
+ */
 
   //funzione che prende il secondo file (choreography)
   handleFileInput2(files) {

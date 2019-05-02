@@ -47,7 +47,8 @@ import {
   
     @ViewChild('ref') private el: ElementRef;
     @Output() private importDone: EventEmitter<any> = new EventEmitter();
-  
+    @Input() private xml: string;
+
     @Input() private url: string;
   
     constructor(private http: HttpClient) {
@@ -66,8 +67,12 @@ import {
     }
   
     ngOnChanges(changes: SimpleChanges) {
+      if (changes.xml){
+        this.loadXml(changes.xml.currentValue)
+      }
       // re-import whenever the url changes
       if (changes.url) {
+      
         this.loadUrl(changes.url.currentValue);
       }
     }
@@ -75,7 +80,16 @@ import {
     ngOnDestroy(): void {
       this.bpmnJS.destroy();
     }
+
+    loadXml(xml: string) {
+      return(
+      this.bpmnJS.importXML(xml, function(err, warnings) {
+      
+  })
+      )
+}
   
+
     /**
      * Load diagram from URL and emit completion event
      */
