@@ -36,7 +36,7 @@ import {
       `
         .diagram-container {
           background-color:white;
-          height: 150%;
+          height: 300px;
           width: 80%;
         }
       `
@@ -56,8 +56,10 @@ import {
       this.bpmnJS = new BpmnJS();
   
       this.bpmnJS.on('import.done', ({ error }) => {
+    
         if (!error) {
-          this.bpmnJS.get('canvas').zoom('fit-viewport');
+           this.bpmnJS.get('canvas').zoom('fit-viewport');
+          this.bpmnJS.get('canvas').resized();
         }
       });
     }

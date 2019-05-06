@@ -13,7 +13,8 @@ import { Observable } from 'rxjs';
 })
 export class C4Component implements OnInit {
   @ViewChild("btn1") closeModal1 : ElementRef 
- 
+  @ViewChild("file") myInputVariable: ElementRef;
+  @ViewChild("file1") myInputVariable1: ElementRef;
 
   fileToUpload: File;
   fileToUpload2: File;
@@ -30,8 +31,8 @@ export class C4Component implements OnInit {
   anteprima: boolean =false;
   anteprimabottoni: boolean =false;
   nomeFile: string =null;
-  anteprima2: boolean =false;
-  anteprimabottoni2: boolean =false;
+  fileScelto: boolean =true;
+  
   nomeFile2: string;
   file1Accepted: boolean =false;
   file2Accepted: boolean =false;
@@ -69,8 +70,7 @@ export class C4Component implements OnInit {
         this.fileToUpload = files.item(0);
         console.log(files)
  this.ReadCollaboration(this.fileToUpload)
-        this.anteprima=true
-        this.anteprimabottoni = true
+      
         this.nomeFile = this.fileToUpload.name
         
         document.getElementById("file").setAttribute("data-target","#anteprimaColla")
@@ -116,14 +116,15 @@ export class C4Component implements OnInit {
  */
 if(inform=="refuse"){
   //rifiuto il file che ho caricato quindi ripristino iniziale
-  this.anteprima=false
+  this.fileScelto=false;
+  this.myInputVariable.nativeElement.value = "";
 
 }
 //accetto il file quindi lo rendo ufficiale
 
 if(inform=="accept"){
-this.anteprimabottoni = false
-this.file1Accepted=true
+  this.fileScelto=true;
+  console.log("ci sonooo accettato")
 /* this.clearModal(this.closeModal1)
  */  }
 }
@@ -135,19 +136,28 @@ clearModal(modal):any{
   }
 
 
-  /* choose2(inform){
-    if(inform=="refuse"){
-      //rifiuto il file che ho caricato quindi ripristino iniziale
-      this.anteprima2=false
-    }
-    //accetto il file quindi lo rendo ufficiale
+  choose2(inform){
     
-    if(inform=="accept"){
-    this.anteprimabottoni2 = false
-    this.file2Accepted=true
-    }
-  }
+    document.getElementById("file1").setAttribute("data-target","")
+  document.getElementById("anteprimaChor").setAttribute("class", "modal")
+        document.getElementById("anteprimaChor").setAttribute("style", "")
+/*   this.clearModal(this.closeModal1)
  */
+if(inform=="refuse"){
+  //rifiuto il file che ho caricato quindi ripristino iniziale
+  this.myInputVariable1.nativeElement.value = "";
+
+
+
+}
+//accetto il file quindi lo rendo ufficiale
+
+if(inform=="accept"){
+
+/* this.clearModal(this.closeModal1)
+ */  }
+}
+ 
 
   //funzione che prende il secondo file (choreography)
   handleFileInput2(files) {
@@ -159,9 +169,10 @@ clearModal(modal):any{
         this.fileToUpload2 = files.item(0);
          this.ReadChoreography(this.fileToUpload2)
  
-        this.anteprima2=true
-        this.anteprimabottoni2 = true
         this.nomeFile2 = this.fileToUpload2.name
+        document.getElementById("file1").setAttribute("data-target","#anteprimaChor")
+        document.getElementById("anteprimaChor").setAttribute("class", "modal fade show")
+        document.getElementById("anteprimaChor").setAttribute("style", "padding-right:16px;display:block")
       }
     }
   }
