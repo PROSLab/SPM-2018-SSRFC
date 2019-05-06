@@ -31,11 +31,9 @@ export class C4Component implements OnInit {
   anteprima: boolean =false;
   anteprimabottoni: boolean =false;
   nomeFile: string =null;
-  fileScelto: boolean =true;
   
   nomeFile2: string;
-  file1Accepted: boolean =false;
-  file2Accepted: boolean =false;
+ 
   diagramUrl: any;
   diagramUrlChor: any;
   modeler: any;
@@ -116,17 +114,11 @@ export class C4Component implements OnInit {
  */
 if(inform=="refuse"){
   //rifiuto il file che ho caricato quindi ripristino iniziale
-  this.fileScelto=false;
+ 
   this.myInputVariable.nativeElement.value = "";
 
 }
 //accetto il file quindi lo rendo ufficiale
-
-if(inform=="accept"){
-  this.fileScelto=true;
-  console.log("ci sonooo accettato")
-/* this.clearModal(this.closeModal1)
- */  }
 }
 
 
@@ -152,10 +144,7 @@ if(inform=="refuse"){
 }
 //accetto il file quindi lo rendo ufficiale
 
-if(inform=="accept"){
 
-/* this.clearModal(this.closeModal1)
- */  }
 }
  
 
@@ -172,7 +161,7 @@ if(inform=="accept"){
         this.nomeFile2 = this.fileToUpload2.name
         document.getElementById("file1").setAttribute("data-target","#anteprimaChor")
         document.getElementById("anteprimaChor").setAttribute("class", "modal fade show")
-        document.getElementById("anteprimaChor").setAttribute("style", "padding-right:16px;display:block")
+        document.getElementById("anteprimaChor").setAttribute("style", "padding-right:16px;display:block;")
       }
     }
   }
@@ -197,12 +186,13 @@ if(inform=="accept"){
 
   //funzione che richiama la post al server e gli passa i 2 files
   CheckEquivalence() {
-    console.log(this.file1)
-    console.log(this.file2)
 
-    if (this.file1Accepted && this.file2Accepted) {
+
+    if ((  this.myInputVariable1.nativeElement.value !="")
+    &&  ( this.myInputVariable.nativeElement.value != "")
+    ) {
       
-      console.log(this.fileToUpload, this.fileToUpload2)
+     
       this.toastr.success('Wait a moment please', 'waiting')
       this.service.submitC4(this.fileToUpload, this.fileToUpload2)
         .subscribe(data => {
