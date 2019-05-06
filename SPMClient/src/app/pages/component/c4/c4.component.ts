@@ -80,7 +80,7 @@ export class C4Component implements OnInit {
       }
     }
   }
- /*  ReadChoreography(file) {
+   ReadChoreography(file) {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
    
@@ -89,7 +89,7 @@ export class C4Component implements OnInit {
     console.log(this.diagramUrlChor)
     }
     fileReader.readAsText(file);
-} */
+} 
   ReadCollaboration(file) {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
@@ -108,7 +108,7 @@ export class C4Component implements OnInit {
 } 
 
   choose(inform){
-    console.log("voorei scegliere ma non posso")
+    
     document.getElementById("file").setAttribute("data-target","")
   document.getElementById("anteprimaColla").setAttribute("class", "modal")
         document.getElementById("anteprimaColla").setAttribute("style", "")
@@ -157,8 +157,8 @@ clearModal(modal):any{
         var reader = new FileReader();
 
         this.fileToUpload2 = files.item(0);
-/*         this.ReadChoreography(this.fileToUpload2)
- */
+         this.ReadChoreography(this.fileToUpload2)
+ 
         this.anteprima2=true
         this.anteprimabottoni2 = true
         this.nomeFile2 = this.fileToUpload2.name

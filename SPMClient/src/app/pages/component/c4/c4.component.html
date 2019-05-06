@@ -1,3 +1,37 @@
+<div class="modal fade" id="anteprimaChor" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Choreography</h4>
+      </div>
+      <div class="modal-body">
+
+        <!-- <div #canvas style="background-color:white" id="canvas"></div> -->
+        <app-diagram-chor [xml]="diagramUrlChor" ></app-diagram-chor>
+
+
+        <br>
+        <div class="row" style="right:40%">
+          {{nomeFile}}
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn btn-danger"  #btn2 value="accept" (click)="choose(btn2.value)"  style="left: 50%">ACCEPT</button>
+        &nbsp;
+        <button type="button" class="btn btn-danger" value="refuse" #btn1 (click)="choose(btn1.value)">Close</button>
+
+     <!--    <button class="btn btn-info" #closeModal1 value="refuse" (click)="choose(closeModal1.value)" data-dismiss="modal" >REFUSE</button>
+ -->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
 <div class="modal fade" id="anteprimaColla" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -15,9 +49,7 @@
           {{nomeFile}}
         </div>
       </div>
-      <div>
-
-      </div>
+     
       <div class="modal-footer">
         <button class="btn btn-danger"  #btn2 value="accept" (click)="choose(btn2.value)"  style="left: 50%">ACCEPT</button>
         &nbsp;
@@ -32,7 +64,7 @@
 </div>
 
 
-<div *ngIf="checked==false">
+<div *ngIf="checked==false" >
   <div class="row">
 
     <div class="col-6" style="height: 400px;border:1px solid rgb(172, 170, 170)">
@@ -55,10 +87,7 @@
 
         </label>
       </div>
-
-      <div class="col-12" *ngIf="anteprima==true">
-
-      </div>
+      
     </div>
 
     <div class="col-6" style="height: 400px;border:1px solid rgb(172, 170, 170)">
@@ -97,7 +126,7 @@
         <div class="row" style="right:40%">
           {{nomeFile2}}
         </div>
-        <div class="row" *ngIf="anteprimabottoni2==true">
+        <div class="row" *ngIf="anteprimabottoni2==true" >
           <button class="btn btn-danger" #b1 value="accept" (click)="choose2(b1.value)"
             style="left: 50%">ACCEPT</button>
           &nbsp;
@@ -120,6 +149,7 @@
 
 
 
+
 <div *ngIf="checked==true" class="row">
   <div class="col-6" style="border:1px solid;height: 200px;">
     mettere anteprima disegno 1
@@ -128,7 +158,6 @@
     mettere anteprima disegno 2
   </div>
 </div>
-
 <br>
 <div>
   <!-- <div *ngIf="checked==true"> -->
