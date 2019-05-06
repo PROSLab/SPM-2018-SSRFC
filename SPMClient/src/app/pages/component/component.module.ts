@@ -10,10 +10,12 @@ import { RepositoryComponent } from './Repository/repository.component';
 import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { FolderComponent } from './folder/folder.component';
 import { BpmnComponent } from '../../bpmn-component/bpmn.component';
-import {DiagramComponent} from './diagram/diagram';
-import {DiagramComponentChor} from './diagram/diagramChor'
+import { DiagramComponent } from './diagram/diagram';
+import { DiagramComponentChor } from './diagram/diagramChor'
 import { ChoreographyModelComponent } from '../../choreography-model/choreography-model.component';
 import { C4Component } from './c4/c4.component';
+import{ CytoscapeComponent } from '../../cytoscape/cytoscape.component'
+
 @NgModule({
   imports: [
     CommonModule,
@@ -21,16 +23,18 @@ import { C4Component } from './c4/c4.component';
     FormsModule,
     ReactiveFormsModule,
     JsonpModule  ],
+
   declarations: [
     DiagramComponent,
-DiagramComponentChor,
+    DiagramComponentChor,
     RepositoryComponent,
     FolderComponent,
     FileComponent,
     RepoPublicComponent,
     BpmnComponent,
     ChoreographyModelComponent,
-    C4Component
+    C4Component,
+    CytoscapeComponent
   ]
 })
 

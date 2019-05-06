@@ -7,6 +7,7 @@ import { RepoPublicComponent } from './repo-public/repo-public.component';
 import { BpmnComponent } from '../../bpmn-component/bpmn.component';
 import { ChoreographyModelComponent } from '../../choreography-model/choreography-model.component';
 import { C4Component } from './c4/c4.component';
+import { CytoscapeComponent } from '../../cytoscape/cytoscape.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -75,6 +76,14 @@ export const ComponentsRoutes: Routes = [
         data: { 
           title: 'c4',
           urls: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'ngComponent' }, { title: 'c4' }]
+        }
+      },
+      {
+        path: 'cyto',
+        component: CytoscapeComponent,
+        data: { 
+          title: 'cyto',
+          urls: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'ngComponent' }, { title: 'cyto' }]
         }
       }
     ]

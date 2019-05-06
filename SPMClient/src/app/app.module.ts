@@ -12,6 +12,7 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { Service } from './service/service'; 
 import {ToastrModule} from 'ngx-toastr'
 import { LoginGuard } from './pages/starter/login.guard';
+
 @NgModule({
   declarations: [AppComponent,SpinnerComponent ],
   imports: [
@@ -21,7 +22,7 @@ import { LoginGuard } from './pages/starter/login.guard';
     positionClass:'toast-top-right',
     preventDuplicates:false,
     }),
-
+    
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
