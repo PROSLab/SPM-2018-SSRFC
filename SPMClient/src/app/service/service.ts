@@ -31,6 +31,7 @@ export class Service {
   id: any;
   repos: string;
   folder: string =null;
+  state: any;
 
   constructor(
     private toastr:ToastrService,
@@ -138,17 +139,21 @@ export class Service {
      );
  }
 
-checkEquivalence(weak,equivalence,collaborationCode,choreographyCode):Observable<any>{
-let formData: FormData = new FormData();
+checkEquivalence(weak,equivalence,collaborationCode,choreographyCode){
+/* let formData: FormData = new FormData();
 formData.append('weak', weak)
 formData.append('equivalence', equivalence)
 formData.append('collaborationPath', collaborationCode)
 formData.append('choreographyPath', choreographyCode)
- 
- return this.http.post("http://pros.unicam.it:8080/C4/rest/files/check_equivalence",formData, {responseType:'text'})
-   .pipe(
-           catchError(this.handleError)
-  ); 
+ */
+/* var params = jQuery.param ({weak: weak , equivalence: equivalence, "collaborationPath": collaborationCode, "choreographyPath": choreographyCode})
+
+ console.log(params)
+ return  this.http.post("http://pros.unicam.it:8080/C4/rest/files/check_equivalence",params, httpOptions3)
+} */
+
+  
+
 }
 
 
