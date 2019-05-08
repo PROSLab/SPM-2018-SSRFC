@@ -12,17 +12,18 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { Service } from './service/service'; 
 import {ToastrModule} from 'ngx-toastr'
 import { LoginGuard } from './pages/starter/login.guard';
-
+import {CytoscapeModule} from 'ngx-cytoscape'
 @NgModule({
   declarations: [AppComponent,SpinnerComponent ],
   imports: [
 
+CytoscapeModule,
     ToastrModule.forRoot({
     timeOut:2000,
     positionClass:'toast-top-right',
     preventDuplicates:false,
     }),
-    
+   
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,

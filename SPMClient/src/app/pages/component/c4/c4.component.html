@@ -117,7 +117,7 @@
             <input  data-toggle="modal" data-target="" #file1 type="file" id="file1" (change)="handleFileInput2($event.target.files)">
            
           </label>
-       
+          
       </div>
 
    
@@ -139,6 +139,7 @@
 
 
 <br>
+
 <div>
   <!-- <div *ngIf="checked==true"> -->
   <div class="row">
@@ -155,7 +156,7 @@
     <div class="col-5">
       <br>
       <button id="check" (click)="downloadColl()" class="btn btn-primary">Download</button>
-      <button id="check" (click)="searchColl()" class="btn btn-success">Search</button>
+      <button id="check" (click)="showDataColl()" class="btn btn-success">Search</button>
     </div>
     <br>
   </div>
@@ -171,7 +172,7 @@
     <div class="col-5">
       <br>
       <button id="check" (click)="downloadChor()" class="btn btn-primary">Download</button>
-      <button id="check" (click)="searchChor()" class="btn btn-success">Search</button>
+      <button id="check" (click)="showDataChor()" class="btn btn-success">Search</button>
     </div>
     <br>
   </div>
@@ -190,5 +191,7 @@
   <br>
   <br>
   <button id="check" (click)="checkAut(opt.value,theCheckbox)" class="btn btn-primary">Check</button>
-
+  <div class="cytograph">
+    <cytoscape-ng [elements]="graphData"></cytoscape-ng>
+  </div>
 </div>

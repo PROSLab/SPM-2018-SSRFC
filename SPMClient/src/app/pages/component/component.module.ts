@@ -14,10 +14,12 @@ import { DiagramComponent } from './diagram/diagram';
 import { DiagramComponentChor } from './diagram/diagramChor'
 import { ChoreographyModelComponent } from '../../choreography-model/choreography-model.component';
 import { C4Component } from './c4/c4.component';
-import{ CytoscapeComponent } from '../../cytoscape/cytoscape.component'
+import {CytoscapeNgLibModule} from "cytoscape-ng-lib";
 
 @NgModule({
   imports: [
+
+    CytoscapeNgLibModule,
     CommonModule,
     RouterModule.forChild(ComponentsRoutes),
     FormsModule,
@@ -34,7 +36,6 @@ import{ CytoscapeComponent } from '../../cytoscape/cytoscape.component'
     BpmnComponent,
     ChoreographyModelComponent,
     C4Component,
-    CytoscapeComponent
   ]
 })
 
