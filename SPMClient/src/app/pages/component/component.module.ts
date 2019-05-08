@@ -14,10 +14,7 @@ import { DiagramComponent } from './diagram/diagram';
 import { DiagramComponentChor } from './diagram/diagramChor'
 import { ChoreographyModelComponent } from '../../choreography-model/choreography-model.component';
 import { C4Component } from './c4/c4.component';
-<<<<<<< HEAD
-=======
 import {CytoscapeNgLibModule} from "cytoscape-ng-lib";
->>>>>>> 1339be1cd836849d1eead16e7a93c5e3fa5e44f6
 
 @NgModule({
   imports: [
