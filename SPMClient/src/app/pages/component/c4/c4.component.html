@@ -139,13 +139,8 @@
 
 
 <br>
-<<<<<<< HEAD
 <div *ngIf="collaboration!= '' ">
     <hr>
-=======
-
-<div>
->>>>>>> 1339be1cd836849d1eead16e7a93c5e3fa5e44f6
   <!-- <div *ngIf="checked==true"> -->
   <div class="row">
    
@@ -179,7 +174,7 @@
     <div class="col-5">
       <br>
       <button id="check" (click)="downloadChor()" class="btn btn-primary">Download</button>
-      <button id="check" (click)="showDataChor()" class="btn btn-success">Search</button>
+      <button id="check" (click)="ShowDataChor()" class="btn btn-success">Search</button>
     </div>
     <br>
   </div>
@@ -198,7 +193,6 @@
   <br>
   <br>
   <button id="check" (click)="checkAut(opt.value,theCheckbox)" class="btn btn-primary">Check</button>
-<<<<<<< HEAD
 
 
 
@@ -219,9 +213,9 @@
     <input class="form-control" type="text" placeholder={{counterExample}} readonly>
   </div>
 
-=======
-  <div class="cytograph">
-    <cytoscape-ng [elements]="graphData"></cytoscape-ng>
-  </div>
->>>>>>> 1339be1cd836849d1eead16e7a93c5e3fa5e44f6
+  
+</div>
+<div *ngIf="enabledgraph==true" class="cytograph">
+    <ngx-cytoscape [elements]="result" ></ngx-cytoscape>  
+
 </div>

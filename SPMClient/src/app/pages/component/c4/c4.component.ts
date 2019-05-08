@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Service } from '../../../service/service';
+import { saveAs } from 'file-saver';
+
+
 declare var cytoscape: any;
 
 @Component({
@@ -34,21 +37,35 @@ export class C4Component implements OnInit {
   diagramUrlChor: any;
   modeler: any;
   bpmnJS: any;
-  autCollaboration: string;
-  autChoreography: string;
+  autCollaboration;
+  autChoreography;
   result: any[];
   state: any;
   counterExample: string;
-
+  fileCollaborationAut: any;
+enabledgraph:boolean=false;
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) {
    
     
    }
-   ShowDataChor(){
-    var me = this;
  
-    console.log(this.autChoreography)
-       
+   ShowDataChor(){
+    this.enabledgraph=true;
+    var me = this;
+    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false",{responseType:"text"}).subscribe(response => {
+      try {
+        let isFileSaverSupported = !!new Blob;
+    } catch (e) { 
+        console.log(e);
+        return;
+    }
+        let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => {
+    
+    
+          this.autChoreography = fileReader.result;
+          
          var log = this.autChoreography.split('\n');
          var i;
          var nodes = [];
@@ -90,55 +107,80 @@ export class C4Component implements OnInit {
          }
          console.log(this.result); 
     
+        }
+        fileReader.readAsText(blob);
+    });
+   
+       
     
       
      
     }
    showDataColl(){
+    this.enabledgraph=true;
     var me = this;
-    console.log(this.autCollaboration)
-       
-         var log = this.autCollaboration.split('\n');
-         var i;
-         var nodes = [];
-         var edges = [];
-         for (i = 1;i<log.length;i++){
-         if (log[i]===""){
-          continue; 
-         }
-         var obj = me.parseLine(log[i]);
-         console.log(obj);
-         
-         if (!nodes.includes(obj.first)){
-           nodes.push(obj.first);	 
-         }
-         if (!nodes.includes(obj.second)){
-           nodes.push(obj.second);	 
-         } 
-         edges.push({
-          source: obj.first,
-          target: obj.second,
-          id:i+"-"+obj.label
-         });
-         }
-         var i;
-         var result = [];
-         for (i = 0; i< nodes.length; i++){
-           result.push({
-            data:{
-              id:nodes[i]
-            } 
-           });
-         }
-         for (i = 0; i < edges.length; i++){
-           result.push({
-            data:edges[i],
-            
-            classes: "autorotate"
-           });
-         }
-         console.log(result); 
+    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true",{responseType:"text"}).subscribe(response => {
+      try {
+        let isFileSaverSupported = !!new Blob;
+    } catch (e) { 
+        console.log(e);
+        return;
+    }
+        let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => {
     
+    
+         this.autCollaboration = fileReader.result;
+       
+          var log = this.autCollaboration.split('\n');
+          var i;
+          var nodes = [];
+          var edges = [];
+          for (i = 1;i<log.length;i++){
+          if (log[i]===""){
+           continue; 
+          }
+          var obj = me.parseLine(log[i]);
+          console.log(obj);
+          
+          if (!nodes.includes(obj.first)){
+            nodes.push(obj.first);	 
+          }
+          if (!nodes.includes(obj.second)){
+            nodes.push(obj.second);	 
+          } 
+          edges.push({
+           source: obj.first,
+           target: obj.second,
+           id:i+"-"+obj.label
+          });
+          }
+          var i;
+           this.result = [];
+          for (i = 0; i< nodes.length; i++){
+            this.result.push({
+             data:{
+               id:nodes[i]
+             } 
+            });
+          }
+          for (i = 0; i < edges.length; i++){
+            this.result.push({
+             data:edges[i],
+             
+             classes: "autorotate"
+            });
+          }
+        
+     console.log(this.result);
+        }
+        fileReader.readAsText(blob);
+        
+     
+});
+    
+
     
       
      
@@ -185,7 +227,7 @@ export class C4Component implements OnInit {
     
   }
  
-   /* private _graphData: any = {
+    private _graphData: any = {
     nodes: [
       {data: {id: 'j', name: 'Jerry', color: '#6FB1FC'}},
       {data: {id: 'e', name: 'Elaine', color: '#EDA1ED'}},
@@ -206,17 +248,24 @@ export class C4Component implements OnInit {
  
       {data: {source: 'g', target: 'j', color: '#F5A45D'}}
     ]
-  }; */
+  }; 
   ngOnInit() {
 
   }
-  /* get graphData(): any {
+  get graphData1(): any {
     return this._graphData;
   }
  
+  set graphData1(value: any) {
+  this._graphData = value;
+  }
+get graphData(): any {
+    return this.result;
+  }
+ 
   set graphData(value: any) {
-    this._graphData = value;
-  } */
+    this.result = value;
+  } 
   //funzione per il controllo del formato dei file (se è bpmn)
   controlFormatFile(f) {
     if (f.name.split('.').pop() == "bpmn") {
@@ -414,11 +463,28 @@ export class C4Component implements OnInit {
 
 
   downloadColl() {
-    window.open("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true")
+    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true",{responseType:"text"}).subscribe(response => {
+      try {
+        let isFileSaverSupported = !!new Blob;
+    } catch (e) { 
+        console.log(e);
+        return;
+    }
+        let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+        saveAs(blob, this.collaboration);
+    });
   }
   downloadChor() {
-    window.open("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false")
-
+    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false",{responseType:"text"}).subscribe(response => {
+      try {
+        let isFileSaverSupported = !!new Blob;
+    } catch (e) { 
+        console.log(e);
+        return;
+    }
+        let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+        saveAs(blob, this.collaboration);
+    });
   }
 
   searchColl() {

@@ -157,22 +157,7 @@ formData.append('choreographyPath', choreographyCode)
 }
 
 
-downloadColl(collaboration,filename){
-  let formData: FormData = new FormData();
-formData.append('collaboration', collaboration) //true o false
-formData.append('filename', filename) //file .Aut
 
-let params = new HttpParams();
-    params = params.append('collaboration', collaboration); //id repos
-    params = params.append('filename', filename); //name della repo nuovo
-
-
-return this.http.post("http://pros.unicam.it:8080/C4/rest/files/download?filename="+filename+"&collaboration=true",httpOptions2)
-   .pipe(
-           catchError(this.handleError)
-  );
-  
-}
   changeNameRepo(id, newRepoName): Observable<any> {
     let params = new HttpParams();
     params = params.append('idRepository', id); //id repos
