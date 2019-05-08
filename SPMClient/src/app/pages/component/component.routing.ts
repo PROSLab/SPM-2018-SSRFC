@@ -59,7 +59,7 @@ export const ComponentsRoutes: Routes = [
         path: 'repositoryID/:idRepo/fileID/:idFile/editorBPMNChoreography/:version',
         component:ChoreographyModelComponent
       },
- 
+      
       {
         path: 'repo-public',
         component: RepoPublicComponent,
@@ -77,6 +77,10 @@ export const ComponentsRoutes: Routes = [
           urls: [{ title: 'Dashboard', url: '/dashboard' }, { title: 'ngComponent' }, { title: 'c4' }]
         }
       },
+<<<<<<< HEAD
+=======
+      
+>>>>>>> 1339be1cd836849d1eead16e7a93c5e3fa5e44f6
     ]
   }
 ];
