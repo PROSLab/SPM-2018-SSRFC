@@ -16,7 +16,6 @@ export class C4Component implements OnInit {
   @ViewChild("btn1") closeModal1: ElementRef
   @ViewChild("file") myInputVariable: ElementRef;
   @ViewChild("file1") myInputVariable1: ElementRef;
-
   fileToUpload: File;
   fileToUpload2: File;
   a: any;
@@ -45,9 +44,12 @@ export class C4Component implements OnInit {
   fileCollaborationAut: any;
 enabledgraph:boolean=false;
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) {
-   
+
     
-   }
+  
+  
+
+   } 
  
    ShowDataChor(){
     this.enabledgraph=true;
@@ -105,6 +107,66 @@ enabledgraph:boolean=false;
             classes: "autorotate"
            });
          }
+         var cy = cytoscape({
+          container:document.getElementById('cy'), 
+         // container to render in
+         zoomingEnabled:true,
+         scale:1,
+         wheelSensitivity: 0.1,
+         includeLabels :true,
+          elements:this.result,
+         
+        
+         style: [ // the stylesheet for the graph
+           {
+             selector: 'node',
+             style: {
+               'background-color': '#666',
+               'label': 'data(id)',
+               
+                 
+             }
+           },
+        
+           {
+             selector: 'edge',
+             style: {
+               'width': 3,
+               'line-color': '#ccc',
+               'target-arrow-color': '#ccc',
+               'target-arrow-shape': 'triangle',
+               'label': 'data(id)'
+             }
+           }
+         ],
+        
+         layout: {
+           
+           name: 'breadthfirst',
+     
+           fit: true, // whether to fit the viewport to the graph
+           directed: true, // whether the tree is directed downwards (or edges can point in any direction if false)
+           padding: 20, // padding on fit
+           circle: false, // put depths in concentric circles if true, put depths top down if false
+           spacingFactor: 3.5, // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
+           boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+           avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+           nodeDimensionsIncludeLabels: true, // Excludes the label when calculating node bounding boxes for the layout algorithm
+           roots: undefined, // the roots of the trees
+           maximalAdjustments: 0, // how many times to try to position the nodes in a maximal way (i.e. no backtracking)
+           animate: false, // whether to transition the node positions
+           animationDuration: 500, // duration of animation in ms if enabled
+           animationEasing: undefined, // easing of animation if enabled,
+           animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+           ready: undefined, // callback on layoutready
+           stop: undefined, // callback on layoutstop
+           transform: function (node, position ){ return position; } // transform a given node position. Useful for changing flow direction in discrete layouts
+     
+     
+          
+         }
+        
+       });
          console.log(this.result); 
     
         }
@@ -116,6 +178,9 @@ enabledgraph:boolean=false;
       
      
     }
+   
+    
+    
    showDataColl(){
     this.enabledgraph=true;
     var me = this;
@@ -172,7 +237,66 @@ enabledgraph:boolean=false;
              classes: "autorotate"
             });
           }
-        
+          var cy = cytoscape({
+            container:document.getElementById('cy'), 
+           // container to render in
+           zoomingEnabled:true,
+           scale:1,
+           wheelSensitivity: 0.1,
+           includeLabels :true,
+            elements:this.result,
+           
+          
+           style: [ // the stylesheet for the graph
+             {
+               selector: 'node',
+               style: {
+                 'background-color': '#666',
+                 'label': 'data(id)',
+                 
+                   
+               }
+             },
+          
+             {
+               selector: 'edge',
+               style: {
+                 'width': 3,
+                 'line-color': '#ccc',
+                 'target-arrow-color': '#ccc',
+                 'target-arrow-shape': 'triangle',
+                 'label': 'data(id)'
+               }
+             }
+           ],
+          
+           layout: {
+             
+             name: 'breadthfirst',
+       
+             fit: true, // whether to fit the viewport to the graph
+             directed: true, // whether the tree is directed downwards (or edges can point in any direction if false)
+             padding: 20, // padding on fit
+             circle: false, // put depths in concentric circles if true, put depths top down if false
+             spacingFactor: 3.5, // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
+             boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+             avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+             nodeDimensionsIncludeLabels: true, // Excludes the label when calculating node bounding boxes for the layout algorithm
+             roots: undefined, // the roots of the trees
+             maximalAdjustments: 0, // how many times to try to position the nodes in a maximal way (i.e. no backtracking)
+             animate: false, // whether to transition the node positions
+             animationDuration: 500, // duration of animation in ms if enabled
+             animationEasing: undefined, // easing of animation if enabled,
+             animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+             ready: undefined, // callback on layoutready
+             stop: undefined, // callback on layoutstop
+             transform: function (node, position ){ return position; } // transform a given node position. Useful for changing flow direction in discrete layouts
+       
+       
+            
+           }
+          
+         });
      console.log(this.result);
         }
         fileReader.readAsText(blob);
@@ -227,45 +351,18 @@ enabledgraph:boolean=false;
     
   }
  
-    private _graphData: any = {
-    nodes: [
-      {data: {id: 'j', name: 'Jerry', color: '#6FB1FC'}},
-      {data: {id: 'e', name: 'Elaine', color: '#EDA1ED'}},
-      {data: {id: 'k', name: 'Kramer', color: '#86B342'}},
-      {data: {id: 'g', name: 'George', color: '#F5A45D'}}
-    ],
-    edges: [
-      {data: {source: 'j', target: 'e',label:'CIAOOO', color: '#6FB1FC'}},
-      {data: {source: 'j', target: 'k', color: '#6FB1FC'}},
-      {data: {source: 'j', target: 'g', color: '#6FB1FC'}},
- 
-      {data: {source: 'e', target: 'j', color: '#EDA1ED'}},
-      {data: {source: 'e', target: 'k', color: '#EDA1ED'}},
- 
-      {data: {source: 'k', target: 'j', color: '#86B342'}},
-      {data: {source: 'k', target: 'e', color: '#86B342'}},
-      {data: {source: 'k', target: 'g', color: '#86B342'}},
- 
-      {data: {source: 'g', target: 'j', color: '#F5A45D'}}
-    ]
-  }; 
+    
   ngOnInit() {
 
   }
-  get graphData1(): any {
-    return this._graphData;
-  }
- 
-  set graphData1(value: any) {
-  this._graphData = value;
-  }
-get graphData(): any {
-    return this.result;
+  
+/* get graphData(): any {
+    return this._cy;
   }
  
   set graphData(value: any) {
-    this.result = value;
-  } 
+   this._cy = value;
+  }  */
   //funzione per il controllo del formato dei file (se è bpmn)
   controlFormatFile(f) {
     if (f.name.split('.').pop() == "bpmn") {
