@@ -83,8 +83,8 @@ export class FolderComponent implements OnInit {
      var reader = new FileReader();
  
  reader.onload = (event: Event) => {
- this.b= reader.result.slice(0,100).toString()
- if(this.b.indexOf("<bpmn2")>-1){
+ this.b= reader.result.slice(0,1000).toString()
+ if(this.b.indexOf("<choreography")>-1){
    this.collaboration="choreography"
  }
  else{
