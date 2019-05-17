@@ -17,7 +17,6 @@ import { C4Component } from './c4/c4.component';
 import { CytoscapeModule } from 'ngx-cytoscape'
 
 
- 
 @NgModule({
   imports: [
 

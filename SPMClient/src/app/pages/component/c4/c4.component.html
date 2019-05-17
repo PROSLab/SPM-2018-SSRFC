@@ -194,16 +194,19 @@
   </div>
   <br>
   <br>
-
+<div  class="row">
+  <div class="col-2">
   <input type="checkbox" [(ngModel)]="theCheckbox">Weak<br>
   <!-- {{theCheckbox}} -->
-  <br>
-  <br>
+</div>
+<div class="col-5">
   <select #opt (change)="($event)">
     <option value="Trace" selected>Trace</option>
     <option value="Branching">Branching</option>
     <option value="Bisimulation">Bisimulation</option>
   </select>
+</div>
+</div>
   <br>
   <br>
   <button id="check" (click)="checkAut(opt.value,theCheckbox)" class="btn btn-primary">Check</button>
@@ -227,10 +230,7 @@
     <input class="form-control" type="text" placeholder={{counterExample}} readonly>
   </div>
 
-  
-</div>
-<div *ngIf="enabledgraph==true" class="cytograph">
-    <ngx-cytoscape [elements]="result" ></ngx-cytoscape>  
+
 
 </div>
 
@@ -366,3 +366,7 @@
   </nav> -->
   
  
+ <div  id="cy" >
+   <ngx-cytoscape ></ngx-cytoscape>  
+
+</div> 
