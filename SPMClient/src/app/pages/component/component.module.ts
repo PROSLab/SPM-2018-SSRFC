@@ -16,6 +16,8 @@ import { ChoreographyModelComponent } from '../../choreography-model/choreograph
 import { C4Component } from './c4/c4.component';
 import { CytoscapeModule } from 'ngx-cytoscape'
 
+
+ 
 @NgModule({
   imports: [
 
@@ -36,6 +38,7 @@ import { CytoscapeModule } from 'ngx-cytoscape'
     BpmnComponent,
     ChoreographyModelComponent,
     C4Component,
+ 
   ]
 })
 

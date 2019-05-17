@@ -13,8 +13,10 @@ import { Service } from './service/service';
 import {ToastrModule} from 'ngx-toastr'
 import { LoginGuard } from './pages/starter/login.guard';
 import {CytoscapeModule} from 'ngx-cytoscape'
+
+
 @NgModule({
-  declarations: [AppComponent,SpinnerComponent ],
+  declarations: [AppComponent,SpinnerComponent],
   imports: [
 
 CytoscapeModule,

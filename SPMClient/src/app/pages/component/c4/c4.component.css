@@ -11,4 +11,16 @@ ngx-cytoscape {
     width: 50em;
   }
 
- 
+
+  .dropdown-menu .sub-menu {
+        left: 100%;
+        position: absolute;
+        top: 0;
+        visibility: hidden;
+        margin-top: -1px;
+    }
+    
+    .dropdown-menu li:hover > .sub-menu {
+        visibility: visible;
+        display: block;
+    }

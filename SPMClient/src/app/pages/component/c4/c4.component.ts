@@ -5,33 +5,34 @@ import { Service } from '../../../service/service';
 import { saveAs } from 'file-saver';
 
 
-declare var cytoscape: any;
 
 @Component({
   selector: 'app-c4',
   templateUrl: './c4.component.html',
   styleUrls: ['./c4.component.css']
 })
+
 export class C4Component implements OnInit {
   @ViewChild("btn1") closeModal1: ElementRef
   @ViewChild("file") myInputVariable: ElementRef;
   @ViewChild("file1") myInputVariable1: ElementRef;
-
+  array = ['a', 'b', 'c', 'd', 'e'];
+  array2 = ['cc', 'ee', 'ff']
   fileToUpload: File;
   fileToUpload2: File;
   a: any;
   a2: any;
   checked: boolean = false;
   choreography: any = '';
-  collaboration: any= '';
+  collaboration: any = '';
   marked = false;
   equivalence: any;
   weak = false;
   file1
   file2
-  anteprima: boolean =false;
-  anteprimabottoni: boolean =false;
-  nomeFile: string =null;
+  anteprima: boolean = false;
+  anteprimabottoni: boolean = false;
+  nomeFile: string = null;
   nomeFile2: string;
   diagramUrl: any;
   diagramUrlChor: any;
@@ -43,229 +44,237 @@ export class C4Component implements OnInit {
   state: any;
   counterExample: string;
   fileCollaborationAut: any;
-enabledgraph:boolean=false;
+  enabledgraph: boolean = false;
+  reposPublic: any;
+  errorMessage: any;
+  repos: any;
+  la: any;
+  lunghezza: number;
+  target = "Choose Repository"
+  allFolder: any;
+  allFile: any;
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) {
-   
-    
-   }
- 
-   ShowDataChor(){
-    this.enabledgraph=true;
+
+
+  }
+
+  ShowDataChor() {
+    this.enabledgraph = true;
     var me = this;
-    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false",{responseType:"text"}).subscribe(response => {
+    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
-    } catch (e) { 
+      } catch (e) {
         console.log(e);
         return;
-    }
-        let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
-        let fileReader = new FileReader();
-        fileReader.onload = (e) => {
-    
-    
-          this.autChoreography = fileReader.result;
-          
-         var log = this.autChoreography.split('\n');
-         var i;
-         var nodes = [];
-         var edges = [];
-         for (i = 1;i<log.length;i++){
-         if (log[i]===""){
-          continue; 
-         }
-         var obj = me.parseLine(log[i]);
-         console.log(obj);
-         
-         if (!nodes.includes(obj.first)){
-           nodes.push(obj.first);	 
-         }
-         if (!nodes.includes(obj.second)){
-           nodes.push(obj.second);	 
-         } 
-         edges.push({
-          source: obj.first,
-          target: obj.second,
-          id:i+"-"+obj.label
-         });
-         }
-         var i;
-          this.result = [];
-         for (i = 0; i< nodes.length; i++){
-           this.result.push({
-            data:{
-              id:nodes[i]
-            } 
-           });
-         }
-         for (i = 0; i < edges.length; i++){
-           this.result.push({
-            data:edges[i],
-            
-            classes: "autorotate"
-           });
-         }
-         console.log(this.result); 
-    
-        }
-        fileReader.readAsText(blob);
-    });
-   
-       
-    
-      
-     
-    }
-   showDataColl(){
-    this.enabledgraph=true;
-    var me = this;
-    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true",{responseType:"text"}).subscribe(response => {
-      try {
-        let isFileSaverSupported = !!new Blob;
-    } catch (e) { 
-        console.log(e);
-        return;
-    }
-        let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
-        let fileReader = new FileReader();
-        fileReader.onload = (e) => {
-    
-    
-         this.autCollaboration = fileReader.result;
-       
-          var log = this.autCollaboration.split('\n');
-          var i;
-          var nodes = [];
-          var edges = [];
-          for (i = 1;i<log.length;i++){
-          if (log[i]===""){
-           continue; 
+      }
+      let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+      let fileReader = new FileReader();
+      fileReader.onload = (e) => {
+
+
+        this.autChoreography = fileReader.result;
+
+        var log = this.autChoreography.split('\n');
+        var i;
+        var nodes = [];
+        var edges = [];
+        for (i = 1; i < log.length; i++) {
+          if (log[i] === "") {
+            continue;
           }
           var obj = me.parseLine(log[i]);
           console.log(obj);
-          
-          if (!nodes.includes(obj.first)){
-            nodes.push(obj.first);	 
-          }
-          if (!nodes.includes(obj.second)){
-            nodes.push(obj.second);	 
-          } 
-          edges.push({
-           source: obj.first,
-           target: obj.second,
-           id:i+"-"+obj.label
-          });
-          }
-          var i;
-           this.result = [];
-          for (i = 0; i< nodes.length; i++){
-            this.result.push({
-             data:{
-               id:nodes[i]
-             } 
-            });
-          }
-          for (i = 0; i < edges.length; i++){
-            this.result.push({
-             data:edges[i],
-             
-             classes: "autorotate"
-            });
-          }
-        
-     console.log(this.result);
-        }
-        fileReader.readAsText(blob);
-        
-     
-});
-    
 
-    
-      
-     
-    }
-   parseLine(a){
+          if (!nodes.includes(obj.first)) {
+            nodes.push(obj.first);
+          }
+          if (!nodes.includes(obj.second)) {
+            nodes.push(obj.second);
+          }
+          edges.push({
+            source: obj.first,
+            target: obj.second,
+            id: i + "-" + obj.label
+          });
+        }
+        var i;
+        this.result = [];
+        for (i = 0; i < nodes.length; i++) {
+          this.result.push({
+            data: {
+              id: nodes[i]
+            }
+          });
+        }
+        for (i = 0; i < edges.length; i++) {
+          this.result.push({
+            data: edges[i],
+
+            classes: "autorotate"
+          });
+        }
+        console.log(this.result);
+
+      }
+      fileReader.readAsText(blob);
+    });
+
+
+
+
+
+  }
+  showDataColl() {
+    this.enabledgraph = true;
+    var me = this;
+    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
+      try {
+        let isFileSaverSupported = !!new Blob;
+      } catch (e) {
+        console.log(e);
+        return;
+      }
+      let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+      let fileReader = new FileReader();
+      fileReader.onload = (e) => {
+
+
+        this.autCollaboration = fileReader.result;
+
+        var log = this.autCollaboration.split('\n');
+        var i;
+        var nodes = [];
+        var edges = [];
+        for (i = 1; i < log.length; i++) {
+          if (log[i] === "") {
+            continue;
+          }
+          var obj = me.parseLine(log[i]);
+          console.log(obj);
+
+          if (!nodes.includes(obj.first)) {
+            nodes.push(obj.first);
+          }
+          if (!nodes.includes(obj.second)) {
+            nodes.push(obj.second);
+          }
+          edges.push({
+            source: obj.first,
+            target: obj.second,
+            id: i + "-" + obj.label
+          });
+        }
+        var i;
+        this.result = [];
+        for (i = 0; i < nodes.length; i++) {
+          this.result.push({
+            data: {
+              id: nodes[i]
+            }
+          });
+        }
+        for (i = 0; i < edges.length; i++) {
+          this.result.push({
+            data: edges[i],
+
+            classes: "autorotate"
+          });
+        }
+
+        console.log(this.result);
+      }
+      fileReader.readAsText(blob);
+
+
+    });
+
+
+
+
+
+  }
+  parseLine(a) {
     var firstNode;
     var lbl;
     var secondNode;
-    if (a[0]!=="("&& a.substr(-1) !== ")"){
+    if (a[0] !== "(" && a.substr(-1) !== ")") {
       throw "Bad format file";
-    }else{
+    } else {
       var endFirstNode = a.indexOf(",");
-      if (endFirstNode == -1){
+      if (endFirstNode == -1) {
         throw "Bad format file";
-      }else{
-        firstNode = a.substr(1,endFirstNode-1);
+      } else {
+        firstNode = a.substr(1, endFirstNode - 1);
         var labelEnd = a.lastIndexOf(",");
-        if (labelEnd == -1){
+        if (labelEnd == -1) {
           throw "Bad format file";
-        }else{
+        } else {
           var labelStart = a.indexOf(",");
-          if (labelStart == -1 || labelStart==labelEnd){
-              throw "Bad format file";
-            }else{
-            lbl = a.substr(labelStart+1,(labelEnd-1-(labelStart)));
-            lbl = lbl.replace(new RegExp("'", 'g'),'');
-            lbl = lbl.replace(new RegExp('"', 'g'),'');
-            
+          if (labelStart == -1 || labelStart == labelEnd) {
+            throw "Bad format file";
+          } else {
+            lbl = a.substr(labelStart + 1, (labelEnd - 1 - (labelStart)));
+            lbl = lbl.replace(new RegExp("'", 'g'), '');
+            lbl = lbl.replace(new RegExp('"', 'g'), '');
+
             var comma = a.lastIndexOf(',');
-            if (comma == -1){
-                throw "Bad format file";
-              }
-            secondNode = a.substr(comma+1,(a.length-2-(comma))); 
+            if (comma == -1) {
+              throw "Bad format file";
             }
+            secondNode = a.substr(comma + 1, (a.length - 2 - (comma)));
+          }
         }
       }
-      
+
     }
     return {
-      first:firstNode,
-      label:lbl,
-      second:secondNode
+      first: firstNode,
+      label: lbl,
+      second: secondNode
     };
-    
+
   }
- 
-    private _graphData: any = {
+
+  private _graphData: any = {
     nodes: [
-      {data: {id: 'j', name: 'Jerry', color: '#6FB1FC'}},
-      {data: {id: 'e', name: 'Elaine', color: '#EDA1ED'}},
-      {data: {id: 'k', name: 'Kramer', color: '#86B342'}},
-      {data: {id: 'g', name: 'George', color: '#F5A45D'}}
+      { data: { id: 'j', name: 'Jerry', color: '#6FB1FC' } },
+      { data: { id: 'e', name: 'Elaine', color: '#EDA1ED' } },
+      { data: { id: 'k', name: 'Kramer', color: '#86B342' } },
+      { data: { id: 'g', name: 'George', color: '#F5A45D' } }
     ],
     edges: [
-      {data: {source: 'j', target: 'e',label:'CIAOOO', color: '#6FB1FC'}},
-      {data: {source: 'j', target: 'k', color: '#6FB1FC'}},
-      {data: {source: 'j', target: 'g', color: '#6FB1FC'}},
- 
-      {data: {source: 'e', target: 'j', color: '#EDA1ED'}},
-      {data: {source: 'e', target: 'k', color: '#EDA1ED'}},
- 
-      {data: {source: 'k', target: 'j', color: '#86B342'}},
-      {data: {source: 'k', target: 'e', color: '#86B342'}},
-      {data: {source: 'k', target: 'g', color: '#86B342'}},
- 
-      {data: {source: 'g', target: 'j', color: '#F5A45D'}}
+      { data: { source: 'j', target: 'e', label: 'CIAOOO', color: '#6FB1FC' } },
+      { data: { source: 'j', target: 'k', color: '#6FB1FC' } },
+      { data: { source: 'j', target: 'g', color: '#6FB1FC' } },
+
+      { data: { source: 'e', target: 'j', color: '#EDA1ED' } },
+      { data: { source: 'e', target: 'k', color: '#EDA1ED' } },
+
+      { data: { source: 'k', target: 'j', color: '#86B342' } },
+      { data: { source: 'k', target: 'e', color: '#86B342' } },
+      { data: { source: 'k', target: 'g', color: '#86B342' } },
+
+      { data: { source: 'g', target: 'j', color: '#F5A45D' } }
     ]
-  }; 
+  };
   ngOnInit() {
 
   }
   get graphData1(): any {
     return this._graphData;
   }
- 
+
   set graphData1(value: any) {
-  this._graphData = value;
+    this._graphData = value;
   }
-get graphData(): any {
+  get graphData(): any {
     return this.result;
   }
- 
+
   set graphData(value: any) {
     this.result = value;
-  } 
+  }
   //funzione per il controllo del formato dei file (se è bpmn)
   controlFormatFile(f) {
     if (f.name.split('.').pop() == "bpmn") {
@@ -406,18 +415,18 @@ get graphData(): any {
       url: "http://pros.unicam.it:8080/C4/rest/files/check_equivalence",
       data: parameters,
       success: function (data) {
-        
+
         console.log("successo")
         console.log(data)
         me.state = data.resultState;
-        if(data.counterExample == ""){
+        if (data.counterExample == "") {
           me.counterExample = "No counterExample possible"
         }
-        else{
+        else {
 
           me.counterExample = data.counterExample;
         }
-        
+
 
 
       },
@@ -448,7 +457,7 @@ get graphData(): any {
           this.collaboration = data.collaboration
           this.choreography = data.choreography
           console.log(data)
-          
+
 
         },
           error => {
@@ -463,27 +472,27 @@ get graphData(): any {
 
 
   downloadColl() {
-    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true",{responseType:"text"}).subscribe(response => {
+    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
-    } catch (e) { 
+      } catch (e) {
         console.log(e);
         return;
-    }
-        let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
-        saveAs(blob, this.collaboration);
+      }
+      let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+      saveAs(blob, this.collaboration);
     });
   }
   downloadChor() {
-    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false",{responseType:"text"}).subscribe(response => {
+    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
-    } catch (e) { 
+      } catch (e) {
         console.log(e);
         return;
-    }
-        let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
-        saveAs(blob, this.collaboration);
+      }
+      let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+      saveAs(blob, this.collaboration);
     });
   }
 
@@ -496,4 +505,54 @@ get graphData(): any {
 
   }
 
+  getAllRepos() {
+    $('ul').on('click', function(event){
+      event.stopPropagation();
+    });
+    $('ul.dropdown-menu.sub-menu').on('click', function(event){
+      event.stopPropagation();
+    });
+    
+    this.service.getAllRepo().subscribe(data => {
+
+      this.repos = JSON.parse(data)
+    }, error => {
+      this.errorMessage = <any>error
+    });
+  }
+
+  AllRepoInfo(id) {
+
+    var a  = document.getElementById("repostate").getAttribute("value")
+
+    this.service.getAllFolder(id)
+    .subscribe(data => {
+      if(data != []){
+     this.allFolder = JSON.parse(data)
+      }
+      else{
+        console.log("repo vuota")
+      }
+
+    }, error => {
+      this.errorMessage = <any>error
+    });
+
+    this.service.getFile(id)
+    .subscribe(data => {
+     this.allFile = JSON.parse(data)
+     /* console.log(this.allFile) */
+    }, error => {
+      this.errorMessage = <any>error
+    });
+
+  }
+
+
+  AllFolderInfo(){
+    
+  }
+
 }
+
+

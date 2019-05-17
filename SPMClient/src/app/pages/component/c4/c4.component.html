@@ -1,3 +1,6 @@
+
+
+
 <div class="modal fade " id="anteprimaChor" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content chor">
@@ -87,8 +90,19 @@
             
            
         </label>
+        <br>
+        <label>
+          or 
+          <br>
+          <button data-toggle="modal" (click)="getAllRepos()"  data-target="#RepoFilePath">Import file from Repository</button>
+        </label>
         
-        
+
+
+
+
+
+
       
       </div>
       
@@ -219,3 +233,136 @@
     <ngx-cytoscape [elements]="result" ></ngx-cytoscape>  
 
 </div>
+
+
+
+<div class="modal fade" id="RepoFilePath" role="dialog">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Choose File to Import</h4>
+          </div>
+          <div class="modal-body">
+             
+              <div class="container">
+    
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                      Choose Repository <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                     <li  *ngFor="let a of repos">   <!-- REPOSITORY LEVEL -->
+                        <button class="btn btn-default" id="repostate"  (mouseenter)= "AllRepoInfo(a.id)" ><a>{{a.repositoryName}} &raquo;</a></button>
+                    
+                        <ul class="sub-menu dropdown-menu">
+              
+                          <li  *ngFor="let b of allFolder"> <!-- FOLDER LEVEL  SE PRESENTE-->
+                            <button class="btn btn-default" id="folderstate"  (mouseenter)= "AllFolderInfo(b.id)" ><a>{{b.folderName}} &raquo;</a></button>
+                    
+                            <ul class="sub-menu dropdown-menu">
+                              <li>
+                                <a>Third Level &raquo;</a> <!-- FILE LEVEL -->
+                                <ul class="sub-menu dropdown-menu">
+                                  <li>
+                                    <a>4th Level</a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    <!--   <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#">Separated link</a></li> -->
+                    </ul>
+                  </div>
+                </div>
+
+
+
+
+
+          </div>
+         
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+
+
+
+    <!-- <div class="navbar-header">
+
+      <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Brand</a>
+    </div>
+  
+  
+    <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
+    
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Link</a></li>
+        <li><a href="#">Link</a></li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" ng-controller="DropdownCtrl">Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#">Sub menu &raquo;</a>
+              <ul class="sub-menu dropdown-menu">
+                <li>
+                  <a>Second Level &raquo;</a>
+                  <ul class="sub-menu dropdown-menu">
+                    <li>
+                      <a>Third Level &raquo;</a>
+                      <ul class="sub-menu dropdown-menu">
+                        <li>
+                          <a>4th Level</a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><a href="#">Separated link</a></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Link</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav> -->
+  
+ 
