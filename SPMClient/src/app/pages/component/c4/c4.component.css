@@ -1,5 +1,6 @@
 .modal-content{
     width: 200%;
+  
 }
 
 
@@ -12,7 +13,7 @@
   } 
 
 
-  .dropdown-menu .sub-menu {
+ /*  .dropdown-menu .sub-menu {
         left: 100%;
         position: absolute;
         top: 0;
@@ -23,4 +24,4 @@
     .dropdown-menu li:hover > .sub-menu {
         visibility: visible;
         display: block;
-    }
+    } */

@@ -1,6 +1,35 @@
 
 
+<!-- <div class="modal fade " id="grafo" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">GRAFO</h4>
+        </div>
+        <div class="modal-body">
+  
+<ngx-cytoscape >
+ <div  id="cy">
 
+ </div>
+  </ngx-cytoscape> 
+  <ngx-cytoscape >
+      <div  id="cz">
+     
+      </div>
+       </ngx-cytoscape> 
+        </div>
+        
+        <div class="modal-footer">
+         
+          <button type="button" class="btn btn-danger" data-dismiss="modal">BACK</button>
+  
+    
+        </div>
+  
+      </div>
+    </div>
+  </div> -->
 <div class="modal fade " id="anteprimaChor" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content chor">
@@ -94,7 +123,7 @@
         <label>
           or 
           <br>
-          <button data-toggle="modal" (click)="getAllRepos()"  data-target="#RepoFilePath">Import file from Repository</button>
+          <button data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button>{{fileSelezionato}}
         </label>
         
 
@@ -116,7 +145,7 @@
         </h2>
       </div>
 
-      <div class="col-2" style="left: 30%" >
+      <div class="col-12" style="left: 30%" >
         <a>
           <img
             style="border-radius:600px;zoom:45%;position:center;right:40%;border:3px solid black;background-color:rgb(70, 70, 167)"
@@ -131,7 +160,11 @@
             <input  data-toggle="modal" data-target="" #file1 type="file" id="file1" (change)="handleFileInput2($event.target.files)">
            
           </label>
-          
+          <label>
+              or 
+              <br>
+              <button data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button>{{fileSelezionatoChor}}
+            </label>
       </div>
 
    
@@ -172,7 +205,7 @@
     <div class="col-5">
       <br>
       <button id="check" (click)="downloadColl()" class="btn btn-primary">Download</button>
-      <button id="check" (click)="showDataColl()" class="btn btn-success">Search</button>
+      <button id="check" (click)="showDataColl()"  class="btn btn-success">Search</button>
     </div>
     <br>
   </div>
@@ -188,7 +221,7 @@
     <div class="col-5">
       <br>
       <button id="check" (click)="downloadChor()" class="btn btn-primary">Download</button>
-      <button id="check" (click)="ShowDataChor()" class="btn btn-success">Search</button>
+      <button id="check1" (click)="ShowDataChor()"  class="btn btn-success">Search</button>
     </div>
     <br>
   </div>
@@ -233,140 +266,81 @@
 
 
 </div>
-
-
-
-<div class="modal fade" id="RepoFilePath" role="dialog">
+ <div class="modal fade" id="ChooseRepo" role="dialog">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title">Choose File to Import</h4>
           </div>
           <div class="modal-body">
-             
-              <div class="container">
-    
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                      Choose Repository <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                     <li  *ngFor="let a of repos">   <!-- REPOSITORY LEVEL -->
-                        <button class="btn btn-default" id="repostate"  (mouseenter)= "AllRepoInfo(a.id)" ><a>{{a.repositoryName}} &raquo;</a></button>
-                    
-                        <ul class="sub-menu dropdown-menu">
+            <!-- REPOSITORY -->
+            <div *ngIf="controlloRepo==true"class="row">
+              <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="AllRepoInfo(repo.id)" >
+                  <h4 class="card2Write" style="cursor:pointer;">
+                      <b>{{repo?.repositoryName}}</b> </h4>
+              </div>
+            
               
-                          <li  *ngFor="let b of allFolder"> <!-- FOLDER LEVEL  SE PRESENTE-->
-                            <button class="btn btn-default" id="folderstate"  (mouseenter)= "AllFolderInfo(b.id)" ><a>{{b.folderName}} &raquo;</a></button>
+             
+      
+          </div>
+          <!-- FOLDER E FILE -->
+          <div *ngIf="controlloFoldandFile==true">
+          <div  class="row">
+            <label>FOLDER:</label>
+            <div class="card2 col-2 display" *ngFor="let fold of allFolder; let i=index;" (click)="AllFolderInfo(fold.id)" >
+                <h4 class="card2Write" style="cursor:pointer;">
+                    <b>{{fold?.folderName}}</b> </h4>
                     
-                            <ul class="sub-menu dropdown-menu">
-                              <li>
-                                <a>Third Level &raquo;</a> <!-- FILE LEVEL -->
-                                <ul class="sub-menu dropdown-menu">
-                                  <li>
-                                    <a>4th Level</a>
-                                  </li>
-                                </ul>
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-                    <!--   <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li class="divider"></li>
-                      <li><a href="#">Separated link</a></li> -->
-                    </ul>
-                  </div>
-                </div>
+            </div>
+          </div>
+            <div class="row">
+                <label>FILE:</label>
+              <div class="card2 col-2 display" *ngFor="let file of allFile; let i=index;" (click)="chooseVers(file.id)"  >
+                  <h4 class="card2Write" style="cursor:pointer;">
+                      <b>{{file?.originalName}}</b> </h4>
+              </div>
+      
+          </div>
+        </div>
+        <!-- SOLO FILES DENTRO A FOLDER CLICCATA -->
+        <div *ngIf="controlloFile==true" class="row">
+          <div class="card2 col-2 display" *ngFor="let file of allFileFold; let i=index;" (click)="chooseVers(file.id)"  >
+              <h4 class="card2Write" style="cursor:pointer;">
+                  <b>{{file?.originalName}}</b> </h4>
+          </div>
+  
+      </div>
+      <div *ngIf="controlloVers==true" class="row">
+          <div class="card2 col-2 display" *ngFor="let vers of finalVersion; let i=index;" (click)="anteprimaFile(vers)" >
+              <h4 class="card2Write" style="cursor:pointer;">
+              <b>{{vers}}</b> </h4>
+          </div>
+  
+      </div>
 
+      
+<div *ngIf="vers.fileType=='collaboration'&& controlloAnteprima==true">
+  <br>
+  <hr>
+  <br>
+    <app-diagram [url]="diagramUrlA" ></app-diagram>
+</div>
+<div *ngIf="vers.fileType=='choreography'&& controlloAnteprima==true">
+    <app-diagram-chor [url]="diagramUrlChorA" ></app-diagram-chor>
+</div>
 
-
-
-
+ 
           </div>
          
           <div class="modal-footer">
+              <button type="button" class="btn btn-danger" *ngIf="controlloRepo==false" (click)="back()" >Back</button>
+              <button *ngIf="controlloAnteprima==true" (click)="acceptFile()"type="button" data-dismiss="modal" class="btn btn-danger" >Accept</button>
               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          </div>
+          </div> 
 
       </div>
   </div>
-</div>
-
-
-
-
-    <!-- <div class="navbar-header">
-
-      <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Brand</a>
-    </div>
-  
-  
-    <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
-    
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link</a></li>
-        <li><a href="#">Link</a></li>
-        
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" ng-controller="DropdownCtrl">Dropdown <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li>
-              <a href="#">Sub menu &raquo;</a>
-              <ul class="sub-menu dropdown-menu">
-                <li>
-                  <a>Second Level &raquo;</a>
-                  <ul class="sub-menu dropdown-menu">
-                    <li>
-                      <a>Third Level &raquo;</a>
-                      <ul class="sub-menu dropdown-menu">
-                        <li>
-                          <a>4th Level</a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li><a href="#">Separated link</a></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
-        
-      </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </nav> -->
-  
- 
- <div  id="cy" >
-   <ngx-cytoscape ></ngx-cytoscape>  
-
 </div> 
+
+<ngx-cytoscape ></ngx-cytoscape>

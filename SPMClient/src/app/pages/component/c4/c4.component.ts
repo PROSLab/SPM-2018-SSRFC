@@ -16,8 +16,8 @@ export class C4Component implements OnInit {
   @ViewChild("btn1") closeModal1: ElementRef
   @ViewChild("file") myInputVariable: ElementRef;
   @ViewChild("file1") myInputVariable1: ElementRef;
-  fileToUpload: File;
-  fileToUpload2: File;
+  fileToUpload: any;
+  fileToUpload2: any;
   a: any;
   a2: any;
   checked: boolean = false;
@@ -51,6 +51,23 @@ export class C4Component implements OnInit {
   target = "Choose Repository"
   allFolder: any;
   allFile: any;
+  idRepo: any;
+  vers = <any>[];
+  allFileFold: any;
+  controlloRepo:boolean=false;
+  controlloFoldandFile:boolean=false;
+  controlloFile:boolean=false;
+  versionArray=<any>[];
+  deprecatedVers=<any>[];
+  finalVersion=<any>[];
+  controlloVers: boolean=false;
+  controlloAnteprima: boolean=false;
+  diagramUrlA: string;
+  diagramUrlChorA: string;
+  sonoDaFile: boolean=false;
+fileSelezionato="Nessun file è stato selezionato"
+  versione: any;
+  fileSelezionatoChor="Nessun file è stato selezionato"
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) {
 
     
@@ -60,7 +77,6 @@ export class C4Component implements OnInit {
    } 
  
    ShowDataChor(){
-    this.enabledgraph=true;
     var me = this;
     this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
       try {
@@ -176,7 +192,7 @@ export class C4Component implements OnInit {
         
        });
          console.log(this.result); 
-
+        
       }
       fileReader.readAsText(blob);
     });
@@ -189,7 +205,6 @@ export class C4Component implements OnInit {
     
     
    showDataColl(){
-    this.enabledgraph=true;
     var me = this;
     this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
       try {
@@ -302,6 +317,7 @@ export class C4Component implements OnInit {
            }
           
          });
+         
      console.log(this.result);
       }
       fileReader.readAsText(blob);
@@ -357,15 +373,6 @@ export class C4Component implements OnInit {
   ngOnInit() {
 
   }
-  
-/* get graphData(): any {
-    return this._cy;
-  }
-
-  set graphData(value: any) {
-   this._cy = value;
-  }  */
-  //funzione per il controllo del formato dei file (se è bpmn)
   controlFormatFile(f) {
     if (f.name.split('.').pop() == "bpmn") {
       return true;
@@ -383,14 +390,12 @@ export class C4Component implements OnInit {
         this.file1 = files[0];
         var reader = new FileReader();
         this.fileToUpload = files.item(0);
-        console.log(files)
+        console.log(this.fileToUpload)
+       
         this.ReadCollaboration(this.fileToUpload)
 
         this.nomeFile = this.fileToUpload.name
 
-        document.getElementById("file").setAttribute("data-target", "#anteprimaColla")
-        document.getElementById("anteprimaColla").setAttribute("class", "modal fade show")
-        document.getElementById("anteprimaColla").setAttribute("style", "padding-right:16px;display:block")
 
       }
     }
@@ -405,26 +410,47 @@ export class C4Component implements OnInit {
     }
     fileReader.readAsText(file);
   }
+
+  showColla(file,filevers){
+    console.log(file,filevers)
+      this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" +file + "&version=" + filevers, { responseType: "text" }).subscribe(response => {
+      try {
+        let isFileSaverSupported = !!new Blob;
+      } catch (e) {
+        console.log(e);
+        return;
+      }
+      let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
+ 
+    
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+
+      this.diagramUrl = fileReader.result;
+   
+      console.log(this.diagramUrl)
+     
+    }
+    fileReader.readAsText(blob);
+   
+  });
+  }
   ReadCollaboration(file) {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
 
-      /*  this.modeler = new Modeler({
-         container: '#canvas',
-         width: '100%',
-       
-       }); */
-
       this.diagramUrl = fileReader.result;
-      /* this.modeler.importXML(this.diagramUrl ) */
-      console.log(this.diagramUrl)
+   
+    
     }
     fileReader.readAsText(file);
   }
 
   choose(inform) {
+    this.fileSelezionato="Nessun file è stato selezionato"
 
-    document.getElementById("file").setAttribute("data-target", "")
+   
+    document.getElementById("file").setAttribute("data-target", " ")
     document.getElementById("anteprimaColla").setAttribute("class", "modal")
     document.getElementById("anteprimaColla").setAttribute("style", "")
     /*   this.clearModal(this.closeModal1)
@@ -446,6 +472,7 @@ export class C4Component implements OnInit {
 
 
   choose2(inform) {
+    this.fileSelezionatoChor="Nessun file è stato selezionato"
 
     document.getElementById("file1").setAttribute("data-target", "")
     document.getElementById("anteprimaChor").setAttribute("class", "modal")
@@ -455,9 +482,6 @@ export class C4Component implements OnInit {
     if (inform == "refuse") {
       //rifiuto il file che ho caricato quindi ripristino iniziale
       this.myInputVariable1.nativeElement.value = "";
-
-
-
     }
     //accetto il file quindi lo rendo ufficiale
 
@@ -534,9 +558,9 @@ export class C4Component implements OnInit {
   CheckEquivalence() {
 
 
-    if ((this.myInputVariable1.nativeElement.value != "")
+   if ((this.myInputVariable1.nativeElement.value != "")
       && (this.myInputVariable.nativeElement.value != "")
-    ) {
+    ) { 
 
 
       this.toastr.success('Wait a moment please', 'waiting')
@@ -553,10 +577,10 @@ export class C4Component implements OnInit {
           error => {
             console.log(error)
           })
-    }
-    else {
+     } 
+     else {
       this.toastr.error('Error , you must upload file', 'File upload')
-    }
+    } 
   }
 
 
@@ -594,34 +618,51 @@ export class C4Component implements OnInit {
     let url = ("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false")
 
   }
+acceptFile(){
+ if (this.vers.fileType=="collaboration"){
+  this.myInputVariable.nativeElement.value = "";
+this.fileSelezionato=this.vers.originalName
+this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
+  this.fileToUpload=new File([response.toLocaleString()],this.vers.originalName);
+ 
+})
+ } else if (this.vers.fileType=="choreography") { 
+  this.myInputVariable1.nativeElement.value = "";
+this.fileSelezionatoChor=this.vers.originalName
+this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
+  this.fileToUpload2=new File([response.toLocaleString()],this.vers.originalName);
+ 
+})
+ }
+}
 
   getAllRepos() {
-    $('ul').on('click', function(event){
-      event.stopPropagation();
-    });
-    $('ul.dropdown-menu.sub-menu').on('click', function(event){
-      event.stopPropagation();
-    });
     
-    this.service.getAllRepo().subscribe(data => {
+    
 
+    this.service.getAllRepo().subscribe(data => {
+      
       this.repos = JSON.parse(data)
+      this.controlloRepo=true;
     }, error => {
       this.errorMessage = <any>error
     });
   }
 
   AllRepoInfo(id) {
-
-    var a  = document.getElementById("repostate").getAttribute("value")
+    this.controlloRepo=false;
+    
+    this.idRepo=id;
 
     this.service.getAllFolder(id)
+  
     .subscribe(data => {
       if(data != []){
      this.allFolder = JSON.parse(data)
+     this.controlloFoldandFile=true;
+
       }
       else{
-        console.log("repo vuota")
       }
 
     }, error => {
@@ -631,16 +672,93 @@ export class C4Component implements OnInit {
     this.service.getFile(id)
     .subscribe(data => {
      this.allFile = JSON.parse(data)
+    
+
+    }
+    
+    
+    , error => {
+      this.errorMessage = <any>error
+    });
+  
+
+  }
+chooseVers(id){
+  this.controlloVers=true
+if(this.controlloFoldandFile==true){
+  this.controlloFoldandFile=false
+  this.sonoDaFile=false;
+} else{
+  this.controlloFile=false
+  this.sonoDaFile=true
+}
+  this.service.getFileSpec(id)
+  .subscribe(data => {
+   this.vers = (data)
+   console.log(this.vers)
+  this.versionArray=[]
+  this.finalVersion=[]
+  this.deprecatedVers=[]
+   for (var i = 0; i < this.vers.cVersion; i++) {
+    this.versionArray[i] = this.vers.cVersion - (this.vers.cVersion - i) + 1
+  }
+  
+  
+  //mi salvo le versioni deprecate
+  for (var i = 0; i < this.vers.deletedVersions.length; i++) {
+    this.deprecatedVers[i] = this.vers.deletedVersions[i]
+  }
+
+  var j = 0;
+  for (i = 0; i < this.versionArray.length; i++) {
+    if (this.deprecatedVers.indexOf(this.versionArray[i]) == -1) {
+      this.finalVersion[j] = this.versionArray[i]
+      j++
+    }
+  }
+console.log(this.finalVersion)
+  }, error => {
+    this.errorMessage = <any>error
+  });
+}
+anteprimaFile(vers){
+  this.versione=vers
+  this.controlloAnteprima=true;
+if (this.vers.fileType=="collaboration"){
+
+ this.diagramUrlA="http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + vers
+}else {
+  this.diagramUrlChorA="http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + vers}
+}
+
+back(){
+  if (this.controlloVers==true && this.sonoDaFile==false){
+  this.controlloAnteprima=false;
+  this.controlloVers=false,
+  this.controlloFoldandFile=true
+  } else if (this.controlloVers==true && this.sonoDaFile==true){
+    this.controlloAnteprima=false;
+    this.controlloVers=false,
+    this.controlloFile=true
+  } else if (this.controlloFoldandFile==true){
+    this.controlloFoldandFile=false;
+    this.controlloRepo=true
+  }else if (this.controlloFile==true){
+    this.controlloFile=false
+    this.controlloFoldandFile=true;
+  }
+}
+  AllFolderInfo(id){
+    this.controlloFoldandFile=false;
+    this.service.getFile(this.idRepo,id)
+    .subscribe(data => {
+     this.allFileFold = JSON.parse(data)
+     this.controlloFile=true
+
      /* console.log(this.allFile) */
     }, error => {
       this.errorMessage = <any>error
     });
-
-  }
-
-
-  AllFolderInfo(){
-    
   }
 
 }
