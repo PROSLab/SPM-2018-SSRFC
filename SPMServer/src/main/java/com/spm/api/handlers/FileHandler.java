@@ -138,7 +138,7 @@ public class FileHandler {
 					
 				})
                 .flatMap(res -> Responses.ok(res))
-				.onErrorResume(Exception.class, Responses::internalServerError);
+           				.onErrorResume(Exception.class, Responses::internalServerError);
 
                 
     }
