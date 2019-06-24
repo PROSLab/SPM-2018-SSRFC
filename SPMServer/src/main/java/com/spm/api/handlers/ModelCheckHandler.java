@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyExtractors;
@@ -94,4 +96,40 @@ public class ModelCheckHandler {
 				})
 				.onErrorResume(Exception.class, Responses::internalServerError);
 	}
+	
+	public Mono<ServerResponse> downloadModel(ServerRequest request) {
+		String fileName = request.queryParam("filename").get();
+		Boolean collaboration = request.queryParam("collaboration").get().equals("true") ? true : false;
+		fileName.replace("/", "");
+		
+		String fileLocation;
+		if (collaboration) fileLocation = collaborationFolder + File.separator + fileName;
+		else fileLocation = choreographyFolder + File.separator + fileName;
+		
+		// Retrieve the file
+		Resource resource = new FileSystemResource(fileLocation);
+		File file = new File(fileLocation);
+		
+		if (file.exists()) return Responses.okFile(resource, file);
+		else return ServerResponse.notFound().build();
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

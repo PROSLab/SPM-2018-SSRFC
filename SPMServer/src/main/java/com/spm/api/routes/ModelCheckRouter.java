@@ -1,6 +1,7 @@
 package com.spm.api.routes;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RequestPredicates.path;
 
@@ -25,10 +26,10 @@ public class ModelCheckRouter {
 								POST("/upload").and(accept(MediaType.MULTIPART_FORM_DATA)),
 								modelCheckHandler::uploadModel
 						)
-						/*.andRoute(
-								GET("/file"),
-								shareHandler::shareModel
-						)*/
+						.andRoute(
+								GET("/download"),
+								modelCheckHandler::downloadModel
+						)
 				);
 	}
 
