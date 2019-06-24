@@ -30,6 +30,10 @@ public class ModelCheckRouter {
 								GET("/download"),
 								modelCheckHandler::downloadModel
 						)
+						.andRoute(
+								POST("/check_equivalence").and(accept(MediaType.MULTIPART_FORM_DATA)),
+								modelCheckHandler::checkEquivalence
+						)
 				);
 	}
 
