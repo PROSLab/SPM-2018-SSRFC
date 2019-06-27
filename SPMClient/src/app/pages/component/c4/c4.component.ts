@@ -3,6 +3,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Service } from '../../../service/service';
 import { saveAs } from 'file-saver';
+import { subscribeOn } from 'rxjs/operators';
+import { runInThisContext } from 'vm';
 
 declare var cytoscape :any;
 
@@ -65,6 +67,7 @@ export class C4Component implements OnInit {
   diagramUrlA: string;
   diagramUrlChorA: string;
   sonoDaFile: boolean=false;
+  diagram:boolean=false;
 fileSelezionato="Nessun file è stato selezionato"
   versione: any;
   fileSelezionatoChor="Nessun file è stato selezionato"
@@ -77,8 +80,9 @@ fileSelezionato="Nessun file è stato selezionato"
    } 
  
    ShowDataChor(){
+    this.diagram=true;
     var me = this;
-    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
+    this.http.get("http://localhost:8080/api/modelcheck/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -205,8 +209,9 @@ fileSelezionato="Nessun file è stato selezionato"
     
     
    showDataColl(){
+    this.diagram=true;
     var me = this;
-    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
+    this.http.get("http://localhost:8080/api/modelcheck/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -384,7 +389,7 @@ fileSelezionato="Nessun file è stato selezionato"
   }
 
   //funzione che prende il primo file (collaboration)
-  handleFileInput1(files) {
+  /* handleFileInput1(files) {
     if (files && files[0]) {
       if (this.controlFormatFile(files[0])) {
         this.file1 = files[0];
@@ -399,8 +404,8 @@ fileSelezionato="Nessun file è stato selezionato"
 
       }
     }
-  }
-  ReadChoreography(file) {
+  } */
+  /* ReadChoreography(file) {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
 
@@ -409,7 +414,7 @@ fileSelezionato="Nessun file è stato selezionato"
       console.log(this.diagramUrlChor)
     }
     fileReader.readAsText(file);
-  }
+  } */
 
   showColla(file,filevers){
     console.log(file,filevers)
@@ -435,7 +440,7 @@ fileSelezionato="Nessun file è stato selezionato"
    
   });
   }
-  ReadCollaboration(file) {
+  /* ReadCollaboration(file) {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
 
@@ -444,7 +449,7 @@ fileSelezionato="Nessun file è stato selezionato"
     
     }
     fileReader.readAsText(file);
-  }
+  } */
 
   choose(inform) {
     this.fileSelezionato="Nessun file è stato selezionato"
@@ -490,7 +495,7 @@ fileSelezionato="Nessun file è stato selezionato"
 
 
   //funzione che prende il secondo file (choreography)
-  handleFileInput2(files) {
+  /* handleFileInput2(files) {
     if (files && files[0]) {
       if (this.controlFormatFile(files[0])) {
         this.file2 = files[0];
@@ -505,7 +510,7 @@ fileSelezionato="Nessun file è stato selezionato"
         document.getElementById("anteprimaChor").setAttribute("style", "padding-right:16px;display:block;")
       }
     }
-  }
+  } */
 
 
   checkAut(equivalence, weak) {
@@ -514,16 +519,18 @@ fileSelezionato="Nessun file è stato selezionato"
     if (this.weak == undefined) {
       this.weak = false
     }
-    console.log(this.weak)
-
-    var parameters = jQuery.param({
-      weak: weak, equivalence: equivalence, "collaborationPath": this.collaboration,
-      "choreographyPath": this.choreography
-    });
-    console.log(parameters);
+  
     this.checked = true;
-    var me = this;
-    $.ajax({
+   
+    this.service.checkEquivalence(this.weak,this.equivalence,this.collaboration,this.choreography)
+  .subscribe(data =>{
+ var checkEqui =data
+ console.log(checkEqui)
+
+}, error => {
+  console.log(error);
+});
+ /*    $.ajax({
       method: "POST",
 
       url: "http://pros.unicam.it:8080/C4/rest/files/check_equivalence",
@@ -546,11 +553,10 @@ fileSelezionato="Nessun file è stato selezionato"
       },
       error: function (e) {
 
-        /*  
-         console.log("ERROR : ", e); */
+        
 
       }
-    });
+    }); */
   }
 
 
@@ -558,8 +564,8 @@ fileSelezionato="Nessun file è stato selezionato"
   CheckEquivalence() {
 
 
-   if ((this.myInputVariable1.nativeElement.value != "")
-      && (this.myInputVariable.nativeElement.value != "")
+   if ((this.fileSelezionato != "Nessun file è stato selezionato")
+      && (this.fileSelezionatoChor != "Nessun file è stato selezionato")
     ) { 
 
 
@@ -586,7 +592,7 @@ fileSelezionato="Nessun file è stato selezionato"
 
 
   downloadColl() {
-    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
+    this.http.get("http://localhost:8080/api/modelcheck/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -598,7 +604,7 @@ fileSelezionato="Nessun file è stato selezionato"
     });
   }
   downloadChor() {
-    this.http.get("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
+    this.http.get("http://localhost:8080/api/modelcheck/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -606,28 +612,25 @@ fileSelezionato="Nessun file è stato selezionato"
         return;
       }
       let blob = new Blob([response.toLocaleString()], { type: 'application/txt' });
-      saveAs(blob, this.collaboration);
+      saveAs(blob, this.choreography);
     });
   }
-
-  searchColl() {
-    let url = ("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.collaboration + "&collaboration=true")
-  }
-
-  searchChor() {
-    let url = ("http://pros.unicam.it:8080/C4/rest/files/download?filename=" + this.choreography + "&collaboration=false")
-
-  }
+controlloModal(){
+  this.controlloRepo=true;
+  this.controlloFile=false;
+  this.controlloFoldandFile=false;
+  this.controlloVers=false;
+  this.controlloAnteprima=false;
+}
 acceptFile(){
+ 
  if (this.vers.fileType=="collaboration"){
-  this.myInputVariable.nativeElement.value = "";
 this.fileSelezionato=this.vers.originalName
 this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload=new File([response.toLocaleString()],this.vers.originalName);
  
 })
  } else if (this.vers.fileType=="choreography") { 
-  this.myInputVariable1.nativeElement.value = "";
 this.fileSelezionatoChor=this.vers.originalName
 this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload2=new File([response.toLocaleString()],this.vers.originalName);
@@ -635,10 +638,17 @@ this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.
 })
  }
 }
-
+paginaPrima()
+{
+  this.diagram=false;
+}
   getAllRepos() {
     
-    
+    this.controlloRepo=true;
+    this.controlloFile=false;
+    this.controlloFoldandFile=false;
+    this.controlloVers=false;
+    this.controlloAnteprima=false;
 
     this.service.getAllRepo().subscribe(data => {
       

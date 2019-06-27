@@ -133,25 +133,23 @@ export class Service {
     formData.append('collaboration', fileToUpload)
     formData.append('choreography', fileToUpload2)
 
-    return this.http.post("http://pros.unicam.it:8080/C4/rest/files/upload",formData,{responseType:'text'})
+    return this.http.post("http://localhost:8080/api/modelcheck/upload",formData,{responseType:'text'})
      .pipe(
               catchError(this.handleError)
      );
  }
 
 checkEquivalence(weak,equivalence,collaborationCode,choreographyCode){
-/* let formData: FormData = new FormData();
+ let formData: FormData = new FormData();
 formData.append('weak', weak)
 formData.append('equivalence', equivalence)
 formData.append('collaborationPath', collaborationCode)
 formData.append('choreographyPath', choreographyCode)
- */
-/* var params = jQuery.param ({weak: weak , equivalence: equivalence, "collaborationPath": collaborationCode, "choreographyPath": choreographyCode})
-
- console.log(params)
- return  this.http.post("http://pros.unicam.it:8080/C4/rest/files/check_equivalence",params, httpOptions3)
-} */
-
+return this.http.post("http://localhost:8080/api/modelcheck/check_equivalence",formData,{responseType:'text'})
+.pipe(
+         catchError(this.handleError)
+);
+ 
   
 
 }

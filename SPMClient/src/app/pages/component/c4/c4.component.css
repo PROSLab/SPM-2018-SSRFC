@@ -8,10 +8,38 @@
     height: 50vh;
     float: left;
     position: relative;
-    border: solid #21c0c0;
+    
     width: 50em;
   } 
 
+  .card2 {
+    margin-block-start: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.185);
+    transition: 0.3s;
+    background-color: rgba(255, 255, 255, 0.644);
+    border:1px solid grey;
+    width:10px; 
+    text-align: left;
+    height: 40px;
+    margin:5px;
+    border-radius: 5px;
+  }
+  
+  .card2:hover {
+    box-shadow: 0 8px 6px 0 rgba(59, 59, 59, 0.527);
+  }
+  .card:hover {
+    box-shadow: 0 8px 6px 0 rgba(184, 184, 184, 0.527);
+  }
+  
+
+  .card2Write{
+    font-style: small;
+    margin-top:5%
+  }
+  .message{
+      margin-top:-5px;
+  }
 
  /*  .dropdown-menu .sub-menu {
         left: 100%;
