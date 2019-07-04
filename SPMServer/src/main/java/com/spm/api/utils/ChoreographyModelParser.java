@@ -67,6 +67,7 @@ public class ChoreographyModelParser {
 				!(node instanceof EventBasedGateway) &&
 				!(node instanceof StartEvent) ) 
 			{
+				
 				ChoreographyTask task = new ChoreographyTask((ModelElementInstanceImpl) node, modelInstance);
 				
 				index++;
