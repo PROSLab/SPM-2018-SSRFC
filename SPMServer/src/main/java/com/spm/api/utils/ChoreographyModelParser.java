@@ -41,6 +41,8 @@ public class ChoreographyModelParser {
 		index = 0;
 		flowNodes.forEach(f -> {
 			index++;
+			System.out.println(f.getDomElement().getLocalName());
+
 			System.out.println("- N." + index + "  : " + f);
 			System.out.println("- TYPE : " + f.getElementType());
 			System.out.println("- ID   : " + f.getId());
@@ -50,6 +52,8 @@ public class ChoreographyModelParser {
 		index = 0;
 		sequenceFlow.forEach(sf -> {
 			index++;
+			System.out.println(sf.getDomElement().getLocalName());
+
 			System.out.println("- N." + index + "  : " + sf);
 			System.out.println("- TYPE : " + sf.getElementType());
 			System.out.println("- ID   : " + sf.getId());
@@ -71,6 +75,7 @@ public class ChoreographyModelParser {
 				ChoreographyTask task = new ChoreographyTask((ModelElementInstanceImpl) node, modelInstance);
 				
 				index++;
+				System.out.println(node.getDomElement().getLocalName());
 				System.out.println("- N." + index + "  : " + task);
 				System.out.println("- TYPE : " + task.getType());
 				System.out.println("- ID   : " + task.getId());
