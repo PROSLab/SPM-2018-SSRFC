@@ -73,11 +73,7 @@ public class ChoreographyModelParser {
 				System.out.println("- N." + index + "  : " + task);
 				System.out.println("- TYPE : " + task.getType());
 				System.out.println("- ID   : " + task.getId());
-				
-				System.out.println(task.getName());
-				System.out.println(task.getModel());
-				System.out.println(task.getTask());
-				System.out.println(task.getParticipantRef());
+				System.out.println("- NAME : " + task.getName());
 			}
 		}
 		
