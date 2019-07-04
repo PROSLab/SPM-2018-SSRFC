@@ -96,7 +96,7 @@
 </div>
 
 
-<div  >
+<div *ngIf="diagram==false" >
   <div class="row">
 
     <div class="col-6" style="height: 400px;border:1px solid rgb(172, 170, 170)">
@@ -113,25 +113,16 @@
             src="https://i.ibb.co/dWFDmMc/Booking-System-Collaborationsimplified-XE.png"></a>
         <br><br><br>
 
-        <label  for="file">
+        <!-- <label  for="file">
           <input  type="file" #file id="file" data-toggle="modal" data-target=""
             (change)="handleFileInput1($event.target.files)">
             
            
         </label>
-        <br>
+        <br> -->
         <label>
-          or 
-          <br>
           <button  data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button>{{fileSelezionato}}
         </label>
-        
-
-
-
-
-
-
       
       </div>
       
@@ -156,13 +147,11 @@
         <br>
 
        
-          <label for="file1">
+          <!-- <label for="file1">
             <input  data-toggle="modal" data-target="" #file1 type="file" id="file1" (change)="handleFileInput2($event.target.files)">
            
-          </label>
+          </label> -->
           <label>
-              or 
-              <br>
               <button data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button>{{fileSelezionatoChor}}
             </label>
       </div>
@@ -186,6 +175,7 @@
 
 
 <br>
+<div *ngIf="diagram==false">
 <div *ngIf="collaboration!= '' ">
     <hr>
   <!-- <div *ngIf="checked==true"> -->
@@ -266,6 +256,7 @@
 
 
 </div>
+</div>
  <div class="modal fade" id="ChooseRepo" role="dialog">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -336,11 +327,13 @@
           <div class="modal-footer">
               <button type="button" class="btn btn-danger" *ngIf="controlloRepo==false" (click)="back()" >Back</button>
               <button *ngIf="controlloAnteprima==true" (click)="acceptFile()"type="button" data-dismiss="modal" class="btn btn-danger" >Accept</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger"(click)="controlloModal()" data-dismiss="modal">Close</button>
           </div> 
 
       </div>
   </div>
 </div> 
-
-<ngx-cytoscape ></ngx-cytoscape>
+<div *ngIf="diagram==true">
+ <ngx-cytoscape  ></ngx-cytoscape> 
+ <button type="button" class="btn btn-danger" (click)="paginaPrima()">Close</button>
+</div>
