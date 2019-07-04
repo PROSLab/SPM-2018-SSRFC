@@ -13,6 +13,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.codec.multipart.FormFieldPart;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.spm.api.utils.Choreography;
+import com.spm.api.utils.ChoreographyModelParser;
 import com.spm.api.utils.Collaboration;
 import com.spm.api.utils.Responses;
 import com.spm.api.utils.InputStreamCollector;
@@ -238,6 +240,30 @@ public class ModelCheckHandler {
 						
 					}
 					
+				});
+	}
+	
+	public Mono<ServerResponse> parseModel(ServerRequest request) {
+		return request.body(BodyExtractors.toMultipartData())
+				.flatMap(parts -> {
+					map = parts.toSingleValueMap();
+                    FilePart filePart = (FilePart) map.get("files");
+                    
+                    File choreographyFile;
+                    
+                    try {
+						choreographyFile = File.createTempFile("choreography", ".aut", new File(choreographyFolder));
+					} catch (IOException e) {
+						e.printStackTrace();
+						return Mono.error(new Exception(e.getMessage()));
+					}
+                    
+                    filePart.transferTo(choreographyFile);
+                    
+                    ChoreographyModelParser parser = new ChoreographyModelParser();
+                    parser.parseChorModel(choreographyFile);
+                    
+                    return Responses.ok(200);
 				});
 	}
 }

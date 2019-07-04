@@ -34,6 +34,10 @@ public class ModelCheckRouter {
 								POST("/check_equivalence").and(accept(MediaType.MULTIPART_FORM_DATA)),
 								modelCheckHandler::checkEquivalence
 						)
+						.andRoute(
+								POST("/test_parsemodel").and(accept(MediaType.MULTIPART_FORM_DATA)),
+								modelCheckHandler::parseModel
+						)
 				);
 	}
 
