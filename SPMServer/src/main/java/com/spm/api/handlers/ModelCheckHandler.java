@@ -145,32 +145,32 @@ public class ModelCheckHandler {
 					
 					if (equivalence.equals("Trace") && weak) {
 						command = "-c -eweak-trace " + files;
-						pb = new ProcessBuilder("ltscompare", "-c", "-eweak-trace", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-eweak-trace", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Trace") && !weak) {
 						command = "-c -etrace " + files;
-						pb = new ProcessBuilder("ltscompare", "-c", "-etrace", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-etrace", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Branching") && weak) {
 						command = "-c -edpbranching-bisim " + files;
-						pb = new ProcessBuilder("ltscompare", "-c", "-edpbranching-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-edpbranching-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Branching") && !weak) {
 						command = "-c -ebranching-bisim " + files;
-						pb = new ProcessBuilder("ltscompare", "-c", "-ebranching-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-ebranching-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Bisimulation") && weak) {
 						command = "-c -eweak-bisim " + files;
-						pb = new ProcessBuilder("ltscompare", "-c", "-eweak-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-eweak-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Bisimulation") && !weak) {
 						command = "-c -ebisim " + files;
-						pb = new ProcessBuilder("ltscompare", "-c", "-ebisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-ebisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					log += command + '\n';
