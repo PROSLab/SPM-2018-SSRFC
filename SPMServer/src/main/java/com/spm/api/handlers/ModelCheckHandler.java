@@ -261,7 +261,7 @@ public class ModelCheckHandler {
                     filePart.transferTo(choreographyFile);
                     
                     ChoreographyModelParser parser = new ChoreographyModelParser();
-                    parser.parseChorModel(choreographyFile);
+                    parser.createAdjList(choreographyFile);
                     
                     return Responses.ok(200);
 				});
