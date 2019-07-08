@@ -7,8 +7,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.json.simple.JSONObject;
 import org.springframework.core.io.FileSystemResource;
@@ -199,6 +203,20 @@ public class ModelCheckHandler {
 						} // produce result for the program.
 						
 						resultState = !(result.contains(" not "));
+						
+						if (result.contains("Saved counterexample to")) {
+
+							Stream<String> stream = Files.lines(Paths.get("Counterexample0.trc"));
+
+							Iterator<String> it = stream.iterator();
+
+							while (it.hasNext()) {
+
+								counterexample += it.next();
+
+							}
+
+						}
 						resultState = !(result.contains(" not "));
 						log = log.replace(collaborationFolder, "");
 						command = command.replace(collaborationFolder, "");
