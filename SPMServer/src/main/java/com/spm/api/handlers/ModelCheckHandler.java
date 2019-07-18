@@ -261,27 +261,71 @@ public class ModelCheckHandler {
 				});
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Mono<ServerResponse> parseModel(ServerRequest request) {
 		return request.body(BodyExtractors.toMultipartData())
 				.flatMap(parts -> {
 					map = parts.toSingleValueMap();
-                    FilePart filePart = (FilePart) map.get("files");
-                    
+					
+					return map.get("collaboration").content().collect(
+							InputStreamCollector::new, 
+							(t, dataBuffer) -> t.collectInputStream(dataBuffer.asInputStream())
+					);
+					
+				})
+				.flatMap(is -> {
+					collaborationInputStream = is.getInputStream();
+					return Mono.just(true);
+				})
+				.flatMap(notUsed -> {
+					return map.get("choreography").content().collect(
+							InputStreamCollector::new, 
+							(t, dataBuffer) -> t.collectInputStream(dataBuffer.asInputStream())
+					);
+				})
+				.flatMap(is -> {
+					choreographyInputStream = is.getInputStream();
+					return Mono.just(true); 
+				})
+				.flatMap(notUsed -> {
+					
+                    File collaborationFile;
                     File choreographyFile;
                     
                     try {
+                    	collaborationFile = File.createTempFile("collaboration", ".aut", new File(collaborationFolder));
 						choreographyFile = File.createTempFile("choreography", ".aut", new File(choreographyFolder));
 					} catch (IOException e) {
 						e.printStackTrace();
 						return Mono.error(new Exception(e.getMessage()));
 					}
                     
-                    filePart.transferTo(choreographyFile);
+                    Collaboration coobj = new Collaboration();
+                    ChoreographyModelParser chobj = new ChoreographyModelParser();
                     
-                    ChoreographyModelParser parser = new ChoreographyModelParser();
-                    parser.createAdjList(choreographyFile);
+                    ArrayList<String> choreographyActions =	chobj.init(choreographyInputStream, choreographyFile);
+                    coobj.setChoreographyActions(choreographyActions);
+                    coobj.init(collaborationInputStream, false, collaborationFile);
                     
-                    return Responses.ok(200);
-				});
+                    //filePart.transferTo(choreographyFile);
+                    //ChoreographyModelParser parser = new ChoreographyModelParser();
+                    //parser.init(choreographyFile);
+                    //return Responses.ok(200);
+                    
+                    JSONObject obj = new JSONObject();
+					obj.put("choreography", choreographyFile.getName());
+					obj.put("collaboration", collaborationFile.getName());
+					StringWriter out = new StringWriter();
+					try {
+						obj.writeJSONString(out);
+					} catch (IOException e) {
+						e.printStackTrace();
+						return Mono.error(new Exception(e.getMessage()));
+					}
+					String jsonText = out.toString();
+					
+					return Responses.ok(jsonText);
+				})
+				.onErrorResume(Exception.class, Responses::internalServerError);
 	}
 }

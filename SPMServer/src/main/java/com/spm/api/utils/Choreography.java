@@ -141,7 +141,7 @@ nodeSet=new ArrayList<LTSNode>();
             		nextNode.decreaseEdge(edge);
 					nextNode.addEdge(outgoingEdge);
 					nextNode=nextNode.validate();
-					choreographyGraph.addEdge(currentNode.getId()+"_"+ nextNode.getId(), String.valueOf(currentNode.getId()), String.valueOf(nextNode.getId()), true).setAttribute("ui.label", edgeLabel);;
+					choreographyGraph.addEdge(currentNode.getId()+"_"+ nextNode.getId(), String.valueOf(currentNode.getId()), String.valueOf(nextNode.getId()), true).setAttribute("ui.label", edgeLabel);
 					choreographyGraph.getNode(nextNode.getId()).setAttribute("ui.label", nextNode.getId());
 					DFS(nextNode);
 				}

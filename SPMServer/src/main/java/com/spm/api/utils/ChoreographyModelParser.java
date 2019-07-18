@@ -1,6 +1,7 @@
 package com.spm.api.utils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,22 +12,17 @@ import org.camunda.bpm.model.bpmn.instance.EndEvent;
 import org.camunda.bpm.model.bpmn.instance.EventBasedGateway;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
+import org.camunda.bpm.model.bpmn.instance.Message;
 import org.camunda.bpm.model.bpmn.instance.ParallelGateway;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import org.camunda.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import org.graphstream.graph.implementations.SingleGraph;
+
 
 public class ChoreographyModelParser {
 	private static BpmnModelInstance modelInstance;
-	
-	//private Collection<StartEvent> startEvents;
-	//private Collection<EndEvent> endEvents;
-	//private Collection<ParallelGateway> parallelGateways;
-	//private Collection<ExclusiveGateway> exclusiveGateways;
-	//private Collection<EventBasedGateway> eventBasedGateways;
-	//public Collection<FlowNode> flowNodes;						// all flow nodes in the model.
-	//public Collection<SequenceFlow> sequenceFlow;					// sequence flow
 	
 	static class Node {
 		String local_name;
@@ -43,10 +39,13 @@ public class ChoreographyModelParser {
 	private Node new_node;
 	private HashMap<String, Boolean> visited;
 	private String idStartNode;
+	private SingleGraph choreographyGraph; // NEW
+	public String choreographyPath; // NEW
 	
-	public void createAdjList(File chor) {
+	public ArrayList<String> init(InputStream chor, File outputFile) {
 		adj = new HashMap<String, ArrayList<Node>>();
-		modelInstance = Bpmn.readModelFromFile(chor);
+		modelInstance = Bpmn.readModelFromStream(chor);
+		choreographyGraph = Utils.GenerateGraph("Choreography"); // NEW
 		
 		// search start event
 		for (StartEvent startEvent : modelInstance.getModelElementsByType(StartEvent.class)) {
@@ -66,6 +65,7 @@ public class ChoreographyModelParser {
 				if(!adj_startevents.contains(new_node)) adj_startevents.add(new_node);
 				if(new_list == true) adj.put(startEvent.getId(), adj_startevents);
 			}
+
 		}
 		
 		// search flow node
@@ -108,11 +108,19 @@ public class ChoreographyModelParser {
 		
 		printAdjList();
 		DFS(idStartNode);
+		choreographyPath = Utils.generatemAUTFile(choreographyGraph, outputFile);
 		
+		ArrayList<String> actions = new ArrayList<>();
+		for (Message m : modelInstance.getModelElementsByType(Message.class)) {
+			actions.add(m.getName());
+		}
+
+		return actions;		
 	}
 	
 	private void DFS(String idStartNode) {
 		visited = new HashMap<String, Boolean>();
+		
 		System.out.println("\n--- --- DFS ALGORITHM --- ---");
 		DFSalg(idStartNode, visited);
 		System.out.println("--- --- --- --- --- --- --- ");
@@ -120,16 +128,38 @@ public class ChoreographyModelParser {
 	
 	private void DFSalg(String idNode, HashMap<String, Boolean> v) {
 		v.put(idNode, true);
-		String name = modelInstance.getModelElementById(idNode).getDomElement().getLocalName();
-		System.out.println("\n-> Visited Node: " + name + " (" + idNode + ")");
+		ModelElementInstance currentElement = modelInstance.getModelElementById(idNode);
+		System.out.println("\n-> Visited Node: " + currentElement.getDomElement().getLocalName() + " (" + idNode + ")");	
 		
 		Iterator<Node> i = adj.get(idNode).listIterator();
 		while(i.hasNext()) {
 			String next_id = i.next().id;
+			buildGraph(currentElement, next_id); // NEW
+			
 			if(!v.containsKey(next_id)) {
 				DFSalg(next_id, v);
 			}
 		}
+	}
+	
+	private void buildGraph(ModelElementInstance currentElement, String idNextNode) {
+		if(currentElement instanceof EventBasedGateway || checkNodeChor(currentElement) == true) {
+			ChoreographyTask currNodeTask = new ChoreographyTask((ModelElementInstanceImpl) currentElement, modelInstance);
+			String edgeLabel = null;
+			if(currNodeTask.getInitialParticipant() != null && currNodeTask.getParticipantRef() != null && currNodeTask.getRequest() != null) {
+				edgeLabel = currNodeTask.getInitialParticipant().getName()+"->"+currNodeTask.getParticipantRef().getName()+":"+currNodeTask.getRequest().getMessage().getName();
+			}
+			String idCurrentNode = currNodeTask.getId();
+			choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", edgeLabel);
+			choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
+			return;
+		}
+		
+		// all other cases
+		String idCurrentNode = ((FlowNode)currentElement).getId();
+		choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", "tau");
+		choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
+		
 	}
 	
 	private boolean checkNodeChor(ModelElementInstance node) {
