@@ -125,6 +125,7 @@ public class TestXML {
 			}
 		}
 		
+		/*
 		// Get first BPMNEdge
 		Element edgeFirst = (Element) xmlRes.getElementsByTagName("bpmndi:BPMNEdge").item(0);
 		// Get last BPMNEdge
@@ -140,6 +141,20 @@ public class TestXML {
 		
 		edges.forEach(e -> {
 			edgeLast.appendChild(xmlRes.importNode(e, true));
+		});
+		*/
+		
+		ArrayList<Node> shapes = getAllShapes();
+		ArrayList<Node> edges = getAllEdges();
+		
+		Element edgeFirst = (Element) xmlRes.getElementsByTagName("bpmndi:BPMNEdge").item(0);
+		
+		shapes.forEach(s -> {
+			edgeFirst.getParentNode().insertBefore(xmlRes.importNode(s, true), edgeFirst.getNextSibling());
+		});
+		
+		edges.forEach(e -> {
+			edgeFirst.getParentNode().insertBefore(xmlRes.importNode(e, true), edgeFirst.getNextSibling());
 		});
 		
 		// Connect messageFlows
