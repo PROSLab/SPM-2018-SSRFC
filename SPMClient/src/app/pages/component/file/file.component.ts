@@ -72,6 +72,25 @@ export class FileComponent implements OnInit {
   importError?: Error;
   collaboration: any;
   autore: any;
+  controlloAnteprima: boolean;
+  controllocollaboration: boolean;
+  controlloRepo: boolean;
+  controlloFile: boolean;
+  controlloFoldandFile: boolean;
+  controlloVers: boolean;
+  repos: any;
+  idRepo: any;
+  allFolder=<any>[];
+  allFileColl=<any>[];
+  sonoDaFile: boolean;
+  versione: any;
+  diagramUrlA: string;
+  allFileFoldColl =<any>[];
+  ver: any;
+  ArrayVersion =<any>[];
+  Versionfinal =<any>[];
+  VersDeprecated =<any>[];
+  VersionFinal =<any>[];
   constructor(private toastr:ToastrService,public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
@@ -282,7 +301,13 @@ error => {
   troncaData(data: String) {
     return this.dataTroncata = data.substr(0, 10)
   }
-
+  controlloModal(){
+    this.controlloRepo=true;
+    this.controlloFile=false;
+    this.controlloFoldandFile=false;
+    this.controlloVers=false;
+    this.controlloAnteprima=false;
+  }
   getFileSpec() {
     
     this.cambia=false
@@ -291,7 +316,11 @@ error => {
     }
     this.service.getFileSpec(this.idFile)
       .subscribe(async data => {
-
+if(data.fileType=="collaboration"){
+  this.controllocollaboration=true
+} else{
+  this.controllocollaboration=false
+}
         if (data != null) {
           this.autore=data.autore
           data.createdAt = this.troncaData(data.createdAt)
@@ -343,7 +372,151 @@ error => {
         this.errorMessage = <any>error
       });
   }
+  getAllRepos() {
+    this.controllocollaboration=true
+    this.controlloRepo=true;
+    this.controlloFile=false;
+    this.controlloFoldandFile=false;
+    this.controlloVers=false;
+    this.controlloAnteprima=false;
 
+    this.service.getAllRepo().subscribe(data => {
+      
+      this.repos = JSON.parse(data)
+      this.controlloRepo=true;
+    }, error => {
+      this.errorMessage = <any>error
+    });
+  }
+
+  AllRepoInfo(id) {
+    this.controlloRepo=false;
+    
+    this.idRepo=id;
+
+    this.service.getAllFolder(id)
+  
+    .subscribe(data => {
+      if(data != []){
+     this.allFolder = JSON.parse(data)
+     this.controlloFoldandFile=true;
+
+      }
+      else{
+      }
+
+    }, error => {
+      this.errorMessage = <any>error
+    });
+
+    this.service.getFile(id)
+    .subscribe(data => {
+      var file =JSON.parse(data)
+    
+      var j=0;
+      var z=0;
+    for(let i=0;i<file.length;i++){
+     
+if (file[i].fileType=="collaboration"){
+  
+  this.allFileColl[j]=file[i]
+  j++
+}
+    }
+    }
+    
+    , error => {
+      this.errorMessage = <any>error
+    });
+  
+
+  }
+chooseVers(id){
+  this.controlloVers=true
+if(this.controlloFoldandFile==true){
+  this.controlloFoldandFile=false
+  this.sonoDaFile=false;
+} else{
+  this.controlloFile=false
+  this.sonoDaFile=true
+}
+  this.service.getFileSpec(id)
+  .subscribe(data => {
+   this.ver = (data)
+   console.log(this.vers)
+  this.ArrayVersion=[]
+  this.Versionfinal=[]
+  this.VersDeprecated=[]
+   for (var i = 0; i < this.ver.cVersion; i++) {
+    this.ArrayVersion[i] = this.ver.cVersion - (this.ver.cVersion - i) + 1
+  }
+  
+  
+  //mi salvo le versioni deprecate
+  for (var i = 0; i < this.ver.deletedVersions.length; i++) {
+    this.VersDeprecated[i] = this.ver.deletedVersions[i]
+  }
+
+  var j = 0;
+  for (i = 0; i < this.versionArray.length; i++) {
+    if (this.deprecatedVers.indexOf(this.ArrayVersion[i]) == -1) {
+      this.VersionFinal[j] = this.ArrayVersion[i]
+      j++
+    }
+  }
+
+  }, error => {
+    this.errorMessage = <any>error
+  });
+}
+anteprimaFile(vers){
+  this.versione=vers
+  this.controlloAnteprima=true;
+ this.diagramUrlA="http://localhost:8080/api/file/downloadFile?idFile=" + this.ver.id + "&version=" + vers
+ console.log(this.diagramUrlA)
+}
+back1(){
+  if (this.controlloVers==true && this.sonoDaFile==false){
+  this.controlloAnteprima=false;
+  this.controlloVers=false,
+  this.controlloFoldandFile=true
+  } else if (this.controlloVers==true && this.sonoDaFile==true){
+    this.controlloAnteprima=false;
+    this.controlloVers=false,
+    this.controlloFile=true
+  } else if (this.controlloFoldandFile==true){
+    this.controlloFoldandFile=false;
+    this.controlloRepo=true
+  }else if (this.controlloFile==true){
+    this.controlloFile=false
+    this.controlloFoldandFile=true;
+  }
+}
+  AllFolderInfo(id){
+    this.controlloFoldandFile=false;
+    this.service.getFile(this.idRepo,id)
+    .subscribe(data => {
+      var file =JSON.parse(data)
+    
+      var j=0;
+      var z=0;
+    for(let i=0;i<file.length;i++){
+     
+if (file[i].fileType=="collaboration"){
+  
+  this.allFileFoldColl[j]=file[i]
+  j++
+}
+
+    }
+   
+     this.controlloFile=true
+
+     /* console.log(this.allFile) */
+    }, error => {
+      this.errorMessage = <any>error
+    });
+  }
 
   newVersion() {
 //this.getFileSpec()
@@ -367,7 +540,14 @@ this.service.createNewVersion(this.idFile, this.vers)
   downloadAllVersion(){
       window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
   }
-
+mergeFile(){
+  /* this.service.merge()
+      .subscribe(data => {
+       
+      }, error => {
+        this.errorMessage = <any>error
+      });*/
+} 
   createFile() {
     this.fileAppear = true;
   }

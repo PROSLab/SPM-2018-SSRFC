@@ -63,8 +63,8 @@ export class C4Component implements OnInit {
   versionArray=<any>[];
   allFileColl=<any>[];
   allFileChor=<any>[];
-  AllFileFoldColl=<any>[];
-  AllFileFoldChor=<any>[];
+  allFileFoldColl=<any>[];
+  allFileFoldChor=<any>[];
   deprecatedVers=<any>[];
   finalVersion=<any>[];
   controlloVers: boolean=false;
@@ -806,15 +806,15 @@ back(){
      
 if (file[i].fileType=="collaboration"){
   
-  this.AllFileFoldColl[j]=file[i]
+  this.allFileFoldColl[j]=file[i]
   j++
 }
 else{
-  this.AllFileFoldChor[z]=file[i]
+  this.allFileFoldChor[z]=file[i]
   z++
 }
     }
-   
+  
      this.controlloFile=true
 
      /* console.log(this.allFile) */

@@ -272,19 +272,25 @@
 <hr>
 <br>
     <div class=" row">
-        <div class="col-5">
+        <div class="col-4">
                 <label>
                         <h2>Preview of {{file.fileType}} model </h2>
                         <h5>Version n. {{vers}}</h5>
                       
                     </label>
-        </div>
-        <div class="col-6">
-                <button (click)="sendToEditor(vers)" style="margin-left:82%" class="btn btn-primary">Open Model</button>
+        </div>  
                 
+       
+
+       
+        <div class="col-5" style="margin-left:70%">
+         
+                <button *ngIf="controllocollaboration==true"  data-toggle="modal" (click)="getAllRepos()" class="btn btn-primary" data-target="#MergeFile">Merge</button>
+                <button (click)="sendToEditor(vers)"  style="margin-left:1%"class="btn btn-primary">Open Model</button>
+           
         </div>
         </div>
-    
+     <br>
     <div *ngIf="file.fileType=='collaboration'" class="diagram">
         <app-diagram  [url]="diagramUrl"></app-diagram>
       <!-- per collaborator -->
@@ -307,7 +313,100 @@
 
 
 </div>
+ <div class="modal fade" id="MergeFile" role="dialog">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Choose File to Import</h4>
+          </div>
+          <div class="modal-body">
+            <!-- REPOSITORY -->
+            
+            <div *ngIf="controlloRepo==true">
+                <div class="row" style="margin-left:10px">
+                  REPOSITORY
+                </div>
+                <div  class="row" style="margin-left:10px">
 
+                <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="AllRepoInfo(repo.id)" >
+                  <h4 class="card2Write" style="cursor:pointer;">
+                      <b>{{repo?.repositoryName}}</b> </h4>
+                </div>
+              </div>
+            </div>
+          <!-- FOLDER E FILE -->
+          <div *ngIf="controlloFoldandFile==true">
+              <div class="row"style="margin-left:10px">FOLDER</div>
+
+          <div  class="row" style="margin-left:10px">
+            <div class="card2 col-2 display" *ngFor="let fold of allFolder; let i=index;" (click)="AllFolderInfo(fold.id)" >
+                <h4 class="card2Write" style="cursor:pointer;">
+                    <b>{{fold?.folderName}}</b>
+                </h4>
+            </div>
+            <div *ngIf="allFolder==0"><br>
+              No Folder inside this Repository</div>
+          </div>
+          <br>
+          <hr>
+          <br>
+          <div class="row" style="margin-left:10px">FILE</div>
+            <div class="row" style="margin-left:10px">
+               
+                <br>
+                <br>
+              <div class="card2 col-2 display" *ngFor="let file of allFileColl; let i=index;" (click)="chooseVers(file.id)"  >
+                  <h4 class="card2Write" style="cursor:pointer;">
+                      <b>{{file?.originalName}}</b> </h4>
+              </div>
+              <div *ngIf="allFile==0"><br>No Folder inside this Repository</div>
+      
+          </div>
+        </div>
+        <!-- SOLO FILES DENTRO A FOLDER CLICCATA -->
+        <div *ngIf="controlloFile==true" class="row">
+          <div class="card2 col-2 display" *ngFor="let file of allFileFoldColl; let i=index;" (click)="chooseVers(file.id)"  >
+              <h4 class="card2Write" style="cursor:pointer;">
+                  <b>{{file?.originalName}}</b> </h4>
+          </div>
+      </div>
+
+      <div *ngIf="controlloVers==true">
+          <div class="row"style="margin-left:10px">VERSION</div>
+          <br>
+          <div  class="row" style="margin-left:10px">
+          <div class="card2 col-2 display" *ngFor="let vers of finalVersion; let i=index;" (click)="anteprimaFile(vers)" >
+            <h4 class="card2Write" style="cursor:pointer;">
+              <b>V.{{vers}}</b>
+            </h4>
+          </div>
+        </div>
+      </div>
+
+      
+<div *ngIf=" controlloAnteprima==true">
+  <br>
+  <hr>
+  <br>
+  <div class="row"style="margin-left:5px">Preview of {{vers.originalName}} model <br>
+    version n.{{versione}}
+  </div>
+  <br><br>
+    <app-diagram [url]="diagramUrlA" ></app-diagram>
+</div>
+<br>
+
+          </div>
+         
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" *ngIf="controlloRepo==false" (click)="back1()" >Back</button>
+              <button *ngIf="controlloAnteprima==true" (click)="mergeFile()"type="button" data-dismiss="modal" class="btn btn-danger" >Merge</button>
+              <button type="button" class="btn btn-danger"(click)="controlloModal()" data-dismiss="modal">Close</button>
+          </div> 
+
+      </div>
+  </div>
+</div> 
 
 <!-- modal change path-->
 <div class="modal fade" id="myModalModifyPath" role="dialog">

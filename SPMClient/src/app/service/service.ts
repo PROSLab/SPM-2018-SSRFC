@@ -162,7 +162,18 @@ return this.http.post("http://localhost:8080/api/modelcheck/check_equivalence",f
   
 
 }
-
+merge(fileToUpload,fileToUpload2): Observable<any> {
+   
+  /*     headers: new HttpHeaders({"Content-Type": "text/plain"})
+   */    const formData: FormData = new FormData();
+      formData.append('sender', fileToUpload)
+      formData.append('receiver', fileToUpload2)
+  
+      return this.http.post("http://localhost:8080/api/modelcheck/mergemodel",formData,{responseType:'text'})
+       .pipe(
+                catchError(this.handleError)
+       );
+   }
 
 
   changeNameRepo(id, newRepoName): Observable<any> {
