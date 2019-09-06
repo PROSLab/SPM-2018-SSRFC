@@ -91,6 +91,9 @@ export class FileComponent implements OnInit {
   Versionfinal =<any>[];
   VersDeprecated =<any>[];
   VersionFinal =<any>[];
+  fileToUpload: File;
+  fileToUpload2: File;
+  Filescelto: any;
   constructor(private toastr:ToastrService,public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
@@ -316,6 +319,7 @@ error => {
     }
     this.service.getFileSpec(this.idFile)
       .subscribe(async data => {
+    
 if(data.fileType=="collaboration"){
   this.controllocollaboration=true
 } else{
@@ -442,19 +446,19 @@ if(this.controlloFoldandFile==true){
 }
   this.service.getFileSpec(id)
   .subscribe(data => {
-   this.ver = (data)
+   this.Filescelto = (data)
    console.log(this.vers)
   this.ArrayVersion=[]
   this.Versionfinal=[]
   this.VersDeprecated=[]
-   for (var i = 0; i < this.ver.cVersion; i++) {
-    this.ArrayVersion[i] = this.ver.cVersion - (this.ver.cVersion - i) + 1
+   for (var i = 0; i < this.Filescelto.cVersion; i++) {
+    this.ArrayVersion[i] = this.Filescelto.cVersion - (this.ver.cVersion - i) + 1
   }
   
   
   //mi salvo le versioni deprecate
-  for (var i = 0; i < this.ver.deletedVersions.length; i++) {
-    this.VersDeprecated[i] = this.ver.deletedVersions[i]
+  for (var i = 0; i < this.Filescelto.deletedVersions.length; i++) {
+    this.VersDeprecated[i] = this.Filescelto.deletedVersions[i]
   }
 
   var j = 0;
@@ -472,7 +476,7 @@ if(this.controlloFoldandFile==true){
 anteprimaFile(vers){
   this.versione=vers
   this.controlloAnteprima=true;
- this.diagramUrlA="http://localhost:8080/api/file/downloadFile?idFile=" + this.ver.id + "&version=" + vers
+ this.diagramUrlA="http://localhost:8080/api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + vers
  console.log(this.diagramUrlA)
 }
 back1(){
@@ -541,13 +545,24 @@ this.service.createNewVersion(this.idFile, this.vers)
       window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
   }
 mergeFile(){
-  /* this.service.merge()
-      .subscribe(data => {
-       
-      }, error => {
-        this.errorMessage = <any>error
-      });*/
-} 
+  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
+  this.fileToUpload=new File([response.toLocaleString()],this.Filescelto.originalName);
+} )
+if (this.vers==undefined)
+{
+  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.finalVersion , { responseType: "text" } ).subscribe(response => {
+    this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
+  } )
+
+}else{
+  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
+  this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
+} )
+
+}
+
+
+}
   createFile() {
     this.fileAppear = true;
   }

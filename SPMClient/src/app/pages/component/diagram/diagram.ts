@@ -56,13 +56,11 @@ import {
   
       this.bpmnJS = new BpmnJS();
       this.elementRegistry = this.bpmnJS.get('elementRegistry');
-      console.log(this.elementRegistry)
+     
   
       this.bpmnJS.on('import.done', ({ error }) => {
         if (!error) {
-          console.log("THIS IS THE ELEMENT AFTER IMPORT: ")
-          console.log( this.elementRegistry.get('MessageFlow_1axzsl4') )
-          console.log( this.elementRegistry.get('Task_0ialkep') )
+        
 
           this.bpmnJS.get('canvas').zoom('fit-viewport');
         }
