@@ -548,21 +548,21 @@ mergeFile(){
   this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload=new File([response.toLocaleString()],this.Filescelto.originalName);
 } )
-if (this.vers==undefined)
-{
-  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.finalVersion , { responseType: "text" } ).subscribe(response => {
-    this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
-  } )
-
-}else{
   this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
 } )
 
+this.service.merge(this.fileToUpload, this.fileToUpload2)
+      .subscribe(data => {
+       data = JSON.parse(data)
+      }, error => {
+        this.errorMessage = <any>error
+      });
+
 }
 
 
-}
+
   createFile() {
     this.fileAppear = true;
   }
