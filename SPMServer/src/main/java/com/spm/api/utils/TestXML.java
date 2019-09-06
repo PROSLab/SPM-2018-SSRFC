@@ -1,6 +1,9 @@
 package com.spm.api.utils;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -9,10 +12,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.springframework.http.codec.multipart.FilePart;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -25,7 +31,7 @@ public class TestXML {
 	public static String participantId;
 	public static String participantIdTake;
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		
 		try {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -48,6 +54,38 @@ public class TestXML {
 			
 			mergeXml();
 			prettyPrint(xmlRes);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}*/
+	
+	public static void init(FilePart sender, FilePart receiver, File outputFile) {
+		
+		try {
+			String tempDir = System.getProperty("java.io.tmpdir");
+			File file1 = File.createTempFile("sender", ".xml", new File(tempDir));
+			File file2 = File.createTempFile("receiver", ".xml", new File(tempDir));
+			sender.transferTo( file1 );
+			receiver.transferTo( file2 );
+			
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder;
+			dBuilder = dbFactory.newDocumentBuilder();
+			
+			xmlRes = dBuilder.parse(file1);
+			xmlRes.getDocumentElement().normalize();
+			
+			DocumentBuilderFactory dbFactory2 = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder2;
+			dBuilder2 = dbFactory2.newDocumentBuilder();
+			
+			xmlTake = dBuilder2.parse(file2);
+			xmlTake.getDocumentElement().normalize();
+			
+			mergeXml();
+			prettyPrint(xmlRes);
+			writeDocToFile(xmlRes, outputFile, false, true);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -395,6 +433,30 @@ public class TestXML {
 		
 		return nodes;
 	}
+	
+	private static void writeDocToFile(Document document, File outputFile, boolean excludeDeclaration, boolean prettyPrint) {
+        try(FileWriter writer = new FileWriter( outputFile )) {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            if(excludeDeclaration) {
+                transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            }
+            if(prettyPrint) {
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            }
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(writer);
+            transformer.transform(source, result);
+            
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        } catch (TransformerConfigurationException e) {
+            throw new IllegalStateException(e);
+        } catch (TransformerException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
 
 }
 

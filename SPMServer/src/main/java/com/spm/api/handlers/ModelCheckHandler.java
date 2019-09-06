@@ -29,6 +29,7 @@ import com.spm.api.utils.Choreography;
 import com.spm.api.utils.ChoreographyModelParser;
 import com.spm.api.utils.Collaboration;
 import com.spm.api.utils.Responses;
+import com.spm.api.utils.TestXML;
 import com.spm.api.utils.InputStreamCollector;
 
 import reactor.core.publisher.Mono;
@@ -328,4 +329,41 @@ public class ModelCheckHandler {
 				})
 				.onErrorResume(Exception.class, Responses::internalServerError);
 	}
+	
+	public Mono<ServerResponse> mergeModel(ServerRequest request) {
+		return request.body(BodyExtractors.toMultipartData())
+				.flatMap(parts -> {
+					map = parts.toSingleValueMap();
+					FilePart senderFilePart = (FilePart) map.get("sender");
+					FilePart receiverFilePart = (FilePart) map.get("receiver");
+					
+					File merge;
+					String tempDir = System.getProperty("java.io.tmpdir");
+					
+					try {
+						merge = File.createTempFile("merge", ".bpmn", new File(tempDir));
+					} catch (IOException e) {
+						e.printStackTrace();
+						return Mono.error(new Exception(e.getMessage()));
+					}
+					
+					TestXML.init(senderFilePart, receiverFilePart, merge);
+					
+					String path = System.getProperty("java.io.tmpdir") + File.separator + merge.getName();
+					Resource resource = new FileSystemResource(path);
+					
+					return Responses.okFile(resource, merge);
+				})
+				.onErrorResume(Exception.class, Responses::internalServerError);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
