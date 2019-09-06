@@ -44,6 +44,7 @@ import {
   })
   export class DiagramComponent implements AfterContentInit, OnChanges, OnDestroy {
     private bpmnJS: BpmnJS;
+    private elementRegistry: any;
   
     @ViewChild('ref') private el: ElementRef;
     @Output() private importDone: EventEmitter<any> = new EventEmitter();
@@ -54,9 +55,15 @@ import {
     constructor(private http: HttpClient) {
   
       this.bpmnJS = new BpmnJS();
+      this.elementRegistry = this.bpmnJS.get('elementRegistry');
+      console.log(this.elementRegistry)
   
       this.bpmnJS.on('import.done', ({ error }) => {
         if (!error) {
+          console.log("THIS IS THE ELEMENT AFTER IMPORT: ")
+          console.log( this.elementRegistry.get('MessageFlow_1axzsl4') )
+          console.log( this.elementRegistry.get('Task_0ialkep') )
+
           this.bpmnJS.get('canvas').zoom('fit-viewport');
         }
       });

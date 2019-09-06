@@ -207,9 +207,59 @@ public class TestXML {
 					
 					// modify targetRef value of mres
 					eMres.setAttribute("targetRef", targetRef);
+					setCoordinates(eMres, eMtake);
 				}
 			}
 		});
+	}
+	
+	public static void setCoordinates(Element messageFlow, Element target) {
+		ArrayList<String> targetXY = getShapeCoords("omgdc:Bounds", getShapeById("bpmndi:BPMNShape", target.getAttribute("targetRef")));
+		Element msgEdge = getShapeById("bpmndi:BPMNEdge", messageFlow.getAttribute("id"));
+		setShapeCoords("omgdi:waypoint", msgEdge, targetXY.get(0), targetXY.get(1));
+	}
+	
+	// tag: "bpmndi:BPMNShape"
+	// tag: "bpmndi:BPMNEdge"
+	public static Element getShapeById(String tag, String id) {
+		NodeList nodes = xmlRes.getElementsByTagName(tag);		
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Element res = (Element) nodes.item(i);
+			if(res.getAttribute("bpmnElement").equals(id)) {
+				return res;
+			}
+		}
+		return null;
+	}
+	
+	// omgdc:Bounds
+	public static ArrayList<String> getShapeCoords(String tag, Element shape) {
+		ArrayList<String> coords = new ArrayList<String>();
+		
+		NodeList nBounds = shape.getElementsByTagName(tag);
+		int len = nBounds.getLength();
+		Element eBound = (Element) nBounds.item(len - 1);
+		
+		String x = eBound.getAttribute("x");
+		String y = eBound.getAttribute("y");
+		
+		coords.add(x);
+		coords.add(y);
+		
+		return coords;
+	}
+	
+	// omgdi:waypoint
+	public static void setShapeCoords(String tag, Element shape, String x, String y) {
+		NodeList nBounds = shape.getElementsByTagName(tag);
+		int len = nBounds.getLength();
+		Element eBound = (Element) nBounds.item(len - 1);
+		
+		Integer xint = Integer.parseInt(x) + 20;
+		//Integer yint = Integer.parseInt(y) + 10;
+		
+		eBound.setAttribute("x", xint.toString());
+		eBound.setAttribute("y", y);
 	}
 	
 	public static final void prettyPrint(Document xml) throws Exception {

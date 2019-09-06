@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Service } from '../../../service/service';
 import { saveAs } from 'file-saver';
 import { subscribeOn } from 'rxjs/operators';
-import { runInThisContext } from 'vm';
+//import { runInThisContext } from 'vm';
 
 declare var cytoscape :any;
 
