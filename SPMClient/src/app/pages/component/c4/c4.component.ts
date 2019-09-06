@@ -570,7 +570,7 @@ fileSelezionato="Nessun file è stato selezionato"
 
 
       this.toastr.success('Wait a moment please', 'waiting')
-      this.service.submitC4(this.fileToUpload, this.fileToUpload2)
+      this.service.parseModelCheck(this.fileToUpload, this.fileToUpload2)
         .subscribe(data => {
 
           data = JSON.parse(data)
