@@ -3,8 +3,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Service } from '../../../service/service';
 import { saveAs } from 'file-saver';
-import { subscribeOn } from 'rxjs/operators';
-import { runInThisContext } from 'vm';
+/* import { subscribeOn } from 'rxjs/operators';
+import { runInThisContext } from 'vm'; */
 
 declare var cytoscape :any;
 
