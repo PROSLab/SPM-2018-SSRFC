@@ -38,6 +38,10 @@ public class ModelCheckRouter {
 								POST("/test_parsemodel").and(accept(MediaType.MULTIPART_FORM_DATA)),
 								modelCheckHandler::parseModel
 						)
+						.andRoute(
+								POST("/mergemodel").and(accept(MediaType.MULTIPART_FORM_DATA)),
+								modelCheckHandler::mergeModel
+						)
 				);
 	}
 
