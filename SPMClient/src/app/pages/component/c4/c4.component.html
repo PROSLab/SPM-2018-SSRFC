@@ -87,14 +87,11 @@
         &nbsp;
         <button type="button" class="btn btn-danger" value="refuse" #btn1 (click)="choose(btn1.value)"  >REFUSE</button>
 
-     <!--    <button class="btn btn-info" #closeModal1 value="refuse" (click)="choose(closeModal1.value)" data-dismiss="modal" >REFUSE</button>
- -->
       </div>
 
     </div>
   </div>
 </div>
-
 
 <div *ngIf="diagram==false" >
   <div class="row">
@@ -112,20 +109,10 @@
           <img style="border-radius:600px;zoom:28%;border:5px solid red"
             src="https://i.ibb.co/dWFDmMc/Booking-System-Collaborationsimplified-XE.png"></a>
         <br><br><br>
-
-        <!-- <label  for="file">
-          <input  type="file" #file id="file" data-toggle="modal" data-target=""
-            (change)="handleFileInput1($event.target.files)">
-            
-           
-        </label>
-        <br> -->
         <label>
-          <button  data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button>{{fileSelezionato}}
+          <button  data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button><br><b>{{fileSelezionato}}</b>
         </label>
-      
       </div>
-      
     </div>
 
     <div class="col-6" style="height: 400px;border:1px solid rgb(172, 170, 170)">
@@ -146,13 +133,8 @@
         <br>
         <br>
 
-       
-          <!-- <label for="file1">
-            <input  data-toggle="modal" data-target="" #file1 type="file" id="file1" (change)="handleFileInput2($event.target.files)">
-           
-          </label> -->
           <label>
-              <button data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button>{{fileSelezionatoChor}}
+              <button data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button><br><b>{{fileSelezionatoChor}}</b>
             </label>
       </div>
 
@@ -163,7 +145,7 @@
 
   <div class="row">
     <div class="col-5"></div>
-    <div class="col-3">
+    <div class="col-5">
       <button id="check" (click)="CheckEquivalence()" style="zoom:140%;background-color: brown;border:2px solid brown"
         class="btn btn-primary">Submit</button>
     </div>
@@ -171,17 +153,11 @@
 </div>
 
 
-
-
-
 <br>
 <div *ngIf="diagram==false">
 <div *ngIf="collaboration!= '' ">
     <hr>
-  <!-- <div *ngIf="checked==true"> -->
   <div class="row">
-   
- 
     <h3>Checking Files</h3>
   </div>
 
@@ -202,7 +178,6 @@
   <br>
   <br>
   <br>
-
   <div class="row">
     <div class="col-5">
       Choreography:
@@ -220,7 +195,6 @@
 <div  class="row">
   <div class="col-2">
   <input type="checkbox" [(ngModel)]="theCheckbox">Weak<br>
-  <!-- {{theCheckbox}} -->
 </div>
 <div class="col-5">
   <select #opt (change)="($event)">
@@ -252,9 +226,6 @@
     <br>
     <input class="form-control" type="text" placeholder={{counterExample}} readonly>
   </div>
-
-
-
 </div>
 </div>
  <div class="modal fade" id="ChooseRepo" role="dialog">
@@ -265,32 +236,45 @@
           </div>
           <div class="modal-body">
             <!-- REPOSITORY -->
-            <div *ngIf="controlloRepo==true"class="row">
-              <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="AllRepoInfo(repo.id)" >
+            
+            <div *ngIf="controlloRepo==true">
+                <div class="row" style="margin-left:10px">
+                  REPOSITORY
+                </div>
+                <div  class="row" style="margin-left:10px">
+
+                <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="AllRepoInfo(repo.id)" >
                   <h4 class="card2Write" style="cursor:pointer;">
                       <b>{{repo?.repositoryName}}</b> </h4>
+                </div>
               </div>
-            
-              
-             
-      
-          </div>
+            </div>
           <!-- FOLDER E FILE -->
           <div *ngIf="controlloFoldandFile==true">
-          <div  class="row">
-            <label>FOLDER:</label>
+              <div class="row"style="margin-left:10px">FOLDER</div>
+
+          <div  class="row" style="margin-left:10px">
             <div class="card2 col-2 display" *ngFor="let fold of allFolder; let i=index;" (click)="AllFolderInfo(fold.id)" >
                 <h4 class="card2Write" style="cursor:pointer;">
-                    <b>{{fold?.folderName}}</b> </h4>
-                    
+                    <b>{{fold?.folderName}}</b>
+                </h4>
             </div>
+            <div *ngIf="allFolder==0"><br>
+              No Folder inside this Repository</div>
           </div>
-            <div class="row">
-                <label>FILE:</label>
+          <br>
+          <hr>
+          <br>
+          <div class="row" style="margin-left:10px">FILE</div>
+            <div class="row" style="margin-left:10px">
+               
+                <br>
+                <br>
               <div class="card2 col-2 display" *ngFor="let file of allFile; let i=index;" (click)="chooseVers(file.id)"  >
                   <h4 class="card2Write" style="cursor:pointer;">
                       <b>{{file?.originalName}}</b> </h4>
               </div>
+              <div *ngIf="allFile==0"><br>No Folder inside this Repository</div>
       
           </div>
         </div>
@@ -300,14 +284,18 @@
               <h4 class="card2Write" style="cursor:pointer;">
                   <b>{{file?.originalName}}</b> </h4>
           </div>
-  
       </div>
-      <div *ngIf="controlloVers==true" class="row">
+
+      <div *ngIf="controlloVers==true">
+          <div class="row"style="margin-left:10px">VERSION</div>
+          <br>
+          <div  class="row" style="margin-left:10px">
           <div class="card2 col-2 display" *ngFor="let vers of finalVersion; let i=index;" (click)="anteprimaFile(vers)" >
-              <h4 class="card2Write" style="cursor:pointer;">
-              <b>{{vers}}</b> </h4>
+            <h4 class="card2Write" style="cursor:pointer;">
+              <b>V.{{vers}}</b>
+            </h4>
           </div>
-  
+        </div>
       </div>
 
       
@@ -315,9 +303,19 @@
   <br>
   <hr>
   <br>
+  <div class="row"style="margin-left:5px">Preview of {{vers.originalName}} model <br>
+    version n.{{versione}}
+  </div>
+  <br><br>
     <app-diagram [url]="diagramUrlA" ></app-diagram>
 </div>
+<br>
+
 <div *ngIf="vers.fileType=='choreography'&& controlloAnteprima==true">
+  <hr><br>
+    <div class="row"style="margin-left:5px">Preview of {{vers.originalName}} model <br>
+      version n.{{versione}}
+    </div><br><br>
     <app-diagram-chor [url]="diagramUrlChorA" ></app-diagram-chor>
 </div>
 
