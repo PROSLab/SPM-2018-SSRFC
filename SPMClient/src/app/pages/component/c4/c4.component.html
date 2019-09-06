@@ -134,7 +134,7 @@
         <br>
 
           <label>
-              <button data-toggle="modal" (click)="getAllRepos()"  data-target="#ChooseRepo">Import file from Repository</button><br><b>{{fileSelezionatoChor}}</b>
+              <button data-toggle="modal" (click)="getAllReposChor()"  data-target="#ChooseRepo">Import file from Repository</button><br><b>{{fileSelezionatoChor}}</b>
             </label>
       </div>
 
@@ -234,7 +234,7 @@
           <div class="modal-header">
               <h4 class="modal-title">Choose File to Import</h4>
           </div>
-          <div class="modal-body">
+          <div *ngIf="controllocollaboration==true"class="modal-body">
             <!-- REPOSITORY -->
             
             <div *ngIf="controlloRepo==true">
@@ -270,7 +270,7 @@
                
                 <br>
                 <br>
-              <div class="card2 col-2 display" *ngFor="let file of allFile; let i=index;" (click)="chooseVers(file.id)"  >
+              <div class="card2 col-2 display" *ngFor="let file of allFileColl; let i=index;" (click)="chooseVers(file.id)"  >
                   <h4 class="card2Write" style="cursor:pointer;">
                       <b>{{file?.originalName}}</b> </h4>
               </div>
@@ -280,7 +280,7 @@
         </div>
         <!-- SOLO FILES DENTRO A FOLDER CLICCATA -->
         <div *ngIf="controlloFile==true" class="row">
-          <div class="card2 col-2 display" *ngFor="let file of allFileFold; let i=index;" (click)="chooseVers(file.id)"  >
+          <div class="card2 col-2 display" *ngFor="let file of allFileFoldColl; let i=index;" (click)="chooseVers(file.id)"  >
               <h4 class="card2Write" style="cursor:pointer;">
                   <b>{{file?.originalName}}</b> </h4>
           </div>
@@ -321,7 +321,93 @@
 
  
           </div>
-         
+          <div *ngIf="controllocollaboration==false"class="modal-body">
+            <!-- REPOSITORY -->
+            
+            <div *ngIf="controlloRepo==true">
+                <div class="row" style="margin-left:10px">
+                  REPOSITORY
+                </div>
+                <div  class="row" style="margin-left:10px">
+
+                <div class="card2 col-2 display" *ngFor="let repo of repos; let i=index;" (click)="AllRepoInfo(repo.id)" >
+                  <h4 class="card2Write" style="cursor:pointer;">
+                      <b>{{repo?.repositoryName}}</b> </h4>
+                </div>
+              </div>
+            </div>
+          <!-- FOLDER E FILE -->
+          <div *ngIf="controlloFoldandFile==true">
+              <div class="row"style="margin-left:10px">FOLDER</div>
+
+          <div  class="row" style="margin-left:10px">
+            <div class="card2 col-2 display" *ngFor="let fold of allFolder; let i=index;" (click)="AllFolderInfo(fold.id)" >
+                <h4 class="card2Write" style="cursor:pointer;">
+                    <b>{{fold?.folderName}}</b>
+                </h4>
+            </div>
+            <div *ngIf="allFolder==0"><br>
+              No Folder inside this Repository</div>
+          </div>
+          <br>
+          <hr>
+          <br>
+          <div class="row" style="margin-left:10px">FILE</div>
+            <div class="row" style="margin-left:10px">
+               
+                <br>
+                <br>
+              <div class="card2 col-2 display" *ngFor="let file of allFileChor; let i=index;" (click)="chooseVers(file.id)"  >
+                  <h4 class="card2Write" style="cursor:pointer;">
+                      <b>{{file?.originalName}}</b> </h4>
+              </div>
+              <div *ngIf="allFile==0"><br>No Folder inside this Repository</div>
+      
+          </div>
+        </div>
+        <!-- SOLO FILES DENTRO A FOLDER CLICCATA -->
+        <div *ngIf="controlloFile==true" class="row">
+          <div class="card2 col-2 display" *ngFor="let file of allFileFoldChor; let i=index;" (click)="chooseVers(file.id)"  >
+              <h4 class="card2Write" style="cursor:pointer;">
+                  <b>{{file?.originalName}}</b> </h4>
+          </div>
+      </div>
+
+      <div *ngIf="controlloVers==true">
+          <div class="row"style="margin-left:10px">VERSION</div>
+          <br>
+          <div  class="row" style="margin-left:10px">
+          <div class="card2 col-2 display" *ngFor="let vers of finalVersion; let i=index;" (click)="anteprimaFile(vers)" >
+            <h4 class="card2Write" style="cursor:pointer;">
+              <b>V.{{vers}}</b>
+            </h4>
+          </div>
+        </div>
+      </div>
+
+      
+<div *ngIf="vers.fileType=='collaboration'&& controlloAnteprima==true">
+  <br>
+  <hr>
+  <br>
+  <div class="row"style="margin-left:5px">Preview of {{vers.originalName}} model <br>
+    version n.{{versione}}
+  </div>
+  <br><br>
+    <app-diagram [url]="diagramUrlA" ></app-diagram>
+</div>
+<br>
+
+<div *ngIf="vers.fileType=='choreography'&& controlloAnteprima==true">
+  <hr><br>
+    <div class="row"style="margin-left:5px">Preview of {{vers.originalName}} model <br>
+      version n.{{versione}}
+    </div><br><br>
+    <app-diagram-chor [url]="diagramUrlChorA" ></app-diagram-chor>
+</div>
+
+ 
+          </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-danger" *ngIf="controlloRepo==false" (click)="back()" >Back</button>
               <button *ngIf="controlloAnteprima==true" (click)="acceptFile()"type="button" data-dismiss="modal" class="btn btn-danger" >Accept</button>

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Service } from '../../../service/service';
 import { saveAs } from 'file-saver';
 import { subscribeOn } from 'rxjs/operators';
+import { jsonpCallbackContext } from '@angular/common/http/src/module';
 //import { runInThisContext } from 'vm';
 
 declare var cytoscape :any;
@@ -60,6 +61,10 @@ export class C4Component implements OnInit {
   controlloFoldandFile:boolean=false;
   controlloFile:boolean=false;
   versionArray=<any>[];
+  allFileColl=<any>[];
+  allFileChor=<any>[];
+  AllFileFoldColl=<any>[];
+  AllFileFoldChor=<any>[];
   deprecatedVers=<any>[];
   finalVersion=<any>[];
   controlloVers: boolean=false;
@@ -71,6 +76,7 @@ export class C4Component implements OnInit {
 fileSelezionato="Nessun file è stato selezionato"
   versione: any;
   fileSelezionatoChor="Nessun file è stato selezionato"
+  controllocollaboration:boolean=false;
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service) {
 
     
@@ -642,8 +648,24 @@ paginaPrima()
 {
   this.diagram=false;
 }
-  getAllRepos() {
+getAllReposChor() {
+  this.controllocollaboration=false  
+  this.controlloRepo=true;
+  this.controlloFile=false;
+  this.controlloFoldandFile=false;
+  this.controlloVers=false;
+  this.controlloAnteprima=false;
+
+  this.service.getAllRepo().subscribe(data => {
     
+    this.repos = JSON.parse(data)
+    this.controlloRepo=true;
+  }, error => {
+    this.errorMessage = <any>error
+  });
+}
+  getAllRepos() {
+    this.controllocollaboration=true
     this.controlloRepo=true;
     this.controlloFile=false;
     this.controlloFoldandFile=false;
@@ -681,9 +703,23 @@ paginaPrima()
 
     this.service.getFile(id)
     .subscribe(data => {
-     this.allFile = JSON.parse(data)
+      var file =JSON.parse(data)
     
-
+      var j=0;
+      var z=0;
+    for(let i=0;i<file.length;i++){
+     
+if (file[i].fileType=="collaboration"){
+  
+  this.allFileColl[j]=file[i]
+  j++
+}
+else{
+  this.allFileChor[z]=file[i]
+  z++
+}
+    }
+ 
     }
     
     
@@ -762,7 +798,23 @@ back(){
     this.controlloFoldandFile=false;
     this.service.getFile(this.idRepo,id)
     .subscribe(data => {
-     this.allFileFold = JSON.parse(data)
+      var file =JSON.parse(data)
+    
+      var j=0;
+      var z=0;
+    for(let i=0;i<file.length;i++){
+     
+if (file[i].fileType=="collaboration"){
+  
+  this.AllFileFoldColl[j]=file[i]
+  j++
+}
+else{
+  this.AllFileFoldChor[z]=file[i]
+  z++
+}
+    }
+   
      this.controlloFile=true
 
      /* console.log(this.allFile) */
