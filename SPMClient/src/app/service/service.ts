@@ -124,7 +124,16 @@ export class Service {
       );
   }
  
+parseModelCheck(fileToUpload,fileToUpload2): Observable<any> {
+  const formData: FormData = new FormData();
+    formData.append('collaboration', fileToUpload)
+    formData.append('choreography', fileToUpload2)
 
+    return this.http.post("http://localhost:8080/api/modelcheck/test_parsemodel",formData,{responseType:'text'})
+     .pipe(
+              catchError(this.handleError)
+     );
+}
   
   submitC4(fileToUpload,fileToUpload2): Observable<any> {
    
