@@ -9,7 +9,7 @@ import { Modeler } from "../../../bpmn-js/bpmn-js";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Viewer} from "bpmn-js/lib/Viewer.js"
 declare var require: any
-
+export var xml;
 @Component({
   selector: 'app-file',
   templateUrl: './file.component.html',
@@ -90,10 +90,12 @@ export class FileComponent implements OnInit {
   ArrayVersion =<any>[];
   Versionfinal =<any>[];
   VersDeprecated =<any>[];
-  VersionFinal =<any>[];
+ 
   fileToUpload: File;
   fileToUpload2: File;
   Filescelto: any;
+  
+ 
   constructor(private toastr:ToastrService,public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
     this.idRepoSelected = route.snapshot.params.idRepo
     this.idUser = localStorage.getItem("id")
@@ -446,13 +448,14 @@ if(this.controlloFoldandFile==true){
 }
   this.service.getFileSpec(id)
   .subscribe(data => {
+   
    this.Filescelto = (data)
-   console.log(this.vers)
   this.ArrayVersion=[]
   this.Versionfinal=[]
   this.VersDeprecated=[]
+  
    for (var i = 0; i < this.Filescelto.cVersion; i++) {
-    this.ArrayVersion[i] = this.Filescelto.cVersion - (this.ver.cVersion - i) + 1
+    this.ArrayVersion[i] = this.Filescelto.cVersion - (this.Filescelto.cVersion - i) + 1
   }
   
   
@@ -462,12 +465,14 @@ if(this.controlloFoldandFile==true){
   }
 
   var j = 0;
-  for (i = 0; i < this.versionArray.length; i++) {
-    if (this.deprecatedVers.indexOf(this.ArrayVersion[i]) == -1) {
-      this.VersionFinal[j] = this.ArrayVersion[i]
+  for (i = 0; i < this.ArrayVersion.length; i++) {
+    if (this.VersDeprecated.indexOf(this.ArrayVersion[i]) == -1) {
+      this.Versionfinal[j] = this.ArrayVersion[i]
       j++
     }
+    
   }
+  
 
   }, error => {
     this.errorMessage = <any>error
@@ -477,7 +482,7 @@ anteprimaFile(vers){
   this.versione=vers
   this.controlloAnteprima=true;
  this.diagramUrlA="http://localhost:8080/api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + vers
- console.log(this.diagramUrlA)
+ 
 }
 back1(){
   if (this.controlloVers==true && this.sonoDaFile==false){
@@ -545,16 +550,30 @@ this.service.createNewVersion(this.idFile, this.vers)
       window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
   }
 mergeFile(){
+  console.log(this.Filescelto.id)
   this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload=new File([response.toLocaleString()],this.Filescelto.originalName);
-} )
-  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
-  this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
+ 
 } )
 
+if (this.vers==undefined){
+  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.Versionfinal , { responseType: "text" } ).subscribe(response => {
+    this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
+})
+}
+else{
+  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
+  this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);} )
+}
 this.service.merge(this.fileToUpload, this.fileToUpload2)
       .subscribe(data => {
-       data = JSON.parse(data)
+      
+   xml=data
+       if(this.idFolder==undefined ){
+        this.router.navigate(['repositoryID', this.idRepoSelected, ,'editorBPMNCollaboration']);
+      } else{
+        this.router.navigate(['repositoryID', this.idRepoSelected,'folderID',this.idFolder, 'editorBPMNCollaboration']);
+        }
       }, error => {
         this.errorMessage = <any>error
       });

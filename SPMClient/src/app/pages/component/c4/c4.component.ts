@@ -762,7 +762,7 @@ if(this.controlloFoldandFile==true){
       j++
     }
   }
-console.log(this.finalVersion)
+
   }, error => {
     this.errorMessage = <any>error
   });

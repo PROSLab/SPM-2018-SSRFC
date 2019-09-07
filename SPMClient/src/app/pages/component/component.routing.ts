@@ -31,6 +31,10 @@ export const ComponentsRoutes: Routes = [
         path: 'repositoryID/:idRepo/editorBPMNCollaboration',
         component: BpmnComponent
       }, 
+    /*   {    
+        path: 'repositoryID/:idRepo/xml/:xml/editorBPMNCollaboration',
+        component: BpmnComponent
+      },  */
       {    
         path: 'repositoryID/:idRepo/editorBPMNChoreography',
         component: ChoreographyModelComponent
@@ -39,6 +43,10 @@ export const ComponentsRoutes: Routes = [
         path: 'repositoryID/:idRepo/folderID/:idFolder/editorBPMNCollaboration',
         component: BpmnComponent
       },
+     /*  {
+        path: 'repositoryID/:idRepo/folderID/:idFolder/xml/:xml/editorBPMNCollaboration',
+        component: BpmnComponent
+      }, */
       {
         path: 'repositoryID/:idRepo/folderID/:idFolder/editorBPMNChoreography',
         component: ChoreographyModelComponent

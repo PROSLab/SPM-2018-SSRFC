@@ -7,7 +7,7 @@ import { Service } from '../service/service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
-
+import {xml} from '../pages/component/file/file.component'
 
 @Component({
   selector: 'app-root',
@@ -56,17 +56,6 @@ export class BpmnComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
-    if (this.idFile == undefined) {
-      this.title="Creation File"
-      this.createFile()
-    }
-    else {
-      this.getFileSpec()
-      this.load()
-     
-    }
-
     this.modeler = new Modeler({
       container: '#canvas',
       width: '100%',
@@ -86,6 +75,27 @@ export class BpmnComponent implements OnInit {
         parent: '#properties'
       },
     });
+  
+    if (this.idFile == undefined && xml==undefined) {
+      this.title="Creation File"
+      console.log("sono in creazione")
+      this.createFile()
+      
+    }
+    else if (xml!=undefined) {
+    console.log(xml)
+      this.modeler.importXML(xml, this.handleError);
+    setTimeout(()=>{this.infos();
+
+    } ,100);
+    }else{
+     
+      this.getFileSpec()
+      this.load()
+     
+    }
+
+
   }
 
   handleError(err: any) {
@@ -230,6 +240,8 @@ this.validity=false;
 
   load(): void {
    
+
+  
     const url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version
     this.http.get(url, {
       headers: {}, responseType: 'text'
@@ -244,6 +256,7 @@ this.validity=false;
         },
         this.handleError
       );
+   
   }
 
 
