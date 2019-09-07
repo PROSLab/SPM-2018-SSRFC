@@ -556,15 +556,16 @@ mergeFile(){
  
 } )
 
-if (this.vers==undefined){
-  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.Versionfinal , { responseType: "text" } ).subscribe(response => {
-    this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
-})
-}
-else{
+
+
   this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);} )
-}
+
+
+
+
+setTimeout(()=>{
+  console.log(this.fileToUpload,this.fileToUpload2)
 this.service.merge(this.fileToUpload, this.fileToUpload2)
       .subscribe(data => {
       
@@ -577,7 +578,7 @@ this.service.merge(this.fileToUpload, this.fileToUpload2)
       }, error => {
         this.errorMessage = <any>error
       });
-
+    } ,100);
 }
 
 
