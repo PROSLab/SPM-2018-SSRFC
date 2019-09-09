@@ -230,16 +230,37 @@ this.validity=false;
   }
 
   createFile() {
-
-    const url = '/assets/bpmn/initial.bpmn';
+    
+     var ciao =  "'_"+ Math.random().toString(36).substr(2, 9)+"'"
+     
+   var idprocess=
+    console.log(ciao)
+  
+    
+    var xml=
+    '<?xml version="1.0" encoding="UTF-8"?>' +
+    '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="12.15.2" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-36d76cc9-50bb-44ca-b6ec-ef4e78f99048" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">' +
+                          
+      '<process id='+ciao+' isExecutable="false">' +
+       
+      '</process>' +
+     ' <bpmndi:BPMNDiagram >'+
+     ' <bpmndi:BPMNPlane >'+
+        ' <bpmndi:BPMNShape >'+
+        ' </bpmndi:BPMNShape>'+
+ '     </bpmndi:BPMNPlane>'+
+  ' </bpmndi:BPMNDiagram>'+
+  '</definitions>'
+  
+   /*  const url = '/assets/bpmn/initial.bpmn';
     this.http.get(url, {
       headers: {}, responseType: 'text'
     }).subscribe(
-      (x: any) => {
-        this.bodyFile = x
-        this.modeler.importXML(x, this.handleError)
-      },
-    );
+      (x: any) => { */
+      /*   this.bodyFile = x */
+        this.modeler.importXML(xml, this.handleError)
+      /* },
+    ); */
   }
 
   load(): void {
