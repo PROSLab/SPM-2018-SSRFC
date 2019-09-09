@@ -214,7 +214,8 @@ public class TestXML {
 			if (mf.getNodeType() == Node.ELEMENT_NODE) {
 				Element el = (Element) mf;
 				
-				if(el.getAttribute("targetRef").equals(participantId)) {
+				if(el.getAttribute("targetRef").equals(participantId) 
+				|| el.getAttribute("sourceRef").equals(participantId)) {
 					msgflowsRes.add(mf);
 				}
 			}
@@ -228,11 +229,14 @@ public class TestXML {
 			if (mf.getNodeType() == Node.ELEMENT_NODE) {
 				Element el = (Element) mf;
 				
-				if(el.getAttribute("sourceRef").equals(participantIdTake)) {
+				if(el.getAttribute("sourceRef").equals(participantIdTake)
+				|| el.getAttribute("targetRef").equals(participantIdTake)) {
 					msgflowsTake.add(mf);
 				}
 			}
 		}
+		
+		// CONTROLLARE IPOTESI CI SONO GLI STESSI MESSAGE FLOW
 		
 		msgflowsRes.forEach(mres -> {
 			Element eMres = (Element) mres;
@@ -241,11 +245,25 @@ public class TestXML {
 				Element eMtake = (Element) msgflowsTake.get(i);
 				
 				if(eMres.getAttribute("name").equals( eMtake.getAttribute("name") )) {
-					String targetRef = eMtake.getAttribute("targetRef");
 					
-					// modify targetRef value of mres
-					eMres.setAttribute("targetRef", targetRef);
-					setCoordinates(eMres, eMtake);
+					// MESSAGE FLOW "SENDER"
+					if(eMres.getAttribute("targetRef").equals(participantId)
+					&& !eMres.getAttribute("sourceRef").equals(participantId)) {
+						String targetRef = eMtake.getAttribute("targetRef");
+						eMres.setAttribute("targetRef", targetRef);
+						
+						setCoordinates(eMres, eMtake);
+					}
+					
+					// MESSAGE FLOW "RECEIVER"
+					if(!eMres.getAttribute("targetRef").equals(participantId)
+					&& eMres.getAttribute("sourceRef").equals(participantId)) {
+						String sourceRef = eMtake.getAttribute("sourceRef");
+						eMres.setAttribute("sourceRef", sourceRef);
+						
+						setCoordinates(eMtake, eMres);
+					}
+	
 				}
 			}
 		});
