@@ -45,7 +45,7 @@ export class BpmnComponent implements OnInit {
   infomessageSafeness: string;
   infoMsgS: string;
   info: boolean = false;
-
+xml;
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
     this.idRepoSelected = route.snapshot.params.idRepo
@@ -53,9 +53,11 @@ export class BpmnComponent implements OnInit {
     this.version = route.snapshot.params.version
     this.isLogged = service.isLogged;
     this.idFile = route.snapshot.params.idFile
+    
   }
 
   ngOnInit(): void {
+    
     this.modeler = new Modeler({
       container: '#canvas',
       width: '100%',
@@ -83,11 +85,13 @@ export class BpmnComponent implements OnInit {
       
     }
     else if (xml!=undefined) {
-    console.log(xml)
+    
       this.modeler.importXML(xml, this.handleError);
     setTimeout(()=>{this.infos();
-
+     
     } ,100);
+   console.log(xml)
+    
     }else{
      
       this.getFileSpec()
