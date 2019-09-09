@@ -4,7 +4,7 @@ import { Service } from '../../../service/service'
 import { Folder } from '../../../../app/service/model/folder'
 import { Repo } from '../../../service/model/repo';
 import {ToastrService} from 'ngx-toastr'
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Modeler } from "../../../bpmn-js/bpmn-js";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Viewer} from "bpmn-js/lib/Viewer.js"
@@ -94,6 +94,7 @@ export class FileComponent implements OnInit {
   fileToUpload: File;
   fileToUpload2: File;
   Filescelto: any;
+  xml: string;
   
  
   constructor(private toastr:ToastrService,public router: Router, private http: HttpClient, private formBuilder:FormBuilder, private service: Service, private route: ActivatedRoute) {
@@ -256,7 +257,7 @@ error => {
 
 
   ngOnInit() {
-  
+  xml=undefined
    
     this.modifyNameForm=this.formBuilder.group({
       reponame:['',Validators.required]
@@ -550,23 +551,24 @@ this.service.createNewVersion(this.idFile, this.vers)
       window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
   }
 mergeFile(){
-  console.log(this.Filescelto.id)
+
   this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload=new File([response.toLocaleString()],this.Filescelto.originalName);
- 
+ this.xml=response
+
 } )
 
 
 
   this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
-  this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);} )
-
+  this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
+} )
 
 
 
 setTimeout(()=>{
-  console.log(this.fileToUpload,this.fileToUpload2)
-this.service.merge(this.fileToUpload, this.fileToUpload2)
+  
+this.service.merge(this.fileToUpload2, this.fileToUpload)
       .subscribe(data => {
       
    xml=data
@@ -578,7 +580,7 @@ this.service.merge(this.fileToUpload, this.fileToUpload2)
       }, error => {
         this.errorMessage = <any>error
       });
-    } ,100);
+    } ,500);
 }
 
 
