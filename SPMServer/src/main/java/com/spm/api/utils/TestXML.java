@@ -84,7 +84,7 @@ public class TestXML {
 			xmlTake.getDocumentElement().normalize();
 			
 			mergeXml();
-			prettyPrint(xmlRes);
+			//prettyPrint(xmlRes);
 			writeDocToFile(xmlRes, outputFile, false, true);
 		
 		} catch (Exception e) {
@@ -261,6 +261,7 @@ public class TestXML {
 						String sourceRef = eMtake.getAttribute("sourceRef");
 						eMres.setAttribute("sourceRef", sourceRef);
 						
+						setStartCoordinates(eMres, eMtake);
 						setCoordinates(eMtake, eMres);
 					}
 	
@@ -273,6 +274,13 @@ public class TestXML {
 		ArrayList<String> targetXY = getShapeCoords("omgdc:Bounds", getShapeById("bpmndi:BPMNShape", target.getAttribute("targetRef")));
 		Element msgEdge = getShapeById("bpmndi:BPMNEdge", messageFlow.getAttribute("id"));
 		setShapeCoords("omgdi:waypoint", msgEdge, targetXY.get(0), targetXY.get(1));
+	}
+	
+	public static void setStartCoordinates(Element messageFlow, Element target) {
+		ArrayList<String> targetXY = getShapeCoords("omgdc:Bounds", getShapeById("bpmndi:BPMNShape", target.getAttribute("sourceRef")));
+		System.out.println(targetXY);
+		Element msgEdge = getShapeById("bpmndi:BPMNEdge", messageFlow.getAttribute("id"));
+		setStartShapeCoords("omgdi:waypoint", msgEdge, targetXY.get(0), targetXY.get(1));
 	}
 	
 	// tag: "bpmndi:BPMNShape"
@@ -312,11 +320,21 @@ public class TestXML {
 		Element eBound = (Element) nBounds.item(len - 1);
 		
 		Integer xint = Integer.parseInt(x) + 20;
-		//Integer yint = Integer.parseInt(y) + 10;
 		
 		eBound.setAttribute("x", xint.toString());
 		eBound.setAttribute("y", y);
 	}
+	
+	// omgdi:waypoint
+		public static void setStartShapeCoords(String tag, Element shape, String x, String y) {
+			NodeList nBounds = shape.getElementsByTagName(tag);
+			Element eBound = (Element) nBounds.item(0);
+			
+			Integer xint = Integer.parseInt(x) + 20;
+			
+			eBound.setAttribute("x", xint.toString());
+			eBound.setAttribute("y", y);
+		}
 	
 	public static final void prettyPrint(Document xml) throws Exception {
         Transformer tf = TransformerFactory.newInstance().newTransformer();
