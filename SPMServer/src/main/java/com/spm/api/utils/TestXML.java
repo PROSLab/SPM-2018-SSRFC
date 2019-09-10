@@ -3,7 +3,6 @@ package com.spm.api.utils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -23,6 +22,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.spm.api.exceptions.BadRequestException;
 
 public class TestXML {
 	
@@ -89,6 +90,54 @@ public class TestXML {
 		
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	// Must be called after TestXML.init method
+	public static void validate() throws Exception {		
+		NodeList msgFlowRes = xmlRes.getElementsByTagName("messageFlow");
+		NodeList msgFlowTake = xmlTake.getElementsByTagName("messageFlow");
+		
+		int msgLenRes = msgFlowRes.getLength();
+		int msgLenTake = msgFlowTake.getLength();
+		
+		// Compare if the two files have same number of messageFlow
+		if( msgLenRes != msgLenTake ) {
+			 throw new BadRequestException("Models not have same number of message flows");
+		}
+		
+		// Compare if each name of first file is defined in the second file
+		for (int i = 0; i < msgLenRes; i++) {
+			Node nRes = msgFlowRes.item(i);
+			String nResName = ((Element) nRes).getAttribute("name");
+			
+			for (int j = 0; j < msgLenTake; j++) {
+				Node nTake = msgFlowTake.item(j);
+				String nTakeName = ((Element) nTake).getAttribute("name");
+				
+				if( nResName.equals( nTakeName ) ) break;
+				
+				if(j == msgLenTake - 1) {
+					throw new BadRequestException("There is a message flow name in first model that not match the second model");
+				}
+			}
+		}
+		
+		// Compare if each name of second file is defined in the first file
+		for (int i = 0; i < msgLenTake; i++) {
+			Node nTake = msgFlowTake.item(i);
+			String nTakeName = ((Element) nTake).getAttribute("name");
+			
+			for (int j = 0; j < msgLenRes; j++) {
+				Node nRes = msgFlowRes.item(j);
+				String nResName = ((Element) nRes).getAttribute("name");
+				
+				if( nTakeName.equals( nResName ) ) break;
+				
+				if(j == msgLenRes - 1) {
+					throw new BadRequestException("There is a message flow name in second model that not match the first model");
+				}
+			}
 		}
 	}
 	

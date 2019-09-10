@@ -25,6 +25,7 @@ import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import com.spm.api.exceptions.BadRequestException;
 import com.spm.api.utils.Choreography;
 import com.spm.api.utils.ChoreographyModelParser;
 import com.spm.api.utils.Collaboration;
@@ -349,11 +350,19 @@ public class ModelCheckHandler {
 					
 					TestXML.init(senderFilePart, receiverFilePart, merge);
 					
+					try {
+						TestXML.validate();
+					} catch (Exception e) {
+						e.printStackTrace();
+						return Mono.error(new BadRequestException(e.getMessage()));
+					}
+					
 					String path = System.getProperty("java.io.tmpdir") + File.separator + merge.getName();
 					Resource resource = new FileSystemResource(path);
 					
 					return Responses.okFile(resource, merge);
 				})
+				.onErrorResume(BadRequestException.class, Responses::badRequest)
 				.onErrorResume(Exception.class, Responses::internalServerError);
 	}
 	
