@@ -73,13 +73,13 @@ public class TestXML {
 		// Compare if each name of first file is defined in the second file
 		for (int i = 0; i < msgLenRes; i++) {
 			Node nRes = msgFlowRes.item(i);
-			String nResName = ((Element) nRes).getAttribute("name");
+			String nResName = ((Element) nRes).getAttribute("name").replaceAll("\\s+","");
 			String nResSource = ((Element) nRes).getAttribute("sourceRef");
 			String nResTarget = ((Element) nRes).getAttribute("targetRef");
 			
 			for (int j = 0; j < msgLenTake; j++) {
 				Node nTake = msgFlowTake.item(j);
-				String nTakeName = ((Element) nTake).getAttribute("name");
+				String nTakeName = ((Element) nTake).getAttribute("name").replaceAll("\\s+","");
 				
 				if( nResName.equals( nTakeName ) ) {
 					String nTakeSource = ((Element) nTake).getAttribute("sourceRef");
@@ -108,13 +108,13 @@ public class TestXML {
 		// Compare if each name of second file is defined in the first file
 		for (int i = 0; i < msgLenTake; i++) {
 			Node nTake = msgFlowTake.item(i);
-			String nTakeName = ((Element) nTake).getAttribute("name");
+			String nTakeName = ((Element) nTake).getAttribute("name").replaceAll("\\s+","");
 			String nTakeSource = ((Element) nTake).getAttribute("sourceRef");
 			String nTakeTarget = ((Element) nTake).getAttribute("targetRef");
 			
 			for (int j = 0; j < msgLenRes; j++) {
 				Node nRes = msgFlowRes.item(j);
-				String nResName = ((Element) nRes).getAttribute("name");
+				String nResName = ((Element) nRes).getAttribute("name").replaceAll("\\s+","");
 				
 				if( nTakeName.equals( nResName ) ) {
 					String nResSource = ((Element) nRes).getAttribute("sourceRef");
@@ -277,8 +277,10 @@ public class TestXML {
 			
 			for(int i = 0; i < msgflowsTake.size(); i++) {
 				Element eMtake = (Element) msgflowsTake.get(i);
+				String eMresName = eMres.getAttribute("name").replaceAll("\\s+","");
+				String eMtakeName = eMtake.getAttribute("name").replaceAll("\\s+","");
 				
-				if(eMres.getAttribute("name").equals( eMtake.getAttribute("name") )) {
+				if(eMresName.equals(eMtakeName)) {
 					
 					// MESSAGE FLOW "SENDER"
 					if(eMres.getAttribute("targetRef").equals(participantId)
