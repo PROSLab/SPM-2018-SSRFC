@@ -23,8 +23,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.spm.api.exceptions.BadRequestException;
-
 public class TestXML {
 	
 	public static Document xmlRes;
@@ -32,69 +30,35 @@ public class TestXML {
 	public static String participantId;
 	public static String participantIdTake;
 
-	/*public static void main(String[] args) {
-		
-		try {
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			File file1 = new File(classLoader.getResource("Sender.bpmn").getFile());
-			File file2 = new File(classLoader.getResource("receiver.bpmn").getFile());
-			
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder;
-			dBuilder = dbFactory.newDocumentBuilder();
-			
-			xmlRes = dBuilder.parse(file1);
-			xmlRes.getDocumentElement().normalize();
-			
-			DocumentBuilderFactory dbFactory2 = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder2;
-			dBuilder2 = dbFactory2.newDocumentBuilder();
-			
-			xmlTake = dBuilder2.parse(file2);
-			xmlTake.getDocumentElement().normalize();
-			
-			mergeXml();
-			prettyPrint(xmlRes);
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}*/
 	
-	public static void init(FilePart sender, FilePart receiver, File outputFile) {
+	public static void init(FilePart sender, FilePart receiver/*, File outputFile*/) throws Exception {
+		String tempDir = System.getProperty("java.io.tmpdir");
+		File file1 = File.createTempFile("sender", ".xml", new File(tempDir));
+		File file2 = File.createTempFile("receiver", ".xml", new File(tempDir));
+		sender.transferTo( file1 );
+		receiver.transferTo( file2 );
 		
-		try {
-			String tempDir = System.getProperty("java.io.tmpdir");
-			File file1 = File.createTempFile("sender", ".xml", new File(tempDir));
-			File file2 = File.createTempFile("receiver", ".xml", new File(tempDir));
-			sender.transferTo( file1 );
-			receiver.transferTo( file2 );
-			
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder;
-			dBuilder = dbFactory.newDocumentBuilder();
-			
-			xmlRes = dBuilder.parse(file1);
-			xmlRes.getDocumentElement().normalize();
-			
-			DocumentBuilderFactory dbFactory2 = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder2;
-			dBuilder2 = dbFactory2.newDocumentBuilder();
-			
-			xmlTake = dBuilder2.parse(file2);
-			xmlTake.getDocumentElement().normalize();
-			
-			mergeXml();
-			//prettyPrint(xmlRes);
-			writeDocToFile(xmlRes, outputFile, false, true);
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder;
+		dBuilder = dbFactory.newDocumentBuilder();
 		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		xmlRes = dBuilder.parse(file1);
+		xmlRes.getDocumentElement().normalize();
+		
+		DocumentBuilderFactory dbFactory2 = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder2;
+		dBuilder2 = dbFactory2.newDocumentBuilder();
+		
+		xmlTake = dBuilder2.parse(file2);
+		xmlTake.getDocumentElement().normalize();	
+	}
+	
+	public static void writeOutputFile (File outputFile) {
+		writeDocToFile(xmlRes, outputFile, false, true);
 	}
 	
 	// Must be called after TestXML.init method
-	public static void validate() throws Exception {		
+	private static void validate() throws Exception {		
 		NodeList msgFlowRes = xmlRes.getElementsByTagName("messageFlow");
 		NodeList msgFlowTake = xmlTake.getElementsByTagName("messageFlow");
 		
@@ -103,22 +67,40 @@ public class TestXML {
 		
 		// Compare if the two files have same number of messageFlow
 		if( msgLenRes != msgLenTake ) {
-			 throw new BadRequestException("Models not have same number of message flows");
+			 throw new Exception("Models not have same number of message flows");
 		}
 		
 		// Compare if each name of first file is defined in the second file
 		for (int i = 0; i < msgLenRes; i++) {
 			Node nRes = msgFlowRes.item(i);
 			String nResName = ((Element) nRes).getAttribute("name");
+			String nResSource = ((Element) nRes).getAttribute("sourceRef");
+			String nResTarget = ((Element) nRes).getAttribute("targetRef");
 			
 			for (int j = 0; j < msgLenTake; j++) {
 				Node nTake = msgFlowTake.item(j);
 				String nTakeName = ((Element) nTake).getAttribute("name");
 				
-				if( nResName.equals( nTakeName ) ) break;
+				if( nResName.equals( nTakeName ) ) {
+					String nTakeSource = ((Element) nTake).getAttribute("sourceRef");
+					String nTakeTarget = ((Element) nTake).getAttribute("targetRef");
+					
+					// nRes is receiver and nTake is sender
+					if(nResSource.equals(participantId) && nTakeTarget.equals(participantIdTake)) { 
+						// it's ok!
+						break;
+					}
+					// nRes is sender and nTake is receiver
+					if(nResTarget.equals(participantId) && nTakeSource.equals(participantIdTake)) { 
+						// it's ok!
+						break;
+					}
+					
+					throw new Exception("There is a message flow in first model sender/receiver that not match the second model message flow receiver/sender");
+				}
 				
 				if(j == msgLenTake - 1) {
-					throw new BadRequestException("There is a message flow name in first model that not match the second model");
+					throw new Exception("There is a message flow name in first model that not match the second model");
 				}
 			}
 		}
@@ -127,21 +109,39 @@ public class TestXML {
 		for (int i = 0; i < msgLenTake; i++) {
 			Node nTake = msgFlowTake.item(i);
 			String nTakeName = ((Element) nTake).getAttribute("name");
+			String nTakeSource = ((Element) nTake).getAttribute("sourceRef");
+			String nTakeTarget = ((Element) nTake).getAttribute("targetRef");
 			
 			for (int j = 0; j < msgLenRes; j++) {
 				Node nRes = msgFlowRes.item(j);
 				String nResName = ((Element) nRes).getAttribute("name");
 				
-				if( nTakeName.equals( nResName ) ) break;
+				if( nTakeName.equals( nResName ) ) {
+					String nResSource = ((Element) nRes).getAttribute("sourceRef");
+					String nResTarget = ((Element) nRes).getAttribute("targetRef");
+				
+					// nTake is receiver and nRes is sender
+					if(nTakeSource.equals(participantIdTake) && nResTarget.equals(participantId)) { 
+						// it's ok!
+						break;
+					}
+					// nTake is sender and nRes is receiver
+					if(nTakeTarget.equals(participantIdTake) && nResSource.equals(participantId)) { 
+						// it's ok!
+						break;
+					}
+					
+					throw new Exception("There is a message flow in second model sender/receiver that not match the first model message flow receiver/sender");
+				}
 				
 				if(j == msgLenRes - 1) {
-					throw new BadRequestException("There is a message flow name in second model that not match the first model");
+					throw new Exception("There is a message flow name in second model that not match the first model");
 				}
 			}
 		}
 	}
 	
-	static void mergeXml() throws Exception {
+	public static void mergeXml() throws Exception {
 		// find empty process tags
 		NodeList nProcess = xmlRes.getElementsByTagName("process");
 		
@@ -211,26 +211,7 @@ public class TestXML {
 				}
 			}
 		}
-		
-		/*
-		// Get first BPMNEdge
-		Element edgeFirst = (Element) xmlRes.getElementsByTagName("bpmndi:BPMNEdge").item(0);
-		// Get last BPMNEdge
-		int edgesLen = xmlRes.getElementsByTagName("bpmndi:BPMNEdge").getLength();
-		Element edgeLast = (Element) xmlRes.getElementsByTagName("bpmndi:BPMNEdge").item( edgesLen - 1 );
-		
-		ArrayList<Node> shapes = getAllShapes();
-		ArrayList<Node> edges = getAllEdges();
-		
-		shapes.forEach(s -> {
-			edgeFirst.getParentNode().insertBefore(xmlRes.importNode(s, true), edgeFirst.getNextSibling());
-		});
-		
-		edges.forEach(e -> {
-			edgeLast.appendChild(xmlRes.importNode(e, true));
-		});
-		*/
-		
+
 		ArrayList<Node> shapes = getAllShapes();
 		ArrayList<Node> edges = getAllEdges();
 		
@@ -243,6 +224,10 @@ public class TestXML {
 		edges.forEach(e -> {
 			edgeFirst.getParentNode().insertBefore(xmlRes.importNode(e, true), edgeFirst.getNextSibling());
 		});
+		
+
+		// Validate the models before connect messageFlows
+		validate();
 		
 		// Connect messageFlows
 		connectMessageFlows();
@@ -375,15 +360,15 @@ public class TestXML {
 	}
 	
 	// omgdi:waypoint
-		public static void setStartShapeCoords(String tag, Element shape, String x, String y) {
-			NodeList nBounds = shape.getElementsByTagName(tag);
-			Element eBound = (Element) nBounds.item(0);
-			
-			Integer xint = Integer.parseInt(x) + 20;
-			
-			eBound.setAttribute("x", xint.toString());
-			eBound.setAttribute("y", y);
-		}
+	public static void setStartShapeCoords(String tag, Element shape, String x, String y) {
+		NodeList nBounds = shape.getElementsByTagName(tag);
+		Element eBound = (Element) nBounds.item(0);
+		
+		Integer xint = Integer.parseInt(x) + 20;
+		
+		eBound.setAttribute("x", xint.toString());
+		eBound.setAttribute("y", y);
+	}
 	
 	public static final void prettyPrint(Document xml) throws Exception {
         Transformer tf = TransformerFactory.newInstance().newTransformer();

@@ -348,13 +348,13 @@ public class ModelCheckHandler {
 						return Mono.error(new Exception(e.getMessage()));
 					}
 					
-					TestXML.init(senderFilePart, receiverFilePart, merge);
-					
 					try {
-						TestXML.validate();
+						TestXML.init(senderFilePart, receiverFilePart/*, merge*/);
+						TestXML.mergeXml();
+						TestXML.writeOutputFile(merge);
+						
 					} catch (Exception e) {
-						e.printStackTrace();
-						return Mono.error(new BadRequestException(e.getMessage()));
+						return Mono.error( new BadRequestException(e.getMessage()) );
 					}
 					
 					String path = System.getProperty("java.io.tmpdir") + File.separator + merge.getName();
