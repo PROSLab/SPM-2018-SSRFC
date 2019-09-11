@@ -171,7 +171,7 @@ merge(fileToUpload,fileToUpload2): Observable<any> {
   
       return this.http.post("http://localhost:8080/api/modelcheck/mergemodel",formData,{responseType:'text'})
        .pipe(
-                catchError(this.handleError)
+                
        );
    }
 

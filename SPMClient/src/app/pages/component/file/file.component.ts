@@ -558,11 +558,19 @@ mergeFile(){
 
 } )
 
-
-
+if (this.vers==undefined)
+{
+  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.finalVersion , { responseType: "text" } ).subscribe(response => {
+    this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
+  } )
+}else{
   this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
-  this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
-} )
+    this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
+  } )
+
+}
+
+
 
 
 
@@ -573,12 +581,14 @@ this.service.merge(this.fileToUpload2, this.fileToUpload)
       
    xml=data
        if(this.idFolder==undefined ){
-        this.router.navigate(['repositoryID', this.idRepoSelected, ,'editorBPMNCollaboration']);
+         console.log(this.idRepoSelected)
+        this.router.navigate(['repositoryID', this.idRepoSelected,'editorBPMNCollaboration']);
       } else{
         this.router.navigate(['repositoryID', this.idRepoSelected,'folderID',this.idFolder, 'editorBPMNCollaboration']);
         }
       }, error => {
-        this.errorMessage = <any>error
+        
+        this.toastr.error(error.error)
       });
     } ,500);
 }
@@ -711,6 +721,7 @@ this.service.merge(this.fileToUpload2, this.fileToUpload)
   }
 
   sendToEditor(v) {
+    xml=undefined
     if(this.idFolder==undefined){
       if(this.file.fileType == "collaboration"){
       this.router.navigate(['repositoryID',this.idRepoSelected,'fileID',this.idFile,'editorBPMNCollaboration',v]);
