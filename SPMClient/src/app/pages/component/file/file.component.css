@@ -34,10 +34,13 @@
     margin:5px;
     border-radius: 5px;
   }
+  .modal-dialog {
+    margin: 0;
+  }
   .modal-content{
     width: 200%;
-  
-}
+    margin-left: 50%;
+  }
 
   .card2:hover {
     box-shadow: 0 8px 6px 0 rgba(59, 59, 59, 0.527);
