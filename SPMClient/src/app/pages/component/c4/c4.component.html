@@ -274,7 +274,7 @@
                   <h4 class="card2Write" style="cursor:pointer;">
                       <b>{{file?.originalName}}</b> </h4>
               </div>
-              <div *ngIf="allFile==0"><br>No Folder inside this Repository</div>
+              <div *ngIf="allFileColl==0"><br>No File inside this Repository</div>
       
           </div>
         </div>
@@ -284,6 +284,7 @@
               <h4 class="card2Write" style="cursor:pointer;">
                   <b>{{file?.originalName}}</b> </h4>
           </div>
+          <div *ngIf="allFileFoldColl==0"><br>No File inside this Repository</div>
       </div>
 
       <div *ngIf="controlloVers==true">
