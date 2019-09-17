@@ -1,7 +1,11 @@
-.modal-content{
-    width: 200%;
-  
-}
+  .modal-content{
+      width: 200%;
+      margin-left: 50%;
+  }
+
+  .modal-dialog {
+    margin: 0;
+  }
 
 
  ngx-cytoscape {
