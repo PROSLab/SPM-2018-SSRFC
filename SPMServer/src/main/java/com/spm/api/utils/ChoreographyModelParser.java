@@ -44,6 +44,7 @@ public class ChoreographyModelParser {
 	private ArrayList<String> names;
 	
 	public ArrayList<String> init(InputStream chor, File outputFile) {
+		names = new ArrayList<String>();
 		adj = new HashMap<String, ArrayList<Node>>();
 		modelInstance = Bpmn.readModelFromStream(chor);
 		choreographyGraph = Utils.GenerateGraph("Choreography"); // NEW
