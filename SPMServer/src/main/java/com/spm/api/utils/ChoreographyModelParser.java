@@ -144,6 +144,7 @@ public class ChoreographyModelParser {
 	}
 	
 	private void buildGraph(ModelElementInstance currentElement, String idNextNode) {
+		System.out.println("HERE I AM");
 		if(currentElement instanceof EventBasedGateway || checkNodeChor(currentElement) == true) {
 			ChoreographyTask currNodeTask = new ChoreographyTask((ModelElementInstanceImpl) currentElement, modelInstance);
 			String edgeLabel = null;
@@ -164,9 +165,17 @@ public class ChoreographyModelParser {
 	}
 	
 	private int convertIdToSeqNumber(String id) {
-		if(names.contains(id)) { return names.indexOf(id); }
+		if(names.contains(id)) {
+			System.out.println("THIS IS A MOTHER OF FUCK");
+			System.out.println(names.contains(id));
+			System.out.println(names.indexOf(id));
+			return names.indexOf(id); 
+		}
 		
 		names.add(id);
+		System.out.println("THIS IS A MOTHER OF FUCK THAT ALREADY CONTAINTS");
+		System.out.println(names.contains(id));
+		System.out.println(names.indexOf(id));
 		return names.indexOf(id);
 	}
 	
