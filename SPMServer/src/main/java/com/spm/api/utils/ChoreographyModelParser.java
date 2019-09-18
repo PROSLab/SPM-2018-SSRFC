@@ -41,6 +41,7 @@ public class ChoreographyModelParser {
 	private String idStartNode;
 	private SingleGraph choreographyGraph; // NEW
 	public String choreographyPath; // NEW
+	private ArrayList<String> names;
 	
 	public ArrayList<String> init(InputStream chor, File outputFile) {
 		adj = new HashMap<String, ArrayList<Node>>();
@@ -151,15 +152,22 @@ public class ChoreographyModelParser {
 			}
 			String idCurrentNode = currNodeTask.getId();
 			choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", edgeLabel);
-			choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
+			choreographyGraph.getNode(idNextNode).setAttribute("ui.label", convertIdToSeqNumber(idNextNode));
 			return;
 		}
 		
 		// all other cases
 		String idCurrentNode = ((FlowNode)currentElement).getId();
 		choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", "tau");
-		choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
+		choreographyGraph.getNode(idNextNode).setAttribute("ui.label", convertIdToSeqNumber(idNextNode));
 		
+	}
+	
+	private int convertIdToSeqNumber(String id) {
+		if(names.contains(id)) { return names.indexOf(id); }
+		
+		names.add(id);
+		return names.indexOf(id);
 	}
 	
 	private boolean checkNodeChor(ModelElementInstance node) {
