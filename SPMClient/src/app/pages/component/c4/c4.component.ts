@@ -530,9 +530,10 @@ fileSelezionato="Nessun file è stato selezionato"
    
     this.service.checkEquivalence(this.weak,this.equivalence,this.collaboration,this.choreography)
   .subscribe(data =>{
- var checkEqui =data
+ var checkEqui =JSON.parse(data)
  console.log(checkEqui)
-
+this.counterExample=checkEqui.counterExample
+this.state=checkEqui.state
 }, error => {
   console.log(error);
 });
@@ -576,15 +577,13 @@ fileSelezionato="Nessun file è stato selezionato"
 
 
       this.toastr.success('Wait a moment please', 'waiting')
-      this.service.parseModelCheck(this.fileToUpload, this.fileToUpload2)
+      this.service.submitC4(this.fileToUpload, this.fileToUpload2)
         .subscribe(data => {
 
-          data = JSON.parse(data)
-          this.collaboration = data.collaboration
-          this.choreography = data.choreography
-          console.log(data)
-
-
+          var mcrl =JSON.parse(data) 
+          this.collaboration = mcrl.collaboration
+          this.choreography = mcrl.choreography
+          console.log(mcrl)
         },
           error => {
             console.log(error)
