@@ -145,7 +145,6 @@ public class ChoreographyModelParser {
 	}
 	
 	private void buildGraph(ModelElementInstance currentElement, String idNextNode) {
-		System.out.println("HERE I AM");
 		if(currentElement instanceof EventBasedGateway || checkNodeChor(currentElement) == true) {
 			ChoreographyTask currNodeTask = new ChoreographyTask((ModelElementInstanceImpl) currentElement, modelInstance);
 			String edgeLabel = null;
@@ -154,29 +153,23 @@ public class ChoreographyModelParser {
 			}
 			String idCurrentNode = currNodeTask.getId();
 			choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", edgeLabel);
-			choreographyGraph.getNode(idNextNode).setAttribute("ui.label", convertIdToSeqNumber(idNextNode));
+			choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
 			return;
 		}
 		
 		// all other cases
 		String idCurrentNode = ((FlowNode)currentElement).getId();
-		choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", "TETTE");
-		choreographyGraph.getNode(idNextNode).setAttribute("ui.label", convertIdToSeqNumber(idNextNode));
+		choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", "tau");
+		choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
 		
 	}
 	
 	private int convertIdToSeqNumber(String id) {
 		if(names.contains(id)) {
-			System.out.println("THIS IS A MOTHER OF FUCK");
-			System.out.println(names.contains(id));
-			System.out.println(names.indexOf(id));
 			return names.indexOf(id); 
 		}
 		
 		names.add(id);
-		System.out.println("THIS IS A MOTHER OF FUCK THAT ALREADY CONTAINTS");
-		System.out.println(names.contains(id));
-		System.out.println(names.indexOf(id));
 		return names.indexOf(id);
 	}
 	
