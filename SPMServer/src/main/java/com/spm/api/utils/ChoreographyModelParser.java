@@ -160,7 +160,7 @@ public class ChoreographyModelParser {
 		
 		// all other cases
 		String idCurrentNode = ((FlowNode)currentElement).getId();
-		choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", "tau");
+		choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", "TETTE");
 		choreographyGraph.getNode(idNextNode).setAttribute("ui.label", convertIdToSeqNumber(idNextNode));
 		
 	}
