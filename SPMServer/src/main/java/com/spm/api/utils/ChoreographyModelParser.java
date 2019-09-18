@@ -151,16 +151,23 @@ public class ChoreographyModelParser {
 			if(currNodeTask.getInitialParticipant() != null && currNodeTask.getParticipantRef() != null && currNodeTask.getRequest() != null) {
 				edgeLabel = currNodeTask.getInitialParticipant().getName()+"->"+currNodeTask.getParticipantRef().getName()+":"+currNodeTask.getRequest().getMessage().getName();
 			}
-			String idCurrentNode = currNodeTask.getId();
-			choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", edgeLabel);
-			choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
+			String idCurrentNode = String.valueOf( convertIdToSeqNumber(currNodeTask.getId()) );
+			String nextNodeID = String.valueOf( convertIdToSeqNumber(idNextNode) );
+			//choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", edgeLabel);
+			//choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
+			choreographyGraph.addEdge(idCurrentNode+"_"+nextNodeID, idCurrentNode, nextNodeID, true).setAttribute("ui.label", edgeLabel);
+			choreographyGraph.getNode(nextNodeID).setAttribute("ui.label", nextNodeID);
+			
 			return;
 		}
 		
 		// all other cases
-		String idCurrentNode = ((FlowNode)currentElement).getId();
-		choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", "tau");
-		choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
+		String idCurrentNode = String.valueOf(convertIdToSeqNumber( ((FlowNode)currentElement).getId() ));
+		String nextNodeID = String.valueOf(convertIdToSeqNumber( idNextNode ));
+		//choreographyGraph.addEdge(idCurrentNode+"_"+idNextNode, idCurrentNode, idNextNode, true).setAttribute("ui.label", "tau");
+		//choreographyGraph.getNode(idNextNode).setAttribute("ui.label", idNextNode);
+		choreographyGraph.addEdge(idCurrentNode+"_"+nextNodeID, idCurrentNode, nextNodeID, true).setAttribute("ui.label", "tau");
+		choreographyGraph.getNode(nextNodeID).setAttribute("ui.label", nextNodeID);
 		
 	}
 	
