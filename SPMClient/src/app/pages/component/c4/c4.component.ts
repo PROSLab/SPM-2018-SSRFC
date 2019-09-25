@@ -533,7 +533,7 @@ fileSelezionato="Nessun file è stato selezionato"
  var checkEqui =JSON.parse(data)
  console.log(checkEqui)
 this.counterExample=checkEqui.counterExample
-this.state=checkEqui.state
+this.state=checkEqui.resultState
 }, error => {
   console.log(error);
 });
