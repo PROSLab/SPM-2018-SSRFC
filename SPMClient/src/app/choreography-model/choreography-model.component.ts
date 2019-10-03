@@ -37,7 +37,7 @@ export class ChoreographyModelComponent implements OnInit {
   messageSoundness: any;
   messageSafeness: string;
   collaboration: any;
-
+  
  
   constructor(private toastr: ToastrService, private http: HttpClient, private service: Service, public router: Router, route: ActivatedRoute) {
     this.folderSelected = route.snapshot.params.idFolder
@@ -67,7 +67,7 @@ export class ChoreographyModelComponent implements OnInit {
     else {
       this.getFileSpec()
       console.log("lo sto modificando")
-      this.load()
+      this.load() 
     }
 
 
@@ -130,16 +130,79 @@ export class ChoreographyModelComponent implements OnInit {
   }
 
   createFile() {
-    const url = '/assets/bpmn/choreographyinitial.bpmn'    
-    this.http.get(url, {
+    /* var xml=
+    '<?xml version="1.0" encoding="UTF-8"?>'+
+    '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="13.6.0" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-6435533c-6dd4-409b-86c1-c182e39313fa" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">' +
+    '<choreography id="sid-a085f3f6-4205-4dd4-b96d-a1cd7ebf5099" isClosed="false">' + 
+       '<participant id="sid-433CA71E-5BC6-425A-AAC5-8D3AA3CC0AB0" name="">' +
+          '<extensionElements>' +
+             '<signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>'+
+          '</extensionElements>' +
+       '</participant>' +
+      '<participant id="sid-7607BADD-0CF4-4370-8BB6-D88897148C33" name="">'+
+          '<extensionElements>' +
+             '<signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>'+
+          '</extensionElements>' +
+       '</participant>' +
+       '<messageFlow id="sid-57cd3215-78aa-40f8-b86d-c455c570ee4b" sourceRef="sid-433CA71E-5BC6-425A-AAC5-8D3AA3CC0AB0" targetRef="sid-7607BADD-0CF4-4370-8BB6-D88897148C33"/>'+
+       '<startEvent id="sid-1B4E942F-16BC-4907-A991-EA5710DF57C9" name="">' +
+          '<extensionElements>' +
+             '<signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>' +
+             '<signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>' +
+          '</extensionElements>' +
+          '<outgoing>sid-0D749C3E-38FF-44FF-BEAB-22B5DBBB89A9</outgoing>' +
+ '</startEvent>' +
+       '<choreographyTask id="sid-1F1BC412-7077-4185-857F-2A21299D2D22" initiatingParticipantRef="sid-433CA71E-5BC6-425A-AAC5-8D3AA3CC0AB0" loopType="None" name="">'+
+          '<extensionElements>' +
+             '<signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>' +
+             '<signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>' +
+          '</extensionElements>'+
+          '<incoming>sid-0D749C3E-38FF-44FF-BEAB-22B5DBBB89A9</incoming>' +
+          '<participantRef>sid-433CA71E-5BC6-425A-AAC5-8D3AA3CC0AB0</participantRef>' +
+          '<participantRef>sid-7607BADD-0CF4-4370-8BB6-D88897148C33</participantRef>' +
+         ' <messageFlowRef>sid-57cd3215-78aa-40f8-b86d-c455c570ee4b</messageFlowRef>' +
+       '</choreographyTask>' +
+       '<sequenceFlow id="sid-0D749C3E-38FF-44FF-BEAB-22B5DBBB89A9" name="" sourceRef="sid-1B4E942F-16BC-4907-A991-EA5710DF57C9" targetRef="sid-1F1BC412-7077-4185-857F-2A21299D2D22">'+
+          '<extensionElements>' +
+             '<signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>'+
+          '</extensionElements>' +
+       '</sequenceFlow>' +
+    '</choreography>' +
+    '<bpmndi:BPMNDiagram id="sid-3278a92c-7271-4746-9f90-363f384f4796">' +
+       '<bpmndi:BPMNPlane bpmnElement="sid-a085f3f6-4205-4dd4-b96d-a1cd7ebf5099" id="sid-499d2b95-aa8a-4288-87fe-73503de0a2ab">'+
+          '<bpmndi:BPMNShape bpmnElement="sid-1B4E942F-16BC-4907-A991-EA5710DF57C9" id="sid-1B4E942F-16BC-4907-A991-EA5710DF57C9_gui">'+
+             '<omgdc:Bounds height="30.0" width="30.0" x="90.0" y="120.0"/>' +
+          '</bpmndi:BPMNShape>'+
+          '<bpmndi:BPMNShape bpmnElement="sid-1F1BC412-7077-4185-857F-2A21299D2D22" id="sid-1F1BC412-7077-4185-857F-2A21299D2D22_gui">'+
+             '<omgdc:Bounds height="140.0" width="150.0" x="165.0" y="65.0"/>' +
+          '</bpmndi:BPMNShape>'+
+          '<bpmndi:BPMNShape bpmnElement="sid-433CA71E-5BC6-425A-AAC5-8D3AA3CC0AB0" choreographyActivityShape="sid-1F1BC412-7077-4185-857F-2A21299D2D22_gui" id="sid-433CA71E-5BC6-425A-AAC5-8D3AA3CC0AB0_gui" isMessageVisible="false" participantBandKind="top_initiating">'+
+             '<omgdc:Bounds height="20.0" width="150.0" x="165.0" y="65.0"/>' +
+          '</bpmndi:BPMNShape>' +
+          '<bpmndi:BPMNShape bpmnElement="sid-7607BADD-0CF4-4370-8BB6-D88897148C33" choreographyActivityShape="sid-1F1BC412-7077-4185-857F-2A21299D2D22_gui" id="sid-7607BADD-0CF4-4370-8BB6-D88897148C33_gui" isMessageVisible="false" participantBandKind="bottom_non_initiating">'+
+             '<omgdc:Bounds height="20.0" width="150.0" x="165.0" y="185.0"/>' +
+          '</bpmndi:BPMNShape>' +
+          '<bpmndi:BPMNEdge bpmnElement="sid-0D749C3E-38FF-44FF-BEAB-22B5DBBB89A9" id="sid-0D749C3E-38FF-44FF-BEAB-22B5DBBB89A9_gui">' +
+             '<omgdi:waypoint x="120.0" y="135.0"/>' +
+             '<omgdi:waypoint x="165.0" y="135.0"/>' +
+          '</bpmndi:BPMNEdge>' +
+       '</bpmndi:BPMNPlane>' +
+    '</bpmndi:BPMNDiagram>' +
+ '</definitions>' */
+ 
+  
+       const url = '/assets/bpmn/choreographyinitial.bpmn'    
+     this.http.get(url, {
       headers: {}, responseType: 'text'
-    }).subscribe(
-      (x: any) => {
-        this.modeler.importXML(x, this.handleError)
-      },
-    );
+    })
+      .subscribe(
+        async (xml: any) => {  
+          this.modeler.importXML(xml, this.handleError);
+         },
+        this.handleError
+      );  
   }
-
+  
   load(): void {
    
     const url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version
@@ -148,7 +211,6 @@ export class ChoreographyModelComponent implements OnInit {
     })
       .subscribe(
         async (x: any) => {
-          console.log(x)
           this.modeler.importXML(x, this.handleError);
         },
         this.handleError

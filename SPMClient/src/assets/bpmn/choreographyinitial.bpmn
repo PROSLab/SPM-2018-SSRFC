@@ -1,33 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
-   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
-   xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-   xmlns:signavio="http://www.signavio.com" id="sid-b7fa5cea-0506-409b-be52-02125a8727f0" targetNamespace="http://www.signavio.com" expressionLanguage="http://www.w3.org/TR/XPath" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="12.15.2" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
-   <choreography id="sid-f1cc8475-0d4c-4f46-b27b-4a90f738f142" isClosed="false">
-      <participant id="sid-14931613-1ADA-481A-9422-619557F24A17" name="">
-         <extensionElements>
-            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
-         </extensionElements>
-      </participant>
-      <participant id="sid-FE8980BE-9637-4ECF-B205-A5A54B5BC1D8" name="">
-         <extensionElements>
-            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
-         </extensionElements>
-      </participant>
-      <messageFlow id="sid-a99b4777-9c6a-4578-8ab7-f430fc45e6a2" sourceRef="sid-14931613-1ADA-481A-9422-619557F24A17" targetRef="sid-FE8980BE-9637-4ECF-B205-A5A54B5BC1D8" />
-      <startEvent id="sid-7B5A28A9-89DE-40AA-9BDC-CBABEBE6562F" name="">
-         <extensionElements>
-            <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff" />
-            <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
-         </extensionElements>
-      </startEvent>
+<?xml version="1.0" encoding="UTF-8"?><definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="13.6.0" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-6435533c-6dd4-409b-86c1-c182e39313fa" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+   <choreography id="sid-a085f3f6-4205-4dd4-b96d-a1cd7ebf5099" isClosed="false">
    </choreography>
-   <bpmndi:BPMNDiagram id="sid-6cba675d-397f-4078-82a5-ccdae035abc9">
-      <bpmndi:BPMNPlane id="sid-1c7a3fe8-c761-410f-873f-6b7d2ab2328e" bpmnElement="sid-f1cc8475-0d4c-4f46-b27b-4a90f738f142">
-         <bpmndi:BPMNShape id="sid-7B5A28A9-89DE-40AA-9BDC-CBABEBE6562F_gui" bpmnElement="sid-7B5A28A9-89DE-40AA-9BDC-CBABEBE6562F">
-            <omgdc:Bounds x="180" y="225" width="30" height="30" />
-         </bpmndi:BPMNShape>
-      </bpmndi:BPMNPlane>
+   <bpmndi:BPMNDiagram id="sid-3278a92c-7271-4746-9f90-363f384f4796">
+       <bpmndi:BPMNPlane bpmnElement="sid-a085f3f6-4205-4dd4-b96d-a1cd7ebf5099" id="sid-499d2b95-aa8a-4288-87fe-73503de0a2ab">
+      </bpmndi:BPMNPlane> 
    </bpmndi:BPMNDiagram>
 </definitions>
