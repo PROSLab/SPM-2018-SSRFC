@@ -231,6 +231,23 @@ public class TestXML {
 		
 		// Connect messageFlows
 		connectMessageFlows();
+		
+		// Remove Empty shapes
+		removeEmptyShapes();
+	}
+	
+	private static void removeEmptyShapes() {
+		NodeList nBPMNShape = xmlRes.getElementsByTagName("bpmndi:BPMNShape");
+		
+		for (int i = 0; i < nBPMNShape.getLength(); i++) {
+			Node nShape = nBPMNShape.item(i);
+			NodeList shapeChilds = nShape.getChildNodes();
+			
+			if(shapeChilds.getLength() <= 0) {
+				Element eElement = (Element) nShape;
+				eElement.getParentNode().removeChild(eElement);
+			}
+		}
 	}
 	
 	public static void connectMessageFlows() {
