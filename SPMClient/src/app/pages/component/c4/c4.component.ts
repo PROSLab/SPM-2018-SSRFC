@@ -702,6 +702,8 @@ getAllReposChor() {
 
     this.service.getFile(id)
     .subscribe(data => {
+      this.allFileColl=[];
+      this.allFileChor=[]
       var file =JSON.parse(data)
     
       var j=0;
@@ -794,6 +796,8 @@ back(){
   }
 }
   AllFolderInfo(id){
+    this.allFileFoldColl=[]
+    this.allFileFoldChor=[]
     this.controlloFoldandFile=false;
     this.service.getFile(this.idRepo,id)
     .subscribe(data => {

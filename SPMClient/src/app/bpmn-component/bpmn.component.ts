@@ -231,15 +231,47 @@ this.validity=false;
 
   createFile() {
     
-     var ciao =  "'bpmn"+ Math.random().toString(36).substr(2, 9)+"'"
-     
-   
-    console.log(ciao)
+     var processid =  "'bpmn"+ Math.random().toString(36).substr(2, 9)+"'"
+    console.log(processid)
   
+    var startEvent =  "'sid_"+ Math.random().toString(36).substr(2, 9)+"'"
     
+   /*   var starteventid=  "'"+startevent+"'"
+   var starteventidgui= "'"+startevent+"_gui'"
+    console.log(starteventid) */
     var xml=
-    '<?xml version="1.0" encoding="UTF-8"?>' +
-    '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="12.15.2" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-36d76cc9-50bb-44ca-b6ec-ef4e78f99048" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">' +         
+    '<?xml version="1.0" encoding="UTF-8"?>'+
+'<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="13.7.2" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-77330163-ec00-4a29-8248-9fc896eb2921" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">'+
+   '<process id='+processid+' isClosed="false" isExecutable="false" processType="None">'+
+      '<extensionElements>'+
+         '<signavio:signavioDiagramMetaData metaKey="prozessreifegrad" metaValue=""/>'+
+         '<signavio:signavioDiagramMetaData metaKey="iso9000ff" metaValue=""/>'+
+        ' <signavio:signavioDiagramMetaData metaKey="processgoal" metaValue=""/>'+
+        ' <signavio:signavioDiagramMetaData metaKey="meta-processowner" metaValue=""/>'+
+        ' <signavio:signavioDiagramMetaData metaKey="revisionid" metaValue="dd34988665d34af7b8ea77db08059fc9"/>'+
+      '</extensionElements>'+
+      '<startEvent id='+startEvent+' name="">'+
+         '<extensionElements>'+
+            '<signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff"/>'+
+            '<signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000"/>'+
+            '<signavio:signavioMetaData metaKey="vorgngerprozesse" metaValue=""/>'+
+         '</extensionElements>'+
+      '</startEvent>'+
+   '</process>'+
+   '<bpmndi:BPMNDiagram id="sid-46a80f5d-ef7b-4810-b476-7028f7cc91b9">'+
+      '<bpmndi:BPMNPlane bpmnElement='+processid+' id="sid-c445a5c4-7551-4d9b-91b0-aae472046caf">'+
+         '<bpmndi:BPMNShape bpmnElement='+startEvent+' id="sid-7A6004AA-D20C-4066-9865-EDA8F96E875E_gui">'+
+            '<omgdc:Bounds height="30.0" width="30.0" x="225.0" y="210.0"/>'+
+         '</bpmndi:BPMNShape>'+
+      '</bpmndi:BPMNPlane>'+
+   '</bpmndi:BPMNDiagram>'+
+'</definitions>'
+
+    
+  /*   
+    var xml=
+    '<?xml version="1.0" encoding="UTF-8"?>'+
+    '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="13.7.2" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-94bf417b-df98-405b-8c80-42b8465097e0" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">'+     
       '<process id='+ciao+' isExecutable="false">' +
       '</process>' +
      ' <bpmndi:BPMNDiagram >'+
@@ -249,16 +281,10 @@ this.validity=false;
  '     </bpmndi:BPMNPlane>'+
   ' </bpmndi:BPMNDiagram>'+
   '</definitions>'
+   */
   
-   /*  const url = '/assets/bpmn/initial.bpmn';
-    this.http.get(url, {
-      headers: {}, responseType: 'text'
-    }).subscribe(
-      (x: any) => { */
-      /*   this.bodyFile = x */
         this.modeler.importXML(xml, this.handleError)
-      /* },
-    ); */
+     
   }
 
   load(): void {
