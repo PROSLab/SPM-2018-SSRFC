@@ -261,7 +261,20 @@ this.validity=false;
       '</bpmndi:BPMNPlane>'+
    '</bpmndi:BPMNDiagram>'+
 '</definitions>'
-
+var initialDiagram =
+'<?xml version="1.0" encoding="UTF-8"?>'+
+'<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.10.0">'+
+'<bpmn:process id="Process_070332r">'+
+'<bpmn:startEvent id="StartEvent_195paqp" />'+
+'</bpmn:process>'+
+'<bpmndi:BPMNDiagram id="BPMNDiagram_1">'+
+'<bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_070332r">'+
+'<bpmndi:BPMNShape id="StartEvent_195paqp_di" bpmnElement="StartEvent_195paqp">'+
+'<dc:Bounds x="190" y="274" width="36" height="36" />'+
+'</bpmndi:BPMNShape>'+
+'</bpmndi:BPMNPlane>'+
+'</bpmndi:BPMNDiagram>'+
+'</bpmn:definitions>'
     
   /*   
     var xml=
