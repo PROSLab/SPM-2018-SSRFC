@@ -246,13 +246,11 @@ this.validity=false;
     console.log(starteventid) */
     console.log(startEvent)
     console.log(starteventid)
-    var xml=
-    '<?xml version="1.0" encoding="UTF-8"?>'+
+    var xml=    
+'<?xml version="1.0" encoding="UTF-8"?>'+
 '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="13.7.2" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-77330163-ec00-4a29-8248-9fc896eb2921" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">'+
    '<process id='+processid+' isClosed="false" isExecutable="false" processType="None">'+
-     
       '<startEvent id='+startEvent+' name="">'+
-         
       '</startEvent>'+
    '</process>'+
    '<bpmndi:BPMNDiagram id='+idBpmnDiagram+'>'+
