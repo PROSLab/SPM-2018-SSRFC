@@ -261,36 +261,8 @@ this.validity=false;
       '</bpmndi:BPMNPlane>'+
    '</bpmndi:BPMNDiagram>'+
 '</definitions>'
-var initialDiagram =
-'<?xml version="1.0" encoding="UTF-8"?>'+
-'<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.10.0">'+
-'<bpmn:process id="Process_070332r">'+
-'<bpmn:startEvent id="StartEvent_195paqp" />'+
-'</bpmn:process>'+
-'<bpmndi:BPMNDiagram id="BPMNDiagram_1">'+
-'<bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_070332r">'+
-'<bpmndi:BPMNShape id="StartEvent_195paqp_di" bpmnElement="StartEvent_195paqp">'+
-'<dc:Bounds x="190" y="274" width="36" height="36" />'+
-'</bpmndi:BPMNShape>'+
-'</bpmndi:BPMNPlane>'+
-'</bpmndi:BPMNDiagram>'+
-'</bpmn:definitions>'
-    
-  /*   
-    var xml=
-    '<?xml version="1.0" encoding="UTF-8"?>'+
-    '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="13.7.2" expressionLanguage="http://www.w3.org/TR/XPath" id="sid-94bf417b-df98-405b-8c80-42b8465097e0" targetNamespace="http://www.signavio.com" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">'+     
-      '<process id='+ciao+' isExecutable="false">' +
-      '</process>' +
-     ' <bpmndi:BPMNDiagram >'+
-     ' <bpmndi:BPMNPlane >'+
-        ' <bpmndi:BPMNShape >'+
-        ' </bpmndi:BPMNShape>'+
- '     </bpmndi:BPMNPlane>'+
-  ' </bpmndi:BPMNDiagram>'+
-  '</definitions>'
-   */
-  
+
+ 
         this.modeler.importXML(xml, this.handleError)
      
   }
