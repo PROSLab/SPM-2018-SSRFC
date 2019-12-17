@@ -66,7 +66,7 @@ public class Collaboration {
 
 
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Collaboration collaboration = new Collaboration();
 		JFileChooser chooser = new JFileChooser("/home/cippus/Documents/testinput");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("BPMN", "bpmn");
@@ -81,7 +81,7 @@ public class Collaboration {
 		//collaboration.init(file, true);
 
 
-	}
+	}*/
 
 	public void init(InputStream file, boolean show, File outputFile) {
 		collaborationGraph=Utils.GenerateGraph("Collaboration");
