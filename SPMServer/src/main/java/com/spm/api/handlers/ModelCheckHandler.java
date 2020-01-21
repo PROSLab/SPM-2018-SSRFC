@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.json.simple.JSONObject;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -151,34 +152,39 @@ public class ModelCheckHandler {
 					JSONObject obj = new JSONObject();
 					ProcessBuilder pb = null;
 					
+					String pbpath = null;
+					
+					if(SystemUtils.IS_OS_WINDOWS) pbpath = "C:/Program Files/mCRL2/bin/ltscompare";
+					if(SystemUtils.IS_OS_MAC) pbpath = "/Applications/mCRL2.app/Contents/bin/ltscompare";
+					
 					if (equivalence.equals("Trace") && weak) {
 						command = "-c -eweak-trace " + files;
-						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-eweak-trace", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder(pbpath, "-c", "-eweak-trace", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Trace") && !weak) {
 						command = "-c -etrace " + files;
-						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-etrace", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder(pbpath, "-c", "-etrace", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Branching") && weak) {
 						command = "-c -edpbranching-bisim " + files;
-						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-edpbranching-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder(pbpath, "-c", "-edpbranching-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Branching") && !weak) {
 						command = "-c -ebranching-bisim " + files;
-						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-ebranching-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder(pbpath, "-c", "-ebranching-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Bisimulation") && weak) {
 						command = "-c -eweak-bisim " + files;
-						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-eweak-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder(pbpath, "-c", "-eweak-bisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					if (equivalence.equals("Bisimulation") && !weak) {
 						command = "-c -ebisim " + files;
-						pb = new ProcessBuilder("C:/Program Files/mCRL2/bin/ltscompare", "-c", "-ebisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
+						pb = new ProcessBuilder(pbpath, "-c", "-ebisim", choreographyPath.replace("\\", "/"), collaborationPath.replace("\\", "/"));
 					}
 					
 					log += command + '\n';
