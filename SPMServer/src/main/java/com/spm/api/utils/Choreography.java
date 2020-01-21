@@ -55,7 +55,7 @@ public class Choreography {
 
 
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Choreography choreography= new Choreography();
 //		JFileChooser chooser = new JFileChooser("/home/cippus/Documents/testinput");
 //		FileNameExtensionFilter filter = new FileNameExtensionFilter("BPMN", "bpmn");
@@ -71,7 +71,7 @@ public class Choreography {
 		///choreography.init(file, true);
 
 
-	}
+	}*/
 
 
 	public Choreography() {
