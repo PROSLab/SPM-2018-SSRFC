@@ -36,12 +36,14 @@ import {
       `
         .diagram-container {
           background-color:white;
-          height: 300px;
-          width: 80%;
+          height: 400px;
+          width: 100%;
         }
       `
     ]
   })
+
+  
   export class DiagramComponentChor  implements AfterContentInit, OnChanges, OnDestroy {
     private bpmnJS: BpmnJS;
   

@@ -1,2 +1,19 @@
 
+.djs-select-wrapper {
+    background-color: blue;
+}
 
+/* <div class="djs-select-wrapper">
+        <select class="djs-select">
+        <option value="sid-0db81e87-0c51-4f9c-8c24-e4bca562bf49" selected="">
+            sid-0db81e87-0c51-4f9c-8c24-e4bca562bf49
+        </option>
+      </select>
+        <button id="start-rename-choreography" class="bpmn-icon-screw-wrench" title="Rename this choreography"></button>
+        <button id="delete-choreography" class="bpmn-icon-trash" title="Delete this choreography"></button>
+        <button id="add-choreography" class="bpmn-icon-sub-process-marker" title="Add a new choreography"></button>
+      </div>
+<div class="djs-rename-wrapper">
+        <input class="djs-rename" type="text">
+        <button id="end-rename-choreography" class="djs-button">Rename</button>
+      </div> */
