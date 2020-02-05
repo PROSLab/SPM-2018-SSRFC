@@ -271,7 +271,7 @@ this.validity=false;
    
 
   
-    const url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version
+    const url = this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version
     this.http.get(url, {
       headers: {}, responseType: 'text'
     })
@@ -320,7 +320,7 @@ this.validity=false;
       saveAs(this.file, "diagram.bpmn")
 
     } else {
-      window.open("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version)
+      window.open(this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version)
       /*  this.downloadFile() */
     }
     this.toastr.success('File downloaded with success', 'Download File')

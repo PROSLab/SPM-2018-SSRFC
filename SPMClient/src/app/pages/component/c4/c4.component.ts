@@ -88,7 +88,7 @@ fileSelezionato="Nessun file è stato selezionato"
    ShowDataChor(){
     this.diagram=true;
     var me = this;
-    this.http.get("http://localhost:8080/api/modelcheck/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
+    this.http.get(this.service.baseUrl+"api/modelcheck/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -217,7 +217,7 @@ fileSelezionato="Nessun file è stato selezionato"
    showDataColl(){
     this.diagram=true;
     var me = this;
-    this.http.get("http://localhost:8080/api/modelcheck/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
+    this.http.get(this.service.baseUrl+"api/modelcheck/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -424,7 +424,7 @@ fileSelezionato="Nessun file è stato selezionato"
 
   showColla(file,filevers){
     console.log(file,filevers)
-      this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" +file + "&version=" + filevers, { responseType: "text" }).subscribe(response => {
+      this.http.get(this.service.baseUrl+"api/file/downloadFile?idFile=" +file + "&version=" + filevers, { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -597,7 +597,7 @@ this.state=checkEqui.resultState
 
 
   downloadColl() {
-    this.http.get("http://localhost:8080/api/modelcheck/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
+    this.http.get(this.service.baseUrl+"api/modelcheck/download?filename=" + this.collaboration + "&collaboration=true", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -609,7 +609,7 @@ this.state=checkEqui.resultState
     });
   }
   downloadChor() {
-    this.http.get("http://localhost:8080/api/modelcheck/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
+    this.http.get(this.service.baseUrl+"api/modelcheck/download?filename=" + this.choreography + "&collaboration=false", { responseType: "text" }).subscribe(response => {
       try {
         let isFileSaverSupported = !!new Blob;
       } catch (e) {
@@ -631,13 +631,13 @@ acceptFile(){
  
  if (this.vers.fileType=="collaboration"){
 this.fileSelezionato=this.vers.originalName
-this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
+this.http.get(this.service.baseUrl+"api/file/downloadFile?idFile=" + this.vers.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload=new File([response.toLocaleString()],this.vers.originalName);
  
 })
  } else if (this.vers.fileType=="choreography") { 
 this.fileSelezionatoChor=this.vers.originalName
-this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
+this.http.get(this.service.baseUrl+"api/file/downloadFile?idFile=" + this.vers.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload2=new File([response.toLocaleString()],this.vers.originalName);
  
 })
@@ -773,9 +773,9 @@ anteprimaFile(vers){
   this.controlloAnteprima=true;
 if (this.vers.fileType=="collaboration"){
 
- this.diagramUrlA="http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + vers
+ this.diagramUrlA=this.service.baseUrl+"api/file/downloadFile?idFile=" + this.vers.id + "&version=" + vers
 }else {
-  this.diagramUrlChorA="http://localhost:8080/api/file/downloadFile?idFile=" + this.vers.id + "&version=" + vers}
+  this.diagramUrlChorA=this.service.baseUrl+"api/file/downloadFile?idFile=" + this.vers.id + "&version=" + vers}
 }
 
 back(){

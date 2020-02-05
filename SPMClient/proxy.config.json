@@ -1,5 +1,5 @@
 {"/library/*": {
-    "target": "http://localhost:10000",
+    "target": "http://localhost:4800",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true,

@@ -24,7 +24,7 @@ const httpOptions3 = {
 })
 
 export class Service {
-  private baseUrl = 'http://localhost:8080/'
+  public baseUrl = 'http://localhost:8080/'
   public errorMsg: string;
   public isLogged:boolean=false;
   user: Object;
@@ -129,7 +129,7 @@ parseModelCheck(fileToUpload,fileToUpload2): Observable<any> {
     formData.append('collaboration', fileToUpload)
     formData.append('choreography', fileToUpload2)
 
-    return this.http.post("http://localhost:8080/api/modelcheck/test_parsemodel",formData,{responseType:'text'})
+    return this.http.post(this.baseUrl+"api/modelcheck/test_parsemodel",formData,{responseType:'text'})
      .pipe(
               catchError(this.handleError)
      );
@@ -142,7 +142,7 @@ parseModelCheck(fileToUpload,fileToUpload2): Observable<any> {
     formData.append('collaboration', fileToUpload)
     formData.append('choreography', fileToUpload2)
 
-    return this.http.post("http://localhost:8080/api/modelcheck/upload",formData,{responseType:'text'})
+    return this.http.post(this.baseUrl+"api/modelcheck/upload",formData,{responseType:'text'})
      .pipe(
               catchError(this.handleError)
      );
@@ -154,7 +154,7 @@ formData.append('weak', weak)
 formData.append('equivalence', equivalence)
 formData.append('collaborationPath', collaborationCode)
 formData.append('choreographyPath', choreographyCode)
-return this.http.post("http://localhost:8080/api/modelcheck/check_equivalence",formData,{responseType:'text'})
+return this.http.post(this.baseUrl+"api/modelcheck/check_equivalence",formData,{responseType:'text'})
 .pipe(
          catchError(this.handleError)
 );
@@ -169,7 +169,7 @@ merge(fileToUpload,fileToUpload2): Observable<any> {
       formData.append('sender', fileToUpload)
       formData.append('receiver', fileToUpload2)
   
-      return this.http.post("http://localhost:8080/api/modelcheck/mergemodel",formData,{responseType:'text'})
+      return this.http.post(this.baseUrl+"api/modelcheck/mergemodel",formData,{responseType:'text'})
        .pipe(
                 
        );

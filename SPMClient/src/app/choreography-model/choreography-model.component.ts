@@ -136,7 +136,7 @@ export class ChoreographyModelComponent implements OnInit {
   
   load(): void {
    
-    const url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version
+    const url = this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version
     this.http.get(url, {
       headers: {}, responseType: 'text'
     })
@@ -179,7 +179,7 @@ export class ChoreographyModelComponent implements OnInit {
       saveAs(this.file, "diagram.bpmn")
 
     } else {
-      window.open("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version)
+      window.open(this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.version)
     }
     this.toastr.success('File downloaded with success', 'Download File')
 

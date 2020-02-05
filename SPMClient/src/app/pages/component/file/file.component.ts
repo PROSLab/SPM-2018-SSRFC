@@ -121,7 +121,7 @@ export class FileComponent implements OnInit {
     }
   }); */
     this.cambia=true  
-    this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
+    this.diagramUrl=this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
    /*  await this.modelerOpen() */
   }
 
@@ -354,10 +354,10 @@ if(data.fileType=="collaboration"){
         }
         if (this.vers==undefined)
         {
-          this.diagramUrl= this.url = "http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" +this.finalVersion
+          this.diagramUrl= this.url = this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" +this.finalVersion
       
         }else{
-          this.diagramUrl="http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
+          this.diagramUrl=this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers
       
         }
 
@@ -468,7 +468,7 @@ if(this.controlloFoldandFile==true){
 anteprimaFile(vers){
   this.versione=vers
   this.controlloAnteprima=true;
- this.diagramUrlA="http://localhost:8080/api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + vers
+ this.diagramUrlA=this.service.baseUrl+"api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + vers
  
 }
 back1(){
@@ -534,11 +534,11 @@ this.service.createNewVersion(this.idFile, this.vers)
   }
 
   downloadAllVersion(){
-      window.open("http://localhost:8080/api/file/exportCollection?idFile="+this.idFile)
+      window.open(this.service.baseUrl+"api/file/exportCollection?idFile="+this.idFile)
   }
 mergeFile(){
 
-  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
+  this.http.get(this.service.baseUrl+"api/file/downloadFile?idFile=" + this.Filescelto.id + "&version=" + this.versione , { responseType: "text" } ).subscribe(response => {
   this.fileToUpload=new File([response.toLocaleString()],this.Filescelto.originalName);
  this.xml=response
 
@@ -546,11 +546,11 @@ mergeFile(){
 
 if (this.vers==undefined)
 {
-  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.finalVersion , { responseType: "text" } ).subscribe(response => {
+  this.http.get(this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.finalVersion , { responseType: "text" } ).subscribe(response => {
     this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
   } )
 }else{
-  this.http.get("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
+  this.http.get(this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers , { responseType: "text" } ).subscribe(response => {
     this.fileToUpload2=new File([response.toLocaleString()],this.file.originalName);
   } )
 
@@ -612,7 +612,7 @@ this.service.merge(this.fileToUpload2, this.fileToUpload)
   }
 
   exportModel() {
-          window.open("http://localhost:8080/api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers)
+          window.open(this.service.baseUrl+"api/file/downloadFile?idFile=" + this.idFile + "&version=" + this.vers)
       /*  this.downloadFile() */
     this.toastr.success('File downloaded with success', 'Download File')
 
